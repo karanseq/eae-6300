@@ -237,6 +237,7 @@ void MonsterChase::ValidateMove(const char* input)
 		return;
 	}
 
+	bool is_valid_input = false;
 	char move = input[0];
 	if (move == 'q' || move == 'Q')
 	{
@@ -246,26 +247,34 @@ void MonsterChase::ValidateMove(const char* input)
 
 	if (move == 'a' || move == 'A')
 	{
+		is_valid_input = true;
 		player_->Move(MoveDirectionLeft);
 	}
 	else if (move == 'd' || move == 'D')
 	{
+		is_valid_input = true;
 		player_->Move(MoveDirectionRight);
 	}
 	else if (move == 'w' || move == 'W')
 	{
+		is_valid_input = true;
 		player_->Move(MoveDirectionUp);
 	}
 	else if (move == 's' || move == 'S')
 	{
+		is_valid_input = true;
 		player_->Move(MoveDirectionDown);
 	}
 	else if (move == 'm' || move == 'M')
 	{
+		is_valid_input = true;
 		CreateMonster();
 	}
 
-	UpdateMonsters();
+	if (is_valid_input)
+	{
+		UpdateMonsters();
+	}
 }
 
 void MonsterChase::SaveNumMonsters(int num_monsters)
