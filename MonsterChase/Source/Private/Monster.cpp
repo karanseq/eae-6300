@@ -25,24 +25,24 @@ void Monster::Move(int player_row, int player_column)
 {
 	if (row_ < player_row)
 	{
-		Player::Move(MoveDirectionDown);
+		Player::Move(engine::MoveDirectionDown);
 	}
 	else if (row_ > player_row)
 	{
-		Player::Move(MoveDirectionUp);
+		Player::Move(engine::MoveDirectionUp);
 	}
 	else if (column_ < player_column)
 	{
-		Player::Move(MoveDirectionRight);
+		Player::Move(engine::MoveDirectionRight);
 	}
 	else if (column_ > player_column)
 	{
-		Player::Move(MoveDirectionLeft);
+		Player::Move(engine::MoveDirectionLeft);
 	}
 	else
 	{
 		int direction = rand() % 4;
-		Player::Move((MoveDirection)direction);
+		Player::Move((engine::MoveDirection)direction);
 	}
 
 	--time_to_live_;

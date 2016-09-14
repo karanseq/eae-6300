@@ -1,7 +1,7 @@
 #pragma once
 #include "Player.h"
 
-class Monster : public Player
+class Monster : public engine::Player
 {
 public:
 	Monster();

@@ -198,18 +198,18 @@ void MonsterChase::ValidateName(const char* input)
 	}
 
 	int input_length = (int)strlen(input);
-	if (input_length > Player::MAX_NAME_LENGTH				// check if the name was within our range
+	if (input_length > engine::Player::MAX_NAME_LENGTH				// check if the name was within our range
 		|| count >= input_length - 1)						// check if the input contained only white spaces
 	{
 		// print an error message
 		char buf[256] = { 0 };
-		sprintf_s(buf, 256, "Please enter a name that is 1 to %d characters long.\n", Player::MAX_NAME_LENGTH);
+		sprintf_s(buf, 256, "Please enter a name that is 1 to %d characters long.\n", engine::Player::MAX_NAME_LENGTH);
 		PrintMessage(buf);
 		return;
 	}
 
 	// remove the newline character from the input
-	char name[Player::MAX_NAME_LENGTH] = { 0 };
+	char name[engine::Player::MAX_NAME_LENGTH] = { 0 };
 	strncpy_s(name, input, strlen(input) - 1);
 
 	// handle both states differently
@@ -248,22 +248,22 @@ void MonsterChase::ValidateMove(const char* input)
 	if (move == 'a' || move == 'A')
 	{
 		is_valid_input = true;
-		player_->Move(MoveDirectionLeft);
+		player_->Move(engine::MoveDirectionLeft);
 	}
 	else if (move == 'd' || move == 'D')
 	{
 		is_valid_input = true;
-		player_->Move(MoveDirectionRight);
+		player_->Move(engine::MoveDirectionRight);
 	}
 	else if (move == 'w' || move == 'W')
 	{
 		is_valid_input = true;
-		player_->Move(MoveDirectionUp);
+		player_->Move(engine::MoveDirectionUp);
 	}
 	else if (move == 's' || move == 'S')
 	{
 		is_valid_input = true;
-		player_->Move(MoveDirectionDown);
+		player_->Move(engine::MoveDirectionDown);
 	}
 	else if (move == 'm' || move == 'M')
 	{
@@ -405,7 +405,7 @@ void MonsterChase::CreatePlayer(const char* name)
 	}
 
 	// create the player at the center of the grid
-	player_ = new Player(MAX_ROWS / 2, MAX_COLS / 2, name);
+	player_ = new engine::Player(MAX_ROWS / 2, MAX_COLS / 2, name);
 
 	// time to start the game
 	game_state_ = GameStateRunning;

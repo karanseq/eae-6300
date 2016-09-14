@@ -1,8 +1,13 @@
 #include "Player.h"
-#include "MonsterChase.h"
 
 // include libraries
 #include <stdio.h>
+
+namespace engine
+{
+
+int Player::max_rows_ = 0;
+int Player::max_cols_ = 0;
 
 Player::Player()
 {
@@ -33,7 +38,7 @@ void Player::Move(MoveDirection move_direction)
 		break;
 	case MoveDirectionRight:
 		new_column = column_ + 1;
-		column_ = (new_column >= MonsterChase::MAX_COLS) ? MonsterChase::MAX_COLS - 1 : new_column;
+		column_ = (new_column >= Player::max_cols_) ? Player::max_cols_ - 1 : new_column;
 		break;
 	case MoveDirectionUp:
 		new_row = row_ - 1;
@@ -41,7 +46,7 @@ void Player::Move(MoveDirection move_direction)
 		break;
 	case MoveDirectionDown:
 		new_row = row_ + 1;
-		row_ = (new_row >= MonsterChase::MAX_ROWS) ? MonsterChase::MAX_ROWS - 1 : new_row;
+		row_ = (new_row >= Player::max_rows_) ? Player::max_rows_ - 1 : new_row;
 		break;
 	}
 }
@@ -50,3 +55,5 @@ void Player::Print()
 {
 	printf("Player %s is at [%d, %d]\n", name_, column_, row_);
 }
+
+} // namespace engine
