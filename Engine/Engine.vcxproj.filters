@@ -21,9 +21,15 @@
     <ClCompile Include="Source\Private\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Vec2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vec2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

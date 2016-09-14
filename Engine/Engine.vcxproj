@@ -150,9 +150,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Private\Player.cpp" />
+    <ClCompile Include="Source\Private\Vec2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\Vec2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
