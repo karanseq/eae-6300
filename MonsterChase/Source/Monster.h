@@ -1,15 +1,16 @@
 #pragma once
 #include "Player.h"
+#include "Vec2D.h"
 
 class Monster : public engine::Player
 {
 public:
 	Monster();
-	Monster(int row, int column, const char* name);
+	Monster(const engine::Vec2D& position, const char* name);
 	virtual ~Monster();
 
 	// monster behavior
-	void Move(int player_row, int player_column);
+	void Move(const engine::Vec2D& player_position);
 	virtual void Print();
 
 	// accessors and mutators

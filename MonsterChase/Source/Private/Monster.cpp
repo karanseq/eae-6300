@@ -10,10 +10,9 @@ Monster::Monster()
 	SetTimeToLive(MAX_MONSTER_TTL / 2 + rand() % MAX_MONSTER_TTL);
 }
 
-Monster::Monster(int row, int column, const char* name)
+Monster::Monster(const engine::Vec2D& position, const char* name)
 {
-	SetRow(row);
-	SetColumn(column);
+	SetPosition(position);
 	SetName(name);
 	SetTimeToLive(MAX_MONSTER_TTL / 2 + rand() % MAX_MONSTER_TTL);
 }
@@ -21,21 +20,21 @@ Monster::Monster(int row, int column, const char* name)
 Monster::~Monster()
 {}
 
-void Monster::Move(int player_row, int player_column)
+void Monster::Move(const engine::Vec2D& player_position)
 {
-	if (row_ < player_row)
+	if (position_.y() < player_position.y())
 	{
 		Player::Move(engine::MoveDirectionDown);
 	}
-	else if (row_ > player_row)
+	else if (position_.y() > player_position.y())
 	{
 		Player::Move(engine::MoveDirectionUp);
 	}
-	else if (column_ < player_column)
+	else if (position_.x() < player_position.x())
 	{
 		Player::Move(engine::MoveDirectionRight);
 	}
-	else if (column_ > player_column)
+	else if (position_.x() > player_position.x())
 	{
 		Player::Move(engine::MoveDirectionLeft);
 	}
@@ -50,5 +49,5 @@ void Monster::Move(int player_row, int player_column)
 
 void Monster::Print()
 {
-	printf("Monster %s %s [%d, %d]\n", name_, (time_to_live_ <= 1 ? "is about to die at" : "is at"), column_, row_);
+	printf("Monster %s %s [%f, %f]\n", name_, (time_to_live_ <= 1 ? "is about to die at" : "is at"), position_.x(), position_.y());
 }

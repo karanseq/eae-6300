@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string.h>
+#include "Vec2D.h"
 
 namespace engine
 {
@@ -17,7 +18,7 @@ namespace engine
 	{
 	public:
 		Player();
-		Player(int row, int column, const char* name);
+		Player(const Vec2D& position, const char* name);
 		virtual ~Player();
 
 		// player behavior
@@ -25,11 +26,8 @@ namespace engine
 		virtual void Print();
 
 		// accessors and mutators
-		inline int GetRow() { return row_; }
-		inline void SetRow(int row) { row_ = row; }
-
-		inline int GetColumn() { return column_; }
-		inline void SetColumn(int column) { column_ = column; }
+		inline const Vec2D& GetPosition() { return position_; }
+		inline void SetPosition(const Vec2D& position) { position_ = position; }
 
 		inline const char* GetName() { return name_; }
 		inline void SetName(const char* name) { strcpy_s(name_, name); }
@@ -46,7 +44,7 @@ namespace engine
 	protected:
 		// data
 		static int max_rows_, max_cols_;
-		int row_, column_;
+		Vec2D position_;
 		char name_[MAX_NAME_LENGTH + 1];
 	};	// class Player
 

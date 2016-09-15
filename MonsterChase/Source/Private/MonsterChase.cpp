@@ -16,6 +16,9 @@ MonsterChase::MonsterChase()
 	num_monsters_ = 0;
 	ascii_index_ = 0;
 	srand((unsigned int)time(0));
+
+	engine::Player::SetMaxRows(MAX_ROWS);
+	engine::Player::SetMaxCols(MAX_COLS);
 }
 
 MonsterChase::~MonsterChase()
@@ -316,7 +319,7 @@ void MonsterChase::CreateMonster(const char* input_name)
 	}
 
 	// create a new monster at the back of the array
-	monsters_[num_monsters_++] = new Monster((rand() % MAX_ROWS), (rand() % MAX_COLS), name);
+	monsters_[num_monsters_++] = new Monster(engine::Vec2D((float)(rand() % MAX_ROWS), (float)(rand() % MAX_COLS)), name);
 
 	// check if all monsters have been created
 	if (initial_num_monsters_ != -1 && num_monsters_ >= initial_num_monsters_)
@@ -362,7 +365,7 @@ void MonsterChase::UpdateMonsters()
 	// touch all monsters
 	for (int i = 0; i < num_monsters_; ++i)
 	{
-		monsters_[i]->Move(player_->GetRow(), player_->GetColumn());
+		monsters_[i]->Move(player_->GetPosition());
 	}
 
 	// check if any monsters must be deleted
@@ -405,7 +408,7 @@ void MonsterChase::CreatePlayer(const char* name)
 	}
 
 	// create the player at the center of the grid
-	player_ = new engine::Player(MAX_ROWS / 2, MAX_COLS / 2, name);
+	player_ = new engine::Player(engine::Vec2D(MAX_ROWS / 2, MAX_COLS / 2), name);
 
 	// time to start the game
 	game_state_ = GameStateRunning;
