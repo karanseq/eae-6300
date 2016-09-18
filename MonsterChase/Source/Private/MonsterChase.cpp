@@ -315,8 +315,12 @@ void MonsterChase::CreateMonster(const char* input_name)
 		sprintf_s(name, "%s", input_name);
 	}
 
+	// calculate random position for this monster
+	engine::Vec2D monster_position = engine::Vec2D((float)(rand() % MAX_ROWS), (float)(rand() % MAX_COLS));
+	monster_position *= (rand() % 10) > 5 ? 1.0f : -1.0f;
+
 	// create a new monster at the back of the array
-	monsters_[num_monsters_++] = new Monster(engine::Vec2D((float)(rand() % MAX_ROWS), (float)(rand() % MAX_COLS)), name);
+	monsters_[num_monsters_++] = new Monster(monster_position, name);
 
 	// check if all monsters have been created
 	if (initial_num_monsters_ != -1 && num_monsters_ >= initial_num_monsters_)
@@ -405,7 +409,7 @@ void MonsterChase::CreatePlayer(const char* name)
 	}
 
 	// create the player at the center of the grid
-	player_ = new Player(engine::Vec2D(MAX_ROWS / 2, MAX_COLS / 2), name);
+	player_ = new Player(engine::Vec2D::ZERO, name);
 
 	// time to start the game
 	game_state_ = GameStateRunning;

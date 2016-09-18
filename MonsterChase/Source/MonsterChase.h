@@ -59,8 +59,8 @@ public:
 
 	// game constants
 	static const int MAX_INPUT_SIZE = 256;
-	static const int MAX_ROWS = 100;
-	static const int MAX_COLS = 100;
+	static const int MAX_ROWS = 50;
+	static const int MAX_COLS = 50;
 	static const int START_ASCII = 97;
 	static const int MAX_ASCII = 25;
 

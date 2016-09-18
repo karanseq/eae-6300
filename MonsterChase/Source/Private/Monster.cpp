@@ -24,11 +24,11 @@ void Monster::Move(const engine::Vec2D& player_position)
 {
 	if (position_.y() < player_position.y())
 	{
-		Player::Move(MoveDirectionDown);
+		Player::Move(MoveDirectionUp);
 	}
 	else if (position_.y() > player_position.y())
 	{
-		Player::Move(MoveDirectionUp);
+		Player::Move(MoveDirectionDown);
 	}
 	else if (position_.x() < player_position.x())
 	{

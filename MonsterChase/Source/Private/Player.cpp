@@ -25,20 +25,16 @@ void Player::Move(MoveDirection move_direction)
 	switch (move_direction)
 	{
 	case MoveDirectionLeft:
-		new_column = position_.x() - 1;
-		position_.x((new_column < 0) ? 0 : new_column);
+		position_ -= engine::Vec2D::UNIT_X;
 		break;
 	case MoveDirectionRight:
-		new_column = position_.x() + 1;
-		position_.x((new_column >= MonsterChase::MAX_COLS) ? MonsterChase::MAX_COLS - 1 : new_column);
+		position_ += engine::Vec2D::UNIT_X;
 		break;
 	case MoveDirectionUp:
-		new_row = position_.y() - 1;
-		position_.y((new_row < 0) ? 0 : new_row);
+		position_ += engine::Vec2D::UNIT_Y;
 		break;
 	case MoveDirectionDown:
-		new_row = position_.y() + 1;
-		position_.y((new_row >= MonsterChase::MAX_ROWS) ? MonsterChase::MAX_ROWS - 1 : new_row);
+		position_ -= engine::Vec2D::UNIT_Y;
 		break;
 	}
 }

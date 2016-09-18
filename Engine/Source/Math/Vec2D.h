@@ -20,6 +20,7 @@ namespace engine
 		~Vec2D()
 		{}
 
+		// accessors and mutators
 		inline float x() const { return x_; }
 		inline void x(float x) { x_ = x; }
 		inline float y() const { return y_; }
@@ -34,6 +35,7 @@ namespace engine
 		Vec2D& operator+=(const Vec2D& vec);
 		Vec2D operator-(const Vec2D& vec) const;
 		Vec2D& operator-=(const Vec2D& vec);
+		Vec2D& operator*=(float scale);
 
 		// relational
 		bool operator==(const Vec2D& vec) const;
@@ -41,6 +43,12 @@ namespace engine
 
 		// unary
 		Vec2D operator-() const;
+
+		// constants
+		static const Vec2D ZERO;
+		static const Vec2D UNIT;
+		static const Vec2D UNIT_X;
+		static const Vec2D UNIT_Y;
 
 	protected:
 		float x_;
