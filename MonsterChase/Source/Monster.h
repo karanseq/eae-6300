@@ -1,8 +1,8 @@
 #pragma once
 #include "Player.h"
-#include "Vec2D.h"
+#include "Math\Vec2D.h"
 
-class Monster : public engine::Player
+class Monster : public Player
 {
 public:
 	Monster();

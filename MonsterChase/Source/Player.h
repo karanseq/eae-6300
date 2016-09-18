@@ -1,0 +1,34 @@
+#pragma once
+
+#include <string.h>
+#include "Math\Vec2D.h"
+
+// forward declaration
+enum MoveDirection;
+
+class Player
+{
+public:
+	Player();
+	Player(const engine::Vec2D& position, const char* name);
+	virtual ~Player();
+
+	// player behavior
+	void Move(MoveDirection move_direction);
+	virtual void Print();
+
+	// accessors and mutators
+	inline const engine::Vec2D& GetPosition() { return position_; }
+	inline void SetPosition(const engine::Vec2D& position) { position_ = position; }
+
+	inline const char* GetName() { return name_; }
+	inline void SetName(const char* name) { strcpy_s(name_, name); }
+
+	// constants
+	static const int MAX_NAME_LENGTH = 10;
+
+protected:
+	// data
+	engine::Vec2D position_;
+	char name_[MAX_NAME_LENGTH + 1];
+};	// class Player

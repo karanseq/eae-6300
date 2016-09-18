@@ -24,24 +24,24 @@ void Monster::Move(const engine::Vec2D& player_position)
 {
 	if (position_.y() < player_position.y())
 	{
-		Player::Move(engine::MoveDirectionDown);
+		Player::Move(MoveDirectionDown);
 	}
 	else if (position_.y() > player_position.y())
 	{
-		Player::Move(engine::MoveDirectionUp);
+		Player::Move(MoveDirectionUp);
 	}
 	else if (position_.x() < player_position.x())
 	{
-		Player::Move(engine::MoveDirectionRight);
+		Player::Move(MoveDirectionRight);
 	}
 	else if (position_.x() > player_position.x())
 	{
-		Player::Move(engine::MoveDirectionLeft);
+		Player::Move(MoveDirectionLeft);
 	}
 	else
 	{
 		int direction = rand() % 4;
-		Player::Move((engine::MoveDirection)direction);
+		Player::Move((MoveDirection)direction);
 	}
 
 	--time_to_live_;

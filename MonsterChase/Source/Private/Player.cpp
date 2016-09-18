@@ -1,20 +1,15 @@
 #include "Player.h"
+#include "MonsterChase.h"
 
 // include libraries
 #include <stdio.h>
-
-namespace engine
-{
-
-int Player::max_rows_ = 0;
-int Player::max_cols_ = 0;
 
 Player::Player()
 {
 	memset(name_, 0, sizeof(name_));
 }
 
-Player::Player(const Vec2D& position, const char* name)
+Player::Player(const engine::Vec2D& position, const char* name)
 {
 	SetPosition(position);
 	SetName(name);
@@ -35,7 +30,7 @@ void Player::Move(MoveDirection move_direction)
 		break;
 	case MoveDirectionRight:
 		new_column = position_.x() + 1;
-		position_.x((new_column >= Player::max_cols_) ? Player::max_cols_ - 1 : new_column);
+		position_.x((new_column >= MonsterChase::MAX_COLS) ? MonsterChase::MAX_COLS - 1 : new_column);
 		break;
 	case MoveDirectionUp:
 		new_row = position_.y() - 1;
@@ -43,7 +38,7 @@ void Player::Move(MoveDirection move_direction)
 		break;
 	case MoveDirectionDown:
 		new_row = position_.y() + 1;
-		position_.y((new_row >= Player::max_rows_) ? Player::max_rows_ - 1 : new_row);
+		position_.y((new_row >= MonsterChase::MAX_ROWS) ? MonsterChase::MAX_ROWS - 1 : new_row);
 		break;
 	}
 }
@@ -52,5 +47,3 @@ void Player::Print()
 {
 	printf("Player %s is at [%f, %f]\n", name_, position_.x(), position_.y());
 }
-
-} // namespace engine

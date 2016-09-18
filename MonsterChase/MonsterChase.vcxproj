@@ -172,11 +172,18 @@
     <ClCompile Include="Source\Private\Main.cpp" />
     <ClCompile Include="Source\Private\Monster.cpp" />
     <ClCompile Include="Source\Private\MonsterChase.cpp" />
+    <ClCompile Include="Source\Private\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Monster.h" />
     <ClInclude Include="Source\MonsterChase.h" />
+    <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Engine\Engine.vcxproj">
+      <Project>{21128bfc-fae6-4bf5-b2f5-77fe1a60b117}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

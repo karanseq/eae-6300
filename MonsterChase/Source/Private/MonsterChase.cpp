@@ -16,9 +16,6 @@ MonsterChase::MonsterChase()
 	num_monsters_ = 0;
 	ascii_index_ = 0;
 	srand((unsigned int)time(0));
-
-	engine::Player::SetMaxRows(MAX_ROWS);
-	engine::Player::SetMaxCols(MAX_COLS);
 }
 
 MonsterChase::~MonsterChase()
@@ -201,18 +198,18 @@ void MonsterChase::ValidateName(const char* input)
 	}
 
 	int input_length = (int)strlen(input);
-	if (input_length > engine::Player::MAX_NAME_LENGTH				// check if the name was within our range
+	if (input_length > Player::MAX_NAME_LENGTH				// check if the name was within our range
 		|| count >= input_length - 1)						// check if the input contained only white spaces
 	{
 		// print an error message
 		char buf[256] = { 0 };
-		sprintf_s(buf, 256, "Please enter a name that is 1 to %d characters long.\n", engine::Player::MAX_NAME_LENGTH);
+		sprintf_s(buf, 256, "Please enter a name that is 1 to %d characters long.\n", Player::MAX_NAME_LENGTH);
 		PrintMessage(buf);
 		return;
 	}
 
 	// remove the newline character from the input
-	char name[engine::Player::MAX_NAME_LENGTH] = { 0 };
+	char name[Player::MAX_NAME_LENGTH] = { 0 };
 	strncpy_s(name, input, strlen(input) - 1);
 
 	// handle both states differently
@@ -251,22 +248,22 @@ void MonsterChase::ValidateMove(const char* input)
 	if (move == 'a' || move == 'A')
 	{
 		is_valid_input = true;
-		player_->Move(engine::MoveDirectionLeft);
+		player_->Move(MoveDirectionLeft);
 	}
 	else if (move == 'd' || move == 'D')
 	{
 		is_valid_input = true;
-		player_->Move(engine::MoveDirectionRight);
+		player_->Move(MoveDirectionRight);
 	}
 	else if (move == 'w' || move == 'W')
 	{
 		is_valid_input = true;
-		player_->Move(engine::MoveDirectionUp);
+		player_->Move(MoveDirectionUp);
 	}
 	else if (move == 's' || move == 'S')
 	{
 		is_valid_input = true;
-		player_->Move(engine::MoveDirectionDown);
+		player_->Move(MoveDirectionDown);
 	}
 	else if (move == 'm' || move == 'M')
 	{
@@ -408,7 +405,7 @@ void MonsterChase::CreatePlayer(const char* name)
 	}
 
 	// create the player at the center of the grid
-	player_ = new engine::Player(engine::Vec2D(MAX_ROWS / 2, MAX_COLS / 2), name);
+	player_ = new Player(engine::Vec2D(MAX_ROWS / 2, MAX_COLS / 2), name);
 
 	// time to start the game
 	game_state_ = GameStateRunning;

@@ -14,6 +14,15 @@ enum GameState
 	GameStateQuit
 };
 
+// An enum to describe the direction of movement
+enum MoveDirection
+{
+	MoveDirectionLeft = 0,
+	MoveDirectionRight,
+	MoveDirectionUp,
+	MoveDirectionDown
+};
+
 class MonsterChase
 {
 public:
@@ -60,7 +69,7 @@ private:
 	GameState game_state_;
 
 	// game elements
-	engine::Player* player_;
+	Player* player_;
 	Monster** monsters_;
 
 	// game counters

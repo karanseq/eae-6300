@@ -149,12 +149,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Private\Player.cpp" />
-    <ClCompile Include="Source\Private\Vec2D.cpp" />
+    <ClInclude Include="Source\Math\Vec2D.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Player.h" />
-    <ClInclude Include="Source\Vec2D.h" />
+    <ClCompile Include="Source\Math\Private\Vec2D.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
