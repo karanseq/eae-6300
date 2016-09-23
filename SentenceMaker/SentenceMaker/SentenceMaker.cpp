@@ -5,6 +5,25 @@
 #include <conio.h>		// _getch
 #include <stdlib.h>		// malloc, free
 
+void CountCharactersAndWords(const char** words, int& num_characters, int& num_words)
+{
+	if (words == NULL)
+	{
+		return;
+	}
+
+	while (*(words + num_words) != NULL)
+	{
+		int char_in_word = 0;
+		while (*(*(words + num_words) + char_in_word) != NULL)
+		{
+			++char_in_word;
+			++num_characters;
+		}
+		++num_words;
+	}
+}
+
 char* MakeSentence(const char** words)
 {
 	// validate input
@@ -13,27 +32,11 @@ char* MakeSentence(const char** words)
 		return NULL;
 	}
 
-	//printf("%s...\n", __FUNCTION__);
 	char* sentence = NULL;
-	int num_words = 0, num_characters = 0;
 	
-	// count the alphabets & words
-	int i = 0;
-	while (words[i] != NULL) {
-		const char* word = words[i];
-
-		int j = 0;
-		while (word[j] != NULL) {
-			//printf("%c", word[j]);
-			++j;
-			++num_characters;
-		}
-
-		//printf(" = %s\n", words[i]);
-		++i;
-		++num_words;
-	}
-	//printf("This sentence has %d words & %d characters...\n", num_words, num_characters);
+	// count the characters & words
+	int num_words = 0, num_characters = 0;
+	CountCharactersAndWords(words, num_characters, num_words);
 	
 	// allocate memory
 	size_t sentence_size = num_characters + num_words + 1;
@@ -46,24 +49,20 @@ char* MakeSentence(const char** words)
 	}
 
 	// fill in the sentence
-	int k = 0;
-	i = 0;
-	while (words[i] != NULL)
+	int i = 0, k = 0;
+	while (*(words + i) != NULL)
 	{
 		int j = 0;
-		while (words[i][j] != NULL)
+		while (*(*(words + i) + j) != NULL)
 		{
-			sentence[k++] = words[i][j];
+			*(sentence + k++) = *(*(words + i) + j);
 			++j;
 		}
-		sentence[k++] = ' ';
+		*(sentence + k++) = ' ';
 		++i;
 	}
-	sentence[--k] = '.';
-	sentence[++k] = '\0';
-	//printf("Final sentence length:%d\n", k);
-
-	printf("Your sentence is:%s\n", sentence);
+	*(sentence + --k) = '.';
+	*(sentence + ++k) = '\0';
 
 	return sentence;
 }
@@ -73,15 +72,18 @@ int main()
 	printf("The Unoriginal Sentence Maker\n");
 
 	const char* words[] = {
-		"This",
-		"might",
-		"not",
-		"really",
-		"work",
+		"May",
+		"the",
+		"force",
+		"be",
+		"with",
+		"you",
 		NULL
 	};
 
 	char* sentence = MakeSentence(words);
+
+	printf("Your sentence is:%s\n", sentence);
 
 	_getch();
 
