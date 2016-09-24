@@ -1,10 +1,5 @@
-// include libraries
-#include <stdio.h>
-
 // include gameplay elements
 #include "MonsterChase.h"
-
-#include "Math\Vec2D.h"
 
 int main(int* argv, char** argc)
 {

@@ -19,6 +19,12 @@
     <Filter Include="Header Files\Math">
       <UniqueIdentifier>{a1d0f04f-5807-4c5b-9df3-d61eee7e778d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Logger">
+      <UniqueIdentifier>{9210ea26-2877-4825-85e8-1949bd4c420a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Logger">
+      <UniqueIdentifier>{262fe3b9-50c5-48b5-bd1e-0e0c378cdd13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -27,10 +33,16 @@
     <ClInclude Include="Source\Math\Vec2D.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Logger\Logger.h">
+      <Filter>Header Files\Logger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Math\Private\Vec2D.cpp">
       <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
+      <Filter>Source Files\Logger</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

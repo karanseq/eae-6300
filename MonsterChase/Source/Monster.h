@@ -1,6 +1,9 @@
-#pragma once
+#ifndef MONSTER_H_
+#define MONSTER_H_
+
 #include "Player.h"
-#include "Math\Vec2D.h"
+
+class engine::Vec2D;
 
 class Monster : public Player
 {
@@ -26,3 +29,4 @@ protected:
 	int time_to_live_;
 };
 
+#endif // MONSTER_H_

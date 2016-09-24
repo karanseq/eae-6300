@@ -1,4 +1,5 @@
 #include "MonsterChase.h"
+#include "Logger\Logger.h"
 
 // include libraries
 #include <stdio.h>
@@ -148,10 +149,7 @@ void MonsterChase::ValidateInput(const char* input)
 void MonsterChase::ValidateNumber(const char* input)
 {
 	// valide input
-	if (input == NULL)
-	{
-		return;
-	}
+	ASSERT(input != NULL);
 
 	// execute this function only in this state
 	if (game_state_ != GameStateInputNumMonsters)
@@ -177,10 +175,7 @@ void MonsterChase::ValidateNumber(const char* input)
 void MonsterChase::ValidateName(const char* input)
 {
 	// validate input
-	if (input == NULL)
-	{
-		return;
-	}
+	ASSERT(input != NULL);
 
 	// execute this function only in these states
 	if (game_state_ != GameStateInputMonsterNames && game_state_ != GameStateInputPlayerName)
@@ -226,10 +221,7 @@ void MonsterChase::ValidateName(const char* input)
 void MonsterChase::ValidateMove(const char* input)
 {
 	// validate input
-	if (input == NULL)
-	{
-		return;
-	}
+	ASSERT(input != NULL);
 
 	// execute this function only in this state
 	if (game_state_ != GameStateRunning)
@@ -280,10 +272,7 @@ void MonsterChase::ValidateMove(const char* input)
 void MonsterChase::SaveNumMonsters(int num_monsters)
 {
 	// validate input
-	if (num_monsters <= 0)
-	{
-		return;
-	}
+	ASSERT(num_monsters > 0);
 
 	// save the number of monsters
 	initial_num_monsters_ = num_monsters;
@@ -300,6 +289,7 @@ void MonsterChase::CreateMonster(const char* input_name)
 	// limit number of monsters
 	if (num_monsters_ >= Monster::MAX_MONSTERS)
 	{
+		LOG_DEBUG("Already at max monsters!");
 		return;
 	}
 
@@ -336,10 +326,9 @@ void MonsterChase::CreateMonster(const char* input_name)
 void MonsterChase::DestroyMonster(int at_index)
 {
 	// validate inputs, bounds and data state
-	if (at_index < 0 || at_index >= num_monsters_ || num_monsters_ == 0)
-	{
-		return;
-	}
+	ASSERT(at_index >= 0);
+	ASSERT(at_index < num_monsters_);
+	ASSERT(num_monsters_ != 0);
 
 	// delete the monster at index
 	delete monsters_[at_index];
@@ -387,10 +376,7 @@ void MonsterChase::UpdateMonsters()
 void MonsterChase::GetNameForMonster(char* name)
 {
 	// validate input
-	if (name == NULL)
-	{
-		return;
-	}
+	ASSERT(name != NULL);
 
 	// generate a name based by appending an incrementing ASCII value
 	sprintf_s(name, MAX_INPUT_SIZE, "foo%c", (START_ASCII + ascii_index_++));
@@ -403,10 +389,7 @@ void MonsterChase::GetNameForMonster(char* name)
 void MonsterChase::CreatePlayer(const char* name)
 {
 	// validate inputs
-	if (name == NULL)
-	{
-		return;
-	}
+	ASSERT(name != NULL);
 
 	// create the player at the center of the grid
 	player_ = new Player(engine::Vec2D::ZERO, name);

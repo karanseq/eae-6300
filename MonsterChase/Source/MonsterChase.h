@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MONSTER_CHASE_H_
+#define MONSTER_CHASE_H_
+
 #include "Player.h"
 #include "Monster.h"
 
@@ -78,3 +80,4 @@ private:
 	int ascii_index_;
 };
 
+#endif // MONSTER_CHASE_H_

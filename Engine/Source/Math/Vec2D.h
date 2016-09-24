@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ENGINE_VEC2D_H_
+#define ENGINE_VEC2D_H_
 
 #include <stdio.h>
 
@@ -56,3 +57,5 @@ namespace engine
 	}; // class Vec2D
 
 } // namespace engine
+
+#endif // ENGINE_VEC2D_H_
