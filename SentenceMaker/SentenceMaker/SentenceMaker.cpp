@@ -1,30 +1,16 @@
 // SentenceMaker.cpp : Defines the entry point for the console application.
 //
 
+#ifdef _DEBUG
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#endif // _DEBUG
+
 #include <stdio.h>		// printf
 #include <conio.h>		// _getch
 #include <stdlib.h>		// malloc, free
 
-void CountCharactersAndWords(const char** words, int& num_characters, int& num_words)
-{
-	if (words == NULL)
-	{
-		return;
-	}
-
-	while (*(words + num_words) != NULL)
-	{
-		int char_in_word = 0;
-		while (*(*(words + num_words) + char_in_word) != NULL)
-		{
-			++char_in_word;
-			++num_characters;
-		}
-		++num_words;
-	}
-}
-
-char* MakeSentence(const char** words)
+char* MakeSentence(char** words, const int num_words, const int num_characters)
 {
 	// validate input
 	if (words == NULL)
@@ -34,12 +20,8 @@ char* MakeSentence(const char** words)
 
 	char* sentence = NULL;
 	
-	// count the characters & words
-	int num_words = 0, num_characters = 0;
-	CountCharactersAndWords(words, num_characters, num_words);
-	
 	// allocate memory
-	size_t sentence_size = num_characters + num_words + 1;
+	int sentence_size = num_characters + num_words + 1;
 	sentence = (char*)malloc(sentence_size);
 
 	// check if we were given memory
@@ -67,32 +49,90 @@ char* MakeSentence(const char** words)
 	return sentence;
 }
 
+bool AcceptInput(char** words, int& num_words, int& num_characters)
+{
+	printf("Type a word or simply hit enter when you're done:");
+
+	// capture input into buffer
+	char input_str[1024] = { 0 };
+	fgets(input_str, sizeof(input_str), stdin);
+
+	// count the characters in the input string
+	int i = 0, num_characters_in_word = 0;
+	while (input_str[i] != NULL)
+	{
+		++num_characters_in_word;
+		++i;
+	}
+
+	// stop accepting input if an empty string was entered
+	if (num_characters_in_word == 1)
+	{
+		*(words + num_words) = NULL;
+		return false;
+	}
+
+	// reserve memory for the word
+	*(words + num_words) = (char*)malloc(num_characters_in_word);
+	if (*(words + num_words) == NULL)
+	{
+		words = NULL;
+		num_words = 0;
+		return false;
+	}
+
+	// copy all characters except the last one...because 'fgets' appends a '\n' to the result
+	for (int i = 0; i < num_characters_in_word - 1; ++i)
+	{
+		*(*(words + num_words) + i) = input_str[i];
+	}
+	*(*(words + num_words) + num_characters_in_word - 1) = '\0';
+
+	// update the total number of words and characters
+	++num_words;
+	num_characters += num_characters_in_word;
+
+	return true;
+}
+
 int main()
 {
-	printf("The Unoriginal Sentence Maker\n");
+	printf("The Unoriginal Sentence Maker...\nSentences having more than 128 words are an abomination!\n\n");
 
-	const char* words[] = {
-		"May",
-		"the",
-		"force",
-		"be",
-		"with",
-		"you",
-		NULL
-	};
+	int num_words = 0, num_characters = 0;
+	char* words[128] = { 0 };
+	while (AcceptInput(words, num_words, num_characters) != false) {}
 
-	char* sentence = MakeSentence(words);
+	char* sentence = NULL;
+	if (num_words > 0)
+	{
+		sentence = MakeSentence(words, num_words, num_characters);
+	}
 
-	printf("Your sentence is:%s\n", sentence);
-
-	_getch();
+	printf("\nYour sentence is:%s\n", sentence);
 
 	// free any memory that may have been allocated
+	if (words != NULL && num_words > 0)
+	{
+		for (int i = 0; i < num_words; ++i)
+		{
+			free(*(words + i));
+			*(words + i) = NULL;
+		}
+	}
+
 	if (sentence != NULL)
 	{
 		free(sentence);
 		sentence = NULL;
 	}
+
+#if defined(_DEBUG)
+	_CrtDumpMemoryLeaks();
+#endif // _DEBUG
+
+	printf("Press any key to exit...\n");
+	_getch();
 
     return 0;
 }
