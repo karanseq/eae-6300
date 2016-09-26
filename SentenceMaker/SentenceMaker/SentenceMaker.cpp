@@ -10,6 +10,8 @@
 #include <conio.h>		// _getch
 #include <stdlib.h>		// malloc, free
 
+#define MAX_WORDS 128
+
 char* MakeSentence(char** words, const int num_words, const int num_characters)
 {
 	// validate input
@@ -54,7 +56,7 @@ bool AcceptInput(char** words, int& num_words, int& num_characters)
 	printf("Type a word or simply hit enter when you're done:");
 
 	// capture input into buffer
-	char input_str[1024] = { 0 };
+	char input_str[256] = { 0 };
 	fgets(input_str, sizeof(input_str), stdin);
 
 	// count the characters in the input string
@@ -68,7 +70,6 @@ bool AcceptInput(char** words, int& num_words, int& num_characters)
 	// stop accepting input if an empty string was entered
 	if (num_characters_in_word == 1)
 	{
-		*(words + num_words) = NULL;
 		return false;
 	}
 
@@ -76,8 +77,6 @@ bool AcceptInput(char** words, int& num_words, int& num_characters)
 	*(words + num_words) = (char*)malloc(num_characters_in_word);
 	if (*(words + num_words) == NULL)
 	{
-		words = NULL;
-		num_words = 0;
 		return false;
 	}
 
@@ -97,11 +96,14 @@ bool AcceptInput(char** words, int& num_words, int& num_characters)
 
 int main()
 {
-	printf("The Unoriginal Sentence Maker...\nSentences having more than 128 words are an abomination!\n\n");
+	printf("The Unoriginal Sentence Maker...\nSentences having more than %d words are an abomination!\n\n", MAX_WORDS);
 
 	int num_words = 0, num_characters = 0;
-	char* words[128] = { 0 };
-	while (AcceptInput(words, num_words, num_characters) != false) {}
+	char* words[MAX_WORDS + 1] = { 0 };
+	while (num_words < MAX_WORDS && AcceptInput(words, num_words, num_characters) != false) {}
+
+	// nullify end of words
+	*(words + num_words) = NULL;
 
 	char* sentence = NULL;
 	if (num_words > 0)
@@ -111,9 +113,11 @@ int main()
 
 	printf("\nYour sentence is:%s\n", sentence);
 
-	// free any memory that may have been allocated
+	// free any memory that may have been allocated...
+	// first check if any words were allocated
 	if (words != NULL && num_words > 0)
 	{
+		// free memory allocated for each word
 		for (int i = 0; i < num_words; ++i)
 		{
 			free(*(words + i));
@@ -121,6 +125,7 @@ int main()
 		}
 	}
 
+	// free memory allocated for the sentence
 	if (sentence != NULL)
 	{
 		free(sentence);
