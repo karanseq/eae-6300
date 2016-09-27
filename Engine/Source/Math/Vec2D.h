@@ -7,25 +7,19 @@ namespace engine
 	class Vec2D
 	{
 	public:
-		Vec2D() : x_(0.0f),
-			y_(0.0f)
-		{}
-
-		Vec2D(float x, float y) : x_(x),
-			y_(y)
-		{}
-
+		Vec2D();
+		Vec2D(float x, float y);
 		Vec2D(const Vec2D& copy);
 
 		~Vec2D()
 		{}
 
 		// accessors and mutators
-		inline float x() const { return x_; }
-		inline void x(float x) { x_ = x; }
-		inline float y() const { return y_; }
-		inline void y(float y) { y_ = y; }
-		inline void set(float x, float y) { x_ = x; y_ = y; }
+		float x() const;
+		void x(float x);
+		float y() const;
+		void y(float y);
+		void set(float x, float y);
 
 		// assignment
 		Vec2D& operator=(const Vec2D& vec);
