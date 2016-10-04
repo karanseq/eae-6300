@@ -15,12 +15,12 @@ void AllocatorTest::RunTest(size_t total_memory, unsigned int num_bds)
 	block_allocator->PrintAllDescriptors();
 #endif
 
-	const size_t num_pointers = 25;
+	const size_t num_pointers = 5;
 	char* pointers[num_pointers] = { 0 };
 
 	for (unsigned int i = 0; i < num_pointers; ++i)
 	{
-		size_t rand_size = 1 + rand() % 8;
+		size_t rand_size = 1 + rand() % 64;
 		pointers[i] = (char*)block_allocator->Alloc(rand_size);
 
 		for (int j = 0; j < rand_size; ++j)
@@ -44,6 +44,16 @@ void AllocatorTest::RunTest(size_t total_memory, unsigned int num_bds)
 			LOG_DEBUG("pointer[%d] = NULL", i);
 		}
 	}
+
+	for (unsigned int i = 0; i < num_pointers; ++i)
+	{
+		block_allocator->Free(pointers[i]);
+		pointers[i] = NULL;
+	}
+
+#ifdef BUILD_DEBUG
+	block_allocator->PrintAllDescriptors();
+#endif
 
 	LOG_DEBUG("Largest block size:%zu", block_allocator->GetLargestFreeBlockSize());
 	LOG_DEBUG("Total free memory:%zu", block_allocator->GetTotalFreeMemorySize());

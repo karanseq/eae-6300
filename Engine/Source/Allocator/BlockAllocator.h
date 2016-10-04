@@ -54,12 +54,15 @@ protected:
 	void InitFirstBlockDescriptor();
 
 	BD* GetDescriptorFromPool();
-	bool AddToPool(BD* bd);
-	bool RemoveFromPool(BD* bd);
+	BD* GetDescriptorFromFreeList(const size_t size);
+
 	bool AddToFreeList(BD* bd);
-	bool RemoveFromFreeList(BD* bd);
+	void RemoveFromFreeList(BD* prev_bd, BD* curr_bd);
 	bool AddToOutstandingList(BD* bd);
-	bool RemoveFromOutstandingList(BD* bd);
+	void RemoveFromOutstandingList(BD* prev_bd, BD* curr_bd);
+
+	bool CheckMemoryOverwrite(const BD* bd) const;
+	void ClearBlock(BD* bd);
 
 public:
 	static BlockAllocator* Create(const size_t block_size = DEFAULT_BLOCK_SIZE, const unsigned int num_block_descriptors = DEFAULT_NUM_BLOCK_DESCRIPTORS, const unsigned int byte_alignment = DEFAULT_BYTE_ALIGNMENT);
@@ -93,7 +96,6 @@ protected:
 	unsigned int num_block_descriptors_;				// initial number of block descriptors
 	unsigned int byte_alignment_;						// the byte alignment to follow
 	
-	unsigned int pool_size_;							// current size of the pool of unused block descriptors
 	BD* pool_head_;										// pool of unused block descriptors
 	BD* free_list_head_;								// list of block descriptors describing free blocks
 	BD* outstanding_list_head_;							// list of block descriptors describing allocated blocks
