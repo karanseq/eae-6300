@@ -149,10 +149,12 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Allocator\BlockAllocator.h" />
     <ClInclude Include="Source\Logger\Logger.h" />
     <ClInclude Include="Source\Math\Vec2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Allocator\Private\BlockAllocator.cpp" />
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp" />
     <ClCompile Include="Source\Math\Private\Vec2D.cpp" />
   </ItemGroup>

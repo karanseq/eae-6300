@@ -25,6 +25,12 @@
     <Filter Include="Header Files\Logger">
       <UniqueIdentifier>{262fe3b9-50c5-48b5-bd1e-0e0c378cdd13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Allocator">
+      <UniqueIdentifier>{07f635b7-a972-4c90-a7f6-191b3a6855f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Allocator">
+      <UniqueIdentifier>{fd257d52-244d-42a7-8af2-d7cb6faa928a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -36,6 +42,9 @@
     <ClInclude Include="Source\Logger\Logger.h">
       <Filter>Header Files\Logger</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Allocator\BlockAllocator.h">
+      <Filter>Header Files\Allocator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Math\Private\Vec2D.cpp">
@@ -43,6 +52,9 @@
     </ClCompile>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
       <Filter>Source Files\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Allocator\Private\BlockAllocator.cpp">
+      <Filter>Source Files\Allocator</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
