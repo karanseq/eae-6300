@@ -23,7 +23,7 @@ void AllocatorTest::RunTest(size_t total_memory, unsigned int num_bds)
 		size_t rand_size = 1 + rand() % 64;
 		pointers[i] = (char*)block_allocator->Alloc(rand_size);
 
-		for (int j = 0; j < rand_size; ++j)
+		for (unsigned int j = 0; j < rand_size; ++j)
 		{
 			pointers[i][j] = 65 + i;
 		}

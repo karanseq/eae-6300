@@ -27,7 +27,6 @@ BlockAllocator* BlockAllocator::instance_ = NULL;
 BlockAllocator::BlockAllocator() : block_(NULL),
 	total_block_size_(DEFAULT_BLOCK_SIZE),
 	num_block_descriptors_(DEFAULT_NUM_BLOCK_DESCRIPTORS),
-	byte_alignment_(DEFAULT_BYTE_ALIGNMENT),
 	pool_head_(NULL),
 	outstanding_list_head_(NULL),
 	free_list_head_(NULL)
@@ -35,10 +34,9 @@ BlockAllocator::BlockAllocator() : block_(NULL),
 	Init();
 }
 
-BlockAllocator::BlockAllocator(const size_t block_size, const unsigned int num_block_descriptors, const unsigned int byte_alignment) : block_(NULL),
+BlockAllocator::BlockAllocator(const size_t block_size, const unsigned int num_block_descriptors) : block_(NULL),
 	total_block_size_(block_size),
 	num_block_descriptors_(num_block_descriptors),
-	byte_alignment_(byte_alignment),
 	pool_head_(NULL),
 	outstanding_list_head_(NULL),
 	free_list_head_(NULL)
@@ -52,11 +50,11 @@ BlockAllocator::~BlockAllocator()
 	block_ = NULL;
 }
 
-BlockAllocator* BlockAllocator::Create(const size_t block_size, const unsigned int num_block_descriptors, const unsigned int byte_alignment)
+BlockAllocator* BlockAllocator::Create(const size_t block_size, const unsigned int num_block_descriptors)
 {
 	if (BlockAllocator::instance_ == NULL)
 	{
-		BlockAllocator::instance_ = new BlockAllocator(block_size, num_block_descriptors, byte_alignment);
+		BlockAllocator::instance_ = new BlockAllocator(block_size, num_block_descriptors);
 	}
 	return BlockAllocator::instance_;
 }
@@ -286,7 +284,7 @@ void* BlockAllocator::Alloc(const size_t size)
 {
 	// consider memory for guardbands
 #ifdef BUILD_DEBUG
-	size_t total_size = size + 8;
+	size_t total_size = size + DEFAULT_GUARDBAND_SIZE * 2;
 #else
 	size_t total_size = size;
 #endif
@@ -329,7 +327,7 @@ void* BlockAllocator::Alloc(const size_t size)
 	new_bd->block_pointer_ = free_bd->block_pointer_ + free_bd->block_size_ - total_size;
 
 	// adjust for byte alignment
-	const unsigned int adjustment = ((uintptr_t)(const void*)(new_bd->block_pointer_)) % byte_alignment_;
+	const unsigned int adjustment = ((uintptr_t)(const void*)(new_bd->block_pointer_)) % DEFAULT_BYTE_ALIGNMENT;
 	new_bd->block_pointer_ -= adjustment;
 
 	new_bd->block_size_ = total_size;

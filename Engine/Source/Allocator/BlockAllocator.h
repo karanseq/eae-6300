@@ -45,7 +45,7 @@ class BlockAllocator
 {
 protected:
 	BlockAllocator();
-	BlockAllocator(const size_t block_size = DEFAULT_BLOCK_SIZE, const unsigned int num_block_descriptors = DEFAULT_NUM_BLOCK_DESCRIPTORS, const unsigned int byte_alignment = DEFAULT_BYTE_ALIGNMENT);
+	BlockAllocator(const size_t block_size = DEFAULT_BLOCK_SIZE, const unsigned int num_block_descriptors = DEFAULT_NUM_BLOCK_DESCRIPTORS);
 	~BlockAllocator();
 	static BlockAllocator* instance_;
 
@@ -65,7 +65,7 @@ protected:
 	void ClearBlock(BD* bd);
 
 public:
-	static BlockAllocator* Create(const size_t block_size = DEFAULT_BLOCK_SIZE, const unsigned int num_block_descriptors = DEFAULT_NUM_BLOCK_DESCRIPTORS, const unsigned int byte_alignment = DEFAULT_BYTE_ALIGNMENT);
+	static BlockAllocator* Create(const size_t block_size = DEFAULT_BLOCK_SIZE, const unsigned int num_block_descriptors = DEFAULT_NUM_BLOCK_DESCRIPTORS);
 	static void Destroy();
 
 	// Allocate a block of memory with given size
@@ -94,7 +94,6 @@ protected:
 	size_t total_block_size_;							// total size of block (including memory for block descriptors)
 	size_t usable_block_size_;							// size of memory to use for user allocations (excluding memory for block descriptors)
 	unsigned int num_block_descriptors_;				// initial number of block descriptors
-	unsigned int byte_alignment_;						// the byte alignment to follow
 	
 	BD* pool_head_;										// pool of unused block descriptors
 	BD* free_list_head_;								// list of block descriptors describing free blocks
