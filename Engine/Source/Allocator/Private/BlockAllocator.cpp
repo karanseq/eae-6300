@@ -284,9 +284,9 @@ void* BlockAllocator::Alloc(const size_t size)
 {
 	// consider memory for guardbands
 #ifdef BUILD_DEBUG
-	size_t total_size = size + DEFAULT_GUARDBAND_SIZE * 2;
+	size_t total_size = size + DEFAULT_GUARDBAND_SIZE * 2 + DEFAULT_BYTE_ALIGNMENT;
 #else
-	size_t total_size = size;
+	size_t total_size = size + DEFAULT_BYTE_ALIGNMENT;
 #endif
 
 	// check if we have sufficient memory
@@ -297,7 +297,7 @@ void* BlockAllocator::Alloc(const size_t size)
 	}
 
 	// fetch a descriptor from the pool
-	BD* new_bd = GetDescriptorFromFreeList(size);
+	BD* new_bd = GetDescriptorFromFreeList(total_size);
 	if (new_bd == NULL)
 	{
 		new_bd = GetDescriptorFromPool();
@@ -328,7 +328,7 @@ void* BlockAllocator::Alloc(const size_t size)
 
 	// adjust for byte alignment
 	const unsigned int adjustment = ((uintptr_t)(const void*)(new_bd->block_pointer_)) % DEFAULT_BYTE_ALIGNMENT;
-	new_bd->block_pointer_ -= adjustment;
+	new_bd->block_pointer_ += (DEFAULT_BYTE_ALIGNMENT - adjustment);
 
 	new_bd->block_size_ = total_size;
 	// initialize the user pointer
@@ -343,7 +343,7 @@ void* BlockAllocator::Alloc(const size_t size)
 	for (unsigned int i = 0; i < DEFAULT_GUARDBAND_SIZE; ++i)
 	{
 		*(new_bd->block_pointer_ + i) = GUARDBAND_FILL;
-		*(new_bd->block_pointer_ + new_bd->block_size_ - (i + 1)) = GUARDBAND_FILL;
+		*(new_bd->block_pointer_ + DEFAULT_GUARDBAND_SIZE + new_bd->user_size_ + i) = GUARDBAND_FILL;
 	}
 
 	// update the user pointer
