@@ -25,6 +25,7 @@ namespace engine
 		OutputDebugStringA(str_output);
 	}
 
+#if defined(DEBUG_LOG_LEVEL) && (DEBUG_LOG_LEVEL == 1)
 	void Print(const char* function_name, const int line_number, const char* format, ...)
 	{
 		const size_t len_temp = 256;
@@ -44,5 +45,6 @@ namespace engine
 
 		OutputDebugStringA(str_output);
 	}
+#endif // defined(DEBUG_LOG_LEVEL) && (DEBUG_LOG_LEVEL == 1)
 
 } // namespace engine

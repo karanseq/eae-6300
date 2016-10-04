@@ -78,7 +78,7 @@ void BlockAllocator::Init()
 {
 	block_ = (unsigned char*)_aligned_malloc(total_block_size_, 4);
 	memset(block_, 0, total_block_size_);
-	LOG_DEBUG("Base start address:%p\tend address:%p\n", block_, (block_ + total_block_size_));
+	LOG_DEBUG("Base start address:%p\tend address:%p", block_, (block_ + total_block_size_));
 
 	InitBlockDescriptors();
 	InitFirstBlockDescriptor();
@@ -95,7 +95,7 @@ void BlockAllocator::InitBlockDescriptors()
 
 	// initialize the "unused" block descriptor pool head
 	pool_head_ = (BD*)bd_begin;
-	LOG_DEBUG("Descriptor pool start address:%p\tend address:%p\n", pool_head_, (pool_head_ + num_block_descriptors_));
+	LOG_DEBUG("Descriptor pool start address:%p\tend address:%p", pool_head_, (pool_head_ + num_block_descriptors_));
 
 	// initialize the pool of block descriptors
 	for (unsigned int i = 0; i < num_block_descriptors_; ++i)
@@ -178,7 +178,7 @@ bool BlockAllocator::RemoveFromPool(BD* bd)
 	// return false if the pool is empty
 	if (pool_size_ <= 0)
 	{
-		LOG_DEBUG("%s - %d\n", __FUNCTION__, __LINE__);
+		LOG_DEBUG("%s - %d", __FUNCTION__, __LINE__);
 		return false;
 	}
 
@@ -376,7 +376,7 @@ size_t BlockAllocator::GetTotalFreeMemorySize() const
 #ifdef BUILD_DEBUG
 void BlockAllocator::PrintAllDescriptors() const
 {
-	LOG_DEBUG("\n-------------------- %s --------------------\n", __FUNCTION__);
+	LOG_DEBUG("-------------------- %s --------------------", __FUNCTION__);
 	if (pool_head_ != NULL)
 	{
 		LOG_DEBUG("POOL:");
@@ -384,7 +384,6 @@ void BlockAllocator::PrintAllDescriptors() const
 		{
 			LOG_DEBUG("BD.id=%d size:%zu  ", bd->id_, bd->block_size_);
 		}
-		LOG_DEBUG("\n");
 	}
 
 	if (free_list_head_ != NULL)
@@ -394,7 +393,6 @@ void BlockAllocator::PrintAllDescriptors() const
 		{
 			LOG_DEBUG("BD.id=%d size:%zu  ", bd->id_, bd->block_size_);
 		}
-		LOG_DEBUG("\n");
 	}
 
 	if (outstanding_list_head_ != NULL)
@@ -404,9 +402,8 @@ void BlockAllocator::PrintAllDescriptors() const
 		{
 			LOG_DEBUG("BD.id=%d size:%zu  ", bd->id_, bd->block_size_);
 		}
-		LOG_DEBUG("\n");
 	}
-	LOG_DEBUG("-------------------- END --------------------\n");
+	LOG_DEBUG("-------------------- END --------------------");
 }
 
 void BlockAllocator::InitTestBlockDescriptor()

@@ -95,7 +95,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;BUILD_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;BUILD_DEBUG;ENABLE_ALLOCATOR_TEST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)Engine\Source\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -112,7 +112,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;BUILD_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;BUILD_DEBUG;ENABLE_ALLOCATOR_TEST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)Engine\Source\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -169,12 +169,14 @@
     <ResourceCompile Include="MonsterChase.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Private\AllocatorTest.cpp" />
     <ClCompile Include="Source\Private\Main.cpp" />
     <ClCompile Include="Source\Private\Monster.cpp" />
     <ClCompile Include="Source\Private\MonsterChase.cpp" />
     <ClCompile Include="Source\Private\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\AllocatorTest.h" />
     <ClInclude Include="Source\Monster.h" />
     <ClInclude Include="Source\MonsterChase.h" />
     <ClInclude Include="Source\Player.h" />

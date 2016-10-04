@@ -26,7 +26,9 @@
 namespace engine
 {
 	void Print(const char* format, ...);
+#if defined(DEBUG_LOG_LEVEL) && (DEBUG_LOG_LEVEL == 1)
 	void Print(const char* function_name, const int line_number, const char* format, ...);
+#endif
 } // namespace engine
 
 #endif // ENGINE_LOGGER_H_
