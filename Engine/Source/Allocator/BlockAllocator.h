@@ -7,6 +7,7 @@ namespace engine {
 #define DEFAULT_NUM_BLOCK_DESCRIPTORS 512
 #define DEFAULT_GUARDBAND_SIZE 4
 #define GUARDBAND_FILL 0xFD
+#define DEFAULT_BYTE_ALIGNMENT 4
 
 /*
 	BlockDescriptor
@@ -24,8 +25,8 @@ public:
 	BlockDescriptor* next_;				// pointer to the next block descriptor
 
 #ifdef BUILD_DEBUG
-	static unsigned int counter_;
-	unsigned int id_;
+	static unsigned int counter_;		// a counter to keep track of all the descriptors
+	unsigned int id_;					// an identifier for each descriptor
 #endif
 
 	void Init();
@@ -44,7 +45,7 @@ class BlockAllocator
 {
 protected:
 	BlockAllocator();
-	BlockAllocator(size_t block_size = DEFAULT_BLOCK_SIZE, unsigned int num_block_descriptors = DEFAULT_NUM_BLOCK_DESCRIPTORS);
+	BlockAllocator(const size_t block_size = DEFAULT_BLOCK_SIZE, const unsigned int num_block_descriptors = DEFAULT_NUM_BLOCK_DESCRIPTORS, const unsigned int byte_alignment = DEFAULT_BYTE_ALIGNMENT);
 	~BlockAllocator();
 	static BlockAllocator* instance_;
 
@@ -61,13 +62,11 @@ protected:
 	bool RemoveFromOutstandingList(BD* bd);
 
 public:
-	static BlockAllocator* Create(size_t block_size = DEFAULT_BLOCK_SIZE, unsigned int num_block_descriptors = DEFAULT_NUM_BLOCK_DESCRIPTORS);
+	static BlockAllocator* Create(const size_t block_size = DEFAULT_BLOCK_SIZE, const unsigned int num_block_descriptors = DEFAULT_NUM_BLOCK_DESCRIPTORS, const unsigned int byte_alignment = DEFAULT_BYTE_ALIGNMENT);
 	static void Destroy();
 
 	// Allocate a block of memory with given size
-	void* Alloc(size_t size);
-	// Allocate a block of memory with given size and byte alignment
-	void* Alloc(size_t size, unsigned int alignment);
+	void* Alloc(const size_t size);
 	// Deallocate a block of memory
 	bool Free(void* pointer);
 
@@ -75,12 +74,12 @@ public:
 	void Collect();
 
 	// Query whether a given pointer is within this allocator's range
-	bool Contains(void* pointer) const;
+	bool Contains(const void* pointer) const;
 	// Query whether a given pointer is an outstanding allocation
-	bool IsAllocated(void* pointer) const;
+	bool IsAllocated(const void* pointer) const;
 
-	size_t GetLargestFreeBlockSize() const;
-	size_t GetTotalFreeMemorySize() const;
+	const size_t GetLargestFreeBlockSize() const;
+	const size_t GetTotalFreeMemorySize() const;
 
 #ifdef BUILD_DEBUG
 	void PrintAllDescriptors() const;
@@ -92,12 +91,11 @@ protected:
 	size_t total_block_size_;							// total size of block (including memory for block descriptors)
 	size_t usable_block_size_;							// size of memory to use for user allocations (excluding memory for block descriptors)
 	unsigned int num_block_descriptors_;				// initial number of block descriptors
+	unsigned int byte_alignment_;						// the byte alignment to follow
 	
 	unsigned int pool_size_;							// current size of the pool of unused block descriptors
 	BD* pool_head_;										// pool of unused block descriptors
-	unsigned int free_list_size_;						// current size of the list of block descriptors describing free blocks
 	BD* free_list_head_;								// list of block descriptors describing free blocks
-	unsigned int outstanding_list_size_;				// current size of the list of block descriptors describing allocated blocks
 	BD* outstanding_list_head_;							// list of block descriptors describing allocated blocks
 
 }; // class BlockAllocator

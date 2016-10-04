@@ -27,24 +27,22 @@ BlockAllocator* BlockAllocator::instance_ = NULL;
 BlockAllocator::BlockAllocator() : block_(NULL),
 	total_block_size_(DEFAULT_BLOCK_SIZE),
 	num_block_descriptors_(DEFAULT_NUM_BLOCK_DESCRIPTORS),
+	byte_alignment_(DEFAULT_BYTE_ALIGNMENT),
 	pool_size_(0),
 	pool_head_(NULL),
-	outstanding_list_size_(0),
 	outstanding_list_head_(NULL),
-	free_list_size_(0),
 	free_list_head_(NULL)
 {
 	Init();
 }
 
-BlockAllocator::BlockAllocator(size_t block_size, unsigned int num_block_descriptors) : block_(NULL), 
+BlockAllocator::BlockAllocator(const size_t block_size, const unsigned int num_block_descriptors, const unsigned int byte_alignment) : block_(NULL),
 	total_block_size_(block_size),
 	num_block_descriptors_(num_block_descriptors),
+	byte_alignment_(byte_alignment),
 	pool_size_(0),
 	pool_head_(NULL),
-	outstanding_list_size_(0),
 	outstanding_list_head_(NULL),
-	free_list_size_(0),
 	free_list_head_(NULL)
 {
 	Init();
@@ -56,11 +54,11 @@ BlockAllocator::~BlockAllocator()
 	block_ = NULL;
 }
 
-BlockAllocator* BlockAllocator::Create(size_t block_size, unsigned int num_block_descriptors)
+BlockAllocator* BlockAllocator::Create(const size_t block_size, const unsigned int num_block_descriptors, const unsigned int byte_alignment)
 {
 	if (BlockAllocator::instance_ == NULL)
 	{
-		BlockAllocator::instance_ = new BlockAllocator(block_size, num_block_descriptors);
+		BlockAllocator::instance_ = new BlockAllocator(block_size, num_block_descriptors, byte_alignment);
 	}
 	return BlockAllocator::instance_;
 }
@@ -218,8 +216,43 @@ bool BlockAllocator::AddToFreeList(BD* bd)
 {
 	ASSERT(bd != NULL);
 
-	bd->next_ = free_list_head_;
-	free_list_head_ = bd;
+	// check if the list is empty
+	if (free_list_head_ == NULL)
+	{
+		// add the new descriptor to the front 
+		bd->next_ = free_list_head_;
+		free_list_head_ = bd;
+		return true;
+	}
+
+	// if the new descriptor's block is smaller than the head's block, add it to the front
+	if (bd->block_size_ < free_list_head_->block_size_)
+	{
+		bd->next_ = free_list_head_;
+		free_list_head_ = bd;
+	}
+	else
+	{
+		// add this descriptor based on ascending order of block size
+		BD* curr_bd = free_list_head_;
+		BD* prev_bd = NULL;
+		while (curr_bd != NULL)
+		{
+			if (bd->block_size_ < curr_bd->block_size_)
+			{
+				if (prev_bd != NULL)
+				{
+					prev_bd->next_ = bd;
+				}
+				bd->next_ = curr_bd;
+				break;
+			}
+			prev_bd = curr_bd;
+			curr_bd = curr_bd->next_;
+		}
+	}
+
+
 	return true;
 }
 
@@ -242,7 +275,7 @@ bool BlockAllocator::RemoveFromOutstandingList(BD* bd)
 	return true;
 }
 
-void* BlockAllocator::Alloc(size_t size)
+void* BlockAllocator::Alloc(const size_t size)
 {
 	// consider memory for guardbands
 #ifdef BUILD_DEBUG
@@ -287,12 +320,17 @@ void* BlockAllocator::Alloc(size_t size)
 
 	// calculate the address of the new block
 	new_bd->block_pointer_ = free_bd->block_pointer_ + free_bd->block_size_ - total_size;
+
+	// adjust for byte alignment
+	const unsigned int adjustment = ((uintptr_t)(const void*)(new_bd->block_pointer_)) % byte_alignment_;
+	new_bd->block_pointer_ -= adjustment;
+
 	new_bd->block_size_ = total_size;
 	// initialize the user pointer
 	new_bd->user_pointer_ = new_bd->block_pointer_;
 
 	// splice the free block
-	free_bd->block_size_ -= total_size;
+	free_bd->block_size_ -= (total_size + adjustment);
 
 #ifdef BUILD_DEBUG
 	// add guardbands
@@ -313,12 +351,6 @@ void* BlockAllocator::Alloc(size_t size)
 	return new_bd->user_pointer_;
 }
 
-// Allocate a block of memory with given size and byte alignment
-void* BlockAllocator::Alloc(size_t size, unsigned int alignment)
-{
-	return NULL;
-}
-
 // Deallocate a block of memory
 bool BlockAllocator::Free(void* pointer)
 {
@@ -330,18 +362,18 @@ void BlockAllocator::Collect()
 {}
 
 // Query whether a given pointer is within this allocator's range
-bool BlockAllocator::Contains(void* pointer) const
+bool BlockAllocator::Contains(const void* pointer) const
 {
 	return ((unsigned char*)pointer >= block_ && (unsigned char*)pointer <= (block_ + total_block_size_));
 }
 
 // Query whether a given pointer is an outstanding allocation
-bool BlockAllocator::IsAllocated(void* pointer) const
+bool BlockAllocator::IsAllocated(const void* pointer) const
 {
 	return false;
 }
 
-size_t BlockAllocator::GetLargestFreeBlockSize() const
+const size_t BlockAllocator::GetLargestFreeBlockSize() const
 {
 	size_t largest_size = 0;
 	// loop the free list
@@ -359,7 +391,7 @@ size_t BlockAllocator::GetLargestFreeBlockSize() const
 	return largest_size;
 }
 
-size_t BlockAllocator::GetTotalFreeMemorySize() const
+const size_t BlockAllocator::GetTotalFreeMemorySize() const
 {
 	size_t total_size = 0;
 	// loop the free list

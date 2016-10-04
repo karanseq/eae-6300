@@ -4,7 +4,7 @@
 #include "Allocator/BlockAllocator.h"
 #include "Logger/Logger.h"
 
-#include <math.h>		// for pow
+#include <stdlib.h>
 
 void AllocatorTest::RunTest(size_t total_memory, unsigned int num_bds)
 {
@@ -15,12 +15,18 @@ void AllocatorTest::RunTest(size_t total_memory, unsigned int num_bds)
 	block_allocator->PrintAllDescriptors();
 #endif
 
-	const size_t num_pointers = 20;
+	const size_t num_pointers = 25;
 	char* pointers[num_pointers] = { 0 };
 
 	for (unsigned int i = 0; i < num_pointers; ++i)
 	{
-		pointers[i] = (char*)block_allocator->Alloc((size_t)pow(2, i + 1));
+		size_t rand_size = 1 + rand() % 8;
+		pointers[i] = (char*)block_allocator->Alloc(rand_size);
+
+		for (int j = 0; j < rand_size; ++j)
+		{
+			pointers[i][j] = 65 + i;
+		}
 	}
 
 #ifdef BUILD_DEBUG
