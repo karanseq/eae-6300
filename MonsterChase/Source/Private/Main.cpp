@@ -11,6 +11,7 @@ int main(int* argv, char** argc)
 	AllocatorTest::Init();
 	AllocatorTest::RunTest01();
 	AllocatorTest::RunTest02();
+	AllocatorTest::RunTest03();
 	AllocatorTest::Reset();
 	return 0;
 #endif

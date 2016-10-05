@@ -116,7 +116,6 @@ void BlockAllocator::InitFirstBlockDescriptor()
 	first_bd->block_pointer_ = block_;
 	first_bd->block_size_ = usable_block_size_;
 	// add the descriptor to the free list
-	//AddToFreeList(first_bd);
 	AddToList(&free_list_head_, &first_bd);
 }
 
@@ -138,6 +137,15 @@ BD* BlockAllocator::GetDescriptorFromPool()
 	bd_ret->next_ = NULL;
 
 	return bd_ret;
+}
+
+void BlockAllocator::AddDescriptorToPool(BD* bd)
+{
+	ASSERT(bd != NULL);
+
+	// add the descriptor to the head
+	bd->next_ = pool_head_;
+	pool_head_ = bd;
 }
 
 BD* BlockAllocator::GetDescriptorFromFreeList(const size_t size)
@@ -185,7 +193,7 @@ void BlockAllocator::AddToList(BD** head, BD** bd)
 	}
 
 	// if the new descriptor's block is smaller than the head's block, add it to the front
-	if ((*bd)->block_size_ < (*head)->block_size_)
+	if ((*bd)->block_pointer_ < (*head)->block_pointer_)
 	{
 		(*bd)->next_ = *head;
 		*head = *bd;
@@ -197,7 +205,7 @@ void BlockAllocator::AddToList(BD** head, BD** bd)
 		BD* prev = NULL;
 		while (curr != NULL)
 		{
-			if ((*bd)->block_size_ < curr->block_size_)
+			if ((*bd)->block_pointer_ < curr->block_pointer_)
 			{
 				if (prev != NULL)
 				{
@@ -234,129 +242,6 @@ void BlockAllocator::RemoveFromList(BD** head, BD** prev, BD** curr)
 	(*curr)->next_ = NULL;
 }
 
-//bool BlockAllocator::AddToFreeList(BD* bd)
-//{
-//	ASSERT(bd != NULL);
-//
-//	// check if the list is empty
-//	if (free_list_head_ == NULL)
-//	{
-//		// add the new descriptor to the front 
-//		bd->next_ = free_list_head_;
-//		free_list_head_ = bd;
-//		return true;
-//	}
-//
-//	// if the new descriptor's block is smaller than the head's block, add it to the front
-//	if (bd->block_size_ < free_list_head_->block_size_)
-//	{
-//		bd->next_ = free_list_head_;
-//		free_list_head_ = bd;
-//	}
-//	else
-//	{
-//		// add this descriptor based on ascending order of block size
-//		BD* curr_bd = free_list_head_;
-//		BD* prev_bd = NULL;
-//		while (curr_bd != NULL)
-//		{
-//			if (bd->block_size_ < curr_bd->block_size_)
-//			{
-//				if (prev_bd != NULL)
-//				{
-//					prev_bd->next_ = bd;
-//				}
-//				bd->next_ = curr_bd;
-//				return true;
-//			}
-//			prev_bd = curr_bd;
-//			curr_bd = curr_bd->next_;
-//		}
-//
-//		// this means the descriptor's block is larger than all elements in the list
-//		prev_bd->next_ = bd;
-//	}
-//
-//	return true;
-//}
-//
-//void BlockAllocator::RemoveFromFreeList(BD* prev_bd, BD* curr_bd)
-//{
-//	if (prev_bd == NULL)
-//	{
-//		// this means we're removing the head
-//		free_list_head_ = curr_bd->next_;
-//	}
-//	else
-//	{
-//		prev_bd->next_ = curr_bd->next_;
-//	}
-//
-//	curr_bd->next_ = NULL;
-//}
-//
-//bool BlockAllocator::AddToOutstandingList(BD* bd)
-//{
-//	ASSERT(bd != NULL);
-//
-//	// check if list is empty
-//	if (outstanding_list_head_ == NULL)
-//	{
-//		// add the new descriptor to the front
-//		bd->next_ = outstanding_list_head_;
-//		outstanding_list_head_ = bd;
-//		return true;
-//	}
-//
-//	// if the new descriptor's block is smaller than the head's block, add it to the front
-//	if (bd->block_size_ < outstanding_list_head_->block_size_)
-//	{
-//		bd->next_ = outstanding_list_head_;
-//		outstanding_list_head_ = bd;
-//	}
-//	else
-//	{
-//		// add this descriptor based on ascending order of block size
-//		BD* curr_bd = outstanding_list_head_;
-//		BD* prev_bd = NULL;
-//		while (curr_bd != NULL)
-//		{
-//			if (bd->block_size_ < curr_bd->block_size_)
-//			{
-//				if (prev_bd != NULL)
-//				{
-//					prev_bd->next_ = bd;
-//				}
-//				bd->next_ = curr_bd;
-//				return true;
-//			}
-//			prev_bd = curr_bd;
-//			curr_bd = curr_bd->next_;
-//		}
-//
-//		// this means the descriptor's block is larger than all elements in the list
-//		prev_bd->next_ = bd;
-//	}
-//
-//	return true;
-//}
-//
-//void BlockAllocator::RemoveFromOutstandingList(BD* prev_bd, BD* curr_bd)
-//{
-//	if (prev_bd == NULL)
-//	{
-//		// this means we're removing the head
-//		outstanding_list_head_ = curr_bd->next_;
-//	}
-//	else
-//	{
-//		// this means we're removing an element in the middle/end
-//		prev_bd->next_ = curr_bd->next_;
-//	}
-//
-//	curr_bd->next_ = NULL;
-//}
-
 bool BlockAllocator::CheckMemoryOverwrite(BD* bd) const
 {
 	for (unsigned int i = 0; i < DEFAULT_GUARDBAND_SIZE; ++i)
@@ -373,19 +258,26 @@ void BlockAllocator::ClearBlock(BD* bd)
 {
 	for (unsigned int i = 0; i < bd->block_size_; ++i)
 	{
-		*(bd->block_pointer_ + i) = '*';
+		*(bd->block_pointer_ + i) = 0;
 	}
-	*(bd->block_pointer_) = '|';
-	*(bd->block_pointer_ + bd->block_size_ - 1) = '|';
 }
 
 void* BlockAllocator::Alloc(const size_t size)
 {
+	if (size <= 0)
+	{
+		LOG_DEBUG("Bad input passed into Alloc!");
+		return NULL;
+	}
+
+	// round off the user's request to the nearest 4 byte size
+	const size_t rounded_size = size + DEFAULT_BYTE_ALIGNMENT - (size % DEFAULT_BYTE_ALIGNMENT);
+
 	// consider memory for guardbands
 #ifdef BUILD_DEBUG
-	size_t total_size = size + DEFAULT_GUARDBAND_SIZE * 2 + DEFAULT_BYTE_ALIGNMENT;
+	size_t total_size = rounded_size + DEFAULT_GUARDBAND_SIZE * 2 + DEFAULT_BYTE_ALIGNMENT;
 #else
-	size_t total_size = size + DEFAULT_BYTE_ALIGNMENT;
+	size_t total_size = rounded_size + DEFAULT_BYTE_ALIGNMENT;
 #endif
 
 	// declare a block descriptor to service this request
@@ -395,8 +287,16 @@ void* BlockAllocator::Alloc(const size_t size)
 	BD* free_bd = GetDescriptorFromFreeList(total_size);
 	if (free_bd == NULL)
 	{
-		LOG_DEBUG("Insufficient memory!");
-		return NULL;
+		// we don't have a descriptor with enoguh memory so let's try and defrag
+		Defragment();
+
+		// request a new descriptor again after defragmentation
+		free_bd = GetDescriptorFromFreeList(total_size);
+		if (free_bd == NULL)
+		{
+			LOG_DEBUG("Insufficient memory!");
+			return NULL;
+		}
 	}
 
 	// 2. check if we need to split the memory pointed by the descriptor returned from 1.
@@ -411,12 +311,19 @@ void* BlockAllocator::Alloc(const size_t size)
 		new_bd = GetDescriptorFromPool();
 		if (new_bd == NULL)
 		{
-			// can't proceed without a new descriptor
-			// so add the descriptor from 1 back to the free list and return NULL
-			//AddToFreeList(free_bd);
-			AddToList(&free_list_head_, &free_bd);
-			LOG_DEBUG("Insufficient descriptors!");
-			return NULL;
+			// we used up all the descriptors so let's try and defrag
+			Defragment();
+
+			// request a new descriptor again after defragmentation
+			new_bd = GetDescriptorFromPool();
+			if (new_bd == NULL)
+			{
+				// can't proceed without a new descriptor
+				// so add the descriptor from 1 back to the free list and return NULL
+				AddToList(&free_list_head_, &free_bd);
+				LOG_DEBUG("Insufficient descriptors!");
+				return NULL;				
+			}
 		}
 
 		// calculate the address of the new block
@@ -431,13 +338,12 @@ void* BlockAllocator::Alloc(const size_t size)
 		free_bd->block_size_ -= total_size;
 
 		// add the remaining free block back to the free list
-		//AddToFreeList(free_bd);
 		AddToList(&free_list_head_, &free_bd);
 	}
 
 	// initialize the user pointer
 	new_bd->user_pointer_ = new_bd->block_pointer_;
-	new_bd->user_size_ = size;
+	new_bd->user_size_ = rounded_size;
 
 #ifdef BUILD_DEBUG
 	// add guardbands
@@ -452,7 +358,6 @@ void* BlockAllocator::Alloc(const size_t size)
 #endif
 
 	// add the descriptor to the outstanding list
-	//AddToOutstandingList(new_bd);
 	AddToList(&outstanding_list_head_, &new_bd);
 
 	// return a pointer to the user
@@ -485,14 +390,12 @@ bool BlockAllocator::Free(void* pointer)
 			}
 
 			// remove descriptor from outstanding list			
-			//RemoveFromOutstandingList(prev_bd, curr_bd);
 			RemoveFromList(&outstanding_list_head_, &prev_bd, &curr_bd);
 
 			// clear the block
 			ClearBlock(curr_bd);
 
 			// add descriptor to free list
-			//AddToFreeList(curr_bd);
 			AddToList(&free_list_head_, &curr_bd);
 
 			free_successful = true;
@@ -506,9 +409,47 @@ bool BlockAllocator::Free(void* pointer)
 	return free_successful;
 }
 
-// Run garbage collection
-void BlockAllocator::Collect()
-{}
+// Run defragmentation
+void BlockAllocator::Defragment()
+{
+#ifdef BUILD_DEBUG
+	unsigned int num_blocks_combined = 0;
+	size_t bytes_combined = 0;
+#endif
+	BD* curr = free_list_head_;
+	while (curr != NULL && curr->next_ != NULL)
+	{
+		if (curr->block_pointer_ + curr->block_size_ == curr->next_->block_pointer_)
+		{
+			BD* next_bd = curr->next_;
+			// update current descriptor's block size
+			curr->block_size_ += next_bd->block_size_;
+
+#ifdef BUILD_DEBUG
+			bytes_combined += next_bd->block_size_;
+#endif
+			// update current descriptor's next pointer
+			curr->next_ = next_bd->next_;
+
+			// clear next descriptor's block size
+			next_bd->block_size_ = 0;
+			// clear next descriptor's next pointer
+			next_bd->next_ = NULL;
+
+			AddDescriptorToPool(next_bd);
+
+#ifdef BUILD_DEBUG
+			++num_blocks_combined;
+#endif
+			continue;
+		}
+		curr = curr->next_;
+	}
+
+#ifdef BUILD_DEBUG
+	LOG_DEBUG("Defragment finished...combined more than %zu bytes in %d blocks!", bytes_combined, num_blocks_combined);
+#endif
+}
 
 // Query whether a given pointer is within this allocator's range
 bool BlockAllocator::Contains(const void* pointer) const
@@ -564,7 +505,7 @@ void BlockAllocator::PrintAllDescriptors() const
 		LOG_DEBUG("POOL:");
 		for (BD* bd = pool_head_; bd != NULL; bd = bd->next_)
 		{
-			LOG_DEBUG("BD.id=%d size:%zu  ", bd->id_, bd->block_size_);
+			LOG_DEBUG("BD.id:%d size:%zu  ", bd->id_, bd->block_size_);
 			++count;
 		}
 		LOG_DEBUG("POOL SIZE:%d", count);
@@ -576,7 +517,7 @@ void BlockAllocator::PrintAllDescriptors() const
 		LOG_DEBUG("FREE:");
 		for (BD* bd = free_list_head_; bd != NULL; bd = bd->next_)
 		{
-			LOG_DEBUG("BD.id=%d size:%zu  ", bd->id_, bd->block_size_);
+			LOG_DEBUG("BD.id:%d size:%zu  ", bd->id_, bd->block_size_);
 			++count;
 		}
 		LOG_DEBUG("FREE LIST SIZE:%d", count);
@@ -588,7 +529,7 @@ void BlockAllocator::PrintAllDescriptors() const
 		LOG_DEBUG("OUTSTANDING:");
 		for (BD* bd = outstanding_list_head_; bd != NULL; bd = bd->next_)
 		{
-			LOG_DEBUG("BD.id=%d size:%zu  ", bd->id_, bd->block_size_);
+			LOG_DEBUG("BD.id:%d size:%zu  ", bd->id_, bd->block_size_);
 			++count;
 		}
 		LOG_DEBUG("OUTSTANDING LIST SIZE:%d", count);

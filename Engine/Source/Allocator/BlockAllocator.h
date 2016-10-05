@@ -55,12 +55,9 @@ protected:
 	void InitFirstBlockDescriptor();
 
 	BD* GetDescriptorFromPool();
+	void AddDescriptorToPool(BD* bd);
 	BD* GetDescriptorFromFreeList(const size_t size);
 
-	/*bool AddToFreeList(BD* bd);
-	void RemoveFromFreeList(BD* prev_bd, BD* curr_bd);
-	bool AddToOutstandingList(BD* bd);
-	void RemoveFromOutstandingList(BD* prev_bd, BD* curr_bd);*/
 	void AddToList(BD** head, BD** bd);
 	void RemoveFromList(BD** head, BD** prev, BD** curr);
 
@@ -76,8 +73,8 @@ public:
 	// Deallocate a block of memory
 	bool Free(void* pointer);
 
-	// Run garbage collection
-	void Collect();
+	// Run defragmentation
+	void Defragment();
 
 	// Query whether a given pointer is within this allocator's range
 	bool Contains(const void* pointer) const;
