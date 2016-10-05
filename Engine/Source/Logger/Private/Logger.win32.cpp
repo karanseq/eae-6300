@@ -14,7 +14,7 @@ namespace engine
 		strcat_s(str_temp, format);
 		strcat_s(str_temp, "\n");
 
-		const size_t len_output = len_temp + 32;
+		const size_t len_output = len_temp + 1024;
 		char str_output[len_output] = { 0 };
 
 		va_list args;
@@ -35,7 +35,7 @@ namespace engine
 		strcat_s(str_temp, format);
 		strcat_s(str_temp, "\n");
 
-		const size_t len_output = len_temp + 32;
+		const size_t len_output = len_temp + 1024;
 		char str_output[len_output] = { 0 };
 
 		va_list args;

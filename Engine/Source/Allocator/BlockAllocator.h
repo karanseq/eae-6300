@@ -8,6 +8,7 @@ namespace engine {
 #define DEFAULT_GUARDBAND_SIZE 4
 #define GUARDBAND_FILL 0xFD
 #define DEFAULT_BYTE_ALIGNMENT 4
+#define MAX_EXTRA_MEMORY 8
 
 /*
 	BlockDescriptor
@@ -56,12 +57,14 @@ protected:
 	BD* GetDescriptorFromPool();
 	BD* GetDescriptorFromFreeList(const size_t size);
 
-	bool AddToFreeList(BD* bd);
+	/*bool AddToFreeList(BD* bd);
 	void RemoveFromFreeList(BD* prev_bd, BD* curr_bd);
 	bool AddToOutstandingList(BD* bd);
-	void RemoveFromOutstandingList(BD* prev_bd, BD* curr_bd);
+	void RemoveFromOutstandingList(BD* prev_bd, BD* curr_bd);*/
+	void AddToList(BD** head, BD** bd);
+	void RemoveFromList(BD** head, BD** prev, BD** curr);
 
-	bool CheckMemoryOverwrite(const BD* bd) const;
+	bool CheckMemoryOverwrite(BD* bd) const;
 	void ClearBlock(BD* bd);
 
 public:
@@ -86,7 +89,6 @@ public:
 
 #ifdef BUILD_DEBUG
 	void PrintAllDescriptors() const;
-	void InitTestBlockDescriptor();
 #endif
 
 protected:

@@ -8,7 +8,10 @@
 int main(int* argv, char** argc)
 {
 #ifdef ENABLE_ALLOCATOR_TEST
-	AllocatorTest::RunTest();
+	AllocatorTest::Init();
+	AllocatorTest::RunTest01();
+	AllocatorTest::RunTest02();
+	AllocatorTest::Reset();
 	return 0;
 #endif
 
