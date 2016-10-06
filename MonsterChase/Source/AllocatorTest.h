@@ -15,7 +15,7 @@ private:
 	static void DoFree(char* pointer, const size_t size);
 
 public:
-	static void Init(const size_t total_memory = 1024 * 1024, const unsigned int num_bds = 48);
+	static void Init(const size_t total_memory = 1024 * 1024, const unsigned int num_bds = 1024);
 	static void Reset();
 
 	static void RunTest01();

@@ -10,6 +10,15 @@ namespace engine {
 #define DEFAULT_BYTE_ALIGNMENT 4
 #define MAX_EXTRA_MEMORY 8
 
+#ifdef BUILD_DEBUG
+enum class DescriptorListType {
+	DESCRIPTOR_TYPE_POOL = 1 << 0,
+	DESCRIPTOR_TYPE_FREE = 1 << 1,
+	DESCRIPTOR_TYPE_USER = 1 << 2
+};
+#define DESCRIPTOR_TYPE_ALL (DescriptorListType)(1 << 0 | 1 << 1 | 1 << 2)
+#endif
+
 /*
 	BlockDescriptor
 	A block descriptor describes a block of memory that is managed by the block allocator.
@@ -32,8 +41,6 @@ public:
 
 	void Init();
 } BD;
-
-
 
 /*
 	BlockAllocator
@@ -61,8 +68,10 @@ protected:
 	void AddToList(BD** head, BD** bd);
 	void RemoveFromList(BD** head, BD** prev, BD** curr);
 
+#ifdef BUILD_DEBUG
 	bool CheckMemoryOverwrite(BD* bd) const;
 	void ClearBlock(BD* bd);
+#endif
 
 public:
 	static BlockAllocator* Create(const size_t block_size = DEFAULT_BLOCK_SIZE, const unsigned int num_block_descriptors = DEFAULT_NUM_BLOCK_DESCRIPTORS);
@@ -96,7 +105,7 @@ protected:
 	
 	BD* pool_head_;										// pool of unused block descriptors
 	BD* free_list_head_;								// list of block descriptors describing free blocks
-	BD* outstanding_list_head_;							// list of block descriptors describing allocated blocks
+	BD* user_list_head_;							// list of block descriptors describing allocated blocks
 
 }; // class BlockAllocator
 

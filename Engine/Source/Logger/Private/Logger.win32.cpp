@@ -5,12 +5,12 @@
 
 namespace engine
 {
-	void Print(const char* format, ...)
+	void Print(const char* type, const char* format, ...)
 	{
 		const size_t len_temp = 256;
 		char str_temp[len_temp] = { 0 };
 
-		sprintf_s(str_temp, "DEBUG: ");
+		sprintf_s(str_temp, type);
 		strcat_s(str_temp, format);
 		strcat_s(str_temp, "\n");
 
@@ -25,7 +25,7 @@ namespace engine
 		OutputDebugStringA(str_output);
 	}
 
-#if defined(DEBUG_LOG_LEVEL) && (DEBUG_LOG_LEVEL == 1)
+#if defined(VERBOSITY_LEVEL) && (VERBOSITY_LEVEL > 1)
 	void Print(const char* function_name, const int line_number, const char* format, ...)
 	{
 		const size_t len_temp = 256;
@@ -45,6 +45,6 @@ namespace engine
 
 		OutputDebugStringA(str_output);
 	}
-#endif // defined(DEBUG_LOG_LEVEL) && (DEBUG_LOG_LEVEL == 1)
+#endif // defined(DEBUG_LOG_LEVEL) && (DEBUG_LOG_LEVEL > 1)
 
 } // namespace engine

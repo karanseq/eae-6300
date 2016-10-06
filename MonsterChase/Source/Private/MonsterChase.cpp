@@ -289,7 +289,7 @@ void MonsterChase::CreateMonster(const char* input_name)
 	// limit number of monsters
 	if (num_monsters_ >= Monster::MAX_MONSTERS)
 	{
-		LOG_DEBUG("Already at max monsters!");
+		LOG("Already at max monsters!");
 		return;
 	}
 

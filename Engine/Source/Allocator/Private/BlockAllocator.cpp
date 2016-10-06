@@ -28,7 +28,7 @@ BlockAllocator::BlockAllocator() : block_(NULL),
 	total_block_size_(DEFAULT_BLOCK_SIZE),
 	num_block_descriptors_(DEFAULT_NUM_BLOCK_DESCRIPTORS),
 	pool_head_(NULL),
-	outstanding_list_head_(NULL),
+	user_list_head_(NULL),
 	free_list_head_(NULL)
 {
 	Init();
@@ -38,7 +38,7 @@ BlockAllocator::BlockAllocator(const size_t block_size, const unsigned int num_b
 	total_block_size_(block_size),
 	num_block_descriptors_(num_block_descriptors),
 	pool_head_(NULL),
-	outstanding_list_head_(NULL),
+	user_list_head_(NULL),
 	free_list_head_(NULL)
 {
 	Init();
@@ -70,9 +70,14 @@ void BlockAllocator::Destroy()
 
 void BlockAllocator::Init()
 {
+	// round the total block size to the nearest multiple of 4
+	total_block_size_ += DEFAULT_BYTE_ALIGNMENT - (total_block_size_ % DEFAULT_BYTE_ALIGNMENT);
+
 	block_ = (unsigned char*)_aligned_malloc(total_block_size_, 4);
 	memset(block_, 0, total_block_size_);
-	LOG_DEBUG("Base start address:%p\tend address:%p", block_, (block_ + total_block_size_));
+#ifdef BUILD_DEBUG
+	LOG("Base start address:%p\tend address:%p", block_, (block_ + total_block_size_));
+#endif
 
 	InitBlockDescriptors();
 	InitFirstBlockDescriptor();
@@ -89,7 +94,9 @@ void BlockAllocator::InitBlockDescriptors()
 
 	// initialize the "unused" block descriptor pool head
 	pool_head_ = (BD*)bd_begin;
-	LOG_DEBUG("Descriptor pool start address:%p\tend address:%p", pool_head_, (pool_head_ + num_block_descriptors_));
+#ifdef BUILD_DEBUG
+	LOG("Descriptor pool start address:%p\tend address:%p", pool_head_, (pool_head_ + num_block_descriptors_));
+#endif
 
 	// initialize the pool of block descriptors
 	for (unsigned int i = 0; i < num_block_descriptors_; ++i)
@@ -242,6 +249,7 @@ void BlockAllocator::RemoveFromList(BD** head, BD** prev, BD** curr)
 	(*curr)->next_ = NULL;
 }
 
+#ifdef BUILD_DEBUG
 bool BlockAllocator::CheckMemoryOverwrite(BD* bd) const
 {
 	for (unsigned int i = 0; i < DEFAULT_GUARDBAND_SIZE; ++i)
@@ -261,12 +269,13 @@ void BlockAllocator::ClearBlock(BD* bd)
 		*(bd->block_pointer_ + i) = 0;
 	}
 }
+#endif
 
 void* BlockAllocator::Alloc(const size_t size)
 {
 	if (size <= 0)
 	{
-		LOG_DEBUG("Bad input passed into Alloc!");
+		LOG_ERROR("Bad input passed into Alloc!");
 		return NULL;
 	}
 
@@ -294,7 +303,7 @@ void* BlockAllocator::Alloc(const size_t size)
 		free_bd = GetDescriptorFromFreeList(total_size);
 		if (free_bd == NULL)
 		{
-			LOG_DEBUG("Insufficient memory!");
+			LOG_ERROR("Insufficient memory!");
 			return NULL;
 		}
 	}
@@ -321,7 +330,7 @@ void* BlockAllocator::Alloc(const size_t size)
 				// can't proceed without a new descriptor
 				// so add the descriptor from 1 back to the free list and return NULL
 				AddToList(&free_list_head_, &free_bd);
-				LOG_DEBUG("Insufficient descriptors!");
+				LOG_ERROR("Insufficient descriptors!");
 				return NULL;				
 			}
 		}
@@ -357,8 +366,8 @@ void* BlockAllocator::Alloc(const size_t size)
 	new_bd->user_pointer_ += DEFAULT_GUARDBAND_SIZE;
 #endif
 
-	// add the descriptor to the outstanding list
-	AddToList(&outstanding_list_head_, &new_bd);
+	// add the descriptor to the user list
+	AddToList(&user_list_head_, &new_bd);
 
 	// return a pointer to the user
 	return new_bd->user_pointer_;
@@ -372,28 +381,32 @@ bool BlockAllocator::Free(void* pointer)
 	// validate input
 	if (pointer == NULL)
 	{
-		LOG_DEBUG("Bad input provided to free!");
+		LOG_ERROR("Bad input provided to free!");
 		return free_successful;
 	}
 
 	// search for the descriptor
-	BD* curr_bd = outstanding_list_head_;
+	BD* curr_bd = user_list_head_;
 	BD* prev_bd = NULL;
 	while (curr_bd != NULL)
 	{
 		if (curr_bd->user_pointer_ == pointer)
 		{
+#ifdef BUILD_DEBUG
 			// check for overwrites
 			if (CheckMemoryOverwrite(curr_bd))
 			{
-				LOG_DEBUG("Detected overwritten memory!");
+				LOG_ERROR("Detected overwritten memory!");
 			}
+#endif
 
-			// remove descriptor from outstanding list			
-			RemoveFromList(&outstanding_list_head_, &prev_bd, &curr_bd);
+			// remove descriptor from user list			
+			RemoveFromList(&user_list_head_, &prev_bd, &curr_bd);
 
+#ifdef BUILD_DEBUG
 			// clear the block
 			ClearBlock(curr_bd);
+#endif
 
 			// add descriptor to free list
 			AddToList(&free_list_head_, &curr_bd);
@@ -413,15 +426,21 @@ bool BlockAllocator::Free(void* pointer)
 void BlockAllocator::Defragment()
 {
 #ifdef BUILD_DEBUG
+	LOG("Defragmenting...");
 	unsigned int num_blocks_combined = 0;
 	size_t bytes_combined = 0;
 #endif
+
 	BD* curr = free_list_head_;
 	while (curr != NULL && curr->next_ != NULL)
 	{
 		if (curr->block_pointer_ + curr->block_size_ == curr->next_->block_pointer_)
 		{
 			BD* next_bd = curr->next_;
+
+#ifdef BUILD_DEBUG
+			LOG("Merging %zu bytes from block-%d & block-%d", (curr->block_size_ + next_bd->block_size_), curr->id_, next_bd->id_);
+#endif
 			// update current descriptor's block size
 			curr->block_size_ += next_bd->block_size_;
 
@@ -447,7 +466,14 @@ void BlockAllocator::Defragment()
 	}
 
 #ifdef BUILD_DEBUG
-	LOG_DEBUG("Defragment finished...combined more than %zu bytes in %d blocks!", bytes_combined, num_blocks_combined);
+	if (bytes_combined > 0)
+	{
+		LOG("Defragment finished...merged more than %zu bytes from %d blocks!", bytes_combined, num_blocks_combined);
+	}
+	else
+	{
+		LOG("Defragment finished...could not find any contiguous blocks!");
+	}
 #endif
 }
 
@@ -457,7 +483,7 @@ bool BlockAllocator::Contains(const void* pointer) const
 	return ((unsigned char*)pointer >= block_ && (unsigned char*)pointer <= (block_ + total_block_size_));
 }
 
-// Query whether a given pointer is an outstanding allocation
+// Query whether a given pointer is a user allocation
 bool BlockAllocator::IsAllocated(const void* pointer) const
 {
 	return false;
@@ -498,43 +524,43 @@ const size_t BlockAllocator::GetTotalFreeMemorySize() const
 #ifdef BUILD_DEBUG
 void BlockAllocator::PrintAllDescriptors() const
 {
-	LOG_DEBUG("---------- %s ----------", __FUNCTION__);
+	LOG("---------- %s ----------", __FUNCTION__);
 	if (pool_head_ != NULL)
 	{
 		unsigned int count = 0;
-		LOG_DEBUG("POOL:");
+		LOG("POOL:");
 		for (BD* bd = pool_head_; bd != NULL; bd = bd->next_)
 		{
-			LOG_DEBUG("BD.id:%d size:%zu  ", bd->id_, bd->block_size_);
+			LOG("BD.id:%d size:%zu  ", bd->id_, bd->block_size_);
 			++count;
 		}
-		LOG_DEBUG("POOL SIZE:%d", count);
+		LOG("POOL SIZE:%d", count);
 	}
 
 	if (free_list_head_ != NULL)
 	{
 		unsigned int count = 0;
-		LOG_DEBUG("FREE:");
+		LOG("FREE:");
 		for (BD* bd = free_list_head_; bd != NULL; bd = bd->next_)
 		{
-			LOG_DEBUG("BD.id:%d size:%zu  ", bd->id_, bd->block_size_);
+			LOG("BD.id:%d size:%zu  ", bd->id_, bd->block_size_);
 			++count;
 		}
-		LOG_DEBUG("FREE LIST SIZE:%d", count);
+		LOG("FREE LIST SIZE:%d", count);
 	}
 
-	if (outstanding_list_head_ != NULL)
+	if (user_list_head_ != NULL)
 	{
 		unsigned int count = 0;
-		LOG_DEBUG("OUTSTANDING:");
-		for (BD* bd = outstanding_list_head_; bd != NULL; bd = bd->next_)
+		LOG("USER:");
+		for (BD* bd = user_list_head_; bd != NULL; bd = bd->next_)
 		{
-			LOG_DEBUG("BD.id:%d size:%zu  ", bd->id_, bd->block_size_);
+			LOG("BD.id:%d size:%zu  ", bd->id_, bd->block_size_);
 			++count;
 		}
-		LOG_DEBUG("OUTSTANDING LIST SIZE:%d", count);
+		LOG("USER LIST SIZE:%d", count);
 	}
-	LOG_DEBUG("---------- END ----------");
+	LOG("---------- END ----------");
 }
 #endif
 
