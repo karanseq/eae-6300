@@ -8,6 +8,7 @@
 Monster::Monster()
 {
 	SetTimeToLive(MAX_MONSTER_TTL / 2 + rand() % MAX_MONSTER_TTL);
+	LOG_DEBUG("Monster alloc...");
 }
 
 Monster::Monster(const engine::Vec2D& position, const char* name)
@@ -15,10 +16,13 @@ Monster::Monster(const engine::Vec2D& position, const char* name)
 	SetPosition(position);
 	SetName(name);
 	SetTimeToLive(MAX_MONSTER_TTL / 2 + rand() % MAX_MONSTER_TTL);
+	LOG_DEBUG("Monster alloc...");
 }
 
 Monster::~Monster()
-{}
+{
+	LOG_DEBUG("Monster dealloc...");
+}
 
 void Monster::Move(const engine::Vec2D& player_position)
 {

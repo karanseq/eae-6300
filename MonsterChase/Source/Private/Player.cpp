@@ -1,22 +1,26 @@
 #include "Player.h"
 #include "MonsterChase.h"
+#include "Logger\Logger.h"
 
 // include libraries
 #include <stdio.h>
 
 Player::Player()
 {
-	memset(name_, 0, sizeof(name_));
+	LOG_DEBUG("Player alloc...");
 }
 
 Player::Player(const engine::Vec2D& position, const char* name)
 {
 	SetPosition(position);
 	SetName(name);
+	LOG_DEBUG("Player alloc...");
 }
 
 Player::~Player()
-{}
+{
+	LOG_DEBUG("Player dealloc...");
+}
 
 void Player::Move(MoveDirection move_direction)
 {

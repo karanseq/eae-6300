@@ -17,6 +17,8 @@ MonsterChase::MonsterChase()
 	num_monsters_ = 0;
 	ascii_index_ = 0;
 	srand((unsigned int)time(0));
+
+	LOG_DEBUG("MonsterChase init successful...");
 }
 
 MonsterChase::~MonsterChase()
@@ -42,6 +44,8 @@ MonsterChase::~MonsterChase()
 		delete[] monsters_;
 		monsters_ = NULL;
 	}
+
+	LOG_DEBUG("MonsterChase cleanup successful...");
 }
 
 void MonsterChase::Update()
@@ -154,6 +158,7 @@ void MonsterChase::ValidateNumber(const char* input)
 	// execute this function only in this state
 	if (game_state_ != GameStateInputNumMonsters)
 	{
+		LOG_DEBUG("Oops! Function %s called with state:%d", __FUNCTION__, game_state_);
 		return;
 	}
 
@@ -169,6 +174,8 @@ void MonsterChase::ValidateNumber(const char* input)
 		}
 	}
 
+	// this means the number entered is out of range
+	ASSERT(number > 0 && number <= Monster::MAX_MONSTERS);
 	PrintMessage("Please pick a number from 1 to 10.\n");
 }
 
@@ -180,6 +187,7 @@ void MonsterChase::ValidateName(const char* input)
 	// execute this function only in these states
 	if (game_state_ != GameStateInputMonsterNames && game_state_ != GameStateInputPlayerName)
 	{
+		LOG_DEBUG("Oops! Function %s called with state:%d", __FUNCTION__, game_state_);
 		return;
 	}
 
@@ -226,6 +234,7 @@ void MonsterChase::ValidateMove(const char* input)
 	// execute this function only in this state
 	if (game_state_ != GameStateRunning)
 	{
+		LOG_DEBUG("Oops! Function %s called with state:%d", __FUNCTION__, game_state_);
 		return;
 	}
 
