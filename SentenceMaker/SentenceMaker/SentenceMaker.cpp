@@ -23,7 +23,7 @@ char* MakeSentence(char** words, const int num_words, const int num_characters)
 	char* sentence = NULL;
 	
 	// allocate memory
-	int sentence_size = num_characters + num_words + 1;
+	int sentence_size = num_characters + 1;
 	sentence = (char*)malloc(sentence_size);
 
 	// check if we were given memory
