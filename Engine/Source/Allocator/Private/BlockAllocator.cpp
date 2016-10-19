@@ -74,8 +74,8 @@ void BlockAllocator::Init()
 	total_block_size_ += DEFAULT_BYTE_ALIGNMENT - (total_block_size_ % DEFAULT_BYTE_ALIGNMENT);
 
 	block_ = (unsigned char*)_aligned_malloc(total_block_size_, 4);
-	memset(block_, 0, total_block_size_);
 #ifdef BUILD_DEBUG
+	memset(block_, 0, total_block_size_);
 	LOG("Base start address:%p\tend address:%p", block_, (block_ + total_block_size_));
 #endif
 
@@ -93,7 +93,7 @@ void BlockAllocator::InitBlockDescriptors()
 	usable_block_size_ = total_block_size_ - (num_block_descriptors_ * sizeof(BD));
 
 	// initialize the "unused" block descriptor pool head
-	pool_head_ = (BD*)bd_begin;
+	pool_head_ = reinterpret_cast<BD*>(bd_begin);
 #ifdef BUILD_DEBUG
 	LOG("Descriptor pool start address:%p\tend address:%p", pool_head_, (pool_head_ + num_block_descriptors_));
 #endif
@@ -293,7 +293,7 @@ void* BlockAllocator::Alloc(const size_t size)
 	BD* free_bd = GetDescriptorFromFreeList(size_with_padding);
 	if (free_bd == NULL)
 	{
-		// we don't have a descriptor with enoguh memory so let's try and defrag
+		// we don't have a descriptor with enough memory so let's try and defrag
 		Defragment();
 
 		// request a new descriptor again after defragmentation
@@ -479,7 +479,7 @@ void BlockAllocator::Defragment()
 // Query whether a given pointer is within this allocator's range
 bool BlockAllocator::Contains(const void* pointer) const
 {
-	return ((unsigned char*)pointer >= block_ && (unsigned char*)pointer <= (block_ + total_block_size_));
+	return (static_cast<const unsigned char*>(pointer) >= block_ && static_cast<const unsigned char*>(pointer) <= (block_ + total_block_size_));
 }
 
 // Query whether a given pointer is a user allocation
@@ -495,7 +495,7 @@ const size_t BlockAllocator::GetLargestFreeBlockSize() const
 	BD* bd = free_list_head_;
 	while (bd != NULL)
 	{
-		// check actual block side not user block size
+		// check actual block size not user block size
 		if (bd->block_size_ > largest_size)
 		{
 			largest_size = bd->block_size_;

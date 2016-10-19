@@ -6,7 +6,9 @@
 
 Player::Player()
 {
+#ifdef BUILD_DEBUG
 	memset(name_, 0, sizeof(name_));
+#endif
 }
 
 Player::Player(const engine::Vec2D& position, const char* name)

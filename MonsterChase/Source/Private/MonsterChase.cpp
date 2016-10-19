@@ -192,7 +192,7 @@ void MonsterChase::ValidateName(const char* input)
 		count += isblank(c) ? 1 : 0;
 	}
 
-	int input_length = (int)strlen(input);
+	int input_length = static_cast<int>(strlen(input));
 	if (input_length > Player::MAX_NAME_LENGTH				// check if the name was within our range
 		|| count >= input_length - 1)						// check if the input contained only white spaces
 	{
