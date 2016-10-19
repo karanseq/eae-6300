@@ -279,28 +279,25 @@ void* BlockAllocator::Alloc(const size_t size)
 		return NULL;
 	}
 
-	// round off the user's request to the nearest 4 byte size
-	const size_t rounded_size = size + DEFAULT_BYTE_ALIGNMENT - (size % DEFAULT_BYTE_ALIGNMENT);
-
-	// consider memory for guardbands
+	// add padding for guardbanding AND byte alignment
 #ifdef BUILD_DEBUG
-	size_t total_size = rounded_size + DEFAULT_GUARDBAND_SIZE * 2 + DEFAULT_BYTE_ALIGNMENT;
+	size_t size_with_padding = size + DEFAULT_GUARDBAND_SIZE * 2 + DEFAULT_BYTE_ALIGNMENT;
 #else
-	size_t total_size = rounded_size + DEFAULT_BYTE_ALIGNMENT;
+	size_t size_with_padding = size + DEFAULT_BYTE_ALIGNMENT;
 #endif
 
 	// declare a block descriptor to service this request
 	BD* new_bd = NULL;
 
 	// 1. look for a descriptor in the free list
-	BD* free_bd = GetDescriptorFromFreeList(total_size);
+	BD* free_bd = GetDescriptorFromFreeList(size_with_padding);
 	if (free_bd == NULL)
 	{
 		// we don't have a descriptor with enoguh memory so let's try and defrag
 		Defragment();
 
 		// request a new descriptor again after defragmentation
-		free_bd = GetDescriptorFromFreeList(total_size);
+		free_bd = GetDescriptorFromFreeList(size_with_padding);
 		if (free_bd == NULL)
 		{
 			LOG_ERROR("Insufficient memory!");
@@ -309,7 +306,7 @@ void* BlockAllocator::Alloc(const size_t size)
 	}
 
 	// 2. check if we need to split the memory pointed by the descriptor returned from 1.
-	if (free_bd->block_size_ <= total_size + MAX_EXTRA_MEMORY)
+	if (free_bd->block_size_ <= size_with_padding + MAX_EXTRA_MEMORY)
 	{
 		// 3. if we don't need to split, use the descriptor returned from 1 to service this request
 		new_bd = free_bd;
@@ -336,15 +333,17 @@ void* BlockAllocator::Alloc(const size_t size)
 		}
 
 		// calculate the address of the new block
-		new_bd->block_pointer_ = free_bd->block_pointer_ + free_bd->block_size_ - total_size;
-		new_bd->block_size_ = total_size;
+		new_bd->block_pointer_ = free_bd->block_pointer_ + free_bd->block_size_ - size_with_padding;
 
 		// adjust for byte alignment
-		const unsigned int adjustment = ((uintptr_t)(const void*)(new_bd->block_pointer_)) % DEFAULT_BYTE_ALIGNMENT;
-		new_bd->block_pointer_ += (adjustment > 0) ? (DEFAULT_BYTE_ALIGNMENT - adjustment) : 0;
+		const uintptr_t adjustment = (reinterpret_cast<uintptr_t>(new_bd->block_pointer_)) % DEFAULT_BYTE_ALIGNMENT;
+		new_bd->block_pointer_ += DEFAULT_BYTE_ALIGNMENT - adjustment;
+
+		// reduce size by the adjustment
+		new_bd->block_size_ = size_with_padding - (DEFAULT_BYTE_ALIGNMENT - adjustment);
 
 		// splice the free block
-		free_bd->block_size_ -= total_size;
+		free_bd->block_size_ -= new_bd->block_size_;
 
 		// add the remaining free block back to the free list
 		AddToList(&free_list_head_, &free_bd);
@@ -352,7 +351,7 @@ void* BlockAllocator::Alloc(const size_t size)
 
 	// initialize the user pointer
 	new_bd->user_pointer_ = new_bd->block_pointer_;
-	new_bd->user_size_ = rounded_size;
+	new_bd->user_size_ = size;
 
 #ifdef BUILD_DEBUG
 	// add guardbands
@@ -468,7 +467,7 @@ void BlockAllocator::Defragment()
 #ifdef BUILD_DEBUG
 	if (bytes_combined > 0)
 	{
-		LOG("Defragment finished...merged more than %zu bytes from %d blocks!", bytes_combined, num_blocks_combined);
+		LOG("Defragment finished...merged %zu bytes from %d blocks!", bytes_combined, num_blocks_combined);
 	}
 	else
 	{

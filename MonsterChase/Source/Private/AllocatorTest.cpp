@@ -104,17 +104,22 @@ void AllocatorTest::RunTest02()
 {
 	LOG("-------------------- Running Test 02 --------------------");
 
-	char* buf1 = DoAlloc(21);
-	char* buf2 = DoAlloc(96);
+	char* buf1 = DoAlloc(96);
+	char* buf2 = DoAlloc(23);
 	
-	DoFree(buf1, 21);
-	DoFree(buf2, 96);
+	DoFree(buf1, 96);
+	DoFree(buf2, 23);
 
 	buf2 = DoAlloc(48);
 	buf1 = DoAlloc(48);
 
 	DoFree(buf1, 48);
 	DoFree(buf2, 48);
+
+	block_allocator_->Defragment();
+#ifdef BUILD_DEBUG
+	block_allocator_->PrintAllDescriptors();
+#endif
 
 	LOG("-------------------- Finished Test 02 --------------------");
 }
