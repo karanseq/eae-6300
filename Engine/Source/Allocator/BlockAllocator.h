@@ -22,16 +22,14 @@ enum class DescriptorListType {
 /*
 	BlockDescriptor
 	A block descriptor describes a block of memory that is managed by the block allocator.
-	- It contains pointers to the actual block of memory as well as a pointer that is eturned to the user.
-	- It contains the size of the actual block of memory as well as the size of the block returned to the user.
+	- It contains a pointer to a block of memory as well as its size
+	- It contains a pointer to the next descriptor in a list or NULL if its not part of a list
 */
 typedef struct BlockDescriptor
 {
 public:
 	unsigned char* block_pointer_;		// pointer to the actual block of data
-	unsigned char* user_pointer_;		// pointer to the block returned to user
 	size_t block_size_;					// size of the actual block of data
-	size_t user_size_;					// size of the block returned to the user
 	BlockDescriptor* next_;				// pointer to the next block descriptor
 
 #ifdef BUILD_DEBUG

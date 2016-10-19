@@ -13,9 +13,7 @@ unsigned int BlockDescriptor::counter_ = 0;
 void BlockDescriptor::Init()
 {
 	block_pointer_ = NULL;
-	user_pointer_ = NULL;
 	block_size_ = 0;
-	user_size_ = 0;
 	next_ = NULL;
 #ifdef BUILD_DEBUG
 	id_ = BlockDescriptor::counter_++;
@@ -252,14 +250,17 @@ void BlockAllocator::RemoveFromList(BD** head, BD** prev, BD** curr)
 #ifdef BUILD_DEBUG
 bool BlockAllocator::CheckMemoryOverwrite(BD* bd) const
 {
-	for (unsigned int i = 0; i < DEFAULT_GUARDBAND_SIZE; ++i)
+	unsigned int lower_byte_counter = 0, upper_byte_counter = 0;
+	for (unsigned int i = 0; i < DEFAULT_GUARDBAND_SIZE + DEFAULT_BYTE_ALIGNMENT; ++i)
 	{
-		if (*(bd->block_pointer_ + i) != GUARDBAND_FILL || *(bd->block_pointer_ + DEFAULT_GUARDBAND_SIZE + bd->user_size_ + i) != GUARDBAND_FILL)
-		{
-			return true;
-		}
+		// check lower guardband
+		lower_byte_counter += (*(bd->block_pointer_ + i) == GUARDBAND_FILL) ? 1 : 0;
+
+		// check upper guardband
+		upper_byte_counter += (*(bd->block_pointer_ + bd->block_size_ - i - 1) == GUARDBAND_FILL) ? 1 : 0;
 	}
-	return false;
+
+	return (lower_byte_counter >= DEFAULT_GUARDBAND_SIZE && upper_byte_counter >= DEFAULT_GUARDBAND_SIZE);
 }
 
 void BlockAllocator::ClearBlock(BD* bd)
@@ -349,27 +350,23 @@ void* BlockAllocator::Alloc(const size_t size)
 		AddToList(&free_list_head_, &free_bd);
 	}
 
-	// initialize the user pointer
-	new_bd->user_pointer_ = new_bd->block_pointer_;
-	new_bd->user_size_ = size;
-
 #ifdef BUILD_DEBUG
 	// add guardbands
 	for (unsigned int i = 0; i < DEFAULT_GUARDBAND_SIZE; ++i)
 	{
 		*(new_bd->block_pointer_ + i) = GUARDBAND_FILL;
-		*(new_bd->block_pointer_ + DEFAULT_GUARDBAND_SIZE + new_bd->user_size_ + i) = GUARDBAND_FILL;
+		*(new_bd->block_pointer_ + DEFAULT_GUARDBAND_SIZE + size + i) = GUARDBAND_FILL;
 	}
-
-	// update the user pointer
-	new_bd->user_pointer_ += DEFAULT_GUARDBAND_SIZE;
 #endif
 
 	// add the descriptor to the user list
 	AddToList(&user_list_head_, &new_bd);
 
-	// return a pointer to the user
-	return new_bd->user_pointer_;
+#ifdef BUILD_DEBUG
+	return (new_bd->block_pointer_ + DEFAULT_GUARDBAND_SIZE);
+#else
+	return new_bd->block_pointer_;
+#endif
 }
 
 // Deallocate a block of memory
@@ -389,7 +386,14 @@ bool BlockAllocator::Free(void* pointer)
 	BD* prev_bd = NULL;
 	while (curr_bd != NULL)
 	{
-		if (curr_bd->user_pointer_ == pointer)
+		// calculate the pointer returned to the user
+#ifdef BUILD_DEBUG
+		unsigned char* user_pointer = curr_bd->block_pointer_ + DEFAULT_GUARDBAND_SIZE;
+#else
+		unsigned char* user_pointer = curr_bd->block_pointer_;
+#endif
+
+		if (user_pointer == pointer)
 		{
 #ifdef BUILD_DEBUG
 			// check for overwrites
