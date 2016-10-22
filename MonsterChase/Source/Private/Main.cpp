@@ -5,6 +5,9 @@
 #include "AllocatorTest.h"
 #include <stdio.h>
 #include <conio.h>
+#ifdef BUILD_DEBUG
+#include <crtdbg.h>
+#endif
 #endif
 
 int main(int* argv, char** argc)
@@ -17,6 +20,9 @@ int main(int* argv, char** argc)
 	AllocatorTest::RunTest03();
 	AllocatorTest::Reset();
 	printf("Finished test.\n");
+#ifdef BUILD_DEBUG
+	_CrtDumpMemoryLeaks();
+#endif
 	_getch();
 	return 0;
 #endif
