@@ -93,6 +93,8 @@ public:
 
 #ifdef BUILD_DEBUG
 	void PrintAllDescriptors() const;
+	void PrintFreeDescriptors() const;
+	void PrintUsedDescriptors() const;
 #endif
 
 protected:

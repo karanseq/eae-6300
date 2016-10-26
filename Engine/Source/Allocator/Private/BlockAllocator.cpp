@@ -160,7 +160,7 @@ BD* BlockAllocator::GetDescriptorFromFreeList(const size_t size)
 	BD* prev_bd = NULL;
 	while (curr_bd != NULL)
 	{
-		if (size < curr_bd->block_size_)
+		if (size <= curr_bd->block_size_)
 		{
 			// check if this is the first descriptor in the list
 			if (prev_bd != NULL)
@@ -250,6 +250,8 @@ void BlockAllocator::RemoveFromList(BD** head, BD** prev, BD** curr)
 #ifdef BUILD_DEBUG
 bool BlockAllocator::CheckMemoryOverwrite(BD* bd) const
 {
+	ASSERT(bd != NULL);
+
 	unsigned int lower_byte_counter = 0, upper_byte_counter = 0;
 	for (unsigned int i = 0; i < DEFAULT_GUARDBAND_SIZE + DEFAULT_BYTE_ALIGNMENT; ++i)
 	{
@@ -260,15 +262,19 @@ bool BlockAllocator::CheckMemoryOverwrite(BD* bd) const
 		upper_byte_counter += (*(bd->block_pointer_ + bd->block_size_ - i - 1) == GUARDBAND_FILL) ? 1 : 0;
 	}
 
-	return (lower_byte_counter >= DEFAULT_GUARDBAND_SIZE && upper_byte_counter >= DEFAULT_GUARDBAND_SIZE);
+	bool found_overwrite = !(lower_byte_counter >= DEFAULT_GUARDBAND_SIZE && upper_byte_counter >= DEFAULT_GUARDBAND_SIZE);
+	if (found_overwrite)
+	{
+		LOG("Found overwrite!");
+	}
+
+	return found_overwrite;
 }
 
 void BlockAllocator::ClearBlock(BD* bd)
 {
-	for (unsigned int i = 0; i < bd->block_size_; ++i)
-	{
-		*(bd->block_pointer_ + i) = 0;
-	}
+	ASSERT(bd != NULL);
+	memset(bd->block_pointer_, 0, bd->block_size_);
 }
 #endif
 
@@ -483,12 +489,22 @@ void BlockAllocator::Defragment()
 // Query whether a given pointer is within this allocator's range
 bool BlockAllocator::Contains(const void* pointer) const
 {
-	return (static_cast<const unsigned char*>(pointer) >= block_ && static_cast<const unsigned char*>(pointer) <= (block_ + total_block_size_));
+	return (static_cast<const unsigned char*>(pointer) >= block_ && static_cast<const unsigned char*>(pointer) < (block_ + usable_block_size_));
 }
 
 // Query whether a given pointer is a user allocation
 bool BlockAllocator::IsAllocated(const void* pointer) const
 {
+	BD* bd = user_list_head_;
+	while (bd != NULL)
+	{
+		// check if the pointer passed in exists within each descriptor
+		if ((static_cast<const unsigned char*>(pointer) >= bd->block_pointer_ && static_cast<const unsigned char*>(pointer) < (bd->block_pointer_ + bd->block_size_)))
+		{
+			return true;
+		}
+		bd = bd->next_;
+	}
 	return false;
 }
 
@@ -506,6 +522,12 @@ const size_t BlockAllocator::GetLargestFreeBlockSize() const
 		}
 		bd = bd->next_;
 	}
+
+	// add padding for guardbanding AND byte alignment
+#ifdef BUILD_DEBUG
+	largest_size -= DEFAULT_GUARDBAND_SIZE * 2;
+#endif
+	largest_size -= DEFAULT_BYTE_ALIGNMENT;
 
 	return largest_size;
 }
@@ -540,8 +562,16 @@ void BlockAllocator::PrintAllDescriptors() const
 		LOG("POOL SIZE:%d", count);
 	}
 
+	PrintFreeDescriptors();
+	PrintUsedDescriptors();	
+	LOG("---------- END ----------");
+}
+
+void BlockAllocator::PrintFreeDescriptors() const
+{
 	if (free_list_head_ != NULL)
 	{
+		LOG("---------- %s ----------", __FUNCTION__);
 		unsigned int count = 0;
 		LOG("FREE:");
 		for (BD* bd = free_list_head_; bd != NULL; bd = bd->next_)
@@ -550,10 +580,15 @@ void BlockAllocator::PrintAllDescriptors() const
 			++count;
 		}
 		LOG("FREE LIST SIZE:%d", count);
+		LOG("---------- END ----------");
 	}
+}
 
+void BlockAllocator::PrintUsedDescriptors() const
+{
 	if (user_list_head_ != NULL)
 	{
+		LOG("---------- %s ----------", __FUNCTION__);
 		unsigned int count = 0;
 		LOG("USER:");
 		for (BD* bd = user_list_head_; bd != NULL; bd = bd->next_)
@@ -562,8 +597,8 @@ void BlockAllocator::PrintAllDescriptors() const
 			++count;
 		}
 		LOG("USER LIST SIZE:%d", count);
+		LOG("---------- END ----------");
 	}
-	LOG("---------- END ----------");
 }
 #endif
 

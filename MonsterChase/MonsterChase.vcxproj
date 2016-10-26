@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Private\AllocatorTest.cpp" />
+    <ClCompile Include="Source\Private\HeapManager_UnitTest.cpp" />
     <ClCompile Include="Source\Private\Main.cpp" />
     <ClCompile Include="Source\Private\Monster.cpp" />
     <ClCompile Include="Source\Private\MonsterChase.cpp" />
