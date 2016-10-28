@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <vector>		// required ONLY for test03
 
+//#define SIMULATE_MEMORY_OVERWRITE
+
 engine::BlockAllocator* AllocatorTest::block_allocator_ = NULL;
 
 void AllocatorTest::Init(size_t total_memory, unsigned int num_bds)
@@ -60,12 +62,14 @@ void AllocatorTest::RunTest01()
 			pointers[i][j] = 65 + i;
 		}
 
+#ifdef SIMULATE_MEMORY_OVERWRITE
 		// write beyond what we requested
 		if (i % 3)
 		{
 			pointers[i][rand_size] = 65 + i;
 			pointers[i][rand_size + 1] = 65 + i;
 		}
+#endif
 	}
 
 #ifdef BUILD_DEBUG
