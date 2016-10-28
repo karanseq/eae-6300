@@ -19,7 +19,7 @@ int main(int* argv, char** argc)
 	AllocatorTest::RunTest03();
 	AllocatorTest::Reset();
 #ifdef BUILD_DEBUG
-	//HeapManager_UnitTest();
+	HeapManager_UnitTest();
 #endif
 	printf("Finished test.\n");
 	_getch();

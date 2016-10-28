@@ -405,7 +405,7 @@ bool BlockAllocator::Free(void* pointer)
 		{
 #ifdef BUILD_DEBUG
 			// check for overwrites
-			ASSERT(CheckMemoryOverwrite(curr_bd));
+			ASSERT(!CheckMemoryOverwrite(curr_bd));
 #endif
 
 			// remove descriptor from user list			
