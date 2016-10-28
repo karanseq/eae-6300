@@ -18,7 +18,9 @@ int main(int* argv, char** argc)
 	AllocatorTest::RunTest02();
 	AllocatorTest::RunTest03();
 	AllocatorTest::Reset();*/
+#ifdef BUILD_DEBUG
 	HeapManager_UnitTest();
+#endif
 	printf("Finished test.\n");
 	_getch();
 	return 0;
