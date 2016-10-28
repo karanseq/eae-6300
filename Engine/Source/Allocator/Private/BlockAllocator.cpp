@@ -405,10 +405,7 @@ bool BlockAllocator::Free(void* pointer)
 		{
 #ifdef BUILD_DEBUG
 			// check for overwrites
-			if (CheckMemoryOverwrite(curr_bd))
-			{
-				LOG_ERROR("Detected overwritten memory!");
-			}
+			ASSERT(!CheckMemoryOverwrite(curr_bd));
 #endif
 
 			// remove descriptor from user list			

@@ -13,12 +13,14 @@ int main(int* argv, char** argc)
 {
 #ifdef ENABLE_ALLOCATOR_TEST
 	printf("Beginning allocator test...\nCheck the Output window for details.\n");
-	/*AllocatorTest::Init(1024 * 100, 128);
+	AllocatorTest::Init(1024 * 100, 128);
 	AllocatorTest::RunTest01();
 	AllocatorTest::RunTest02();
 	AllocatorTest::RunTest03();
-	AllocatorTest::Reset();*/
+	AllocatorTest::Reset();
+#ifdef BUILD_DEBUG
 	HeapManager_UnitTest();
+#endif
 	printf("Finished test.\n");
 	_getch();
 	return 0;
