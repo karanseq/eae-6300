@@ -71,7 +71,7 @@ void BlockAllocator::Init()
 	// round the total block size to the nearest multiple of 4
 	total_block_size_ += DEFAULT_BYTE_ALIGNMENT - (total_block_size_ % DEFAULT_BYTE_ALIGNMENT);
 
-	block_ = (unsigned char*)_aligned_malloc(total_block_size_, 4);
+	block_ = static_cast<uint8_t*>(_aligned_malloc(total_block_size_, 4));
 #ifdef BUILD_DEBUG
 	memset(block_, 0, total_block_size_);
 	LOG("Base start address:%p\tend address:%p", block_, (block_ + total_block_size_));
@@ -84,7 +84,7 @@ void BlockAllocator::Init()
 void BlockAllocator::InitBlockDescriptors()
 {
 	// check if we have enough to allocate memory for the required number of block descriptors
-	unsigned char* bd_begin = ((block_ + total_block_size_) - (num_block_descriptors_ * sizeof(BD)));
+	uint8_t* bd_begin = ((block_ + total_block_size_) - (num_block_descriptors_ * sizeof(BD)));
 	ASSERT(Contains(bd_begin));
 
 	// calculate the amount of memory available after separating memory for the block descriptors
@@ -253,7 +253,9 @@ bool BlockAllocator::CheckMemoryOverwrite(BD* bd) const
 	ASSERT(bd != NULL);
 
 	unsigned int lower_byte_counter = 0, upper_byte_counter = 0;
-	for (unsigned int i = 0; i < DEFAULT_GUARDBAND_SIZE + DEFAULT_BYTE_ALIGNMENT; ++i)
+	size_t search_size = DEFAULT_GUARDBAND_SIZE + DEFAULT_BYTE_ALIGNMENT + MAX_EXTRA_MEMORY;
+	search_size = search_size > bd->block_size_ ? bd->block_size_ : search_size;
+	for (unsigned int i = 0; i < search_size; ++i)
 	{
 		// check lower guardband
 		lower_byte_counter += (*(bd->block_pointer_ + i) == GUARDBAND_FILL) ? 1 : 0;
@@ -394,9 +396,9 @@ bool BlockAllocator::Free(void* pointer)
 	{
 		// calculate the pointer returned to the user
 #ifdef BUILD_DEBUG
-		unsigned char* user_pointer = curr_bd->block_pointer_ + DEFAULT_GUARDBAND_SIZE;
+		uint8_t* user_pointer = curr_bd->block_pointer_ + DEFAULT_GUARDBAND_SIZE;
 #else
-		unsigned char* user_pointer = curr_bd->block_pointer_;
+		uint8_t* user_pointer = curr_bd->block_pointer_;
 #endif
 
 		if (user_pointer == pointer)
@@ -489,7 +491,7 @@ void BlockAllocator::Defragment()
 // Query whether a given pointer is within this allocator's range
 bool BlockAllocator::Contains(const void* pointer) const
 {
-	return (static_cast<const unsigned char*>(pointer) >= block_ && static_cast<const unsigned char*>(pointer) < (block_ + usable_block_size_));
+	return (static_cast<const uint8_t*>(pointer) >= block_ && static_cast<const uint8_t*>(pointer) < (block_ + usable_block_size_));
 }
 
 // Query whether a given pointer is a user allocation
@@ -499,7 +501,7 @@ bool BlockAllocator::IsAllocated(const void* pointer) const
 	while (bd != NULL)
 	{
 		// check if the pointer passed in exists within each descriptor
-		if ((static_cast<const unsigned char*>(pointer) >= bd->block_pointer_ && static_cast<const unsigned char*>(pointer) < (bd->block_pointer_ + bd->block_size_)))
+		if ((static_cast<const uint8_t*>(pointer) >= bd->block_pointer_ && static_cast<const uint8_t*>(pointer) < (bd->block_pointer_ + bd->block_size_)))
 		{
 			return true;
 		}

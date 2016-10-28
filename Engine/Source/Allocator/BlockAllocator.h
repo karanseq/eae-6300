@@ -1,6 +1,8 @@
 #ifndef ENGINE_BLOCK_ALLOCATOR_H_
 #define ENGINE_BLOCK_ALLOCATOR_H_
 
+#include <stdint.h>
+
 namespace engine {
 
 #define DEFAULT_BLOCK_SIZE 1024 * 1024
@@ -28,9 +30,9 @@ enum class DescriptorListType {
 typedef struct BlockDescriptor
 {
 public:
-	unsigned char* block_pointer_;		// pointer to the actual block of data
-	size_t block_size_;					// size of the actual block of data
 	BlockDescriptor* next_;				// pointer to the next block descriptor
+	uint8_t* block_pointer_;			// pointer to the actual block of data
+	size_t block_size_;					// size of the actual block of data
 
 #ifdef BUILD_DEBUG
 	static unsigned int counter_;		// a counter to keep track of all the descriptors
@@ -97,15 +99,15 @@ public:
 	void PrintUsedDescriptors() const;
 #endif
 
-protected:
-	unsigned char* block_;								// actual block of memory
+protected:	
+	BD* pool_head_;										// pool of unused block descriptors
+	BD* free_list_head_;								// list of block descriptors describing free blocks
+	BD* user_list_head_;								// list of block descriptors describing allocated blocks
+	
+	uint8_t* block_;									// actual block of memory
 	size_t total_block_size_;							// total size of block (including memory for block descriptors)
 	size_t usable_block_size_;							// size of memory to use for user allocations (excluding memory for block descriptors)
 	unsigned int num_block_descriptors_;				// initial number of block descriptors
-	
-	BD* pool_head_;										// pool of unused block descriptors
-	BD* free_list_head_;								// list of block descriptors describing free blocks
-	BD* user_list_head_;							// list of block descriptors describing allocated blocks
 
 }; // class BlockAllocator
 
