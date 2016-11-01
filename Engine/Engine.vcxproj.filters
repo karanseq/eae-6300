@@ -45,6 +45,12 @@
     <ClInclude Include="Source\Allocator\BlockAllocator.h">
       <Filter>Header Files\Allocator</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Math\Vec2D-inl.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Allocator\BlockAllocator-inl.h">
+      <Filter>Header Files\Allocator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Math\Private\Vec2D.cpp">

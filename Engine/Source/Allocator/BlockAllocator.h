@@ -60,7 +60,7 @@ protected:
 
 #ifdef BUILD_DEBUG
 	bool CheckMemoryOverwrite(BD* bd) const;
-	void ClearBlock(BD* bd, const unsigned char fill);
+	inline void ClearBlock(BD* bd, const unsigned char fill);
 #endif
 
 public:
@@ -76,7 +76,7 @@ public:
 	void Defragment();
 
 	// Query whether a given pointer is within this allocator's range
-	bool Contains(const void* pointer) const;
+	inline bool Contains(const void* pointer) const;
 	// Query whether a given pointer is an outstanding allocation
 	bool IsAllocated(const void* pointer) const;
 
@@ -101,5 +101,7 @@ protected:
 }; // class BlockAllocator
 
 } // namespace engine
+
+#include "BlockAllocator-inl.h"
 
 #endif // ENGINE_BLOCK_ALLOCATOR_H_

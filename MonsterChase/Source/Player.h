@@ -17,13 +17,13 @@ public:
 
 	// player behavior
 	void Move(MoveDirection move_direction);
-	virtual void Print();
+	virtual void Print() const;
 
 	// accessors and mutators
-	inline const engine::Vec2D& GetPosition() { return position_; }
+	inline const engine::Vec2D& GetPosition() const { return position_; }
 	inline void SetPosition(const engine::Vec2D& position) { position_ = position; }
 
-	inline const char* GetName() { return name_; }
+	inline const char* GetName() const { return name_; }
 	inline void SetName(const char* name) { ASSERT(name != NULL); strcpy_s(name_, name); }
 
 	// constants

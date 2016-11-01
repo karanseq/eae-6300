@@ -47,7 +47,7 @@ void Monster::Move(const engine::Vec2D& player_position)
 	--time_to_live_;
 }
 
-void Monster::Print()
+void Monster::Print() const
 {
 	printf("Monster %s %s [%f, %f]\n", name_, (time_to_live_ <= 1 ? "is about to die at" : "is at"), position_.x(), position_.y());
 }

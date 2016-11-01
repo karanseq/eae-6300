@@ -41,7 +41,7 @@ void Player::Move(MoveDirection move_direction)
 	}
 }
 
-void Player::Print()
+void Player::Print() const
 {
 	printf("Player %s is at [%f, %f]\n", name_, position_.x(), position_.y());
 }

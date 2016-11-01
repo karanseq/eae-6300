@@ -57,7 +57,7 @@ public:
 
 	void CreatePlayer(const char* name);
 
-	inline GameState GetState() { return game_state_; }
+	inline GameState GetState() const { return game_state_; }
 
 	// game constants
 	static const int MAX_INPUT_SIZE = 256;

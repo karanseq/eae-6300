@@ -14,10 +14,10 @@ public:
 
 	// monster behavior
 	void Move(const engine::Vec2D& player_position);
-	virtual void Print();
+	virtual void Print() const;
 
 	// accessors and mutators
-	inline int GetTimeToLive() { return time_to_live_; }
+	inline int GetTimeToLive() const { return time_to_live_; }
 	inline void SetTimeToLive(int time_to_live) { time_to_live_ = time_to_live; }
 
 	// constants

@@ -1,8 +1,6 @@
 #ifndef ENGINE_VEC2D_H_
 #define ENGINE_VEC2D_H_
 
-#include <stdio.h>
-
 namespace engine
 {
 	class Vec2D
@@ -16,28 +14,28 @@ namespace engine
 		{}
 
 		// accessors and mutators
-		float x() const;
-		void x(float x);
-		float y() const;
-		void y(float y);
-		void set(float x, float y);
+		inline float x() const;
+		inline void x(float x);
+		inline float y() const;
+		inline void y(float y);
+		inline void set(float x, float y);
 
 		// assignment
-		Vec2D& operator=(const Vec2D& vec);
+		inline Vec2D& operator=(const Vec2D& vec);
 
 		// arithmetic
-		Vec2D operator+(const Vec2D& vec) const;
-		Vec2D& operator+=(const Vec2D& vec);
-		Vec2D operator-(const Vec2D& vec) const;
-		Vec2D& operator-=(const Vec2D& vec);
-		Vec2D& operator*=(float scale);
+		inline Vec2D operator+(const Vec2D& vec) const;
+		inline Vec2D& operator+=(const Vec2D& vec);
+		inline Vec2D operator-(const Vec2D& vec) const;
+		inline Vec2D& operator-=(const Vec2D& vec);
+		inline Vec2D& operator*=(float scale);
 
 		// relational
-		bool operator==(const Vec2D& vec) const;
-		bool operator!=(const Vec2D& vec) const;
+		inline bool operator==(const Vec2D& vec) const;
+		inline bool operator!=(const Vec2D& vec) const;
 
 		// unary
-		Vec2D operator-() const;
+		inline Vec2D operator-() const;
 
 		// constants
 		static const Vec2D ZERO;
@@ -51,5 +49,7 @@ namespace engine
 	}; // class Vec2D
 
 } // namespace engine
+
+#include "Vec2D-inl.h"
 
 #endif // ENGINE_VEC2D_H_

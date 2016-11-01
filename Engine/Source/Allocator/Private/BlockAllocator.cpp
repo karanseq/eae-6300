@@ -2,7 +2,6 @@
 #include "Logger\Logger.h"
 
 #include <stdlib.h>			// for _aligned_malloc & _aligned_free
-#include <string.h>			// for memset
 
 namespace engine {
 
@@ -190,16 +189,10 @@ bool BlockAllocator::CheckMemoryOverwrite(BD* bd) const
 	bool found_overwrite = !(lower_byte_counter >= DEFAULT_GUARDBAND_SIZE && upper_byte_counter >= DEFAULT_GUARDBAND_SIZE);
 	if (found_overwrite)
 	{
-		LOG("Detected overwritten memory!");
+		LOG_ERROR("Detected overwritten memory!");
 	}
 
 	return found_overwrite;
-}
-
-void BlockAllocator::ClearBlock(BD* bd, const unsigned char fill)
-{
-	ASSERT(bd != NULL);
-	memset(bd->block_pointer_, fill, bd->block_size_);
 }
 #endif
 
@@ -410,12 +403,6 @@ void BlockAllocator::Defragment()
 		LOG("Defragment finished...could not find any contiguous blocks!");
 	}
 #endif
-}
-
-// Query whether a given pointer is within this allocator's range
-bool BlockAllocator::Contains(const void* pointer) const
-{
-	return (static_cast<const uint8_t*>(pointer) >= block_ && static_cast<const uint8_t*>(pointer) <= (block_ + total_block_size_));
 }
 
 // Query whether a given pointer is a user allocation
