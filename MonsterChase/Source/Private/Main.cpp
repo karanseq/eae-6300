@@ -5,19 +5,20 @@
 #include "AllocatorTest.h"
 #include <stdio.h>
 #include <conio.h>
-#endif
 
 bool HeapManager_UnitTest();
+#endif
 
 int main(int* argv, char** argc)
 {
 #ifdef ENABLE_ALLOCATOR_TEST
 	printf("Beginning allocator test...\nCheck the Output window for details.\n");
-	AllocatorTest::Init(1024 * 100, 128);
+	/*AllocatorTest::Init(1024 * 1024);
+	AllocatorTest::RunTest00();
 	AllocatorTest::RunTest01();
 	AllocatorTest::RunTest02();
 	AllocatorTest::RunTest03();
-	AllocatorTest::Reset();
+	AllocatorTest::Reset();*/
 #ifdef BUILD_DEBUG
 	HeapManager_UnitTest();
 #endif

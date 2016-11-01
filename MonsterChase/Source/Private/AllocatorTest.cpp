@@ -10,11 +10,11 @@
 
 engine::BlockAllocator* AllocatorTest::block_allocator_ = NULL;
 
-void AllocatorTest::Init(size_t total_memory, unsigned int num_bds)
+void AllocatorTest::Init(size_t total_memory)
 {
-	LOG("Testing BlockAllocator TOTAL_MEM:%zu NUM_BDS:%d", total_memory, num_bds);
+	LOG("Testing BlockAllocator TOTAL_MEM:%zu", total_memory);
 
-	block_allocator_ = engine::BlockAllocator::Create(total_memory, num_bds);
+	block_allocator_ = engine::BlockAllocator::Create(total_memory);
 #ifdef BUILD_DEBUG
 	block_allocator_->PrintAllDescriptors();
 #endif
@@ -28,8 +28,8 @@ void AllocatorTest::Reset()
 
 char* AllocatorTest::DoAlloc(const size_t size)
 {
-	char* ret = static_cast<char*>(block_allocator_->Alloc(size));
 	LOG("Alloc-%zu", size);
+	char* ret = static_cast<char*>(block_allocator_->Alloc(size));
 #ifdef BUILD_DEBUG
 	block_allocator_->PrintAllDescriptors();
 #endif
@@ -38,11 +38,57 @@ char* AllocatorTest::DoAlloc(const size_t size)
 
 void AllocatorTest::DoFree(char* pointer, const size_t size)
 {
-	block_allocator_->Free(pointer);
 	LOG("Free-%zu", size);
+	block_allocator_->Free(pointer);
 #ifdef BUILD_DEBUG
 	block_allocator_->PrintAllDescriptors();
 #endif
+}
+
+void AllocatorTest::RunTest00()
+{
+	LOG("-------------------- Running Test 00 --------------------");
+
+	std::vector<void*> pointers;
+	void* pointer = NULL;
+	uint16_t counter = 0;
+	do
+	{
+		pointer = block_allocator_->Alloc(11 * (counter + 1));
+		if (pointer != NULL)
+		{
+			++counter;
+			pointers.push_back(pointer);
+		}
+
+#ifdef BUILD_DEBUG
+		block_allocator_->PrintAllDescriptors();
+#endif
+
+	} while (pointer != NULL);
+
+#ifdef BUILD_DEBUG
+	block_allocator_->PrintAllDescriptors();
+#endif
+
+	const size_t num_pointers = pointers.size();
+	for (uint16_t i = 0; i < num_pointers; ++i)
+	{
+		block_allocator_->Free(pointers[i]);
+	}
+	pointers.clear();
+
+#ifdef BUILD_DEBUG
+	block_allocator_->PrintAllDescriptors();
+#endif
+
+	block_allocator_->Defragment();
+
+#ifdef BUILD_DEBUG
+	block_allocator_->PrintAllDescriptors();
+#endif
+
+	LOG("-------------------- Finished Test 00 --------------------");
 }
 
 void AllocatorTest::RunTest01()
@@ -57,9 +103,16 @@ void AllocatorTest::RunTest01()
 		size_t rand_size = 1 + rand() % 512;
 		pointers[i] = static_cast<char*>(block_allocator_->Alloc(rand_size));
 
-		for (unsigned int j = 0; j < rand_size; ++j)
+		if (pointers[i])
 		{
-			pointers[i][j] = 65 + i;
+			for (unsigned int j = 0; j < rand_size; ++j)
+			{
+				pointers[i][j] = 65 + i;
+			}
+		}
+		else
+		{
+			break;
 		}
 
 #ifdef SIMULATE_MEMORY_OVERWRITE
@@ -90,6 +143,7 @@ void AllocatorTest::RunTest01()
 
 	for (unsigned int i = 0; i < num_pointers; ++i)
 	{
+		LOG("Freeing %d...", i);
 		block_allocator_->Free(pointers[i]);
 		pointers[i] = NULL;
 	}
@@ -114,8 +168,8 @@ void AllocatorTest::RunTest02()
 	buf2 = DoAlloc(10);
 	buf1 = DoAlloc(22);
 
-	DoFree(buf1, 10);
-	DoFree(buf2, 22);
+	DoFree(buf1, 22);
+	DoFree(buf2, 10);
 
 	block_allocator_->Defragment();
 #ifdef BUILD_DEBUG
@@ -130,16 +184,15 @@ void AllocatorTest::RunTest03()
 	LOG("-------------------- Running Test 03 --------------------");
 	const unsigned int iterations = 512;
 	const unsigned int max_size = 1024 * 5;
-	bool successful = false;
 
-	std::vector<char*> unfreed_pointers;
+	std::vector<void*> unfreed_pointers;
 
 	for (unsigned int i = 0; i < iterations; ++i)
 	{
 		const size_t rand_size = static_cast<size_t>(rand() % max_size);
 		LOG("Request-%d Alloc size:%zu", i, rand_size);
-		char* buf = static_cast<char*>(block_allocator_->Alloc(rand_size));
-		successful = (buf != NULL);
+		void* buf = block_allocator_->Alloc(rand_size);
+		bool successful = (buf != NULL);
 
 		if (successful && (rand() % 10) > 3)
 		{
@@ -151,13 +204,12 @@ void AllocatorTest::RunTest03()
 			unfreed_pointers.push_back(buf);
 		}
 
-		if (successful)
-		{
-#ifdef BUILD_DEBUG
-			block_allocator_->PrintAllDescriptors();
-#endif
-		}
 	}
+
+	LOG("Finished %d iterations...", iterations);
+#ifdef BUILD_DEBUG
+	block_allocator_->PrintAllDescriptors();
+#endif
 
 	const size_t num_unfreed_pointers = unfreed_pointers.size();
 	LOG("Freeing %zu user allocations...", num_unfreed_pointers);

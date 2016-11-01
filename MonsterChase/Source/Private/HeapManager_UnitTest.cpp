@@ -21,7 +21,7 @@ bool HeapManager_UnitTest()
 	assert( pHeapMemory );*/
 
 	// Create a heap manager for my test heap.
-	BlockAllocator * pHeapManager = BlockAllocator::Create(sizeHeap, numDescriptors); //CreateHeapManager( pHeapMemory, sizeHeap, numDescriptors );
+	BlockAllocator * pHeapManager = BlockAllocator::Create(sizeHeap); //CreateHeapManager( pHeapMemory, sizeHeap, numDescriptors );
 	assert( pHeapManager );
 
 	if( pHeapManager == NULL )
@@ -85,6 +85,8 @@ bool HeapManager_UnitTest()
 	}
 #endif
 
+	LOG("Beginning to exhaust allocations...");
+
 	std::vector<void *> AllocatedAddresses;
 
 	long	numAllocs = 0;
@@ -108,7 +110,12 @@ bool HeapManager_UnitTest()
 		size_t			sizeAlloc = 1 + (rand() & (maxTestAllocationSize - 1));
 
 		//void * pPtr = alloc( pHeapManager, sizeAlloc, alignment );
+		LOG("ALLOC:%zu", sizeAlloc);
 		void* pPtr = pHeapManager->Alloc(sizeAlloc);
+
+#ifdef BUILD_DEBUG
+		//pHeapManager->PrintAllDescriptors();
+#endif
 
 		assert( (reinterpret_cast<uintptr_t>(pPtr) & (alignment - 1)) == 0 );
 
@@ -117,8 +124,13 @@ bool HeapManager_UnitTest()
 			//Collect( pHeapManager);
 			pHeapManager->Defragment();
 
+			LOG("ALLOC:%zu", sizeAlloc);
 			//pPtr = alloc( pHeapManager, sizeAlloc, alignment );
 			pPtr = pHeapManager->Alloc(sizeAlloc);
+
+#ifdef BUILD_DEBUG
+			//pHeapManager->PrintAllDescriptors();
+#endif
 
 			if( pPtr == NULL )
 			{
@@ -139,8 +151,13 @@ bool HeapManager_UnitTest()
 			AllocatedAddresses.pop_back();
 
 			//bool success = free( pHeapManager, pPtr );
+			LOG("FREE");
 			bool success = pHeapManager->Free(pPtr);
 			assert( success );
+
+#ifdef BUILD_DEBUG
+			//pHeapManager->PrintAllDescriptors();
+#endif
 
 			numFrees++;
 		}
@@ -148,6 +165,7 @@ bool HeapManager_UnitTest()
 		if( (rand() % garbageCollectAboutEvery) == 0 )
 		{
 			//Collect( pHeapManager);
+			LOG("DEFRAG");
 			pHeapManager->Defragment();
 			
 			numCollects++;
