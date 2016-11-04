@@ -175,6 +175,7 @@
     <ClCompile Include="Source\Private\Monster.cpp" />
     <ClCompile Include="Source\Private\MonsterChase.cpp" />
     <ClCompile Include="Source\Private\Player.cpp" />
+    <ClCompile Include="Source\Private\VectorConstnessTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AllocatorTest.h" />

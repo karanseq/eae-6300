@@ -9,8 +9,18 @@
 bool HeapManager_UnitTest();
 #endif
 
+#define ENABLE_VECTOR_CONST_TEST
+
+#ifdef ENABLE_VECTOR_CONST_TEST
+void TestVectorConstness();
+#endif
+
 int main(int* argv, char** argc)
 {
+#ifdef ENABLE_VECTOR_CONST_TEST
+	TestVectorConstness();
+#endif
+
 #ifdef ENABLE_ALLOCATOR_TEST
 	printf("Beginning allocator test...\nCheck the Output window for details.\n");
 #ifdef BUILD_DEBUG
