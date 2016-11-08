@@ -4,25 +4,19 @@
 #include "Player.h"
 #include "Monster.h"
 
+#include "PlayerController.h"
+#include "MonsterController.h"
+
 // An enum to maintain the various states of the game
 enum GameState
 {
 	GameStateNone = 0,
 	GameStateBegin,
+	GameStateInputPlayerName,
 	GameStateInputNumMonsters,
 	GameStateInputMonsterNames,
-	GameStateInputPlayerName,
 	GameStateRunning,
 	GameStateQuit
-};
-
-// An enum to describe the direction of movement
-enum MoveDirection
-{
-	MoveDirectionLeft = 0,
-	MoveDirectionRight,
-	MoveDirectionUp,
-	MoveDirectionDown
 };
 
 class MonsterChase
@@ -50,7 +44,7 @@ public:
 
 	// game logic
 	void SaveNumMonsters(int num_monsters);
-	void CreateMonster(const char* input_name = NULL);
+	void CreateMonster(const char* input_name = nullptr);
 	void DestroyMonster(int at_index);
 	void UpdateMonsters();
 	void GetNameForMonster(char* name);
@@ -65,14 +59,17 @@ public:
 	static const int MAX_COLS = 50;
 	static const int START_ASCII = 97;
 	static const int MAX_ASCII = 25;
+	static const int MAX_MONSTERS = 10;
+	static const int MAX_MONSTER_TTL = 10;
+	static const int MAX_NAME_LENGTH = 10;
 
 private:
 	// field to maintain the current state of the game
 	GameState game_state_;
 
 	// game elements
-	Player* player_;
-	Monster** monsters_;
+	PlayerController* player_controller_;
+	MonsterController** monster_controllers_;
 
 	// game counters
 	int initial_num_monsters_;

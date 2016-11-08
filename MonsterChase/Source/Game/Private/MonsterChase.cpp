@@ -1,4 +1,4 @@
-#include "MonsterChase.h"
+#include "Game\MonsterChase.h"
 #include "Logger\Logger.h"
 
 // include libraries
@@ -12,8 +12,8 @@
 MonsterChase::MonsterChase()
 {
 	game_state_ = GameStateBegin;
-	player_ = NULL;
-	monsters_ = NULL;
+	player_controller_ = nullptr;
+	monster_controllers_ = nullptr;
 	num_monsters_ = 0;
 	ascii_index_ = 0;
 	srand((unsigned int)time(0));
@@ -22,25 +22,28 @@ MonsterChase::MonsterChase()
 MonsterChase::~MonsterChase()
 {
 	// deallocate the player
-	if (player_ != NULL)
+	if (player_controller_)
 	{
-		delete player_;
-		player_ = NULL;
+		delete player_controller_->GetGameObject();
+		delete player_controller_;
+		player_controller_ = nullptr;
 	}
 
 	// deallocate the monsters
-	if (monsters_ != NULL)
+
+	if (monster_controllers_)
 	{
 		for (int i = 0; i < num_monsters_; ++i)
 		{
-			if (monsters_[i] != NULL)
+			if (monster_controllers_[i] != nullptr)
 			{
-				delete monsters_[i];
-				monsters_[i] = NULL;
+				delete monster_controllers_[i]->GetGameObject();
+				delete monster_controllers_[i];
+				monster_controllers_[i] = nullptr;
 			}
 		}
-		delete[] monsters_;
-		monsters_ = NULL;
+		delete[] monster_controllers_;
+		monster_controllers_ = nullptr;
 	}
 }
 
@@ -64,8 +67,12 @@ void MonsterChase::PrintMessage()
 	{
 	case GameStateBegin:
 		PrintMessage("Welcome to MonsterChase!\n\n");
-		game_state_ = GameStateInputNumMonsters;
+		game_state_ = GameStateInputPlayerName;
 		PrintMessage();
+		break;
+
+	case GameStateInputPlayerName:
+		PrintMessage("What would you like to name the player? ");
 		break;
 
 	case GameStateInputNumMonsters:
@@ -74,10 +81,6 @@ void MonsterChase::PrintMessage()
 
 	case GameStateInputMonsterNames:
 		PrintMessageMonsterName();
-		break;
-
-	case GameStateInputPlayerName:
-		PrintMessage("What would you like to name the player? ");
 		break;
 
 	case GameStateRunning:
@@ -107,10 +110,10 @@ void MonsterChase::PrintGameInformation()
 {
 	for (int i = 0; i < num_monsters_; ++i)
 	{
-		monsters_[i]->Print();
+		monster_controllers_[i]->DebugPrint();
 	}
 
-	player_->Print();
+	player_controller_->DebugPrint();
 }
 
 void MonsterChase::AcceptInput()
@@ -162,7 +165,7 @@ void MonsterChase::ValidateNumber(const char* input)
 	if (sscanf_s(input, "%d", &number) > 0)
 	{
 		// check if the number was within our range
-		if (number > 0 && number <= Monster::MAX_MONSTERS)
+		if (number > 0 && number <= MAX_MONSTERS)
 		{
 			SaveNumMonsters(number);
 			return;
@@ -193,28 +196,28 @@ void MonsterChase::ValidateName(const char* input)
 	}
 
 	int input_length = static_cast<int>(strlen(input));
-	if (input_length > Player::MAX_NAME_LENGTH				// check if the name was within our range
+	if (input_length > MAX_NAME_LENGTH						// check if the name was within our range
 		|| count >= input_length - 1)						// check if the input contained only white spaces
 	{
 		// print an error message
 		char buf[256] = { 0 };
-		sprintf_s(buf, 256, "Please enter a name that is 1 to %d characters long.\n", Player::MAX_NAME_LENGTH);
+		sprintf_s(buf, 256, "Please enter a name that is 1 to %d characters long.\n", MAX_NAME_LENGTH);
 		PrintMessage(buf);
 		return;
 	}
 
 	// remove the newline character from the input
-	char name[Player::MAX_NAME_LENGTH] = { 0 };
+	char name[MAX_NAME_LENGTH] = { 0 };
 	strncpy_s(name, input, strlen(input) - 1);
 
 	// handle both states differently
-	if (game_state_ == GameStateInputMonsterNames)
-	{
-		CreateMonster(name);
-	}
-	else if (game_state_ == GameStateInputPlayerName)
+	if (game_state_ == GameStateInputPlayerName)
 	{
 		CreatePlayer(name);
+	}
+	else if (game_state_ == GameStateInputMonsterNames)
+	{
+		CreateMonster(name);
 	}
 }
 
@@ -240,22 +243,22 @@ void MonsterChase::ValidateMove(const char* input)
 	if (move == 'a' || move == 'A')
 	{
 		is_valid_input = true;
-		player_->Move(MoveDirectionLeft);
+		player_controller_->Move(engine::MovementController::MoveDirection2D::MoveDirectionLeft);
 	}
 	else if (move == 'd' || move == 'D')
 	{
 		is_valid_input = true;
-		player_->Move(MoveDirectionRight);
+		player_controller_->Move(engine::MovementController::MoveDirection2D::MoveDirectionRight);
 	}
 	else if (move == 'w' || move == 'W')
 	{
 		is_valid_input = true;
-		player_->Move(MoveDirectionUp);
+		player_controller_->Move(engine::MovementController::MoveDirection2D::MoveDirectionUp);
 	}
 	else if (move == 's' || move == 'S')
 	{
 		is_valid_input = true;
-		player_->Move(MoveDirectionDown);
+		player_controller_->Move(engine::MovementController::MoveDirection2D::MoveDirectionDown);
 	}
 	else if (move == 'm' || move == 'M')
 	{
@@ -278,7 +281,7 @@ void MonsterChase::SaveNumMonsters(int num_monsters)
 	initial_num_monsters_ = num_monsters;
 
 	// create the array
-	monsters_ = new Monster*[Monster::MAX_MONSTERS];
+	monster_controllers_ = new MonsterController*[MAX_MONSTERS];
 
 	// time to query the names of each monster
 	game_state_ = GameStateInputMonsterNames;
@@ -287,7 +290,7 @@ void MonsterChase::SaveNumMonsters(int num_monsters)
 void MonsterChase::CreateMonster(const char* input_name)
 {
 	// limit number of monsters
-	if (num_monsters_ >= Monster::MAX_MONSTERS)
+	if (num_monsters_ >= MAX_MONSTERS)
 	{
 		LOG("Already at max monsters!");
 		return;
@@ -306,11 +309,19 @@ void MonsterChase::CreateMonster(const char* input_name)
 	}
 
 	// calculate random position for this monster
-	engine::Vec2D monster_position = engine::Vec2D((float)(rand() % MAX_ROWS), (float)(rand() % MAX_COLS));
+	engine::Vec2D monster_position = engine::Vec2D(static_cast<float>(rand() % MAX_ROWS), static_cast<float>(rand() % MAX_COLS));
 	monster_position *= (rand() % 10) > 5 ? 1.0f : -1.0f;
 
 	// create a new monster at the back of the array
-	monsters_[num_monsters_++] = new Monster(monster_position, name);
+	MonsterController* monster_controller = new MonsterController();
+	monster_controller->SetGameObject(new engine::GameObject());
+	monster_controller->SetPosition(monster_position);
+	monster_controller->SetName(name);
+	monster_controller->SetTimeToLive(MAX_MONSTER_TTL / 2 + rand() % MAX_MONSTER_TTL);
+	monster_controller->SetTarget(player_controller_->GetGameObject());
+	monster_controllers_[num_monsters_] = monster_controller;
+
+	++num_monsters_;
 
 	// check if all monsters have been created
 	if (initial_num_monsters_ != -1 && num_monsters_ >= initial_num_monsters_)
@@ -319,7 +330,7 @@ void MonsterChase::CreateMonster(const char* input_name)
 		initial_num_monsters_ = -1;
 
 		// now its the player's turn
-		game_state_ = GameStateInputPlayerName;
+		game_state_ = GameStateRunning;
 	}
 }
 
@@ -331,8 +342,9 @@ void MonsterChase::DestroyMonster(int at_index)
 	ASSERT(num_monsters_ != 0);
 
 	// delete the monster at index
-	delete monsters_[at_index];
-	monsters_[at_index] = NULL;
+	delete monster_controllers_[at_index]->GetGameObject();
+	delete monster_controllers_[at_index];
+	monster_controllers_[at_index] = nullptr;
 
 	// check if this monster is the last one
 	if (at_index != num_monsters_ - 1)
@@ -340,10 +352,10 @@ void MonsterChase::DestroyMonster(int at_index)
 		// TODO: move last object and reduce fragmentation
 
 		// swap the last monster to occupy this index
-		monsters_[at_index] = monsters_[num_monsters_ - 1];
+		monster_controllers_[at_index] = monster_controllers_[num_monsters_ - 1];
 
 		// clear the pointer
-		monsters_[num_monsters_ - 1] = NULL;
+		monster_controllers_[num_monsters_ - 1] = nullptr;
 	}
 
 	// reduce number of monsters
@@ -355,19 +367,19 @@ void MonsterChase::UpdateMonsters()
 	// touch all monsters
 	for (int i = 0; i < num_monsters_; ++i)
 	{
-		monsters_[i]->Move(player_->GetPosition());
+		monster_controllers_[i]->UpdateGameObject();
 	}
 
 	// check if any monsters must be deleted
 	for (int i = 0; i < num_monsters_; ++i)
 	{
-		if (monsters_[i]->GetTimeToLive() <= 0)
+		if (monster_controllers_[i]->GetTimeToLive() <= 0)
 		{
 			// delete this monster
 			DestroyMonster(i);
 
 			// the function above swaps the monsters
-			// decrement the index to process the monster occupying this place after the swap 
+			// decrement the index to preocess the monster occupying this place after the swap
 			--i;
 		}
 	}
@@ -392,8 +404,11 @@ void MonsterChase::CreatePlayer(const char* name)
 	ASSERT(name != NULL);
 
 	// create the player at the center of the grid
-	player_ = new Player(engine::Vec2D::ZERO, name);
+	player_controller_ = new PlayerController();
+	player_controller_->SetGameObject(new engine::GameObject());
+	player_controller_->SetPosition(engine::Vec2D::ZERO);
+	player_controller_->SetName(name);
 
 	// time to start the game
-	game_state_ = GameStateRunning;
+	game_state_ = GameStateInputNumMonsters;
 }

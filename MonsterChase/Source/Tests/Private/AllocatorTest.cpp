@@ -1,6 +1,6 @@
 #ifdef ENABLE_ALLOCATOR_TEST
 
-#include "AllocatorTest.h"
+#include "Tests/AllocatorTest.h"
 #include "Logger/Logger.h"
 
 #include <stdlib.h>

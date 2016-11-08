@@ -169,20 +169,20 @@
     <ResourceCompile Include="MonsterChase.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Private\AllocatorTest.cpp" />
-    <ClCompile Include="Source\Private\HeapManager_UnitTest.cpp" />
-    <ClCompile Include="Source\Private\Main.cpp" />
-    <ClCompile Include="Source\Private\Monster.cpp" />
-    <ClCompile Include="Source\Private\MonsterChase.cpp" />
-    <ClCompile Include="Source\Private\Player.cpp" />
-    <ClCompile Include="Source\Private\VectorConstnessTest.cpp" />
+    <ClCompile Include="Source\Game\Private\Main.cpp" />
+    <ClCompile Include="Source\Game\Private\MonsterChase.cpp" />
+    <ClCompile Include="Source\Game\Private\MonsterController.cpp" />
+    <ClCompile Include="Source\Game\Private\PlayerController.cpp" />
+    <ClCompile Include="Source\Tests\Private\AllocatorTest.cpp" />
+    <ClCompile Include="Source\Tests\Private\HeapManager_UnitTest.cpp" />
+    <ClCompile Include="Source\Tests\Private\VectorConstnessTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\AllocatorTest.h" />
-    <ClInclude Include="Source\Monster.h" />
-    <ClInclude Include="Source\MonsterChase.h" />
-    <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\Game\MonsterChase.h" />
+    <ClInclude Include="Source\Game\MonsterController.h" />
+    <ClInclude Include="Source\Game\PlayerController.h" />
     <ClInclude Include="Source\resource.h" />
+    <ClInclude Include="Source\Tests\AllocatorTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
