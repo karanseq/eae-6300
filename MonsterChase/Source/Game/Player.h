@@ -24,7 +24,7 @@ public:
 	}
 
 	void Update();
-	void Move(MoveDirections move_direction);
+	bool HandleUserInput(char input);
 	void Print();
 
 	// accessors and mutators

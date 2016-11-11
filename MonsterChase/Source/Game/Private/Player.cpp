@@ -8,9 +8,33 @@ void Player::Update()
 	controller_->UpdateGameObject();
 }
 
-void Player::Move(MoveDirections move_direction)
+bool Player::HandleUserInput(char input)
 {
-	reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(move_direction);
+	if (input == 'a' || input == 'A')
+	{
+		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionLeft);
+		return true;
+	}
+	else if (input == 'd' || input == 'D')
+	{
+		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionRight);
+		return true;
+	}
+	else if (input == 'w' || input == 'W')
+	{
+		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionUp);
+		return true;
+	}
+	else if (input == 's' || input == 'S')
+	{
+		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionDown);
+		return true;
+	}
+	else
+	{
+		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionNone);
+		return false;
+	}
 }
 
 void Player::Print()

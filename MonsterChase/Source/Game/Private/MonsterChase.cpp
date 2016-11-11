@@ -231,30 +231,14 @@ void MonsterChase::ValidateMove(const char* input)
 		return;
 	}
 
-	if (move == 'a' || move == 'A')
-	{
-		is_valid_input = true;
-		player_->Move(MoveDirections::kMoveDirectionLeft);
-	}
-	else if (move == 'd' || move == 'D')
-	{
-		is_valid_input = true;
-		player_->Move(MoveDirections::kMoveDirectionRight);
-	}
-	else if (move == 'w' || move == 'W')
-	{
-		is_valid_input = true;
-		player_->Move(MoveDirections::kMoveDirectionUp);
-	}
-	else if (move == 's' || move == 'S')
-	{
-		is_valid_input = true;
-		player_->Move(MoveDirections::kMoveDirectionDown);
-	}
-	else if (move == 'm' || move == 'M')
+	if (move == 'm' || move == 'M')
 	{
 		is_valid_input = true;
 		CreateMonster();
+	}
+	else
+	{
+		is_valid_input = player_->HandleUserInput(move);
 	}
 
 	if (is_valid_input)
