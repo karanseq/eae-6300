@@ -1,12 +1,6 @@
 #ifndef MONSTER_CHASE_H_
 #define MONSTER_CHASE_H_
 
-#include "Player.h"
-#include "Monster.h"
-
-#include "PlayerController.h"
-#include "MonsterController.h"
-
 // An enum to maintain the various states of the game
 enum GameState
 {
@@ -18,6 +12,10 @@ enum GameState
 	GameStateRunning,
 	GameStateQuit
 };
+
+// forward declarations
+class Player;
+class Monster;
 
 class MonsterChase
 {
@@ -68,8 +66,8 @@ private:
 	GameState game_state_;
 
 	// game elements
-	PlayerController* player_controller_;
-	MonsterController** monster_controllers_;
+	Player* player_;
+	Monster** monsters_;
 
 	// game counters
 	int initial_num_monsters_;

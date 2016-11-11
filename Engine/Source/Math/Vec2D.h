@@ -6,8 +6,7 @@ namespace engine
 	class Vec2D
 	{
 	public:
-		Vec2D();
-		Vec2D(float x, float y);
+		Vec2D(float x = 0.0f, float y = 0.0f);
 		Vec2D(const Vec2D& copy);
 
 		~Vec2D()
@@ -18,7 +17,7 @@ namespace engine
 		inline void x(float x);
 		inline float y() const;
 		inline void y(float y);
-		inline void set(float x, float y);
+		inline void set(float x = 0.0f, float y = 0.0f);
 
 		// assignment
 		inline Vec2D& operator=(const Vec2D& vec);

@@ -60,17 +60,26 @@
     <ClInclude Include="Source\GameObject\GameObject.h">
       <Filter>Header Files\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameObject\GameObjectController.h">
+    <ClInclude Include="Source\GameObject\InterfaceGameObjectController.h">
       <Filter>Header Files\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameObject\MovementController.h">
+    <ClInclude Include="Source\Math\Transform.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Transform-inl.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Vec3D.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Vec3D-inl.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameObject\IdentityComponent.h">
       <Filter>Header Files\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameObject\NameController.h">
-      <Filter>Header Files\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameObject\DebugPrintController.h">
-      <Filter>Header Files\GameObject</Filter>
+    <ClInclude Include="Source\Allocator\AllocatorUtil.h">
+      <Filter>Header Files\Allocator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="Source\Allocator\Private\BlockAllocator.cpp">
       <Filter>Source Files\Allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\Private\Vec3D.cpp">
+      <Filter>Source Files\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

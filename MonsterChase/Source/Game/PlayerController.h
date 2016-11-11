@@ -1,48 +1,40 @@
 #ifndef PLAYER_CONTROLLER_H_
 #define PLAYER_CONTROLLER_H_
 
-#include "GameObject\GameObjectController.h"
-#include "GameObject\MovementController.h"
-#include "GameObject\NameController.h"
-#include "GameObject\DebugPrintController.h"
+// game includes
+#include "Game\GameTypes.h"
+
+// engine includes
+#include "GameObject\InterfaceGameObjectController.h"
 #include "GameObject\GameObject.h"
+#include "Allocator\AllocatorUtil.h"
 #include "Logger\Logger.h"
 
-#include <stdio.h>
-
-class PlayerController : public engine::GameObjectController, 
-	public engine::MovementController, 
-	public engine::NameController,
-	public engine::DebugPrintController
+class PlayerController : public engine::InterfaceGameObjectController
 {
 public:
-	PlayerController() : player_(nullptr),
-		name_(nullptr)
+	PlayerController() : game_object_(new engine::GameObject()),
+		move_direction_(MoveDirections::kMoveDirectionNone)
 	{}
-	virtual ~PlayerController();
 
-	/* Implement the GameObjectController */
-	inline void SetGameObject(engine::GameObject* game_object) override			{ player_ = game_object; }
-	inline engine::GameObject* GetGameObject() override							{ return player_; }
+	virtual ~PlayerController()
+	{
+		SAFE_DELETE(game_object_);
+	}
+
+	/* Implement InterfaceGameObjectController */
+	inline engine::GameObject* GetGameObject() override								{ return game_object_; }
+	inline void SetGameObject(engine::GameObject* game_object) override				{ ASSERT(game_object); SAFE_DELETE(game_object_); game_object_ = game_object; }
 
 	void UpdateGameObject() override;
 
-	/* Implement the MovementController */
-	void Move(engine::MovementController::MoveDirection2D direction) override;
-
-	/* Implement the NameController */
-	void SetName(const char* name) override;
-	inline const char* GetName() const override					{ return name_; }
-
-	/* Implement the DebugPrintController */
-	inline void DebugPrint() const override						{ ASSERT(player_ != nullptr); printf("Player %s is at [%f, %f]\n", name_, player_->GetPosition().x(), player_->GetPosition().y()); }
-
-	inline void SetPosition(const engine::Vec2D& position)		{ ASSERT(player_ != nullptr); player_->SetPosition(position); }
-	inline const engine::Vec2D& GetPosition() const				{ ASSERT(player_ != nullptr); return player_->GetPosition(); }
+	inline MoveDirections GetMoveDirection() const									{ return move_direction_; }
+	inline void SetMoveDirection(MoveDirections move_direction)						{ move_direction_ = move_direction; }
 
 private:
-	engine::GameObject* player_;
-	const char* name_;
-};
+	engine::GameObject* game_object_;
+	MoveDirections move_direction_;
+
+}; // class PlayerController
 
 #endif // PLAYER_CONTROLLER_H_

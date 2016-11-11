@@ -1,11 +1,11 @@
-#include "Game\PlayerController.h"
+#include "Game\SillyMonsterController.h"
+#include "Game\GameTypes.h"
+#include "Game\GameUtils.h"
 
-// engine includes
-#include "Math\Vec3D.h"
-
-void PlayerController::UpdateGameObject()
+void SillyMonsterController::UpdateGameObject()
 {
-	switch (move_direction_)
+	MoveDirections direction = GameUtils::GetRandomDirection();
+	switch (direction)
 	{
 	case MoveDirections::kMoveDirectionLeft:
 		game_object_->SetPosition(game_object_->GetPosition() - engine::Vec3D::UNIT_X);

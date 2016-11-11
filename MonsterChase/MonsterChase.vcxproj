@@ -170,16 +170,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\Private\Main.cpp" />
+    <ClCompile Include="Source\Game\Private\Monster.cpp" />
     <ClCompile Include="Source\Game\Private\MonsterChase.cpp" />
-    <ClCompile Include="Source\Game\Private\MonsterController.cpp" />
+    <ClCompile Include="Source\Game\Private\Player.cpp" />
     <ClCompile Include="Source\Game\Private\PlayerController.cpp" />
+    <ClCompile Include="Source\Game\Private\SillyMonsterController.cpp" />
+    <ClCompile Include="Source\Game\Private\SmartMonsterController.cpp" />
     <ClCompile Include="Source\Tests\Private\AllocatorTest.cpp" />
     <ClCompile Include="Source\Tests\Private\HeapManager_UnitTest.cpp" />
     <ClCompile Include="Source\Tests\Private\VectorConstnessTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\GameTypes.h" />
+    <ClInclude Include="Source\Game\GameUtils.h" />
+    <ClInclude Include="Source\Game\Monster.h" />
     <ClInclude Include="Source\Game\MonsterChase.h" />
-    <ClInclude Include="Source\Game\MonsterController.h" />
+    <ClInclude Include="Source\Game\SillyMonsterController.h" />
+    <ClInclude Include="Source\Game\SmartMonsterController.h" />
+    <ClInclude Include="Source\Game\Player.h" />
     <ClInclude Include="Source\Game\PlayerController.h" />
     <ClInclude Include="Source\resource.h" />
     <ClInclude Include="Source\Tests\AllocatorTest.h" />

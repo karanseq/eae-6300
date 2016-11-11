@@ -149,21 +149,25 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Allocator\AllocatorUtil.h" />
     <ClInclude Include="Source\Allocator\BlockAllocator-inl.h" />
     <ClInclude Include="Source\Allocator\BlockAllocator.h" />
-    <ClInclude Include="Source\GameObject\DebugPrintController.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
-    <ClInclude Include="Source\GameObject\GameObjectController.h" />
-    <ClInclude Include="Source\GameObject\MovementController.h" />
-    <ClInclude Include="Source\GameObject\NameController.h" />
+    <ClInclude Include="Source\GameObject\InterfaceGameObjectController.h" />
+    <ClInclude Include="Source\GameObject\IdentityComponent.h" />
     <ClInclude Include="Source\Logger\Logger.h" />
+    <ClInclude Include="Source\Math\Transform-inl.h" />
+    <ClInclude Include="Source\Math\Transform.h" />
     <ClInclude Include="Source\Math\Vec2D-inl.h" />
     <ClInclude Include="Source\Math\Vec2D.h" />
+    <ClInclude Include="Source\Math\Vec3D-inl.h" />
+    <ClInclude Include="Source\Math\Vec3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Allocator\Private\BlockAllocator.cpp" />
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp" />
     <ClCompile Include="Source\Math\Private\Vec2D.cpp" />
+    <ClCompile Include="Source\Math\Private\Vec3D.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

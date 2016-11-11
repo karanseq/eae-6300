@@ -38,12 +38,6 @@
     <ClCompile Include="Source\Game\Private\MonsterChase.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Private\MonsterController.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Private\PlayerController.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Tests\Private\AllocatorTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
@@ -53,6 +47,21 @@
     <ClCompile Include="Source\Tests\Private\VectorConstnessTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Private\Player.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Private\PlayerController.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Private\SillyMonsterController.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Private\SmartMonsterController.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Private\Monster.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\resource.h">
@@ -61,14 +70,29 @@
     <ClInclude Include="Source\Game\MonsterChase.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\MonsterController.h">
+    <ClInclude Include="Source\Tests\AllocatorTest.h">
+      <Filter>Header Files\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Monster.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Player.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\PlayerController.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\AllocatorTest.h">
-      <Filter>Header Files\Tests</Filter>
+    <ClInclude Include="Source\Game\SmartMonsterController.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\SillyMonsterController.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\GameTypes.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\GameUtils.h">
+      <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
