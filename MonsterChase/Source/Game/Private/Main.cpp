@@ -45,7 +45,7 @@ int main(int* argv, char** argc)
 	// initialize game
 	MonsterChase* monster_chase = new MonsterChase();
 
-	while (monster_chase->GetState() != GameStateQuit)
+	while (monster_chase->GetState() != GameStates::kGameStateQuit)
 	{
 		monster_chase->Update();
 	}

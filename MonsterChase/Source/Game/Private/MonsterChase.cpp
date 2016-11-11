@@ -17,7 +17,7 @@
 
 MonsterChase::MonsterChase()
 {
-	game_state_ = GameStateBegin;
+	game_state_ = GameStates::kGameStateBegin;
 	player_ = nullptr;
 	monsters_ = nullptr;
 	num_monsters_ = 0;
@@ -56,25 +56,25 @@ void MonsterChase::PrintMessage()
 {
 	switch (game_state_)
 	{
-	case GameStateBegin:
+	case GameStates::kGameStateBegin:
 		PrintMessage("Welcome to MonsterChase!\n\n");
-		game_state_ = GameStateInputPlayerName;
+		game_state_ = GameStates::kGameStateInputPlayerName;
 		PrintMessage();
 		break;
 
-	case GameStateInputPlayerName:
+	case GameStates::kGameStateInputPlayerName:
 		PrintMessage("What would you like to name the player? ");
 		break;
 
-	case GameStateInputNumMonsters:
+	case GameStates::kGameStateInputNumMonsters:
 		PrintMessage("How many monsters would you like to start with? ");
 		break;
 
-	case GameStateInputMonsterNames:
+	case GameStates::kGameStateInputMonsterNames:
 		PrintMessageMonsterName();
 		break;
 
-	case GameStateRunning:
+	case GameStates::kGameStateRunning:
 		PrintGameInformation();
 		PrintMessage("\nPress A to move left, D to move right, W to move up, S to move down, M to spawn a new monster and Q to quit.\n");
 		break;
@@ -87,7 +87,7 @@ void MonsterChase::PrintMessage()
 
 void MonsterChase::PrintMessageMonsterName()
 {
-	if (game_state_ != GameStateInputMonsterNames)
+	if (game_state_ != GameStates::kGameStateInputMonsterNames)
 	{
 		return;
 	}
@@ -110,7 +110,7 @@ void MonsterChase::PrintGameInformation()
 void MonsterChase::AcceptInput()
 {
 	char input_str[MAX_INPUT_SIZE + 1] = { 0 };
-	if (game_state_ == GameStateRunning)
+	if (game_state_ == GameStates::kGameStateRunning)
 	{
 		input_str[0] = _getch();
 	}
@@ -125,16 +125,16 @@ void MonsterChase::ValidateInput(const char* input)
 {
 	switch (game_state_)
 	{
-	case GameStateInputNumMonsters:
+	case GameStates::kGameStateInputNumMonsters:
 		ValidateNumber(input);
 		break;
 
-	case GameStateInputMonsterNames:
-	case GameStateInputPlayerName:
+	case GameStates::kGameStateInputMonsterNames:
+	case GameStates::kGameStateInputPlayerName:
 		ValidateName(input);
 		break;
 
-	case GameStateRunning:
+	case GameStates::kGameStateRunning:
 		ValidateMove(input);
 		break;
 	}
@@ -146,7 +146,7 @@ void MonsterChase::ValidateNumber(const char* input)
 	ASSERT(input != NULL);
 
 	// execute this function only in this state
-	if (game_state_ != GameStateInputNumMonsters)
+	if (game_state_ != GameStates::kGameStateInputNumMonsters)
 	{
 		return;
 	}
@@ -172,7 +172,7 @@ void MonsterChase::ValidateName(const char* input)
 	ASSERT(input != NULL);
 
 	// execute this function only in these states
-	if (game_state_ != GameStateInputMonsterNames && game_state_ != GameStateInputPlayerName)
+	if (game_state_ != GameStates::kGameStateInputMonsterNames && game_state_ != GameStates::kGameStateInputPlayerName)
 	{
 		return;
 	}
@@ -202,11 +202,11 @@ void MonsterChase::ValidateName(const char* input)
 	strncpy_s(name, input, strlen(input) - 1);
 
 	// handle both states differently
-	if (game_state_ == GameStateInputPlayerName)
+	if (game_state_ == GameStates::kGameStateInputPlayerName)
 	{
 		CreatePlayer(name);
 	}
-	else if (game_state_ == GameStateInputMonsterNames)
+	else if (game_state_ == GameStates::kGameStateInputMonsterNames)
 	{
 		CreateMonster(name);
 	}
@@ -218,7 +218,7 @@ void MonsterChase::ValidateMove(const char* input)
 	ASSERT(input != NULL);
 
 	// execute this function only in this state
-	if (game_state_ != GameStateRunning)
+	if (game_state_ != GameStates::kGameStateRunning)
 	{
 		return;
 	}
@@ -227,7 +227,7 @@ void MonsterChase::ValidateMove(const char* input)
 	char move = input[0];
 	if (move == 'q' || move == 'Q')
 	{
-		game_state_ = GameStateQuit;
+		game_state_ = GameStates::kGameStateQuit;
 		return;
 	}
 
@@ -260,7 +260,7 @@ void MonsterChase::SaveNumMonsters(int num_monsters)
 	monsters_ = new Monster*[MAX_MONSTERS];
 
 	// time to query the names of each monster
-	game_state_ = GameStateInputMonsterNames;
+	game_state_ = GameStates::kGameStateInputMonsterNames;
 }
 
 void MonsterChase::CreateMonster(const char* input_name)
@@ -313,7 +313,7 @@ void MonsterChase::CreateMonster(const char* input_name)
 		initial_num_monsters_ = -1;
 
 		// now its the player's turn
-		game_state_ = GameStateRunning;
+		game_state_ = GameStates::kGameStateRunning;
 	}
 }
 
@@ -389,5 +389,5 @@ void MonsterChase::CreatePlayer(const char* name)
 	player_->GetIdentity()->SetName(name);
 
 	// time to start the game
-	game_state_ = GameStateInputNumMonsters;
+	game_state_ = GameStates::kGameStateInputNumMonsters;
 }

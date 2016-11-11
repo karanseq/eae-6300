@@ -1,17 +1,7 @@
 #ifndef MONSTER_CHASE_H_
 #define MONSTER_CHASE_H_
 
-// An enum to maintain the various states of the game
-enum GameState
-{
-	GameStateNone = 0,
-	GameStateBegin,
-	GameStateInputPlayerName,
-	GameStateInputNumMonsters,
-	GameStateInputMonsterNames,
-	GameStateRunning,
-	GameStateQuit
-};
+#include "Game\GameTypes.h"
 
 // forward declarations
 class Player;
@@ -49,7 +39,7 @@ public:
 
 	void CreatePlayer(const char* name);
 
-	inline GameState GetState() const { return game_state_; }
+	inline GameStates GetState() const { return game_state_; }
 
 	// game constants
 	static const int MAX_INPUT_SIZE = 256;
@@ -63,7 +53,7 @@ public:
 
 private:
 	// field to maintain the current state of the game
-	GameState game_state_;
+	GameStates game_state_;
 
 	// game elements
 	Player* player_;

@@ -1,6 +1,17 @@
 #ifndef GAME_TYPES_H_
 #define GAME_TYPES_H_
 
+enum class GameStates
+{
+	kGameStateNone = 0,
+	kGameStateBegin,
+	kGameStateInputPlayerName,
+	kGameStateInputNumMonsters,
+	kGameStateInputMonsterNames,
+	kGameStateRunning,
+	kGameStateQuit
+};
+
 enum class MonsterControllers
 {
 	kNoMonsterController = 0,
