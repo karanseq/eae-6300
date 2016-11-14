@@ -101,17 +101,17 @@ bool HeapManager_UnitTest()
 	{
 		const size_t		maxTestAllocationSize = 1024;
 
-		const unsigned int	alignments[] = { 4 };		//, 8, 16, 32, 64 };
+		const unsigned int	alignments[] = { 4 , 8, 16, 32, 64 };
 
-		unsigned int	index = 0;						//rand() % (sizeof(alignments) / sizeof(alignments[0]));
+		unsigned int	index = rand() % (sizeof(alignments) / sizeof(alignments[0]));
 
 		unsigned int	alignment = alignments[index];
 
 		size_t			sizeAlloc = 1 + (rand() & (maxTestAllocationSize - 1));
 
 		//void * pPtr = alloc( pHeapManager, sizeAlloc, alignment );
-		LOG("ALLOC:%zu", sizeAlloc);
-		void* pPtr = pHeapManager->Alloc(sizeAlloc);
+		LOG("ALLOC size:%zu alignment:%zu", sizeAlloc, alignment);
+		void* pPtr = pHeapManager->Alloc(sizeAlloc, alignment);
 
 #ifdef BUILD_DEBUG
 		//pHeapManager->PrintAllDescriptors();
@@ -124,9 +124,9 @@ bool HeapManager_UnitTest()
 			//Collect( pHeapManager);
 			pHeapManager->Defragment();
 
-			LOG("ALLOC:%zu", sizeAlloc);
+			LOG("ALLOC size:%zu alignment:%zu", sizeAlloc, alignment);
 			//pPtr = alloc( pHeapManager, sizeAlloc, alignment );
-			pPtr = pHeapManager->Alloc(sizeAlloc);
+			pPtr = pHeapManager->Alloc(sizeAlloc, alignment);
 
 #ifdef BUILD_DEBUG
 			//pHeapManager->PrintAllDescriptors();

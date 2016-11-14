@@ -49,7 +49,36 @@ void AllocatorTest::RunTest00()
 {
 	LOG("-------------------- Running Test 00 --------------------");
 
-	std::vector<void*> pointers;
+	size_t alignment = 32;
+	void* pointer1 = block_allocator_->Alloc(200, alignment);
+	LOG("Alloc-200 aligned:%d", reinterpret_cast<uintptr_t>(pointer1) % alignment);
+
+#ifdef BUILD_DEBUG
+	block_allocator_->PrintAllDescriptors();
+#endif
+
+	alignment = 16;
+	void* pointer2 = block_allocator_->Alloc(200, alignment);
+	LOG("Alloc-200 aligned:%d", reinterpret_cast<uintptr_t>(pointer1) % alignment);
+
+#ifdef BUILD_DEBUG
+	block_allocator_->PrintAllDescriptors();
+#endif
+
+	if (pointer1)			block_allocator_->Free(pointer1);
+	if (pointer2)			block_allocator_->Free(pointer2);
+
+#ifdef BUILD_DEBUG
+	block_allocator_->PrintAllDescriptors();
+#endif
+
+	block_allocator_->Defragment();
+
+#ifdef BUILD_DEBUG
+	block_allocator_->PrintAllDescriptors();
+#endif
+
+	/*std::vector<void*> pointers;
 	void* pointer = NULL;
 	uint16_t counter = 0;
 	do
@@ -86,7 +115,7 @@ void AllocatorTest::RunTest00()
 
 #ifdef BUILD_DEBUG
 	block_allocator_->PrintAllDescriptors();
-#endif
+#endif*/
 
 	LOG("-------------------- Finished Test 00 --------------------");
 }

@@ -68,7 +68,7 @@ public:
 	static void Destroy();
 
 	// Allocate a block of memory with given size
-	void* Alloc(const size_t size);
+	void* Alloc(const size_t size, const size_t alignment = DEFAULT_BYTE_ALIGNMENT);
 	// Deallocate a block of memory
 	bool Free(void* pointer);
 
@@ -80,7 +80,7 @@ public:
 	// Query whether a given pointer is an outstanding allocation
 	bool IsAllocated(const void* pointer) const;
 
-	const size_t GetLargestFreeBlockSize() const;
+	const size_t GetLargestFreeBlockSize(const size_t alignment = DEFAULT_BYTE_ALIGNMENT) const;
 	const size_t GetTotalFreeMemorySize() const;
 
 #ifdef BUILD_DEBUG

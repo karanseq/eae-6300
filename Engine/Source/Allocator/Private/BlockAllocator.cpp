@@ -196,15 +196,15 @@ bool BlockAllocator::CheckMemoryOverwrite(BD* bd) const
 }
 #endif
 
-void* BlockAllocator::Alloc(const size_t size)
+void* BlockAllocator::Alloc(const size_t size, const size_t alignment)
 {
 	ASSERT(size > 0);
+	ASSERT((alignment & (alignment - 1)) == 0);
 
-	// pre-calculate overhead required for an allocation
 #ifdef BUILD_DEBUG
-	const size_t overhead = DEFAULT_BYTE_ALIGNMENT + DEFAULT_GUARDBAND_SIZE * 2 + size_of_BD_;
+	const size_t guardband_size = DEFAULT_GUARDBAND_SIZE;
 #else
-	const size_t overhead = DEFAULT_BYTE_ALIGNMENT + size_of_BD_;
+	const size_t guardband_size = 0;
 #endif
 
 	// declare a block descriptor to service this request
@@ -218,23 +218,21 @@ void* BlockAllocator::Alloc(const size_t size)
 		// check if this block is big enough
 		if (size <= free_bd->block_size_)
 		{
-			// check if this block needs to be fragmented
-			if (free_bd->block_size_ - size >= (MAX_EXTRA_MEMORY + size_of_BD_))
-			{
-				// if we need to split, calculate the address of the new block
-				uint8_t* new_block_pointer = free_bd->block_pointer_ + free_bd->block_size_ - size - overhead;
+			// calculate the new address of the new block
+			uint8_t* new_block_pointer = free_bd->block_pointer_ + free_bd->block_size_ - size_of_BD_ - guardband_size * 2 - size;
+			const uintptr_t alignment_offset = (reinterpret_cast<uintptr_t>(new_block_pointer + size_of_BD_ + guardband_size)) % alignment;
 
-				// adjust for byte alignment
-				const uintptr_t adjustment = (reinterpret_cast<uintptr_t>(new_block_pointer)) % DEFAULT_BYTE_ALIGNMENT;
-				new_block_pointer += (DEFAULT_BYTE_ALIGNMENT - adjustment);
+			// check if this block needs to be fragmented
+			if ((size_of_BD_ + guardband_size * 2 + size + alignment_offset + MAX_EXTRA_MEMORY) <= free_bd->block_size_)
+			{
+				// block is much bigger than we need so we'll fragment it
+				new_block_pointer = free_bd->block_pointer_ + free_bd->block_size_ - size_of_BD_ - guardband_size * 2 - size - alignment_offset;
 
 				// initialize the new block's descriptor
 				new_bd = reinterpret_cast<BD*>(new_block_pointer);
 				new_bd->Init();
 				new_bd->block_pointer_ = new_block_pointer + size_of_BD_;
-
-				// reduce size by adjustment
-				new_bd->block_size_ = size + overhead - size_of_BD_ - (DEFAULT_BYTE_ALIGNMENT - adjustment);
+				new_bd->block_size_ = size + alignment_offset + guardband_size * 2;
 
 				// splice the free block
 				free_bd->block_size_ -= (size_of_BD_ + new_bd->block_size_);
@@ -242,16 +240,21 @@ void* BlockAllocator::Alloc(const size_t size)
 				// done with the search so break
 				break;
 			}
-			else if (free_bd->block_size_ - size >= (DEFAULT_BYTE_ALIGNMENT + DEFAULT_GUARDBAND_SIZE * 2))
+			// check to see if this block is big enough to be used as is
+			else if ((size + guardband_size * 2) <= free_bd->block_size_)
 			{
-				// if we don't need to split, use this free descriptor as is
-				new_bd = free_bd;
+				// if we are to use the entire block as is, check to see if it is properly byte aligned 
+				if ((reinterpret_cast<uintptr_t>(free_bd->block_pointer_ + guardband_size) % alignment) == 0)
+				{
+					// block is slightly bigger so we'll use it whole
+					new_bd = free_bd;
 
-				// remove it from the free list
-				RemoveFromList(&free_list_head_, &new_bd);
+					// remove the descriptor from the free list
+					RemoveFromList(&free_list_head_, &free_bd);
 
-				// done with the search so break
-				break;
+					// done with the search so break
+					break;
+				}
 			}
 		}
 
@@ -292,10 +295,10 @@ void* BlockAllocator::Alloc(const size_t size)
 	ClearBlock(new_bd, CLEAN_FILL);
 
 	// add guardbands
-	for (unsigned int i = 0; i < DEFAULT_GUARDBAND_SIZE; ++i)
+	for (unsigned int i = 0; i < guardband_size; ++i)
 	{
 		*(new_bd->block_pointer_ + i) = GUARDBAND_FILL;
-		*(new_bd->block_pointer_ + DEFAULT_GUARDBAND_SIZE + size + i) = GUARDBAND_FILL;
+		*(new_bd->block_pointer_ + guardband_size + size + i) = GUARDBAND_FILL;
 	}
 
 	// save the size requested by the user for future use
@@ -305,11 +308,7 @@ void* BlockAllocator::Alloc(const size_t size)
 	// add the descriptor to the user list
 	AddToList(&user_list_head_, &new_bd, false);
 
-#ifdef BUILD_DEBUG
-	return (new_bd->block_pointer_ + DEFAULT_GUARDBAND_SIZE);
-#else
-	return new_bd->block_pointer_;
-#endif
+	return (new_bd->block_pointer_ + guardband_size);
 }
 
 // Deallocate a block of memory
@@ -421,7 +420,7 @@ bool BlockAllocator::IsAllocated(const void* pointer) const
 	return false;
 }
 
-const size_t BlockAllocator::GetLargestFreeBlockSize() const
+const size_t BlockAllocator::GetLargestFreeBlockSize(const size_t alignment) const
 {
 	size_t largest_size = 0;
 	// loop the free list
@@ -437,9 +436,9 @@ const size_t BlockAllocator::GetLargestFreeBlockSize() const
 	}
 
 #ifdef BUILD_DEBUG
-	return largest_size - DEFAULT_BYTE_ALIGNMENT - DEFAULT_GUARDBAND_SIZE * 2;
+	return largest_size - alignment - DEFAULT_GUARDBAND_SIZE * 2;
 #else
-	return largest_size - DEFAULT_BYTE_ALIGNMENT;
+	return largest_size - alignment;
 #endif
 }
 
