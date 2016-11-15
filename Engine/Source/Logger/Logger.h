@@ -1,12 +1,9 @@
 #ifndef ENGINE_LOGGER_H_
 #define ENGINE_LOGGER_H_
 
-#include <assert.h>
-
 /*
-	A simple logging & assert utility.
+	A simple logging utility.
 	Features:
-	- Supports a simple assert function in debug mode at all verbosity levels
 	- Supports a simple log function in both debug and release modes at various verbosity levels (see Variables section)
 	- Supports a simple verbose function that adds file name and line number to a regular log in debug mode at max verbosity (see Variables section)
 
@@ -15,21 +12,18 @@
 	- VERBOSITY_LEVEL
 		- In RELEASE mode, set VERBOSITY_LEVEL to 1 to enable logs, 0 to disable all logs
 			VERBOSITY_LEVEL = 0
-				- Assert, log & error are disabled
+				- Log & error are disabled
 			VERBOSITY_LEVEL = 1
-				- Assert is disabled, log & error are enabled
+				- Log & error are enabled
 
 		- In DEBUG mode,
 			VERBOSITY_LEVEL = 0 or 1
-				- Assert, log & error are enabled, verbose is disabled
+				- Log & error are enabled, verbose is disabled
 			VERBOSITY_LEVEL = 2
-				- Assert, log, error & verbose are enabled
+				- Log, error & verbose are enabled
 */
 
 #if defined(BUILD_DEBUG)
-	// in debug mode, enable assert
-	#define ASSERT(cond)					assert((cond))
-
 	// in debug mode, enable verbose & log when level is 2
 	#if defined(VERBOSITY_LEVEL) && (VERBOSITY_LEVEL > 1)
 		#define LOG(format, ...)			engine::Print("DEBUG: ", (format), __VA_ARGS__)
@@ -46,8 +40,7 @@
 		#define VERBOSE(format, ...)		void(0)
 	#endif
 #else
-	// in release mode, disable assert and verbose
-	#define ASSERT(cond)					void(0)
+	// in release mode, disable verbose
 	#define VERBOSE(format, ...)			void(0)
 
 	// in release mode, enable log & error when level is 1

@@ -1,4 +1,5 @@
 #include "Allocator\BlockAllocator.h"
+#include "Assert\Assert.h"
 #include "Logger\Logger.h"
 
 #include <stdlib.h>			// for _aligned_malloc & _aligned_free
@@ -62,6 +63,7 @@ void BlockAllocator::Destroy()
 {
 	if (BlockAllocator::instance_ != nullptr)
 	{
+		BlockAllocator::instance_->~BlockAllocator();
 		_aligned_free(BlockAllocator::instance_);
 		BlockAllocator::instance_ = nullptr;
 	}

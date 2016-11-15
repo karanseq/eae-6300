@@ -5,7 +5,7 @@
 #include "GameObject\InterfaceGameObjectController.h"
 #include "GameObject\IdentityComponent.h"
 #include "Allocator\AllocatorUtil.h"
-#include "Logger\Logger.h"
+#include "Assert\Assert.h"
 
 // game includes
 #include "Game\PlayerController.h"

@@ -1,5 +1,5 @@
 #include "BlockAllocator.h"
-#include "Logger\Logger.h"
+#include "Assert\Assert.h"
 
 #include <string.h>			// for memset
 

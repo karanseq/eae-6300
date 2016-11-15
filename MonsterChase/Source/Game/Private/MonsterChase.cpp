@@ -5,6 +5,7 @@
 
 // engine includes 
 #include "Math\Vec2D.h"
+#include "Assert\Assert.h"
 #include "Logger\Logger.h"
 
 // library includes
@@ -236,10 +237,8 @@ void MonsterChase::ValidateMove(const char* input)
 		is_valid_input = true;
 		CreateMonster();
 	}
-	else
-	{
-		is_valid_input = player_->HandleUserInput(move);
-	}
+
+	is_valid_input = player_->HandleUserInput(move);
 
 	if (is_valid_input)
 	{

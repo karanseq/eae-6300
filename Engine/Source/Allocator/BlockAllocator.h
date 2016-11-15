@@ -66,6 +66,7 @@ protected:
 public:
 	static BlockAllocator* Create(const size_t block_size = DEFAULT_BLOCK_SIZE);
 	static void Destroy();
+	static inline BlockAllocator* GetInstance() { return BlockAllocator::instance_; }
 
 	// Allocate a block of memory with given size
 	void* Alloc(const size_t size, const size_t alignment = DEFAULT_BYTE_ALIGNMENT);

@@ -7,7 +7,7 @@
 
 // engine includes
 #include "Allocator\AllocatorUtil.h"
-#include "Logger\Logger.h"
+#include "Assert\Assert.h"
 
 namespace engine
 {

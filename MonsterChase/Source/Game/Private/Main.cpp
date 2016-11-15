@@ -1,4 +1,8 @@
-// include gameplay elements
+// engine includes
+#include "Allocator\BlockAllocator.h"
+#include "Allocator\CustomNew.h"
+
+// game includes
 #include "Game\MonsterChase.h"
 
 #ifdef BUILD_DEBUG
@@ -42,6 +46,9 @@ int main(int* argv, char** argc)
 	return 0;
 #endif
 
+	// initialize allocator
+	engine::BlockAllocator::Create(1024 * 5);
+
 	// initialize game
 	MonsterChase* monster_chase = new MonsterChase();
 
@@ -52,6 +59,11 @@ int main(int* argv, char** argc)
 
 	delete monster_chase;
 	monster_chase = nullptr;
+
+#ifdef BUILD_DEBUG
+	engine::BlockAllocator::GetInstance()->PrintAllDescriptors();
+#endif
+	engine::BlockAllocator::Destroy();
 
 #if defined(_DEBUG)
 	_CrtDumpMemoryLeaks();
