@@ -24,7 +24,7 @@ bool HeapManager_UnitTest()
 	BlockAllocator * pHeapManager = BlockAllocator::Create(sizeHeap); //CreateHeapManager( pHeapMemory, sizeHeap, numDescriptors );
 	assert( pHeapManager );
 
-	if( pHeapManager == NULL )
+	if( pHeapManager == nullptr )
 		return false;
 
 #ifdef TEST_SINGLE_LARGE_ALLOCATION
@@ -119,7 +119,7 @@ bool HeapManager_UnitTest()
 
 		assert( (reinterpret_cast<uintptr_t>(pPtr) & (alignment - 1)) == 0 );
 
-		if( pPtr == NULL )
+		if( pPtr == nullptr )
 		{
 			//Collect( pHeapManager);
 			pHeapManager->Defragment();
@@ -132,7 +132,7 @@ bool HeapManager_UnitTest()
 			//pHeapManager->PrintAllDescriptors();
 #endif
 
-			if( pPtr == NULL )
+			if( pPtr == nullptr )
 			{
 				done = true;
 				break;
@@ -253,7 +253,7 @@ bool HeapManager_UnitTest()
 
 	//Destroy( pHeapManager );
 	pHeapManager->Destroy();
-	pHeapManager = NULL;
+	pHeapManager = nullptr;
 
 	//_aligned_free( pHeapMemory );
 

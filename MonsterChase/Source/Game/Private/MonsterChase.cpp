@@ -143,7 +143,7 @@ void MonsterChase::ValidateInput(const char* input)
 void MonsterChase::ValidateNumber(const char* input)
 {
 	// valide input
-	ASSERT(input != NULL);
+	ASSERT(input != nullptr);
 
 	// execute this function only in this state
 	if (game_state_ != GameStates::kGameStateInputNumMonsters)
@@ -169,7 +169,7 @@ void MonsterChase::ValidateNumber(const char* input)
 void MonsterChase::ValidateName(const char* input)
 {
 	// validate input
-	ASSERT(input != NULL);
+	ASSERT(input != nullptr);
 
 	// execute this function only in these states
 	if (game_state_ != GameStates::kGameStateInputMonsterNames && game_state_ != GameStates::kGameStateInputPlayerName)
@@ -215,7 +215,7 @@ void MonsterChase::ValidateName(const char* input)
 void MonsterChase::ValidateMove(const char* input)
 {
 	// validate input
-	ASSERT(input != NULL);
+	ASSERT(input != nullptr);
 
 	// execute this function only in this state
 	if (game_state_ != GameStates::kGameStateRunning)
@@ -275,7 +275,7 @@ void MonsterChase::CreateMonster(const char* input_name)
 	char name[MAX_INPUT_SIZE] = { 0 };
 
 	// if no name was provided, generate one
-	if (input_name == NULL)
+	if (input_name == nullptr)
 	{
 		GetNameForMonster(name);
 	}
@@ -369,7 +369,7 @@ void MonsterChase::UpdateMonsters()
 void MonsterChase::GetNameForMonster(char* name)
 {
 	// validate input
-	ASSERT(name != NULL);
+	ASSERT(name != nullptr);
 
 	// generate a name based by appending an incrementing ASCII value
 	sprintf_s(name, MAX_INPUT_SIZE, "foo%c", (START_ASCII + ascii_index_++));
@@ -382,7 +382,7 @@ void MonsterChase::GetNameForMonster(char* name)
 void MonsterChase::CreatePlayer(const char* name)
 {
 	// validate inputs
-	ASSERT(name != NULL);
+	ASSERT(name != nullptr);
 
 	// create the player at the center of the grid
 	player_ = new Player();

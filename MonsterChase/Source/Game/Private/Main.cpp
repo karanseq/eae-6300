@@ -30,11 +30,11 @@ int main(int* argv, char** argc)
 #ifdef BUILD_DEBUG
 	HeapManager_UnitTest();
 #else
-	AllocatorTest::Init(500);
+	AllocatorTest::Init(1024*1024);
 	AllocatorTest::RunTest00();
-	//AllocatorTest::RunTest01();
-	//AllocatorTest::RunTest02();
-	//AllocatorTest::RunTest03();
+	AllocatorTest::RunTest01();
+	AllocatorTest::RunTest02();
+	AllocatorTest::RunTest03();
 	AllocatorTest::Reset();
 #endif
 	printf("Finished test.\n");

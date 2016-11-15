@@ -18,7 +18,7 @@ namespace engine {
 	BlockDescriptor
 	A block descriptor describes a block of memory that is managed by the block allocator.
 	- It contains a pointer to a block of memory as well as its size
-	- It contains a pointer to the next & previous descriptor in a list or NULL if its not part of a list
+	- It contains a pointer to the next & previous descriptor in a list or nullptr if its not part of a list
 */
 typedef struct BlockDescriptor
 {
@@ -42,7 +42,7 @@ public:
 	A simple block allocator that users can use to request for memory.
 	- Users need to provide the size of the memory block they need.
 	- If the request was successful, users will receive a pointer to the start of the memory block.
-	- If the request was unsuccessful, users will receive a NULL pointer.
+	- If the request was unsuccessful, users will receive a nullptr pointer.
 */
 class BlockAllocator
 {

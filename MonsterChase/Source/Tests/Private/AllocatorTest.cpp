@@ -8,7 +8,7 @@
 
 //#define SIMULATE_MEMORY_OVERWRITE
 
-engine::BlockAllocator* AllocatorTest::block_allocator_ = NULL;
+engine::BlockAllocator* AllocatorTest::block_allocator_ = nullptr;
 
 void AllocatorTest::Init(size_t total_memory)
 {
@@ -79,12 +79,12 @@ void AllocatorTest::RunTest00()
 #endif
 
 	/*std::vector<void*> pointers;
-	void* pointer = NULL;
+	void* pointer = nullptr;
 	uint16_t counter = 0;
 	do
 	{
 		pointer = block_allocator_->Alloc(11 * (counter + 1));
-		if (pointer != NULL)
+		if (pointer != nullptr)
 		{
 			++counter;
 			pointers.push_back(pointer);
@@ -94,7 +94,7 @@ void AllocatorTest::RunTest00()
 		block_allocator_->PrintAllDescriptors();
 #endif
 
-	} while (pointer != NULL);
+	} while (pointer != nullptr);
 
 #ifdef BUILD_DEBUG
 	block_allocator_->PrintAllDescriptors();
@@ -160,13 +160,13 @@ void AllocatorTest::RunTest01()
 
 	for (unsigned int i = 0; i < num_pointers; ++i)
 	{
-		if (pointers[i] != NULL)
+		if (pointers[i] != nullptr)
 		{
 			LOG("pointer[%d] = %p : %s", i, pointers[i], pointers[i]);
 		}
 		else
 		{
-			LOG("pointer[%d] = NULL", i);
+			LOG("pointer[%d] = nullptr", i);
 		}
 	}
 
@@ -174,7 +174,7 @@ void AllocatorTest::RunTest01()
 	{
 		LOG("Freeing %d...", i);
 		block_allocator_->Free(pointers[i]);
-		pointers[i] = NULL;
+		pointers[i] = nullptr;
 	}
 
 #ifdef BUILD_DEBUG
@@ -221,7 +221,7 @@ void AllocatorTest::RunTest03()
 		const size_t rand_size = static_cast<size_t>(rand() % max_size);
 		LOG("Request-%d Alloc size:%zu", i, rand_size);
 		void* buf = block_allocator_->Alloc(rand_size);
-		bool successful = (buf != NULL);
+		bool successful = (buf != nullptr);
 
 		if (successful && (rand() % 10) > 3)
 		{
