@@ -12,7 +12,11 @@ namespace engine {
 class GameObject
 {
 public:
-	virtual ~GameObject() {}
+	GameObject() : transform_()
+	{}
+	virtual ~GameObject()
+	{}
+
 
 	inline const Transform& GetTransform() const					{ return transform_; }
 	inline void SetTransform(const Transform& transform)			{ transform_ = transform; }
@@ -27,8 +31,14 @@ public:
 	inline void SetScale(const Vec3D& scale)						{ transform_.SetScale(scale); }
 
 private:
+	// disable default copy constructor
+	GameObject(const GameObject& copy);
+	// disable default assignment operator
+	inline GameObject& operator=(const GameObject& game_object);
+
+private:
 	Transform transform_;
-};
+}; // class GameObject
 
 } // namespace engine
 

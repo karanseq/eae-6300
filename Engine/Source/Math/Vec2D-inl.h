@@ -36,8 +36,8 @@ namespace engine
 			return *this;
 		}
 
-		x(vec.x());
-		y(vec.y());
+		x_ = vec.x_;
+		y_ = vec.y_;
 		return *this;
 	}
 

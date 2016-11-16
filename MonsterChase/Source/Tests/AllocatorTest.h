@@ -10,6 +10,8 @@ class AllocatorTest
 private:
 	AllocatorTest() {};
 	~AllocatorTest() {};
+	AllocatorTest(const AllocatorTest& copy);
+	AllocatorTest& operator=(const AllocatorTest& at);
 
 	static char* DoAlloc(const size_t size);
 	static void DoFree(char* pointer, const size_t size);

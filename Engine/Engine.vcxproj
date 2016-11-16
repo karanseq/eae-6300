@@ -167,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp" />
+    <ClCompile Include="Source\Math\Private\Transform.cpp" />
     <ClCompile Include="Source\Math\Private\Vec2D.cpp" />
     <ClCompile Include="Source\Math\Private\Vec3D.cpp" />
     <ClCompile Include="Source\Memory\Private\BlockAllocator.cpp" />

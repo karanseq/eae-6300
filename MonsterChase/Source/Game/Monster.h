@@ -38,6 +38,12 @@ public:
 	inline void SetTimeToLive(uint8_t time_to_live)													{ time_to_live_ = time_to_live; }
 
 private:
+	// disable default copy constructor
+	Monster(const Monster& copy);
+	// disable default assignment operator
+	Monster& operator=(const Monster& monster);
+
+private:
 	engine::InterfaceGameObjectController* controller_;
 	engine::IdentityComponent* identity_;
 	uint8_t time_to_live_;

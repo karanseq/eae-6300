@@ -2,6 +2,19 @@
 
 namespace engine
 {
+	inline Transform& Transform::operator=(const Transform& transform)
+	{
+		// check for self assignment
+		if (this == &transform)
+		{
+			return *this;
+		}
+
+		position_ = transform.position_;
+		rotation_ = transform.rotation_;
+		scale_ = transform.scale_;
+	}
+
 	inline const Vec3D& Transform::GetPosition() const
 	{
 		return position_;

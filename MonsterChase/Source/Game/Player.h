@@ -35,6 +35,12 @@ public:
 	inline void SetIdentity(engine::IdentityComponent* identity)									{ ASSERT(identity); SAFE_DELETE(identity_); identity_ = identity; }
 
 private:
+	// disable default copy constructor
+	Player(const Player& copy);
+	// disable default assignment operator
+	Player& operator=(const Player& monster);
+
+private:
 	engine::InterfaceGameObjectController* controller_;
 	engine::IdentityComponent* identity_;
 }; // class Player

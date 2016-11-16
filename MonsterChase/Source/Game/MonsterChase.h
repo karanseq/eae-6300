@@ -52,6 +52,12 @@ public:
 	static const int MAX_NAME_LENGTH = 10;
 
 private:
+	// disable default copy constructor
+	MonsterChase(const MonsterChase& copy);
+	// disable default assignment operator
+	MonsterChase& operator=(const MonsterChase& monster);
+
+private:
 	// field to maintain the current state of the game
 	GameStates game_state_;
 

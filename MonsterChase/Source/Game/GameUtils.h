@@ -14,8 +14,8 @@ class GameUtils
 {
 private:
 	GameUtils() {}
-	GameUtils(const GameUtils& copy) {}
-	GameUtils& operator=(const GameUtils& rhs) {}
+	GameUtils(const GameUtils& copy);
+	GameUtils& operator=(const GameUtils& rhs);
 	~GameUtils() {}
 
 public:

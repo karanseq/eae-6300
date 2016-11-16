@@ -8,13 +8,14 @@ namespace engine
 	class Transform
 	{
 	public:
-		Transform(Vec3D position = Vec3D::ZERO, Vec3D rotation = Vec3D::ZERO, Vec3D scale = Vec3D::UNIT) : position_(position),
-			rotation_(rotation),
-			scale_(scale)
-		{}
+		Transform(Vec3D position = Vec3D::ZERO, Vec3D rotation = Vec3D::ZERO, Vec3D scale = Vec3D::UNIT);
+		Transform(const Transform& copy);
 
 		~Transform()
 		{}
+
+		// assignment
+		inline Transform& operator=(const Transform& transform);
 
 		// accessors and mutators
 		inline const Vec3D& GetPosition() const;

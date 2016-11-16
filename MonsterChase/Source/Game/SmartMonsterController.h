@@ -29,6 +29,12 @@ public:
 	inline engine::GameObject* GetTarget()											{ return target_; }
 
 private:
+	// disable default copy constructor
+	SmartMonsterController(const SmartMonsterController& copy);
+	// disable default assignment operator
+	SmartMonsterController& operator=(const SmartMonsterController& monster);
+
+private:
 	engine::GameObject* game_object_;
 	engine::GameObject* target_;
 }; // class SmartMonsterController

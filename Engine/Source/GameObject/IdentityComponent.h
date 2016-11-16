@@ -50,9 +50,9 @@ namespace engine
 				return *this;
 			}
 
-			id_ = ic.GetID();
-			tag_ = ic.GetTag();
-			name_ = _strdup(ic.GetName());
+			id_ = ic.id_;
+			tag_ = ic.tag_;
+			name_ = _strdup(ic.name_);
 			return *this;
 		}
 

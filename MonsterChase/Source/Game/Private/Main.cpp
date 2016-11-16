@@ -1,6 +1,7 @@
 // engine includes
 #include "Memory\BlockAllocator.h"
 #include "Memory\AllocatorUtil.h"
+#include "Math\Vec2D.h"
 
 // game includes
 #include "Game\MonsterChase.h"
@@ -48,6 +49,11 @@ int main(int* argv, char** argc)
 
 	// initialize allocator
 	engine::BlockAllocator::Create(1024 * 5);
+
+	engine::Vec2D a(10.0f, 0.0f);
+	engine::Vec2D b(0.0f, 10.0f);
+	engine::Vec2D c;
+	c = a + b;
 
 	// initialize game
 	MonsterChase* monster_chase = new MonsterChase();

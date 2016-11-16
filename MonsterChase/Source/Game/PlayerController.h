@@ -32,6 +32,12 @@ public:
 	inline void SetMoveDirection(MoveDirections move_direction)						{ move_direction_ = move_direction; }
 
 private:
+	// disable default copy constructor
+	PlayerController(const PlayerController& copy);
+	// disable default assignment operator
+	PlayerController& operator=(const PlayerController& monster);
+
+private:
 	engine::GameObject* game_object_;
 	MoveDirections move_direction_;
 

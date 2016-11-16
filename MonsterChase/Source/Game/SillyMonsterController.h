@@ -25,6 +25,12 @@ public:
 	void UpdateGameObject() override;
 
 private:
+	// disable default copy constructor
+	SillyMonsterController(const SillyMonsterController& copy);
+	// disable default assignment operator
+	SillyMonsterController& operator=(const SillyMonsterController& monster);
+
+private:
 	engine::GameObject* game_object_;
 }; // class SillyMonsterController
 
