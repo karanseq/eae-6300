@@ -1,5 +1,5 @@
 #ifdef BUILD_DEBUG
-#include "Allocator\BlockAllocator.h"
+#include "Memory\BlockAllocator.h"
 #include "Logger\Logger.h"
 
 #include <assert.h>

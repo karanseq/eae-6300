@@ -25,12 +25,6 @@
     <Filter Include="Header Files\Logger">
       <UniqueIdentifier>{262fe3b9-50c5-48b5-bd1e-0e0c378cdd13}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Allocator">
-      <UniqueIdentifier>{07f635b7-a972-4c90-a7f6-191b3a6855f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Allocator">
-      <UniqueIdentifier>{fd257d52-244d-42a7-8af2-d7cb6faa928a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\GameObject">
       <UniqueIdentifier>{768c53f6-582c-4a69-83f3-e487754732de}</UniqueIdentifier>
     </Filter>
@@ -39,6 +33,12 @@
     </Filter>
     <Filter Include="Header Files\Assert">
       <UniqueIdentifier>{736dea9f-f22e-4df4-87d1-1603858ca447}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Memory">
+      <UniqueIdentifier>{c79b3a65-ac38-4796-a6c2-2b1f1110efc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Memory">
+      <UniqueIdentifier>{514b9fd4-cdee-4a8c-b696-aee2eb05a28c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -51,14 +51,8 @@
     <ClInclude Include="Source\Logger\Logger.h">
       <Filter>Header Files\Logger</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Allocator\BlockAllocator.h">
-      <Filter>Header Files\Allocator</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Math\Vec2D-inl.h">
       <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Allocator\BlockAllocator-inl.h">
-      <Filter>Header Files\Allocator</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameObject\GameObject.h">
       <Filter>Header Files\GameObject</Filter>
@@ -81,28 +75,37 @@
     <ClInclude Include="Source\GameObject\IdentityComponent.h">
       <Filter>Header Files\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Allocator\AllocatorUtil.h">
-      <Filter>Header Files\Allocator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Allocator\CustomNew.h">
-      <Filter>Header Files\Allocator</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Assert\Assert.h">
       <Filter>Header Files\Assert</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Memory\AllocatorUtil.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Memory\BlockAllocator.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Memory\BlockAllocator-inl.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Memory\AllocatorOverrides.h">
+      <Filter>Header Files\Memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
       <Filter>Source Files\Logger</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Allocator\Private\BlockAllocator.cpp">
-      <Filter>Source Files\Allocator</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Math\Private\Vec3D.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
     <ClCompile Include="Source\Math\Private\Vec2D.cpp">
       <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Memory\Private\BlockAllocator.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Memory\Private\AllocatorOverrides.cpp">
+      <Filter>Source Files\Memory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

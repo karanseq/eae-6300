@@ -7,7 +7,7 @@
 // engine includes
 #include "GameObject\InterfaceGameObjectController.h"
 #include "GameObject\GameObject.h"
-#include "Allocator\AllocatorUtil.h"
+#include "Memory\AllocatorUtil.h"
 #include "Assert\Assert.h"
 
 class PlayerController : public engine::InterfaceGameObjectController

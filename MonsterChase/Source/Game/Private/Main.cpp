@@ -1,6 +1,6 @@
 // engine includes
-#include "Allocator\BlockAllocator.h"
-#include "Allocator\CustomNew.h"
+#include "Memory\BlockAllocator.h"
+#include "Memory\AllocatorUtil.h"
 
 // game includes
 #include "Game\MonsterChase.h"
@@ -59,6 +59,12 @@ int main(int* argv, char** argc)
 
 	delete monster_chase;
 	monster_chase = nullptr;
+
+	char* buf = static_cast<char*>(malloc(200));
+#ifdef BUILD_DEBUG
+	engine::BlockAllocator::GetInstance()->PrintAllDescriptors();
+#endif
+	SAFE_FREE(buf);
 
 #ifdef BUILD_DEBUG
 	engine::BlockAllocator::GetInstance()->PrintAllDescriptors();

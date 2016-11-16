@@ -6,7 +6,7 @@
 #include <string.h>
 
 // engine includes
-#include "Allocator\AllocatorUtil.h"
+#include "Memory\AllocatorUtil.h"
 #include "Assert\Assert.h"
 
 namespace engine

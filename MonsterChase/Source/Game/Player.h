@@ -4,7 +4,7 @@
 // engine includes
 #include "GameObject\InterfaceGameObjectController.h"
 #include "GameObject\IdentityComponent.h"
-#include "Allocator\AllocatorUtil.h"
+#include "Memory\AllocatorUtil.h"
 #include "Assert\Assert.h"
 
 // game includes
