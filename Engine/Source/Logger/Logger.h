@@ -17,23 +17,18 @@
 				- Log & error are enabled
 
 		- In DEBUG mode,
-			VERBOSITY_LEVEL = 0 or 1
+			VERBOSITY_LEVEL = 0
 				- Log & error are enabled, verbose is disabled
-			VERBOSITY_LEVEL = 2
+			VERBOSITY_LEVEL = 1
 				- Log, error & verbose are enabled
 */
 
 #if defined(BUILD_DEBUG)
-	// in debug mode, enable verbose & log when level is 2
-	#if defined(VERBOSITY_LEVEL) && (VERBOSITY_LEVEL > 1)
+	// in debug mode, enable verbose, log & error when level is 1
+	#if defined(VERBOSITY_LEVEL) && (VERBOSITY_LEVEL > 0)
 		#define LOG(format, ...)			engine::Print("DEBUG: ", (format), __VA_ARGS__)
 		#define LOG_ERROR(format, ...)		engine::Print("ERROR: ", (format), __VA_ARGS__)
 		#define VERBOSE(format, ...)		engine::Print(__FUNCTION__, __LINE__, (format), __VA_ARGS__)
-	// in debug mode, enable log when level is 1	
-	#elif defined(VERBOSITY_LEVEL) && (VERBOSITY_LEVEL > 0)
-		#define LOG(format, ...)			engine::Print("DEBUG: ", (format), __VA_ARGS__)
-		#define LOG_ERROR(format, ...)		engine::Print("ERROR: ", (format), __VA_ARGS__)
-		#define VERBOSE(format, ...)		void(0)
 	#else
 		#define LOG(format, ...)			engine::Print("DEBUG: ", (format), __VA_ARGS__)
 		#define LOG_ERROR(format, ...)		engine::Print("ERROR: ", (format), __VA_ARGS__)

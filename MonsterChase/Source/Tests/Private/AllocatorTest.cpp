@@ -8,13 +8,16 @@
 
 //#define SIMULATE_MEMORY_OVERWRITE
 
+uint8_t* AllocatorTest::memory_ = nullptr;
 engine::BlockAllocator* AllocatorTest::block_allocator_ = nullptr;
 
 void AllocatorTest::Init(size_t total_memory)
 {
 	LOG("Testing BlockAllocator TOTAL_MEM:%zu", total_memory);
 
-	block_allocator_ = engine::BlockAllocator::Create(total_memory);
+	memory_ = static_cast<uint8_t*>(_aligned_malloc(total_memory, 4));
+
+	block_allocator_ = engine::BlockAllocator::Create(memory_, total_memory);
 #ifdef BUILD_DEBUG
 	block_allocator_->PrintAllDescriptors();
 #endif
@@ -23,7 +26,11 @@ void AllocatorTest::Init(size_t total_memory)
 void AllocatorTest::Reset()
 {
 	LOG("Destroying BlockAllocator...");
-	block_allocator_->Destroy();
+	engine::BlockAllocator::Destroy(block_allocator_);
+	block_allocator_ = nullptr;
+
+	_aligned_free(memory_);
+	memory_ = nullptr;
 }
 
 char* AllocatorTest::DoAlloc(const size_t size)
@@ -77,45 +84,6 @@ void AllocatorTest::RunTest00()
 #ifdef BUILD_DEBUG
 	block_allocator_->PrintAllDescriptors();
 #endif
-
-	/*std::vector<void*> pointers;
-	void* pointer = nullptr;
-	uint16_t counter = 0;
-	do
-	{
-		pointer = block_allocator_->Alloc(11 * (counter + 1));
-		if (pointer != nullptr)
-		{
-			++counter;
-			pointers.push_back(pointer);
-		}
-
-#ifdef BUILD_DEBUG
-		block_allocator_->PrintAllDescriptors();
-#endif
-
-	} while (pointer != nullptr);
-
-#ifdef BUILD_DEBUG
-	block_allocator_->PrintAllDescriptors();
-#endif
-
-	const size_t num_pointers = pointers.size();
-	for (uint16_t i = 0; i < num_pointers; ++i)
-	{
-		block_allocator_->Free(pointers[i]);
-	}
-	pointers.clear();
-
-#ifdef BUILD_DEBUG
-	block_allocator_->PrintAllDescriptors();
-#endif
-
-	block_allocator_->Defragment();
-
-#ifdef BUILD_DEBUG
-	block_allocator_->PrintAllDescriptors();
-#endif*/
 
 	LOG("-------------------- Finished Test 00 --------------------");
 }

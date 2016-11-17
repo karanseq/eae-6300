@@ -5,11 +5,21 @@
 
 namespace engine
 {
+	inline const BANode* BlockAllocator::GetKnownAllocators()
+	{
+		return const_cast<const BANode*>(known_allocators_head_);
+	}
+
 #ifdef BUILD_DEBUG
 	inline void BlockAllocator::ClearBlock(BD* bd, const unsigned char fill)
 	{
 		ASSERT(bd != nullptr);
 		memset(bd->block_pointer_, fill, bd->block_size_);
+	}
+
+	inline unsigned int BlockAllocator::GetID() const
+	{
+		return id_;
 	}
 #endif
 

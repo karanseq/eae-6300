@@ -17,11 +17,12 @@ bool HeapManager_UnitTest()
 	const unsigned int 	numDescriptors = 2048;
 
 	// Allocate memory for my test heap.
-	/*void * pHeapMemory = _aligned_malloc( sizeHeap, 4 );
-	assert( pHeapMemory );*/
+	void * pHeapMemory = _aligned_malloc( sizeHeap, 4 );
+	assert( pHeapMemory );
 
 	// Create a heap manager for my test heap.
-	BlockAllocator * pHeapManager = BlockAllocator::Create(sizeHeap); //CreateHeapManager( pHeapMemory, sizeHeap, numDescriptors );
+	//BlockAllocator * pHeapManager = BlockAllocator::Create(sizeHeap); //CreateHeapManager( pHeapMemory, sizeHeap, numDescriptors );
+	BlockAllocator* pHeapManager = BlockAllocator::Create(pHeapMemory, sizeHeap);
 	assert( pHeapManager );
 
 	if( pHeapManager == nullptr )
@@ -252,10 +253,10 @@ bool HeapManager_UnitTest()
 	}
 
 	//Destroy( pHeapManager );
-	pHeapManager->Destroy();
+	BlockAllocator::Destroy(pHeapManager);
 	pHeapManager = nullptr;
 
-	//_aligned_free( pHeapMemory );
+	_aligned_free( pHeapMemory );
 
 	// we succeeded
 	return true;

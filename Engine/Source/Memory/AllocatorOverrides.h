@@ -30,6 +30,15 @@ void operator delete[](void* pointer);
 void* operator new(size_t size, engine::AlignmentType alignment);
 void operator delete(void* pointer, engine::AlignmentType alignment);
 
+void* operator new(size_t size, engine::BlockAllocator* allocator);
+void operator delete(void* pointer, engine::BlockAllocator* allocator);
+
+void* operator new[](size_t size, engine::BlockAllocator* allocator);
+void operator delete[](void* pointer, engine::BlockAllocator* allocator);
+
+void* operator new(size_t size, engine::BlockAllocator* allocator, engine::AlignmentType alignment);
+void operator delete(void* pointer, engine::BlockAllocator* allocator, engine::AlignmentType alignment);
+
 #ifdef BUILD_DEBUG
 #define TRACK_NEW (__FILE__, __LINE__)
 void* operator new(size_t size, const char* file_name, unsigned int line);
@@ -37,8 +46,5 @@ void operator delete(void* pointer, const char* file_name, unsigned int line);
 #else
 #define TRACK_NEW
 #endif
-
-void* operator new(size_t size, engine::BlockAllocator* allocator, engine::AlignmentType alignment);
-void operator delete(void* pointer, engine::BlockAllocator* allocator, engine::AlignmentType alignment);
 
 #endif // CUSTOM_NEW_H_

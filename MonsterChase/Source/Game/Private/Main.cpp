@@ -1,6 +1,7 @@
 // engine includes
 #include "Memory\BlockAllocator.h"
 #include "Memory\AllocatorUtil.h"
+#include "Memory\AllocatorOverrides.h"
 #include "Math\Vec2D.h"
 
 // game includes
@@ -26,6 +27,9 @@ void TestVectorConstness();
 
 int main(int* argv, char** argc)
 {
+	engine::BlockAllocator* default_allocator = engine::BlockAllocator::CreateDefaultAllocator();
+	engine::BlockAllocator::RegisterAllocator(default_allocator);
+
 #ifdef ENABLE_VECTOR_CONST_TEST
 	TestVectorConstness();
 #endif
@@ -47,14 +51,6 @@ int main(int* argv, char** argc)
 	return 0;
 #endif
 
-	// initialize allocator
-	engine::BlockAllocator::Create(1024 * 5);
-
-	engine::Vec2D a(10.0f, 0.0f);
-	engine::Vec2D b(0.0f, 10.0f);
-	engine::Vec2D c;
-	c = a + b;
-
 	// initialize game
 	MonsterChase* monster_chase = new MonsterChase();
 
@@ -66,16 +62,8 @@ int main(int* argv, char** argc)
 	delete monster_chase;
 	monster_chase = nullptr;
 
-	char* buf = static_cast<char*>(malloc(200));
-#ifdef BUILD_DEBUG
-	engine::BlockAllocator::GetInstance()->PrintAllDescriptors();
-#endif
-	SAFE_FREE(buf);
-
-#ifdef BUILD_DEBUG
-	engine::BlockAllocator::GetInstance()->PrintAllDescriptors();
-#endif
-	engine::BlockAllocator::Destroy();
+	engine::BlockAllocator::DeregisterAllocator(default_allocator);
+	engine::BlockAllocator::DestroyDefaultAllocator();
 
 #if defined(_DEBUG)
 	_CrtDumpMemoryLeaks();

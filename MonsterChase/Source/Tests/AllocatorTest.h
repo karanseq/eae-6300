@@ -3,7 +3,7 @@
 #ifndef ALLOCATOR_TEST_H_
 #define ALLOCATOR_TEST_H_
 
-#include "Allocator/BlockAllocator.h"
+#include "Memory/BlockAllocator.h"
 
 class AllocatorTest
 {
@@ -26,6 +26,7 @@ public:
 	static void RunTest03();
 
 private:
+	static uint8_t* memory_;
 	static engine::BlockAllocator* block_allocator_;
 };
 

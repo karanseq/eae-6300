@@ -37,6 +37,14 @@ public:
 	void Init();
 } BD;
 
+class BlockAllocator;
+typedef struct BlockAllocatorNode
+{
+public:
+	BlockAllocator* block_allocator_;
+	BlockAllocatorNode* next_;
+} BANode;
+
 /*
 	BlockAllocator
 	A simple block allocator that users can use to request for memory.
@@ -46,13 +54,15 @@ public:
 */
 class BlockAllocator
 {
-protected:
-	BlockAllocator();
-	BlockAllocator(const size_t block_size = DEFAULT_BLOCK_SIZE);
-	~BlockAllocator();
-	static BlockAllocator* instance_;
+private:
+	// disable default constructor, copy constructor & assignment operator
+	BlockAllocator() {}
+	BlockAllocator(const BlockAllocator& copy);
+	BlockAllocator& operator=(const BlockAllocator& ba);
 
-	void Init();
+	BlockAllocator(void* memory, size_t block_size);
+	~BlockAllocator() {}
+
 	void InitFirstBlockDescriptor();
 
 	void AddToList(BD** head, BD** bd, bool enable_sort);
@@ -64,9 +74,18 @@ protected:
 #endif
 
 public:
-	static BlockAllocator* Create(const size_t block_size = DEFAULT_BLOCK_SIZE);
-	static void Destroy();
-	static inline BlockAllocator* GetInstance() { return BlockAllocator::instance_; }
+	static BlockAllocator* Create(void* memory, size_t block_size);
+	static void Destroy(BlockAllocator* allocator);
+
+	static BlockAllocator* CreateDefaultAllocator();
+	static void DestroyDefaultAllocator();
+
+	static bool IsAllocatorRegistered(BlockAllocator* allocator);
+	static void RegisterAllocator(BlockAllocator* allocator);
+	static void DeregisterAllocator(BlockAllocator* allocator);
+	static void DeregisterAllKnownAllocators();
+
+	static inline const BANode* GetKnownAllocators();
 
 	// Allocate a block of memory with given size
 	void* Alloc(const size_t size, const size_t alignment = DEFAULT_BYTE_ALIGNMENT);
@@ -85,19 +104,31 @@ public:
 	const size_t GetTotalFreeMemorySize() const;
 
 #ifdef BUILD_DEBUG
+	inline unsigned int GetID() const;
 	void PrintAllDescriptors() const;
 	void PrintFreeDescriptors() const;
 	void PrintUsedDescriptors() const;
 #endif
 
-protected:
+private:
 	uint8_t* block_;									// actual block of memory
 	
 	BD* free_list_head_;								// list of block descriptors describing free blocks
 	BD* user_list_head_;								// list of block descriptors describing allocated blocks
 	
 	size_t total_block_size_;							// total size of block
-	size_t size_of_BD_;									// size of a BlockDescriptor object
+	static size_t size_of_BD_;							// size of a BlockDescriptor object
+
+#ifdef BUILD_DEBUG
+	unsigned int id_;
+	static unsigned int counter_;
+#endif
+
+	// static members for the default allocator
+	static BlockAllocator* default_allocator_;
+
+	// static memebers for the known allocators list
+	static BANode* known_allocators_head_;
 
 }; // class BlockAllocator
 
