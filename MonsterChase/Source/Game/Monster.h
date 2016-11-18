@@ -16,12 +16,7 @@ class Monster
 {
 public:
 	Monster(MonsterControllers controller_type = MonsterControllers::kNoMonsterController);
-
-	~Monster()
-	{
-		SAFE_DELETE(controller_);
-		SAFE_DELETE(identity_);
-	}
+	~Monster();
 
 	void Update();
 

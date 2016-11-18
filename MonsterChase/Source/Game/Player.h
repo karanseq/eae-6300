@@ -13,15 +13,8 @@
 class Player
 {
 public:
-	Player() : controller_(new PlayerController()),
-		identity_(new engine::IdentityComponent())
-	{}
-
-	~Player()
-	{
-		SAFE_DELETE(controller_);
-		SAFE_DELETE(identity_);
-	}
+	Player();
+	~Player();
 
 	void Update();
 	bool HandleUserInput(char input);

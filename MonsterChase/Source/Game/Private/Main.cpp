@@ -28,29 +28,28 @@ void TestVectorConstness();
 int main(int* argv, char** argc)
 {
 	engine::BlockAllocator* default_allocator = engine::BlockAllocator::CreateDefaultAllocator();
-	engine::BlockAllocator::RegisterAllocator(default_allocator);
 
 #ifdef ENABLE_VECTOR_CONST_TEST
 	TestVectorConstness();
 #endif
 
-#ifdef ENABLE_ALLOCATOR_TEST
-	printf("Beginning allocator test...\nCheck the Output window for details.\n");
-#ifdef BUILD_DEBUG
-	HeapManager_UnitTest();
-#else
-	AllocatorTest::Init(1024*1024);
-	AllocatorTest::RunTest00();
-	AllocatorTest::RunTest01();
-	AllocatorTest::RunTest02();
-	AllocatorTest::RunTest03();
-	AllocatorTest::Reset();
-#endif
-	printf("Finished test.\n");
-	_getch();
-	return 0;
-#endif
-
+//#ifdef ENABLE_ALLOCATOR_TEST
+//	printf("Beginning allocator test...\nCheck the Output window for details.\n");
+//#ifdef BUILD_DEBUG
+//	HeapManager_UnitTest();
+//#else
+//	AllocatorTest::Init(1024*1024);
+//	AllocatorTest::RunTest00();
+//	AllocatorTest::RunTest01();
+//	AllocatorTest::RunTest02();
+//	AllocatorTest::RunTest03();
+//	AllocatorTest::Reset();
+//#endif
+//	printf("Finished test.\n");
+//	_getch();
+//	return 0;
+//#endif
+	
 	// initialize game
 	MonsterChase* monster_chase = new MonsterChase();
 
@@ -62,7 +61,6 @@ int main(int* argv, char** argc)
 	delete monster_chase;
 	monster_chase = nullptr;
 
-	engine::BlockAllocator::DeregisterAllocator(default_allocator);
 	engine::BlockAllocator::DestroyDefaultAllocator();
 
 #if defined(_DEBUG)

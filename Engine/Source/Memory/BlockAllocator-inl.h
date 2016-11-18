@@ -5,9 +5,9 @@
 
 namespace engine
 {
-	inline const BANode* BlockAllocator::GetKnownAllocators()
+	inline size_t BlockAllocator::GetSizeOfBD()
 	{
-		return const_cast<const BANode*>(known_allocators_head_);
+		return size_of_BD_;
 	}
 
 #ifdef BUILD_DEBUG

@@ -3,6 +3,22 @@
 // library includes
 #include <stdio.h>
 
+// engine includes
+#include "Memory\AllocatorOverrides.h"
+
+// game includes
+#include "Game\MonsterChase.h"
+
+Player::Player() : controller_(new (MonsterChase::GetAllocator()) PlayerController()),
+	identity_(new (MonsterChase::GetAllocator()) engine::IdentityComponent())
+{}
+
+Player::~Player()
+{
+	SAFE_DELETE(controller_);
+	SAFE_DELETE(identity_);
+}
+
 void Player::Update()
 {
 	controller_->UpdateGameObject();

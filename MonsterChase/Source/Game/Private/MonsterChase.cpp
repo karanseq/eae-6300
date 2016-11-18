@@ -7,6 +7,7 @@
 #include "Math\Vec2D.h"
 #include "Assert\Assert.h"
 #include "Logger\Logger.h"
+#include "Memory\AllocatorOverrides.h"
 
 // library includes
 #include <stdio.h>
@@ -16,8 +17,19 @@
 #include <time.h>
 #include <ctype.h>
 
+// static member initialization
+engine::BlockAllocator* MonsterChase::game_allocator_ = nullptr;
+
 MonsterChase::MonsterChase()
 {
+	// allocate memory for the game objects
+	void* aligned_memory = engine::BlockAllocator::CreateDefaultAllocator()->Alloc(MEMORY_SIZE);
+	ASSERT(aligned_memory);
+
+	// create an allocator to manage memory for the game objects
+	MonsterChase::game_allocator_ = engine::BlockAllocator::Create(aligned_memory, MEMORY_SIZE);
+	ASSERT(MonsterChase::game_allocator_);
+
 	game_state_ = GameStates::kGameStateBegin;
 	player_ = nullptr;
 	monsters_ = nullptr;
@@ -37,6 +49,10 @@ MonsterChase::~MonsterChase()
 		SAFE_DELETE(monsters_[i]);
 	}
 	SAFE_DELETE_ARRAY(monsters_);
+
+	// deallocate the allocator
+	engine::BlockAllocator::Destroy(MonsterChase::game_allocator_);
+	engine::BlockAllocator::CreateDefaultAllocator()->Free(MonsterChase::game_allocator_);
 }
 
 void MonsterChase::Update()
@@ -256,7 +272,7 @@ void MonsterChase::SaveNumMonsters(int num_monsters)
 	initial_num_monsters_ = num_monsters;
 
 	// create the array
-	monsters_ = new Monster*[MAX_MONSTERS];
+	monsters_ = new (MonsterChase::game_allocator_) Monster*[MAX_MONSTERS];
 
 	// time to query the names of each monster
 	game_state_ = GameStates::kGameStateInputMonsterNames;
@@ -290,7 +306,7 @@ void MonsterChase::CreateMonster(const char* input_name)
 	MonsterControllers controller_type = (rand() % 10) > 5 ? MonsterControllers::kSmartMonsterController : MonsterControllers::kSillyMonsterController;
 
 	// create a new monster at the back of the array
-	Monster* monster = new Monster(controller_type);
+	Monster* monster = new (MonsterChase::game_allocator_) Monster(controller_type);
 	monsters_[num_monsters_] = monster;
 	++num_monsters_;
 
@@ -384,7 +400,7 @@ void MonsterChase::CreatePlayer(const char* name)
 	ASSERT(name != nullptr);
 
 	// create the player at the center of the grid
-	player_ = new Player();
+	player_ = new (MonsterChase::game_allocator_) Player();
 	player_->GetIdentity()->SetName(name);
 
 	// time to start the game

@@ -10,14 +10,8 @@
 class SmartMonsterController : public engine::InterfaceGameObjectController
 {
 public:
-	SmartMonsterController() : game_object_(new engine::GameObject()),
-		target_(nullptr)
-	{}
-
-	virtual ~SmartMonsterController()
-	{
-		SAFE_DELETE(game_object_);
-	}
+	SmartMonsterController();
+	virtual ~SmartMonsterController();
 
 	/* Implement InterfaceGameObjectController */
 	inline void SetGameObject(engine::GameObject* game_object) override				{ ASSERT(game_object); SAFE_DELETE(game_object_); game_object_ = game_object; }

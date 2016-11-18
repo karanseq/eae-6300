@@ -13,14 +13,8 @@
 class PlayerController : public engine::InterfaceGameObjectController
 {
 public:
-	PlayerController() : game_object_(new engine::GameObject()),
-		move_direction_(MoveDirections::kMoveDirectionNone)
-	{}
-
-	virtual ~PlayerController()
-	{
-		SAFE_DELETE(game_object_);
-	}
+	PlayerController();
+	virtual ~PlayerController();
 
 	/* Implement InterfaceGameObjectController */
 	inline engine::GameObject* GetGameObject() override								{ return game_object_; }

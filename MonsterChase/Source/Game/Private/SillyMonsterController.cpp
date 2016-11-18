@@ -2,6 +2,20 @@
 #include "Game\GameTypes.h"
 #include "Game\GameUtils.h"
 
+// engine includes
+#include "Memory\AllocatorOverrides.h"
+
+// game includes
+#include "Game\MonsterChase.h"
+
+SillyMonsterController::SillyMonsterController() : game_object_(new (MonsterChase::GetAllocator()) engine::GameObject())
+{}
+
+SillyMonsterController::~SillyMonsterController()
+{
+	SAFE_DELETE(game_object_);
+}
+
 void SillyMonsterController::UpdateGameObject()
 {
 	MoveDirections direction = GameUtils::GetRandomDirection();

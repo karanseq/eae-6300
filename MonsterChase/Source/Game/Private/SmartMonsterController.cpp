@@ -1,5 +1,20 @@
 #include "Game\SmartMonsterController.h"
 
+// engine includes
+#include "Memory\AllocatorOverrides.h"
+
+// game includes
+#include "Game\MonsterChase.h"
+
+SmartMonsterController::SmartMonsterController() : game_object_(new (MonsterChase::GetAllocator()) engine::GameObject()),
+	target_(nullptr)
+{}
+
+SmartMonsterController::~SmartMonsterController()
+{
+	SAFE_DELETE(game_object_);
+}
+
 void SmartMonsterController::UpdateGameObject()
 {
 	ASSERT(target_);

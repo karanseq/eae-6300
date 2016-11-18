@@ -20,9 +20,11 @@ namespace engine {
 	- It contains a pointer to a block of memory as well as its size
 	- It contains a pointer to the next & previous descriptor in a list or nullptr if its not part of a list
 */
+class BlockAllocator;
 typedef struct BlockDescriptor
 {
 public:
+	BlockAllocator* allocator_;			// pointer to the allocator managing this descriptor
 	BlockDescriptor* next_;				// pointer to the next block descriptor
 	BlockDescriptor* previous_;			// pointer to the previous block descriptor
 	uint8_t* block_pointer_;			// pointer to the actual block of data
@@ -36,14 +38,6 @@ public:
 
 	void Init();
 } BD;
-
-class BlockAllocator;
-typedef struct BlockAllocatorNode
-{
-public:
-	BlockAllocator* block_allocator_;
-	BlockAllocatorNode* next_;
-} BANode;
 
 /*
 	BlockAllocator
@@ -80,13 +74,6 @@ public:
 	static BlockAllocator* CreateDefaultAllocator();
 	static void DestroyDefaultAllocator();
 
-	static bool IsAllocatorRegistered(BlockAllocator* allocator);
-	static void RegisterAllocator(BlockAllocator* allocator);
-	static void DeregisterAllocator(BlockAllocator* allocator);
-	static void DeregisterAllKnownAllocators();
-
-	static inline const BANode* GetKnownAllocators();
-
 	// Allocate a block of memory with given size
 	void* Alloc(const size_t size, const size_t alignment = DEFAULT_BYTE_ALIGNMENT);
 	// Deallocate a block of memory
@@ -100,6 +87,7 @@ public:
 	// Query whether a given pointer is an outstanding allocation
 	bool IsAllocated(const void* pointer) const;
 
+	static inline size_t GetSizeOfBD();
 	const size_t GetLargestFreeBlockSize(const size_t alignment = DEFAULT_BYTE_ALIGNMENT) const;
 	const size_t GetTotalFreeMemorySize() const;
 
@@ -126,9 +114,6 @@ private:
 
 	// static members for the default allocator
 	static BlockAllocator* default_allocator_;
-
-	// static memebers for the known allocators list
-	static BANode* known_allocators_head_;
 
 }; // class BlockAllocator
 

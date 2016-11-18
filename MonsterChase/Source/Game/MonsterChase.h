@@ -3,6 +3,8 @@
 
 #include "Game\GameTypes.h"
 
+#include "Memory\BlockAllocator.h"
+
 // forward declarations
 class Player;
 class Monster;
@@ -39,9 +41,11 @@ public:
 
 	void CreatePlayer(const char* name);
 
-	inline GameStates GetState() const { return game_state_; }
+	inline GameStates GetState() const												{ return game_state_; }
+	static inline engine::BlockAllocator* GetAllocator()							{ return MonsterChase::game_allocator_; }
 
 	// game constants
+	static const size_t MEMORY_SIZE = 1024 * 5;
 	static const int MAX_INPUT_SIZE = 256;
 	static const int MAX_ROWS = 50;
 	static const int MAX_COLS = 50;
@@ -58,6 +62,9 @@ private:
 	MonsterChase& operator=(const MonsterChase& monster);
 
 private:
+	// reference to an instance of an allocator specifically for game objects
+	static engine::BlockAllocator* game_allocator_;
+
 	// field to maintain the current state of the game
 	GameStates game_state_;
 

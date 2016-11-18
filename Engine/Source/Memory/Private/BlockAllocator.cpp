@@ -13,6 +13,7 @@ unsigned int BlockDescriptor::counter_ = 0;
 
 void BlockDescriptor::Init()
 {
+	allocator_ = nullptr;
 	next_ = nullptr;
 	previous_ = nullptr;
 	block_pointer_ = nullptr;
@@ -26,7 +27,6 @@ void BlockDescriptor::Init()
 // initialize static members
 size_t BlockAllocator::size_of_BD_ = sizeof(BD);
 BlockAllocator* BlockAllocator::default_allocator_ = nullptr;
-BANode* BlockAllocator::known_allocators_head_ = nullptr;
 
 #ifdef BUILD_DEBUG
 unsigned int BlockAllocator::counter_ = 0;
@@ -41,7 +41,7 @@ BlockAllocator::BlockAllocator(void* memory, size_t block_size) : block_(nullptr
 #ifdef BUILD_DEBUG
 	id_ = BlockAllocator::counter_++;
 	memset(block_, CLEAN_FILL, total_block_size_);
-	LOG("BlockAllocator-%d created with start address:%p\tend address:%p", id_, block_, (block_ + total_block_size_));
+	LOG("BlockAllocator-%d created with start address:%p\tend address:%p and size:%zu", id_, block_, (block_ + total_block_size_), total_block_size_);
 #endif
 
 	InitFirstBlockDescriptor();
@@ -64,22 +64,12 @@ BlockAllocator* BlockAllocator::Create(void* memory, size_t block_size)
 	BlockAllocator* block_allocator = new (memory) BlockAllocator(block_allocator_memory, block_size);
 	ASSERT(block_allocator);
 
-	// add the allocator to the list of known allocators
-	/*if (!IsAllocatorRegistered(block_allocator))
-	{
-		RegisterAllocator(block_allocator);
-	}
-	else
-	{
-		LOG_ERROR("Created a new allocator but it already exists in the known allocator list!");
-	}*/
-
 	return block_allocator;
 }
 
 void BlockAllocator::Destroy(BlockAllocator* allocator)
 {
-	//DeregisterAllocator(allocator);
+	
 }
 
 BlockAllocator* BlockAllocator::CreateDefaultAllocator()
@@ -111,9 +101,6 @@ BlockAllocator* BlockAllocator::CreateDefaultAllocator()
 			default_allocator_memory = nullptr;
 			return nullptr;
 		}
-
-		// add the default allocator to the list of known allocators
-		//RegisterAllocator(default_allocator_);
 	}
 
 	return default_allocator_;
@@ -121,103 +108,10 @@ BlockAllocator* BlockAllocator::CreateDefaultAllocator()
 
 void BlockAllocator::DestroyDefaultAllocator()
 {
-	//Destroy(default_allocator_);
+	Destroy(default_allocator_);
 
 	_aligned_free(default_allocator_);
 	default_allocator_ = nullptr;
-}
-
-bool BlockAllocator::IsAllocatorRegistered(BlockAllocator* allocator)
-{
-	ASSERT(allocator);
-
-	BANode* curr_node = known_allocators_head_;
-	while (curr_node != nullptr)
-	{
-		if (curr_node->block_allocator_ == allocator)
-		{
-			return true;
-		}
-
-		curr_node = curr_node->next_;
-	}
-
-	return false;
-}
-
-void BlockAllocator::RegisterAllocator(BlockAllocator* allocator)
-{
-	ASSERT(allocator);
-	ASSERT(default_allocator_);
-
-	// get a new block allocator node
-	BANode* new_allocator_node = static_cast<BANode*>(default_allocator_->Alloc(sizeof(BANode)));
-	ASSERT(new_allocator_node);
-
-	// initialize the new block allocator node
-	new_allocator_node->block_allocator_ = allocator;
-	new_allocator_node->next_ = known_allocators_head_;
-
-	// add the new block allocator node to the head of the list
-	known_allocators_head_ = new_allocator_node;
-}
-
-void BlockAllocator::DeregisterAllocator(BlockAllocator* allocator)
-{
-	ASSERT(allocator);
-	ASSERT(default_allocator_);
-
-	BANode* curr_node = known_allocators_head_;
-	BANode* prev_node = nullptr;
-
-	while (curr_node != nullptr)
-	{
-		if (curr_node->block_allocator_ == allocator)
-		{
-			// check if we're at the head
-			if (prev_node)
-			{
-				// this is not the head
-				prev_node->next_ = curr_node->next_;
-			}
-			else
-			{
-				// update the head
-				known_allocators_head_ = curr_node->next_;
-			}
-
-			// delete the node
-			default_allocator_->Free(curr_node);
-			curr_node = nullptr;
-
-			break;
-		}
-
-		prev_node = curr_node;
-		curr_node = curr_node->next_;
-	}
-}
-
-void BlockAllocator::DeregisterAllKnownAllocators()
-{
-	ASSERT(default_allocator_);
-
-	BANode* curr_node = known_allocators_head_;
-
-	while (curr_node != nullptr)
-	{
-		// save a reference to the next node
-		BANode* next_node = curr_node->next_;
-
-		// delete the node
-		default_allocator_->Free(curr_node);
-
-		// move to the next node
-		curr_node = next_node;
-	}
-
-	// nullify the head
-	known_allocators_head_ = nullptr;
 }
 
 void BlockAllocator::InitFirstBlockDescriptor()
@@ -225,6 +119,7 @@ void BlockAllocator::InitFirstBlockDescriptor()
 	// initialize the first descriptor
 	BD* first_bd = reinterpret_cast<BD*>(block_);
 	first_bd->Init();
+	first_bd->allocator_ = this;
 	first_bd->block_pointer_ = block_ + size_of_BD_;
 	first_bd->block_size_ = total_block_size_ - size_of_BD_;
 
@@ -373,6 +268,7 @@ void* BlockAllocator::Alloc(const size_t size, const size_t alignment)
 				// initialize the new block's descriptor
 				new_bd = reinterpret_cast<BD*>(new_block_pointer);
 				new_bd->Init();
+				new_bd->allocator_ = this;
 				new_bd->block_pointer_ = new_block_pointer + size_of_BD_;
 				new_bd->block_size_ = size + alignment_offset + guardband_size * 2;
 
@@ -521,6 +417,7 @@ void BlockAllocator::Defragment()
 			}
 
 			// clear next descriptor
+			next_bd->allocator_ = nullptr;
 			next_bd->next_ = nullptr;
 			next_bd->previous_ = nullptr;
 			next_bd->block_pointer_ = nullptr;
