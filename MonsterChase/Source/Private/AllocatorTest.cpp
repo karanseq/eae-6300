@@ -26,9 +26,9 @@ void AllocatorTest::Reset()
 	block_allocator_->Destroy();
 }
 
-char* AllocatorTest::DoAlloc(const size_t size)
+uint8_t* AllocatorTest::DoAlloc(const size_t size)
 {
-	char* ret = static_cast<char*>(block_allocator_->Alloc(size));
+	uint8_t* ret = static_cast<uint8_t*>(block_allocator_->Alloc(size));
 	LOG("Alloc-%zu", size);
 #ifdef BUILD_DEBUG
 	block_allocator_->PrintAllDescriptors();
@@ -36,7 +36,7 @@ char* AllocatorTest::DoAlloc(const size_t size)
 	return ret;
 }
 
-void AllocatorTest::DoFree(char* pointer, const size_t size)
+void AllocatorTest::DoFree(uint8_t* pointer, const size_t size)
 {
 	block_allocator_->Free(pointer);
 	LOG("Free-%zu", size);
@@ -105,8 +105,8 @@ void AllocatorTest::RunTest02()
 {
 	LOG("-------------------- Running Test 02 --------------------");
 
-	char* buf1 = DoAlloc(9);
-	char* buf2 = DoAlloc(23);
+	uint8_t* buf1 = DoAlloc(9);
+	uint8_t* buf2 = DoAlloc(23);
 	
 	DoFree(buf1, 9);
 	DoFree(buf2, 23);
@@ -132,13 +132,13 @@ void AllocatorTest::RunTest03()
 	const unsigned int max_size = 1024 * 5;
 	bool successful = false;
 
-	std::vector<char*> unfreed_pointers;
+	std::vector<uint8_t*> unfreed_pointers;
 
 	for (unsigned int i = 0; i < iterations; ++i)
 	{
 		const size_t rand_size = static_cast<size_t>(rand() % max_size);
 		LOG("Request-%d Alloc size:%zu", i, rand_size);
-		char* buf = static_cast<char*>(block_allocator_->Alloc(rand_size));
+		uint8_t* buf = static_cast<uint8_t*>(block_allocator_->Alloc(rand_size));
 		successful = (buf != NULL);
 
 		if (successful && (rand() % 10) > 3)

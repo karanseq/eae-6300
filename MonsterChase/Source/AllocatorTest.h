@@ -11,8 +11,8 @@ private:
 	AllocatorTest() {};
 	~AllocatorTest() {};
 
-	static char* DoAlloc(const size_t size);
-	static void DoFree(char* pointer, const size_t size);
+	static uint8_t* DoAlloc(const size_t size);
+	static void DoFree(uint8_t* pointer, const size_t size);
 
 public:
 	static void Init(const size_t total_memory = 1024 * 1024, const unsigned int num_bds = 1024);
