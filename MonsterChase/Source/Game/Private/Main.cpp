@@ -2,7 +2,7 @@
 #include "Memory\BlockAllocator.h"
 #include "Memory\AllocatorUtil.h"
 #include "Memory\AllocatorOverrides.h"
-#include "Math\Vec2D.h"
+#include "Math\MathUtil.h"
 
 // game includes
 #include "Game\MonsterChase.h"
@@ -20,10 +20,15 @@ bool HeapManager_UnitTest();
 #endif // ENABLE_ALLOCATOR_TEST
 
 //#define ENABLE_VECTOR_CONST_TEST
+#define ENABLE_FLOAT_VALIDITY_TEST
 
 #ifdef ENABLE_VECTOR_CONST_TEST
 void TestVectorConstness();
 #endif // ENABLE_VECTOR_CONST_TEST
+
+#ifdef ENABLE_FLOAT_VALIDITY_TEST
+void TestFloatValidity();
+#endif // ENABLE_FLOAT_VALIDITY_TEST
 
 int main(int* argv, char** argc)
 {
@@ -33,23 +38,27 @@ int main(int* argv, char** argc)
 	TestVectorConstness();
 #endif
 
-//#ifdef ENABLE_ALLOCATOR_TEST
-//	printf("Beginning allocator test...\nCheck the Output window for details.\n");
-//#ifdef BUILD_DEBUG
-//	HeapManager_UnitTest();
-//#else
-//	AllocatorTest::Init(1024*1024);
-//	AllocatorTest::RunTest00();
-//	AllocatorTest::RunTest01();
-//	AllocatorTest::RunTest02();
-//	AllocatorTest::RunTest03();
-//	AllocatorTest::Reset();
-//#endif
-//	printf("Finished test.\n");
-//	_getch();
-//	return 0;
-//#endif
-	
+#ifdef ENABLE_FLOAT_VALIDITY_TEST
+	TestFloatValidity();
+#endif
+
+#ifdef ENABLE_ALLOCATOR_TEST
+	printf("Beginning allocator test...\nCheck the Output window for details.\n");
+#ifdef BUILD_DEBUG
+	HeapManager_UnitTest();
+#else
+	AllocatorTest::Init();
+	AllocatorTest::RunTest00();
+	AllocatorTest::RunTest01();
+	AllocatorTest::RunTest02();
+	AllocatorTest::RunTest03();
+	AllocatorTest::Reset();
+#endif
+	printf("Finished test.\n");
+	_getch();
+	return 0;
+#endif
+
 	// initialize game
 	MonsterChase* monster_chase = new MonsterChase();
 

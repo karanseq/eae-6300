@@ -1,11 +1,24 @@
+#include "Logger\Logger.h"
 #include "Math\Vec2D.h"
+#include "Math\Vec3D.h"
 
 void TestVectorConstness()
 {
-	const engine::Vec2D a(2.0f, 4.0f);
-	const engine::Vec2D b(3.0f, 5.0f);
+	LOG("-------------------- Running Vec2D, Vec3D Test --------------------");
 
-	const engine::Vec2D c = a + b;
+	const engine::Vec2D v2_a(2.0f, 4.0f);
+	const engine::Vec2D v2_b(3.0f, 5.0f);
 
-	engine::Vec2D d = -c;
+	const engine::Vec2D v2_c = v2_a + v2_b;
+
+	engine::Vec2D v2_d = -v2_c;
+
+	const engine::Vec3D v3_a(2.0f, 4.0f, 6.0f);
+	const engine::Vec3D v3_b(3.0f, 5.0f, 7.0f);
+
+	const engine::Vec3D v3_c = v3_a + v3_b;
+
+	engine::Vec3D v3_d = -v3_c;
+
+	LOG("-------------------- Finished Vec2D, Vec3D Test --------------------");
 }

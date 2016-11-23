@@ -15,7 +15,7 @@ void AllocatorTest::Init(size_t total_memory)
 {
 	LOG("Testing BlockAllocator TOTAL_MEM:%zu", total_memory);
 
-	memory_ = static_cast<uint8_t*>(_aligned_malloc(total_memory, 4));
+	memory_ = static_cast<uint8_t*>(_aligned_malloc(total_memory, DEFAULT_BYTE_ALIGNMENT));
 
 	block_allocator_ = engine::BlockAllocator::Create(memory_, total_memory);
 #ifdef BUILD_DEBUG
@@ -97,14 +97,16 @@ void AllocatorTest::RunTest01()
 
 	for (unsigned int i = 0; i < num_pointers; ++i)
 	{
-		size_t rand_size = 1 + rand() % 512;
+		const size_t max_size = 512;
+		size_t rand_size = 1 + rand() % max_size;
 		pointers[i] = static_cast<char*>(block_allocator_->Alloc(rand_size));
 
+		const uint8_t a_ascii = 65;
 		if (pointers[i])
 		{
 			for (unsigned int j = 0; j < rand_size; ++j)
 			{
-				pointers[i][j] = 65 + i;
+				pointers[i][j] = a_ascii + i;
 			}
 		}
 		else
@@ -116,8 +118,8 @@ void AllocatorTest::RunTest01()
 		// write beyond what we requested
 		if (i % 3)
 		{
-			pointers[i][rand_size] = 65 + i;
-			pointers[i][rand_size + 1] = 65 + i;
+			pointers[i][rand_size] = a_ascii + i;
+			pointers[i][rand_size + 1] = a_ascii + i;
 		}
 #endif
 	}

@@ -109,8 +109,9 @@ void MonsterChase::PrintMessageMonsterName()
 		return;
 	}
 
-	char message[256] = { 0 };
-	sprintf_s(message, 256, "What would you like to name Monster-%d? ", num_monsters_ + 1);
+	const size_t message_size = 256;
+	char message[message_size] = { 0 };
+	sprintf_s(message, message_size, "What would you like to name Monster-%d? ", num_monsters_ + 1);
 	PrintMessage(message);
 }
 
@@ -208,8 +209,9 @@ void MonsterChase::ValidateName(const char* input)
 		|| count >= input_length - 1)						// check if the input contained only white spaces
 	{
 		// print an error message
-		char buf[256] = { 0 };
-		sprintf_s(buf, 256, "Please enter a name that is 1 to %d characters long.\n", MAX_NAME_LENGTH);
+		const size_t message_size = 256;
+		char buf[message_size] = { 0 };
+		sprintf_s(buf, message_size, "Please enter a name that is 1 to %d characters long.\n", MAX_NAME_LENGTH);
 		PrintMessage(buf);
 		return;
 	}

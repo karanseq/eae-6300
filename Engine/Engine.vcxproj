@@ -154,6 +154,7 @@
     <ClInclude Include="Source\GameObject\InterfaceGameObjectController.h" />
     <ClInclude Include="Source\GameObject\IdentityComponent.h" />
     <ClInclude Include="Source\Logger\Logger.h" />
+    <ClInclude Include="Source\Math\MathUtil.h" />
     <ClInclude Include="Source\Math\Transform-inl.h" />
     <ClInclude Include="Source\Math\Transform.h" />
     <ClInclude Include="Source\Math\Vec2D-inl.h" />

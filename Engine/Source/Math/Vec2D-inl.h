@@ -1,4 +1,6 @@
 #include "Vec2D.h"
+#include "Assert\Assert.h"
+#include "Math\MathUtil.h"
 
 namespace engine
 {
@@ -9,6 +11,7 @@ namespace engine
 
 	inline void Vec2D::x(float x)
 	{
+		ASSERT(!IsNaN(x));
 		x_ = x;
 	}
 
@@ -19,11 +22,13 @@ namespace engine
 
 	inline void Vec2D::y(float y)
 	{
+		ASSERT(!IsNaN(y));
 		y_ = y;
 	}
 
 	inline void Vec2D::set(float x, float y)
 	{
+		ASSERT(!IsNaN(x) && !IsNaN(y));
 		x_ = x;
 		y_ = y;
 	}
@@ -67,6 +72,7 @@ namespace engine
 
 	inline Vec2D& Vec2D::operator*=(float scale)
 	{
+		ASSERT(!IsNaN(scale));
 		x(x_ * scale);
 		y(y_ * scale);
 		return *this;
@@ -74,7 +80,7 @@ namespace engine
 
 	inline bool Vec2D::operator==(const Vec2D& vec) const
 	{
-		return (x_ == vec.x() && y_ == vec.y());
+		return (FuzzyEqual(x_, vec.x()) && FuzzyEqual(y_, vec.y()));
 	}
 
 	inline bool Vec2D::operator!=(const Vec2D& vec) const

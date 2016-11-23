@@ -1,4 +1,6 @@
 #include "Vec3D.h"
+#include "Assert\Assert.h"
+#include "Math\MathUtil.h"
 
 namespace engine
 {
@@ -9,6 +11,7 @@ namespace engine
 
 	inline void Vec3D::x(float x)
 	{
+		ASSERT(!IsNaN(x));
 		x_ = x;
 	}
 
@@ -19,6 +22,7 @@ namespace engine
 
 	inline void Vec3D::y(float y)
 	{
+		ASSERT(!IsNaN(y));
 		y_ = y;
 	}
 
@@ -29,11 +33,13 @@ namespace engine
 
 	inline void Vec3D::z(float z)
 	{
+		ASSERT(!IsNaN(z));
 		z_ = z;
 	}
 
 	inline void Vec3D::set(float x, float y, float z)
 	{
+		ASSERT(!IsNaN(x) && !IsNaN(y) && !IsNaN(z));
 		x_ = x;
 		y_ = y;
 		z_ = z;
@@ -81,6 +87,7 @@ namespace engine
 
 	inline Vec3D& Vec3D::operator*=(float scale)
 	{
+		ASSERT(!IsNaN(scale));
 		x(x_ * scale);
 		y(y_ * scale);
 		z(z_ * scale);
@@ -89,7 +96,7 @@ namespace engine
 
 	inline bool Vec3D::operator==(const Vec3D& vec) const
 	{
-		return (x_ == vec.x() && y_ == vec.y() && z_ == vec.z());
+		return (FuzzyEqual(x_, vec.x()) && FuzzyEqual(y_, vec.y()) && FuzzyEqual(z_, vec.z()));
 	}
 
 	inline bool Vec3D::operator!=(const Vec3D& vec) const
