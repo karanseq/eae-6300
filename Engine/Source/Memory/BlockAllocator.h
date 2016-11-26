@@ -5,14 +5,14 @@
 
 namespace engine {
 
-#define DEFAULT_BLOCK_SIZE 1024 * 1024
-#define DEFAULT_GUARDBAND_SIZE 4
-#define DEFAULT_BYTE_ALIGNMENT 4
-#define MAX_EXTRA_MEMORY 8
+#define DEFAULT_BLOCK_SIZE				1024 * 1024
+#define DEFAULT_GUARDBAND_SIZE			4
+#define DEFAULT_BYTE_ALIGNMENT			4
+#define MAX_EXTRA_MEMORY				8
 
-#define GUARDBAND_FILL		0xFD
-#define DEAD_FILL			0xDD
-#define CLEAN_FILL			0xCD
+#define GUARDBAND_FILL					0xFD
+#define DEAD_FILL						0xDD
+#define CLEAN_FILL						0xCD
 
 /*
 	BlockDescriptor
@@ -99,21 +99,20 @@ public:
 #endif
 
 private:
-	uint8_t* block_;									// actual block of memory
+	uint8_t*										block_;									// actual block of memory
 	
-	BD* free_list_head_;								// list of block descriptors describing free blocks
-	BD* user_list_head_;								// list of block descriptors describing allocated blocks
+	BD*												free_list_head_;						// list of block descriptors describing free blocks
+	BD*												user_list_head_;						// list of block descriptors describing allocated blocks
 	
-	size_t total_block_size_;							// total size of block
-	static size_t size_of_BD_;							// size of a BlockDescriptor object
+	size_t											total_block_size_;						// total size of block
+	static											size_t size_of_BD_;						// size of a BlockDescriptor object
 
 #ifdef BUILD_DEBUG
-	unsigned int id_;
-	static unsigned int counter_;
+	unsigned int									id_;									// an id to keep track of this allocator in debug mode
+	static unsigned int								counter_;								// a counter that will be used while setting ids for allocators
 #endif
 
-	// static members for the default allocator
-	static BlockAllocator* default_allocator_;
+	static BlockAllocator*							default_allocator_;						// a reference to the default allocator
 
 }; // class BlockAllocator
 

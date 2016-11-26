@@ -39,9 +39,9 @@ private:
 	Monster& operator=(const Monster& monster);
 
 private:
-	engine::InterfaceGameObjectController* controller_;
-	engine::IdentityComponent* identity_;
-	uint8_t time_to_live_;
+	engine::InterfaceGameObjectController*			controller_;
+	engine::IdentityComponent*						identity_;
+	uint8_t											time_to_live_;
 }; // class Monster
 
 #endif // MONSTER_H_

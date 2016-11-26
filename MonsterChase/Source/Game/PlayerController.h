@@ -32,8 +32,8 @@ private:
 	PlayerController& operator=(const PlayerController& monster);
 
 private:
-	engine::GameObject* game_object_;
-	MoveDirections move_direction_;
+	engine::GameObject*					game_object_;
+	MoveDirections						move_direction_;
 
 }; // class PlayerController
 

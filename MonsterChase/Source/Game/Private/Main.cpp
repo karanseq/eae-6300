@@ -1,12 +1,4 @@
-// engine includes
-#include "Memory\BlockAllocator.h"
-#include "Memory\AllocatorUtil.h"
-#include "Memory\AllocatorOverrides.h"
-#include "Math\MathUtil.h"
-
-// game includes
-#include "Game\MonsterChase.h"
-
+// library includes
 #ifdef BUILD_DEBUG
 #include <crtdbg.h>
 #endif // BUILD_DEBUG
@@ -15,6 +7,15 @@
 #include "Tests\AllocatorTest.h"
 #include <stdio.h>
 #include <conio.h>
+
+// engine includes
+#include "Memory\BlockAllocator.h"
+#include "Memory\AllocatorUtil.h"
+#include "Memory\AllocatorOverrides.h"
+#include "Math\MathUtil.h"
+
+// game includes
+#include "Game\MonsterChase.h"
 
 bool HeapManager_UnitTest();
 #endif // ENABLE_ALLOCATOR_TEST
@@ -32,6 +33,7 @@ void TestFloatValidity();
 
 int main(int* argv, char** argc)
 {
+	// initialize the default allocator
 	engine::BlockAllocator* default_allocator = engine::BlockAllocator::CreateDefaultAllocator();
 
 #ifdef ENABLE_VECTOR_CONST_TEST
@@ -70,6 +72,7 @@ int main(int* argv, char** argc)
 	delete monster_chase;
 	monster_chase = nullptr;
 
+	// destroy the default allocator
 	engine::BlockAllocator::DestroyDefaultAllocator();
 
 #if defined(_DEBUG)

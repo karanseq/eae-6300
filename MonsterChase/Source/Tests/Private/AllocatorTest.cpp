@@ -56,16 +56,18 @@ void AllocatorTest::RunTest00()
 {
 	LOG("-------------------- Running Test 00 --------------------");
 
+	size_t size = 200;
 	size_t alignment = 32;
-	void* pointer1 = block_allocator_->Alloc(200, alignment);
+	void* pointer1 = block_allocator_->Alloc(size, alignment);
 	LOG("Alloc-200 aligned:%d", reinterpret_cast<uintptr_t>(pointer1) % alignment);
 
 #ifdef BUILD_DEBUG
 	block_allocator_->PrintAllDescriptors();
 #endif
 
+	size = 200;
 	alignment = 16;
-	void* pointer2 = block_allocator_->Alloc(200, alignment);
+	void* pointer2 = block_allocator_->Alloc(size, alignment);
 	LOG("Alloc-200 aligned:%d", reinterpret_cast<uintptr_t>(pointer1) % alignment);
 
 #ifdef BUILD_DEBUG
@@ -158,17 +160,25 @@ void AllocatorTest::RunTest02()
 {
 	LOG("-------------------- Running Test 02 --------------------");
 
-	char* buf1 = DoAlloc(9);
-	char* buf2 = DoAlloc(23);
+	size_t size = 9;
+	char* buf1 = DoAlloc(size);
+	size = 23;
+	char* buf2 = DoAlloc(size);
 	
-	DoFree(buf1, 9);
-	DoFree(buf2, 23);
+	size = 9;
+	DoFree(buf1, size);
+	size = 23;
+	DoFree(buf2, size);
 
-	buf2 = DoAlloc(10);
-	buf1 = DoAlloc(22);
+	size = 10;
+	buf2 = DoAlloc(size);
+	size = 22;
+	buf1 = DoAlloc(size);
 
-	DoFree(buf1, 22);
-	DoFree(buf2, 10);
+	size = 22;
+	DoFree(buf1, size);
+	size = 10;
+	DoFree(buf2, size);
 
 	block_allocator_->Defragment();
 #ifdef BUILD_DEBUG
@@ -181,8 +191,9 @@ void AllocatorTest::RunTest02()
 void AllocatorTest::RunTest03()
 {
 	LOG("-------------------- Running Test 03 --------------------");
-	const unsigned int iterations = 512;
-	const unsigned int max_size = 1024 * 5;
+	const uint16_t iterations = 512;
+	const uint32_t max_size = 1024 * 5;
+	const uint8_t success_chance = 3;
 
 	std::vector<void*> unfreed_pointers;
 
@@ -193,7 +204,7 @@ void AllocatorTest::RunTest03()
 		void* buf = block_allocator_->Alloc(rand_size);
 		bool successful = (buf != nullptr);
 
-		if (successful && (rand() % 10) > 3)
+		if (successful && (rand() % 10) > success_chance)
 		{
 			LOG("Request-%d Free size:%zu", i, rand_size);
 			block_allocator_->Free(buf);

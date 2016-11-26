@@ -34,8 +34,8 @@ private:
 	Player& operator=(const Player& monster);
 
 private:
-	engine::InterfaceGameObjectController* controller_;
-	engine::IdentityComponent* identity_;
+	engine::InterfaceGameObjectController*					controller_;
+	engine::IdentityComponent*								identity_;
 }; // class Player
 
 #endif // PLAYER_H_
