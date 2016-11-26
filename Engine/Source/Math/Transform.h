@@ -3,8 +3,9 @@
 
 #include "Vec3D.h"
 
-namespace engine
-{
+namespace engine {
+namespace math {
+
 	class Transform
 	{
 	public:
@@ -32,6 +33,7 @@ namespace engine
 
 	}; // class Transform
 
+} // namespace math
 } // namespace engine
 
 #include "Transform-inl.h"

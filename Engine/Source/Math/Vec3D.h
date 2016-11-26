@@ -1,8 +1,9 @@
 #ifndef ENGINE_VEC3D_H_
 #define ENGINE_VEC3D_H_
 
-namespace engine
-{
+namespace engine {
+namespace math {
+
 	class Vec3D
 	{
 	public:
@@ -51,6 +52,7 @@ namespace engine
 		float z_;
 	}; // class Vec3D
 
+} // namespace math
 } // namespace engine
 
 #include "Vec3D-inl.h"

@@ -1,8 +1,9 @@
 #ifndef ENGINE_GAME_OBJECT_CONTROLLER_H_
 #define ENGINE_GAME_OBJECT_CONTROLLER_H_
 
-namespace engine
-{
+namespace engine {
+namespace gameobject {
+
 // forward declaration
 class GameObject;
 class Vec2D;
@@ -21,6 +22,7 @@ public:
 	virtual void UpdateGameObject() = 0;
 };
 
+} // namespace gameobject
 } // namespace engine
 
 #endif // ENGINE_GAME_OBJECT_CONTROLLER_H_

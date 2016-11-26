@@ -1,7 +1,8 @@
 #include "Math\Vec3D.h"
 
-namespace engine
-{
+namespace engine {
+namespace math {
+
 	const Vec3D Vec3D::ZERO(0.0f, 0.0f, 0.0f);
 	const Vec3D Vec3D::UNIT(1.0f, 1.0f, 1.0f);
 	const Vec3D Vec3D::UNIT_X(1.0f, 0.0f, 0.0f);
@@ -20,4 +21,5 @@ namespace engine
 		z_ = copy.z();
 	}
 
+} // namespace math
 } // namespace engine

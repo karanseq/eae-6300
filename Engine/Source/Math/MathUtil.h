@@ -5,8 +5,9 @@
 
 #define M_PI           3.14159265358979323846f  /* pi */
 
-namespace engine
-{
+namespace engine {
+namespace math {
+
 	inline float RadiansToDegrees(float radians)
 	{
 		return (radians * 180.0f / M_PI);
@@ -33,6 +34,7 @@ namespace engine
 		return FuzzyEqual(number, 0.000000001f);
 	}
 
+} // namespace math
 } // namespace engine
 
 #endif // MATH_UTIL_H_

@@ -7,7 +7,7 @@
 // game includes
 #include "Game\MonsterChase.h"
 
-PlayerController::PlayerController() : game_object_(new (MonsterChase::GetAllocator()) engine::GameObject()),
+PlayerController::PlayerController() : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject()),
 	move_direction_(MoveDirections::kMoveDirectionNone)
 {}
 
@@ -21,19 +21,19 @@ void PlayerController::UpdateGameObject()
 	switch (move_direction_)
 	{
 	case MoveDirections::kMoveDirectionLeft:
-		game_object_->SetPosition(game_object_->GetPosition() - engine::Vec3D::UNIT_X);
+		game_object_->SetPosition(game_object_->GetPosition() - engine::math::Vec3D::UNIT_X);
 		break;
 
 	case MoveDirections::kMoveDirectionRight:
-		game_object_->SetPosition(game_object_->GetPosition() + engine::Vec3D::UNIT_X);
+		game_object_->SetPosition(game_object_->GetPosition() + engine::math::Vec3D::UNIT_X);
 		break;
 
 	case MoveDirections::kMoveDirectionUp:
-		game_object_->SetPosition(game_object_->GetPosition() + engine::Vec3D::UNIT_Y);
+		game_object_->SetPosition(game_object_->GetPosition() + engine::math::Vec3D::UNIT_Y);
 		break;
 
 	case MoveDirections::kMoveDirectionDown:
-		game_object_->SetPosition(game_object_->GetPosition() - engine::Vec3D::UNIT_Y);
+		game_object_->SetPosition(game_object_->GetPosition() - engine::math::Vec3D::UNIT_Y);
 		break;
 
 	case MoveDirections::kMoveDirectionNone:

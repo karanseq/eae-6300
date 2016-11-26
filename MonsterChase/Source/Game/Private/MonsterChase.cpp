@@ -18,16 +18,16 @@
 #include <ctype.h>
 
 // static member initialization
-engine::BlockAllocator* MonsterChase::game_allocator_ = nullptr;
+engine::memory::BlockAllocator* MonsterChase::game_allocator_ = nullptr;
 
 MonsterChase::MonsterChase()
 {
 	// allocate memory for the game objects
-	void* aligned_memory = engine::BlockAllocator::CreateDefaultAllocator()->Alloc(MEMORY_SIZE);
+	void* aligned_memory = engine::memory::BlockAllocator::CreateDefaultAllocator()->Alloc(MEMORY_SIZE);
 	ASSERT(aligned_memory);
 
 	// create an allocator to manage memory for the game objects
-	MonsterChase::game_allocator_ = engine::BlockAllocator::Create(aligned_memory, MEMORY_SIZE);
+	MonsterChase::game_allocator_ = engine::memory::BlockAllocator::Create(aligned_memory, MEMORY_SIZE);
 	ASSERT(MonsterChase::game_allocator_);
 
 	game_state_ = GameStates::kGameStateBegin;
@@ -51,8 +51,8 @@ MonsterChase::~MonsterChase()
 	SAFE_DELETE_ARRAY(monsters_);
 
 	// deallocate the allocator
-	engine::BlockAllocator::Destroy(MonsterChase::game_allocator_);
-	engine::BlockAllocator::CreateDefaultAllocator()->Free(MonsterChase::game_allocator_);
+	engine::memory::BlockAllocator::Destroy(MonsterChase::game_allocator_);
+	engine::memory::BlockAllocator::CreateDefaultAllocator()->Free(MonsterChase::game_allocator_);
 }
 
 void MonsterChase::Update()
@@ -109,8 +109,8 @@ void MonsterChase::PrintMessageMonsterName()
 		return;
 	}
 
-	const size_t message_size = 256;
-	char message[message_size] = { 0 };
+	const size_t		message_size = 256;
+	char				message[message_size] = { 0 };
 	sprintf_s(message, message_size, "What would you like to name Monster-%d? ", num_monsters_ + 1);
 	PrintMessage(message);
 }
@@ -196,8 +196,8 @@ void MonsterChase::ValidateName(const char* input)
 	}
 
 	// count the number of white spaces in the input
-	char c = 0;
-	int i = 0, count = 0;
+	char		c = 0;
+	int			i = 0, count = 0;
 	while (input[i])
 	{
 		c = input[i++];
@@ -302,7 +302,7 @@ void MonsterChase::CreateMonster(const char* input_name)
 	}
 
 	// calculate random position for this monster
-	engine::Vec3D monster_position = GameUtils::GetRandomVec3D(MAX_ROWS, MAX_COLS);
+	engine::math::Vec3D monster_position = GameUtils::GetRandomVec3D(MAX_ROWS, MAX_COLS);
 	monster_position *= (rand() % 10) > 5 ? 1.0f : -1.0f;
 
 	MonsterControllers controller_type = (rand() % 10) > 5 ? MonsterControllers::kSmartMonsterController : MonsterControllers::kSillyMonsterController;

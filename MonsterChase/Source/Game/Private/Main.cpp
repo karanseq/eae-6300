@@ -34,7 +34,7 @@ void TestFloatValidity();
 int main(int* argv, char** argc)
 {
 	// initialize the default allocator
-	engine::BlockAllocator* default_allocator = engine::BlockAllocator::CreateDefaultAllocator();
+	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::CreateDefaultAllocator();
 
 #ifdef ENABLE_VECTOR_CONST_TEST
 	TestVectorConstness();
@@ -73,7 +73,7 @@ int main(int* argv, char** argc)
 	monster_chase = nullptr;
 
 	// destroy the default allocator
-	engine::BlockAllocator::DestroyDefaultAllocator();
+	engine::memory::BlockAllocator::DestroyDefaultAllocator();
 
 #if defined(_DEBUG)
 	_CrtDumpMemoryLeaks();

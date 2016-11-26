@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 namespace engine {
+namespace memory {
 
 #define DEFAULT_BLOCK_SIZE				1024 * 1024
 #define DEFAULT_GUARDBAND_SIZE			4
@@ -24,16 +25,16 @@ class BlockAllocator;
 typedef struct BlockDescriptor
 {
 public:
-	BlockAllocator* allocator_;			// pointer to the allocator managing this descriptor
-	BlockDescriptor* next_;				// pointer to the next block descriptor
-	BlockDescriptor* previous_;			// pointer to the previous block descriptor
-	uint8_t* block_pointer_;			// pointer to the actual block of data
-	size_t block_size_;					// size of the actual block of data
+	BlockAllocator*			allocator_;				// pointer to the allocator managing this descriptor
+	BlockDescriptor*		next_;					// pointer to the next block descriptor
+	BlockDescriptor*		previous_;				// pointer to the previous block descriptor
+	uint8_t*				block_pointer_;			// pointer to the actual block of data
+	size_t					block_size_;			// size of the actual block of data
 
 #ifdef BUILD_DEBUG
-	size_t user_size_;					// size of the block requested by the user
-	unsigned int id_;					// an identifier for each descriptor
-	static unsigned int counter_;		// a counter to keep track of all the descriptors
+	size_t					user_size_;				// size of the block requested by the user
+	uint32_t				id_;					// an identifier for each descriptor
+	static uint32_t			counter_;				// a counter to keep track of all the descriptors
 #endif
 
 	void Init();
@@ -108,14 +109,15 @@ private:
 	static											size_t size_of_BD_;						// size of a BlockDescriptor object
 
 #ifdef BUILD_DEBUG
-	unsigned int									id_;									// an id to keep track of this allocator in debug mode
-	static unsigned int								counter_;								// a counter that will be used while setting ids for allocators
+	uint32_t										id_;									// an id to keep track of this allocator in debug mode
+	static uint32_t									counter_;								// a counter that will be used while setting ids for allocators
 #endif
 
 	static BlockAllocator*							default_allocator_;						// a reference to the default allocator
 
 }; // class BlockAllocator
 
+} // namespace memory
 } // namespace engine
 
 #include "BlockAllocator-inl.h"

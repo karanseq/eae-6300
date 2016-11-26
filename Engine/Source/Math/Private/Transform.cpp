@@ -1,7 +1,8 @@
 #include "Math\Transform.h"
 
-namespace engine
-{
+namespace engine {
+namespace math {
+
 	Transform::Transform(Vec3D position, Vec3D rotation, Vec3D scale) : position_(position),
 		rotation_(rotation),
 		scale_(scale)
@@ -14,4 +15,5 @@ namespace engine
 		scale_ = copy.scale_;
 	}
 
+} // namespace math
 } // namespace engine

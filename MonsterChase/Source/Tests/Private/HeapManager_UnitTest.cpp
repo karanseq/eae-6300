@@ -11,7 +11,7 @@
 
 bool HeapManager_UnitTest()
 {
-	using namespace engine;
+	using namespace engine::memory;
 
 	const size_t 		sizeHeap = 1024 * 1024;
 	const unsigned int 	numDescriptors = 2048;

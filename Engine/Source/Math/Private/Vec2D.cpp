@@ -1,7 +1,8 @@
 #include "Math\Vec2D.h"
 
-namespace engine
-{
+namespace engine {
+namespace math {
+
 	const Vec2D Vec2D::ZERO(0.0f, 0.0f);
 	const Vec2D Vec2D::UNIT(1.0f, 1.0f);
 	const Vec2D Vec2D::UNIT_X(1.0f, 0.0f);
@@ -17,4 +18,5 @@ namespace engine
 		y_ = copy.y();
 	}
 
+} // namespace math
 } // namespace engine

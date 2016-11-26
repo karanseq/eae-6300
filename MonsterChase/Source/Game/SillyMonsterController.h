@@ -7,15 +7,15 @@
 #include "Memory\AllocatorUtil.h"
 #include "Assert\Assert.h"
 
-class SillyMonsterController : public engine::InterfaceGameObjectController
+class SillyMonsterController : public engine::gameobject::InterfaceGameObjectController
 {
 public:
 	SillyMonsterController();
 	virtual ~SillyMonsterController();
 
 	/* Implement InterfaceGameObjectController */
-	inline void SetGameObject(engine::GameObject* game_object) override				{ ASSERT(game_object); SAFE_DELETE(game_object_); game_object_ = game_object; }
-	inline engine::GameObject* GetGameObject() override								{ return game_object_; }
+	inline void SetGameObject(engine::gameobject::GameObject* game_object) override				{ ASSERT(game_object); SAFE_DELETE(game_object_); game_object_ = game_object; }
+	inline engine::gameobject::GameObject* GetGameObject() override								{ return game_object_; }
 
 	void UpdateGameObject() override;
 
@@ -26,7 +26,7 @@ private:
 	SillyMonsterController& operator=(const SillyMonsterController& monster);
 
 private:
-	engine::GameObject* game_object_;
+	engine::gameobject::GameObject* game_object_;
 }; // class SillyMonsterController
 
 #endif // SILLY_MONSTER_CONTROLLER_H_

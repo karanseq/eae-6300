@@ -10,20 +10,20 @@
 #include "Memory\AllocatorUtil.h"
 #include "Assert\Assert.h"
 
-class PlayerController : public engine::InterfaceGameObjectController
+class PlayerController : public engine::gameobject::InterfaceGameObjectController
 {
 public:
 	PlayerController();
 	virtual ~PlayerController();
 
 	/* Implement InterfaceGameObjectController */
-	inline engine::GameObject* GetGameObject() override								{ return game_object_; }
-	inline void SetGameObject(engine::GameObject* game_object) override				{ ASSERT(game_object); SAFE_DELETE(game_object_); game_object_ = game_object; }
+	inline engine::gameobject::GameObject* GetGameObject() override								{ return game_object_; }
+	inline void SetGameObject(engine::gameobject::GameObject* game_object) override				{ ASSERT(game_object); SAFE_DELETE(game_object_); game_object_ = game_object; }
 
 	void UpdateGameObject() override;
 
-	inline MoveDirections GetMoveDirection() const									{ return move_direction_; }
-	inline void SetMoveDirection(MoveDirections move_direction)						{ move_direction_ = move_direction; }
+	inline MoveDirections GetMoveDirection() const												{ return move_direction_; }
+	inline void SetMoveDirection(MoveDirections move_direction)									{ move_direction_ = move_direction; }
 
 private:
 	// disable default copy constructor
@@ -32,8 +32,8 @@ private:
 	PlayerController& operator=(const PlayerController& monster);
 
 private:
-	engine::GameObject*					game_object_;
-	MoveDirections						move_direction_;
+	engine::gameobject::GameObject*					game_object_;
+	MoveDirections									move_direction_;
 
 }; // class PlayerController
 

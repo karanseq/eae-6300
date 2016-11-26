@@ -21,11 +21,11 @@ public:
 	void Print();
 
 	// accessors and mutators
-	inline engine::InterfaceGameObjectController* GetController() const								{ return controller_; }
-	inline void SetController(engine::InterfaceGameObjectController* controller)					{ ASSERT(controller); SAFE_DELETE(controller_); controller_ = controller; }
+	inline engine::gameobject::InterfaceGameObjectController* GetController() const								{ return controller_; }
+	inline void SetController(engine::gameobject::InterfaceGameObjectController* controller)					{ ASSERT(controller); SAFE_DELETE(controller_); controller_ = controller; }
 
-	inline engine::IdentityComponent* GetIdentity() const											{ return identity_; }
-	inline void SetIdentity(engine::IdentityComponent* identity)									{ ASSERT(identity); SAFE_DELETE(identity_); identity_ = identity; }
+	inline engine::gameobject::IdentityComponent* GetIdentity() const											{ return identity_; }
+	inline void SetIdentity(engine::gameobject::IdentityComponent* identity)									{ ASSERT(identity); SAFE_DELETE(identity_); identity_ = identity; }
 
 private:
 	// disable default copy constructor
@@ -34,8 +34,8 @@ private:
 	Player& operator=(const Player& monster);
 
 private:
-	engine::InterfaceGameObjectController*					controller_;
-	engine::IdentityComponent*								identity_;
+	engine::gameobject::InterfaceGameObjectController*					controller_;
+	engine::gameobject::IdentityComponent*								identity_;
 }; // class Player
 
 #endif // PLAYER_H_

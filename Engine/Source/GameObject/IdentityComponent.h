@@ -9,8 +9,9 @@
 #include "Memory\AllocatorUtil.h"
 #include "Assert\Assert.h"
 
-namespace engine
-{
+namespace engine {
+namespace gameobject {
+
 	class IdentityComponent
 	{
 	public:
@@ -67,6 +68,7 @@ namespace engine
 		char*				name_;
 	}; // class IdentityComponent
 
+} // namespace gameobject
 } // namespace engine
 
 #endif // ENGINE_IDENTITY_COMPONENT_H_

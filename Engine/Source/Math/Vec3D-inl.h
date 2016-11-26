@@ -2,8 +2,9 @@
 #include "Assert\Assert.h"
 #include "Math\MathUtil.h"
 
-namespace engine
-{
+namespace engine {
+namespace math {
+
 	inline float Vec3D::x() const
 	{
 		return x_;
@@ -109,4 +110,5 @@ namespace engine
 		return Vec3D(-x(), -y(), -z());
 	}
 
+} // namespace math
 } // namespace engine

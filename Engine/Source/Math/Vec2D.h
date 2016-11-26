@@ -1,8 +1,9 @@
 #ifndef ENGINE_VEC2D_H_
 #define ENGINE_VEC2D_H_
 
-namespace engine
-{
+namespace engine {
+namespace math {
+
 	class Vec2D
 	{
 	public:
@@ -47,6 +48,7 @@ namespace engine
 		float y_;
 	}; // class Vec2D
 
+} // namespace math
 } // namespace engine
 
 #include "Vec2D-inl.h"

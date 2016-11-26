@@ -1,9 +1,11 @@
 #ifndef MONSTER_CHASE_H_
 #define MONSTER_CHASE_H_
 
-#include "Game\GameTypes.h"
-
+// engine includes
 #include "Memory\BlockAllocator.h"
+
+// game includes
+#include "Game\GameTypes.h"
 
 // forward declarations
 class Player;
@@ -42,7 +44,7 @@ public:
 	void CreatePlayer(const char* name);
 
 	inline GameStates GetState() const												{ return game_state_; }
-	static inline engine::BlockAllocator* GetAllocator()							{ return MonsterChase::game_allocator_; }
+	static inline engine::memory::BlockAllocator* GetAllocator()					{ return MonsterChase::game_allocator_; }
 
 	// game constants
 	static const size_t									MEMORY_SIZE = 1024 * 5;
@@ -63,7 +65,7 @@ private:
 
 private:
 	// reference to an instance of an allocator specifically for game objects
-	static engine::BlockAllocator*						game_allocator_;
+	static engine::memory::BlockAllocator*				game_allocator_;
 
 	// field to maintain the current state of the game
 	GameStates											game_state_;
@@ -76,6 +78,6 @@ private:
 	int													initial_num_monsters_;
 	int													num_monsters_;
 	int													ascii_index_;
-};
+}; // class MonsterChase
 
 #endif // MONSTER_CHASE_H_

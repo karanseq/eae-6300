@@ -1,7 +1,8 @@
 #include "Transform.h"
 
-namespace engine
-{
+namespace engine {
+namespace math {
+
 	inline Transform& Transform::operator=(const Transform& transform)
 	{
 		// check for self assignment
@@ -45,4 +46,5 @@ namespace engine
 		scale_ = scale;
 	}
 
+} // namespace math
 } // namespace engine

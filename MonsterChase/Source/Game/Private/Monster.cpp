@@ -10,7 +10,7 @@
 #include "Game\MonsterChase.h"
 
 Monster::Monster(MonsterControllers controller_type) : controller_(nullptr),
-	identity_(new (MonsterChase::GetAllocator()) engine::IdentityComponent()),
+	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent()),
 	time_to_live_(0)
 {
 	ASSERT(controller_type != MonsterControllers::kNoMonsterController);

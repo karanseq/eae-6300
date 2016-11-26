@@ -6,6 +6,7 @@
 #include <new>				// for placement new
 
 namespace engine {
+namespace memory {
 
 #ifdef BUILD_DEBUG
 unsigned int BlockDescriptor::counter_ = 0;
@@ -25,11 +26,11 @@ void BlockDescriptor::Init()
 }
 
 // initialize static members
-size_t BlockAllocator::size_of_BD_ = sizeof(BD);
-BlockAllocator* BlockAllocator::default_allocator_ = nullptr;
+size_t				BlockAllocator::size_of_BD_ = sizeof(BD);
+BlockAllocator*		BlockAllocator::default_allocator_ = nullptr;
 
 #ifdef BUILD_DEBUG
-unsigned int BlockAllocator::counter_ = 0;
+unsigned int		BlockAllocator::counter_ = 0;
 #endif
 
 BlockAllocator::BlockAllocator(void* memory, size_t block_size) : block_(nullptr),
@@ -211,8 +212,8 @@ void BlockAllocator::RemoveFromList(BD** head, BD** bd)
 bool BlockAllocator::CheckMemoryOverwrite(BD* bd) const
 {
 	ASSERT(bd != nullptr);
-	unsigned int lower_byte_counter = 0, upper_byte_counter = 0;
-	for (unsigned int i = 0; i < DEFAULT_GUARDBAND_SIZE; ++i)
+	uint8_t lower_byte_counter = 0, upper_byte_counter = 0;
+	for (uint8_t i = 0; i < DEFAULT_GUARDBAND_SIZE; ++i)
 	{
 		// check lower guardband
 		lower_byte_counter += (*(bd->block_pointer_ + i) == GUARDBAND_FILL) ? 1 : 0;
@@ -239,25 +240,25 @@ void* BlockAllocator::Alloc(const size_t size, const size_t alignment)
 	ASSERT((alignment & (alignment - 1)) == 0);
 
 #ifdef BUILD_DEBUG
-	const size_t guardband_size = DEFAULT_GUARDBAND_SIZE;
+	const size_t	guardband_size = DEFAULT_GUARDBAND_SIZE;
 #else
-	const size_t guardband_size = 0;
+	const size_t	guardband_size = 0;
 #endif
 
 	// declare a block descriptor to service this request
-	BD* new_bd = nullptr;
+	BD*				new_bd = nullptr;
 
 	// loop the free list for a descriptor to a block that is big enough
-	bool did_defrag = false;
-	BD* free_bd = free_list_head_;
+	bool			did_defrag = false;
+	BD*				free_bd = free_list_head_;
 	while (free_bd != nullptr)
 	{
 		// check if this block is big enough
 		if (size <= free_bd->block_size_)
 		{
 			// calculate the new address of the new block
-			uint8_t* new_block_pointer = free_bd->block_pointer_ + free_bd->block_size_ - size_of_BD_ - guardband_size * 2 - size;
-			const uintptr_t alignment_offset = (reinterpret_cast<uintptr_t>(new_block_pointer + size_of_BD_ + guardband_size)) % alignment;
+			uint8_t*				new_block_pointer = free_bd->block_pointer_ + free_bd->block_size_ - size_of_BD_ - guardband_size * 2 - size;
+			const uintptr_t			alignment_offset = (reinterpret_cast<uintptr_t>(new_block_pointer + size_of_BD_ + guardband_size)) % alignment;
 
 			// check if this block needs to be fragmented
 			if ((size_of_BD_ + guardband_size * 2 + size + alignment_offset + MAX_EXTRA_MEMORY) <= free_bd->block_size_)
@@ -333,7 +334,7 @@ void* BlockAllocator::Alloc(const size_t size, const size_t alignment)
 	ClearBlock(new_bd, CLEAN_FILL);
 
 	// add guardbands
-	for (unsigned int i = 0; i < guardband_size; ++i)
+	for (uint8_t i = 0; i < guardband_size; ++i)
 	{
 		*(new_bd->block_pointer_ + i) = GUARDBAND_FILL;
 		*(new_bd->block_pointer_ + guardband_size + size + i) = GUARDBAND_FILL;
@@ -388,8 +389,8 @@ void BlockAllocator::Defragment()
 {
 #ifdef BUILD_DEBUG
 	LOG("Defragmenting...");
-	unsigned int num_blocks_combined = 0;
-	size_t bytes_combined = 0;
+	unsigned int		num_blocks_combined = 0;
+	size_t				bytes_combined = 0;
 #endif
 
 	BD* curr = free_list_head_;
@@ -507,7 +508,7 @@ void BlockAllocator::PrintFreeDescriptors() const
 	LOG("---------- %s ----------", __FUNCTION__);
 	if (free_list_head_ != nullptr)
 	{
-		unsigned int count = 0;
+		uint32_t count = 0;
 		LOG("FREE:");
 		for (BD* bd = free_list_head_; bd != nullptr; bd = bd->next_)
 		{
@@ -528,7 +529,7 @@ void BlockAllocator::PrintUsedDescriptors() const
 	LOG("---------- %s ----------", __FUNCTION__);
 	if (user_list_head_ != nullptr)
 	{
-		unsigned int count = 0;
+		uint32_t count = 0;
 		LOG("USER:");
 		for (BD* bd = user_list_head_; bd != nullptr; bd = bd->next_)
 		{
@@ -545,4 +546,5 @@ void BlockAllocator::PrintUsedDescriptors() const
 }
 #endif
 
+} // namespace memory
 } // namespace engine

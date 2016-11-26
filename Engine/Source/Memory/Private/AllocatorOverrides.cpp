@@ -3,19 +3,19 @@
 //void* malloc(size_t size)
 //{
 //	LOG("Calling malloc(size = %zu)...", size);
-//	return engine::BlockAllocator::GetInstance()->Alloc(size);
+//	return engine::memory::BlockAllocator::GetInstance()->Alloc(size);
 //}
 //
 //void free(void* pointer)
 //{
 //	ASSERT(pointer);
 //	LOG("Calling free(pointer = %p)...", pointer);
-//	engine::BlockAllocator::GetInstance()->Free(pointer);
+//	engine::memory::BlockAllocator::GetInstance()->Free(pointer);
 //}
 
 void* operator new(size_t size)
 {
-	engine::BlockAllocator* default_allocator = engine::BlockAllocator::CreateDefaultAllocator();
+	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::CreateDefaultAllocator();
 	ASSERT(default_allocator);
 #ifdef BUILD_DEBUG
 	LOG("Calling new(size = %zu) on allocator-%d", size, default_allocator->GetID());
@@ -31,16 +31,16 @@ void operator delete(void* pointer)
 
 	// calculate the address of the descriptor from the user's pointer
 #ifdef BUILD_DEBUG
-	uint8_t* descriptor_address = static_cast<uint8_t*>(pointer) - DEFAULT_GUARDBAND_SIZE - engine::BlockAllocator::GetSizeOfBD();
+	uint8_t* descriptor_address = static_cast<uint8_t*>(pointer) - DEFAULT_GUARDBAND_SIZE - engine::memory::BlockAllocator::GetSizeOfBD();
 #else
-	uint8_t* descriptor_address = static_cast<uint8_t*>(pointer) - engine::BlockAllocator::GetSizeOfBD();
+	uint8_t* descriptor_address = static_cast<uint8_t*>(pointer) - engine::memory::BlockAllocator::GetSizeOfBD();
 #endif
 	// cast to get a descriptor
-	engine::BD* descriptor = reinterpret_cast<engine::BD*>(descriptor_address);
+	engine::memory::BD* descriptor = reinterpret_cast<engine::memory::BD*>(descriptor_address);
 	ASSERT(descriptor);
 	
 	// get the allocator from the descriptor
-	engine::BlockAllocator* allocator = descriptor->allocator_;
+	engine::memory::BlockAllocator* allocator = descriptor->allocator_;
 	ASSERT(allocator);
 #ifdef BUILD_DEBUG
 	LOG("Calling delete(pointer = %p) on allocator-%d", pointer, allocator->GetID());
@@ -52,7 +52,7 @@ void operator delete(void* pointer)
 
 void* operator new[](size_t size)
 {
-	engine::BlockAllocator* default_allocator = engine::BlockAllocator::CreateDefaultAllocator();
+	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::CreateDefaultAllocator();
 	ASSERT(default_allocator);
 #ifdef BUILD_DEBUG
 	LOG("Calling new[](size = %zu) on allocator-%d", size, default_allocator->GetID());
@@ -68,16 +68,16 @@ void operator delete[](void* pointer)
 
 	// calculate the address of the descriptor from the user's pointer
 #ifdef BUILD_DEBUG
-	uint8_t* descriptor_address = static_cast<uint8_t*>(pointer) - DEFAULT_GUARDBAND_SIZE - engine::BlockAllocator::GetSizeOfBD();
+	uint8_t* descriptor_address = static_cast<uint8_t*>(pointer) - DEFAULT_GUARDBAND_SIZE - engine::memory::BlockAllocator::GetSizeOfBD();
 #else
-	uint8_t* descriptor_address = static_cast<uint8_t*>(pointer) - engine::BlockAllocator::GetSizeOfBD();
+	uint8_t* descriptor_address = static_cast<uint8_t*>(pointer) - engine::memory::BlockAllocator::GetSizeOfBD();
 #endif
 	// cast to get a descriptor
-	engine::BD* descriptor = reinterpret_cast<engine::BD*>(descriptor_address);
+	engine::memory::BD* descriptor = reinterpret_cast<engine::memory::BD*>(descriptor_address);
 	ASSERT(descriptor);
 
 	// get the allocator from the descriptor
-	engine::BlockAllocator* allocator = descriptor->allocator_;
+	engine::memory::BlockAllocator* allocator = descriptor->allocator_;
 	ASSERT(allocator);
 #ifdef BUILD_DEBUG
 	LOG("Calling delete(pointer = %p) on allocator-%d", pointer, allocator->GetID());
@@ -87,9 +87,9 @@ void operator delete[](void* pointer)
 	allocator->Free(pointer);
 }
 
-void* operator new(size_t size, engine::AlignmentType alignment)
+void* operator new(size_t size, engine::memory::AlignmentType alignment)
 {
-	engine::BlockAllocator* default_allocator = engine::BlockAllocator::CreateDefaultAllocator();
+	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::CreateDefaultAllocator();
 	ASSERT(default_allocator);
 #ifdef BUILD_DEBUG
 	LOG("Calling new(size = %zu, alignemnt = %d) on allocator-%d", size, alignment, default_allocator->GetID());
@@ -99,10 +99,10 @@ void* operator new(size_t size, engine::AlignmentType alignment)
 	return pointer;
 }
 
-void operator delete(void* pointer, engine::AlignmentType alignment)
+void operator delete(void* pointer, engine::memory::AlignmentType alignment)
 {
 	ASSERT(pointer);
-	engine::BlockAllocator* default_allocator = engine::BlockAllocator::CreateDefaultAllocator();
+	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::CreateDefaultAllocator();
 	ASSERT(default_allocator);
 #ifdef BUILD_DEBUG
 	LOG("Calling delete(pointer = %p, alignemnt = %d) on allocator-%d", pointer, alignment, default_allocator->GetID());
@@ -110,7 +110,7 @@ void operator delete(void* pointer, engine::AlignmentType alignment)
 	default_allocator->Free(pointer);
 }
 
-void* operator new(size_t size, engine::BlockAllocator* allocator)
+void* operator new(size_t size, engine::memory::BlockAllocator* allocator)
 {
 	ASSERT(allocator);
 #ifdef BUILD_DEBUG
@@ -121,7 +121,7 @@ void* operator new(size_t size, engine::BlockAllocator* allocator)
 	return pointer;
 }
 
-void operator delete(void* pointer, engine::BlockAllocator* allocator)
+void operator delete(void* pointer, engine::memory::BlockAllocator* allocator)
 {
 	ASSERT(pointer);
 	ASSERT(allocator);
@@ -131,7 +131,7 @@ void operator delete(void* pointer, engine::BlockAllocator* allocator)
 	allocator->Free(pointer);
 }
 
-void* operator new[](size_t size, engine::BlockAllocator* allocator)
+void* operator new[](size_t size, engine::memory::BlockAllocator* allocator)
 {
 	ASSERT(allocator);
 #ifdef BUILD_DEBUG
@@ -142,7 +142,7 @@ void* operator new[](size_t size, engine::BlockAllocator* allocator)
 	return pointer;
 }
 
-void operator delete[](void* pointer, engine::BlockAllocator* allocator)
+void operator delete[](void* pointer, engine::memory::BlockAllocator* allocator)
 {
 	ASSERT(pointer);
 	ASSERT(allocator);
@@ -152,7 +152,7 @@ void operator delete[](void* pointer, engine::BlockAllocator* allocator)
 	allocator->Free(pointer);
 }
 
-void* operator new(size_t size, engine::BlockAllocator* allocator, engine::AlignmentType alignment)
+void* operator new(size_t size, engine::memory::BlockAllocator* allocator, engine::memory::AlignmentType alignment)
 {
 	ASSERT(allocator);
 #ifdef BUILD_DEBUG
@@ -163,7 +163,7 @@ void* operator new(size_t size, engine::BlockAllocator* allocator, engine::Align
 	return pointer;
 }
 
-void operator delete(void* pointer, engine::BlockAllocator* allocator, engine::AlignmentType alignment)
+void operator delete(void* pointer, engine::memory::BlockAllocator* allocator, engine::memory::AlignmentType alignment)
 {
 	ASSERT(pointer);
 	ASSERT(allocator);
@@ -177,7 +177,7 @@ void operator delete(void* pointer, engine::BlockAllocator* allocator, engine::A
 #define TRACK_NEW (__FILE__, __LINE__)
 void* operator new(size_t size, const char* file_name, unsigned int line)
 {
-	engine::BlockAllocator* default_allocator = engine::BlockAllocator::CreateDefaultAllocator();
+	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::CreateDefaultAllocator();
 	ASSERT(default_allocator);
 	LOG("Calling new(size = %zu, file_name = %s, line = %d) on allocator-%d", size, file_name, line, default_allocator->GetID());
 	void* pointer = default_allocator->Alloc(size);
@@ -187,7 +187,7 @@ void* operator new(size_t size, const char* file_name, unsigned int line)
 
 void operator delete(void* pointer, const char* file_name, unsigned int line)
 {
-	engine::BlockAllocator* default_allocator = engine::BlockAllocator::CreateDefaultAllocator();
+	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::CreateDefaultAllocator();
 	ASSERT(default_allocator);
 	LOG("Calling delete(pointer = %p, file_name = %s, line = %d) on allocator-%d", pointer, file_name, line, default_allocator->GetID());
 	default_allocator->Free(pointer);

@@ -9,7 +9,7 @@
 //#define SIMULATE_MEMORY_OVERWRITE
 
 uint8_t* AllocatorTest::memory_ = nullptr;
-engine::BlockAllocator* AllocatorTest::block_allocator_ = nullptr;
+engine::memory::BlockAllocator* AllocatorTest::block_allocator_ = nullptr;
 
 void AllocatorTest::Init(size_t total_memory)
 {
@@ -17,7 +17,7 @@ void AllocatorTest::Init(size_t total_memory)
 
 	memory_ = static_cast<uint8_t*>(_aligned_malloc(total_memory, DEFAULT_BYTE_ALIGNMENT));
 
-	block_allocator_ = engine::BlockAllocator::Create(memory_, total_memory);
+	block_allocator_ = engine::memory::BlockAllocator::Create(memory_, total_memory);
 #ifdef BUILD_DEBUG
 	block_allocator_->PrintAllDescriptors();
 #endif
@@ -26,7 +26,7 @@ void AllocatorTest::Init(size_t total_memory)
 void AllocatorTest::Reset()
 {
 	LOG("Destroying BlockAllocator...");
-	engine::BlockAllocator::Destroy(block_allocator_);
+	engine::memory::BlockAllocator::Destroy(block_allocator_);
 	block_allocator_ = nullptr;
 
 	_aligned_free(memory_);
@@ -56,9 +56,9 @@ void AllocatorTest::RunTest00()
 {
 	LOG("-------------------- Running Test 00 --------------------");
 
-	size_t size = 200;
-	size_t alignment = 32;
-	void* pointer1 = block_allocator_->Alloc(size, alignment);
+	size_t		size = 200;
+	size_t		alignment = 32;
+	void*		pointer1 = block_allocator_->Alloc(size, alignment);
 	LOG("Alloc-200 aligned:%d", reinterpret_cast<uintptr_t>(pointer1) % alignment);
 
 #ifdef BUILD_DEBUG
@@ -67,7 +67,7 @@ void AllocatorTest::RunTest00()
 
 	size = 200;
 	alignment = 16;
-	void* pointer2 = block_allocator_->Alloc(size, alignment);
+	void*		pointer2 = block_allocator_->Alloc(size, alignment);
 	LOG("Alloc-200 aligned:%d", reinterpret_cast<uintptr_t>(pointer1) % alignment);
 
 #ifdef BUILD_DEBUG
@@ -94,16 +94,17 @@ void AllocatorTest::RunTest01()
 {
 	LOG("-------------------- Running Test 01 --------------------");
 
-	const size_t num_pointers = 25;
-	char* pointers[num_pointers] = { 0 };
+	const size_t		num_pointers = 25;
+	char*				pointers[num_pointers] = { 0 };
 
-	for (unsigned int i = 0; i < num_pointers; ++i)
+	for (uint8_t i = 0; i < num_pointers; ++i)
 	{
-		const size_t max_size = 512;
-		size_t rand_size = 1 + rand() % max_size;
+		const size_t	max_size = 512;
+		size_t			rand_size = 1 + rand() % max_size;
+
 		pointers[i] = static_cast<char*>(block_allocator_->Alloc(rand_size));
 
-		const uint8_t a_ascii = 65;
+		const uint8_t	a_ascii = 65;
 		if (pointers[i])
 		{
 			for (unsigned int j = 0; j < rand_size; ++j)
@@ -130,7 +131,7 @@ void AllocatorTest::RunTest01()
 	block_allocator_->PrintAllDescriptors();
 #endif
 
-	for (unsigned int i = 0; i < num_pointers; ++i)
+	for (uint8_t i = 0; i < num_pointers; ++i)
 	{
 		if (pointers[i] != nullptr)
 		{
@@ -142,7 +143,7 @@ void AllocatorTest::RunTest01()
 		}
 	}
 
-	for (unsigned int i = 0; i < num_pointers; ++i)
+	for (uint8_t i = 0; i < num_pointers; ++i)
 	{
 		LOG("Freeing %d...", i);
 		block_allocator_->Free(pointers[i]);
@@ -160,10 +161,10 @@ void AllocatorTest::RunTest02()
 {
 	LOG("-------------------- Running Test 02 --------------------");
 
-	size_t size = 9;
-	char* buf1 = DoAlloc(size);
+	size_t		size = 9;
+	char*		buf1 = DoAlloc(size);
 	size = 23;
-	char* buf2 = DoAlloc(size);
+	char*		buf2 = DoAlloc(size);
 	
 	size = 9;
 	DoFree(buf1, size);
@@ -191,18 +192,19 @@ void AllocatorTest::RunTest02()
 void AllocatorTest::RunTest03()
 {
 	LOG("-------------------- Running Test 03 --------------------");
-	const uint16_t iterations = 512;
-	const uint32_t max_size = 1024 * 5;
-	const uint8_t success_chance = 3;
+	const uint16_t			iterations = 512;
+	const uint32_t			max_size = 1024 * 5;
+	const uint8_t			success_chance = 3;
 
 	std::vector<void*> unfreed_pointers;
 
-	for (unsigned int i = 0; i < iterations; ++i)
+	for (uint16_t i = 0; i < iterations; ++i)
 	{
-		const size_t rand_size = static_cast<size_t>(rand() % max_size);
+		const size_t		rand_size = static_cast<size_t>(rand() % max_size);
 		LOG("Request-%d Alloc size:%zu", i, rand_size);
-		void* buf = block_allocator_->Alloc(rand_size);
-		bool successful = (buf != nullptr);
+
+		void*				buf = block_allocator_->Alloc(rand_size);
+		bool				successful = (buf != nullptr);
 
 		if (successful && (rand() % 10) > success_chance)
 		{
@@ -221,9 +223,10 @@ void AllocatorTest::RunTest03()
 	block_allocator_->PrintAllDescriptors();
 #endif
 
-	const size_t num_unfreed_pointers = unfreed_pointers.size();
+	const size_t			num_unfreed_pointers = unfreed_pointers.size();
 	LOG("Freeing %zu user allocations...", num_unfreed_pointers);
-	for (unsigned int i = 0; i < num_unfreed_pointers; ++i)
+
+	for (uint16_t i = 0; i < num_unfreed_pointers; ++i)
 	{
 		block_allocator_->Free(unfreed_pointers[i]);
 	}

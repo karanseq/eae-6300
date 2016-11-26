@@ -3,8 +3,9 @@
 
 #include <string.h>			// for memset
 
-namespace engine
-{
+namespace engine {
+namespace memory {
+
 	inline size_t BlockAllocator::GetSizeOfBD()
 	{
 		return size_of_BD_;
@@ -30,4 +31,5 @@ namespace engine
 		return (static_cast<const uint8_t*>(pointer) >= block_ && static_cast<const uint8_t*>(pointer) <= (block_ + total_block_size_));
 	}
 
+} // namespace memory
 } // namespace engine

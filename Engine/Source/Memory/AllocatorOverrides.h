@@ -5,8 +5,9 @@
 #include "Assert\Assert.h"
 #include "Logger\Logger.h"
 
-namespace engine
-{
+namespace engine {
+namespace memory {
+
 	enum AlignmentType
 	{
 		ALIGNMENT_DEFAULT = 4,
@@ -16,6 +17,7 @@ namespace engine
 		ALIGNMENT_64 = 64
 	};
 
+} // namespace memory
 } // namespace engine
 
 //void* malloc(size_t size);
@@ -27,17 +29,17 @@ void operator delete(void* pointer);
 void* operator new[](size_t size);
 void operator delete[](void* pointer);
 
-void* operator new(size_t size, engine::AlignmentType alignment);
-void operator delete(void* pointer, engine::AlignmentType alignment);
+void* operator new(size_t size, engine::memory::AlignmentType alignment);
+void operator delete(void* pointer, engine::memory::AlignmentType alignment);
 
-void* operator new(size_t size, engine::BlockAllocator* allocator);
-void operator delete(void* pointer, engine::BlockAllocator* allocator);
+void* operator new(size_t size, engine::memory::BlockAllocator* allocator);
+void operator delete(void* pointer, engine::memory::BlockAllocator* allocator);
 
-void* operator new[](size_t size, engine::BlockAllocator* allocator);
-void operator delete[](void* pointer, engine::BlockAllocator* allocator);
+void* operator new[](size_t size, engine::memory::BlockAllocator* allocator);
+void operator delete[](void* pointer, engine::memory::BlockAllocator* allocator);
 
-void* operator new(size_t size, engine::BlockAllocator* allocator, engine::AlignmentType alignment);
-void operator delete(void* pointer, engine::BlockAllocator* allocator, engine::AlignmentType alignment);
+void* operator new(size_t size, engine::memory::BlockAllocator* allocator, engine::memory::AlignmentType alignment);
+void operator delete(void* pointer, engine::memory::BlockAllocator* allocator, engine::memory::AlignmentType alignment);
 
 #ifdef BUILD_DEBUG
 #define TRACK_NEW (__FILE__, __LINE__)

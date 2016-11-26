@@ -10,7 +10,7 @@
 #include "Game\MonsterChase.h"
 
 Player::Player() : controller_(new (MonsterChase::GetAllocator()) PlayerController()),
-	identity_(new (MonsterChase::GetAllocator()) engine::IdentityComponent())
+	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent())
 {}
 
 Player::~Player()

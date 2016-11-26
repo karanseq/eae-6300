@@ -1,7 +1,7 @@
 #ifndef ENGINE_ALLOCATOR_UTIL_H_
 #define ENGINE_ALLOCATOR_UTIL_H_
 
-#include <stdlib.h>
+#include <stdlib.h>									// for free
 //#include "Memory\AllocatorOverrides.h"
 
 namespace engine

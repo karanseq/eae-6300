@@ -26,8 +26,8 @@ public:
 	static void RunTest03();
 
 private:
-	static uint8_t* memory_;
-	static engine::BlockAllocator* block_allocator_;
+	static uint8_t*									memory_;
+	static engine::memory::BlockAllocator*			block_allocator_;
 };
 
 #endif // ALLOCATOR_TEST_H_
