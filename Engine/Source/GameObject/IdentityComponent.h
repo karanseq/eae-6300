@@ -23,6 +23,7 @@ namespace engine
 		{
 			id_ = copy.GetID();
 			tag_ = copy.GetTag();
+			SAFE_FREE(name_);
 			name_ = _strdup(copy.GetName());
 		}
 
@@ -52,6 +53,7 @@ namespace engine
 
 			id_ = ic.id_;
 			tag_ = ic.tag_;
+			SAFE_FREE(name_);
 			name_ = _strdup(ic.name_);
 			return *this;
 		}
