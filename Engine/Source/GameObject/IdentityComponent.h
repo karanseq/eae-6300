@@ -3,8 +3,6 @@
 
 // library includes
 #include <cstdint>
-#include <string.h>
-#include <algorithm>
 
 // engine includes
 #include "Memory\AllocatorUtil.h"
@@ -16,76 +14,31 @@ namespace gameobject {
 	class IdentityComponent
 	{
 	public:
-		IdentityComponent(uint32_t id = 0, uint32_t tag = 0, const char* name = "") : id_(id),
-			tag_(tag),
-			name_(_strdup(name))
-		{}
+		IdentityComponent(uint32_t id = 0, uint32_t tag = 0, const char* name = "");
 	
 		// standard copy constuctor
-		IdentityComponent(const IdentityComponent& copy)
-		{
-			id_ = copy.id_;
-			tag_ = copy.tag_;
-			
-			SAFE_FREE(name_);
-			name_ = _strdup(copy.name_);
-		}
+		IdentityComponent(const IdentityComponent& copy);
 
 		// move copy constructor
-		IdentityComponent(IdentityComponent&& copy)
-		{
-			id_ = copy.id_;
-			tag_ = copy.tag_;
-			std::swap(name_, copy.name_);
-		}
+		IdentityComponent(IdentityComponent&& copy);
 
-		~IdentityComponent()
-		{
-			SAFE_FREE(name_);
-		}
-
-		// accessors and mutators
-		inline void SetID(uint32_t id)								{ id_ = id; }
-		inline uint32_t GetID() const								{ return id_; }
-
-		inline void SetTag(uint32_t tag)							{ tag_ = tag; }
-		inline uint32_t GetTag() const								{ return tag_; }
-
-		inline void SetName(const char* name)						{ ASSERT(name); SAFE_FREE(name_); name_ = _strdup(name); }
-		inline const char* GetName() const							{ return name_; }
+		~IdentityComponent();
 
 		// copy assignment
-		inline IdentityComponent& operator=(const IdentityComponent& ic)
-		{
-			// check for self assignment
-			if (this == &ic)
-			{
-				return *this;
-			}
-
-			id_ = ic.id_;
-			tag_ = ic.tag_;
-
-			SAFE_FREE(name_);
-			name_ = _strdup(ic.name_);
-			
-			return *this;
-		}
+		inline IdentityComponent& operator=(const IdentityComponent& ic);		
 
 		// move assignment
-		inline IdentityComponent& operator=(IdentityComponent&& ic)
-		{
-			if (this == &ic)
-			{
-				return *this;
-			}
+		inline IdentityComponent& operator=(IdentityComponent&& ic);
 
-			id_ = ic.id_;
-			tag_ = ic.tag_;
-			std::swap(name_, ic.name_);
-			
-			return *this;
-		}
+		// accessors and mutators
+		inline void SetID(uint32_t id);
+		inline uint32_t GetID() const;
+
+		inline void SetTag(uint32_t tag);
+		inline uint32_t GetTag() const;
+
+		inline void SetName(const char* name);
+		inline const char* GetName() const;
 
 	protected:
 		uint32_t			id_;
@@ -95,5 +48,7 @@ namespace gameobject {
 
 } // namespace gameobject
 } // namespace engine
+
+#include "IdentityComponent-inl.h"
 
 #endif // ENGINE_IDENTITY_COMPONENT_H_

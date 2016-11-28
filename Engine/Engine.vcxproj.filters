@@ -93,6 +93,9 @@
     <ClInclude Include="Source\Math\MathUtil.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GameObject\IdentityComponent-inl.h">
+      <Filter>Header Files\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -112,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="Source\Math\Private\Transform.cpp">
       <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameObject\Private\IdentityComponent.cpp">
+      <Filter>Source Files\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
