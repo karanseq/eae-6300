@@ -15,7 +15,7 @@
 class Monster
 {
 public:
-	Monster(MonsterControllers controller_type = MonsterControllers::kNoMonsterController);
+	Monster(MonsterControllers controller_type, const char* name);
 	~Monster();
 
 	void Update();
@@ -29,8 +29,8 @@ public:
 	inline engine::gameobject::IdentityComponent* GetIdentity() const											{ return identity_; }
 	inline void SetIdentity(engine::gameobject::IdentityComponent* identity)									{ ASSERT(identity); SAFE_DELETE(identity_); identity_ = identity; }
 
-	inline uint8_t GetTimeToLive() const															{ return time_to_live_; }
-	inline void SetTimeToLive(uint8_t time_to_live)													{ time_to_live_ = time_to_live; }
+	inline uint8_t GetTimeToLive() const																		{ return time_to_live_; }
+	inline void SetTimeToLive(uint8_t time_to_live)																{ time_to_live_ = time_to_live; }
 
 private:
 	// disable default copy constructor

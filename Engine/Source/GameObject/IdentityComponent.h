@@ -4,6 +4,7 @@
 // library includes
 #include <cstdint>
 #include <string.h>
+#include <algorithm>
 
 // engine includes
 #include "Memory\AllocatorUtil.h"
@@ -20,13 +21,22 @@ namespace gameobject {
 			name_(_strdup(name))
 		{}
 	
+		// standard copy constuctor
 		IdentityComponent(const IdentityComponent& copy)
 		{
-			id_ = copy.GetID();
-			tag_ = copy.GetTag();
+			id_ = copy.id_;
+			tag_ = copy.tag_;
 			
 			SAFE_FREE(name_);
-			name_ = _strdup(copy.GetName());
+			name_ = _strdup(copy.name_);
+		}
+
+		// move copy constructor
+		IdentityComponent(IdentityComponent&& copy)
+		{
+			id_ = copy.id_;
+			tag_ = copy.tag_;
+			std::swap(name_, copy.name_);
 		}
 
 		~IdentityComponent()
@@ -44,7 +54,7 @@ namespace gameobject {
 		inline void SetName(const char* name)						{ ASSERT(name); SAFE_FREE(name_); name_ = _strdup(name); }
 		inline const char* GetName() const							{ return name_; }
 
-		// assignment
+		// copy assignment
 		inline IdentityComponent& operator=(const IdentityComponent& ic)
 		{
 			// check for self assignment
@@ -58,6 +68,21 @@ namespace gameobject {
 
 			SAFE_FREE(name_);
 			name_ = _strdup(ic.name_);
+			
+			return *this;
+		}
+
+		// move assignment
+		inline IdentityComponent& operator=(IdentityComponent&& ic)
+		{
+			if (this == &ic)
+			{
+				return *this;
+			}
+
+			id_ = ic.id_;
+			tag_ = ic.tag_;
+			std::swap(name_, ic.name_);
 			
 			return *this;
 		}

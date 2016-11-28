@@ -1,6 +1,9 @@
 #ifndef MONSTER_CHASE_H_
 #define MONSTER_CHASE_H_
 
+// library includes
+#include <vector>
+
 // engine includes
 #include "Memory\BlockAllocator.h"
 
@@ -72,7 +75,7 @@ private:
 
 	// game elements
 	Player*												player_;
-	Monster**											monsters_;
+	std::vector<Monster*>								monsters_;
 
 	// game counters
 	int													initial_num_monsters_;

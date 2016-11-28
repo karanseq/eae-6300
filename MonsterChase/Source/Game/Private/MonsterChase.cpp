@@ -20,22 +20,20 @@
 // static member initialization
 engine::memory::BlockAllocator* MonsterChase::game_allocator_ = nullptr;
 
-MonsterChase::MonsterChase()
+MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
+	player_(nullptr)
 {
 	// allocate memory for the game objects
 	void* aligned_memory = engine::memory::BlockAllocator::CreateDefaultAllocator()->Alloc(MEMORY_SIZE);
 	ASSERT(aligned_memory);
 
+	monsters_.reserve(MAX_MONSTERS);
+
 	// create an allocator to manage memory for the game objects
 	MonsterChase::game_allocator_ = engine::memory::BlockAllocator::Create(aligned_memory, MEMORY_SIZE);
 	ASSERT(MonsterChase::game_allocator_);
 
-	game_state_ = GameStates::kGameStateBegin;
-	player_ = nullptr;
-	monsters_ = nullptr;
-	num_monsters_ = 0;
-	ascii_index_ = 0;
-	srand((unsigned int)time(0));
+	srand(static_cast<unsigned int>(time(0)));
 }
 
 MonsterChase::~MonsterChase()
@@ -48,7 +46,7 @@ MonsterChase::~MonsterChase()
 	{
 		SAFE_DELETE(monsters_[i]);
 	}
-	SAFE_DELETE_ARRAY(monsters_);
+	monsters_.clear();
 
 	// deallocate the allocator
 	engine::memory::BlockAllocator::Destroy(MonsterChase::game_allocator_);
@@ -273,9 +271,6 @@ void MonsterChase::SaveNumMonsters(int num_monsters)
 	// save the number of monsters
 	initial_num_monsters_ = num_monsters;
 
-	// create the array
-	monsters_ = new (MonsterChase::game_allocator_) Monster*[MAX_MONSTERS];
-
 	// time to query the names of each monster
 	game_state_ = GameStates::kGameStateInputMonsterNames;
 }
@@ -308,13 +303,12 @@ void MonsterChase::CreateMonster(const char* input_name)
 	MonsterControllers controller_type = (rand() % 10) > 5 ? MonsterControllers::kSmartMonsterController : MonsterControllers::kSillyMonsterController;
 
 	// create a new monster at the back of the array
-	Monster* monster = new (MonsterChase::game_allocator_) Monster(controller_type);
-	monsters_[num_monsters_] = monster;
+	Monster* monster = new (MonsterChase::game_allocator_) Monster(controller_type, name);
+	monsters_.push_back(monster);
 	++num_monsters_;
 
 	// set this monster's attributes
 	monster->GetController()->GetGameObject()->SetPosition(monster_position);
-	monster->GetIdentity()->SetName(name);
 	monster->SetTimeToLive(MAX_MONSTER_TTL / 2 + rand() % MAX_MONSTER_TTL);
 
 	// handle smart monsters differently
@@ -341,20 +335,13 @@ void MonsterChase::DestroyMonster(int at_index)
 	ASSERT(at_index < num_monsters_);
 	ASSERT(num_monsters_ != 0);
 
-	// delete the monster at index
-	SAFE_DELETE(monsters_[at_index]);
+	// swap this monster with the last one
+	std::swap(monsters_[at_index], monsters_.back());
 
-	// check if this monster is the last one
-	if (at_index != num_monsters_ - 1)
-	{
-		// TODO: move last object and reduce fragmentation
-
-		// swap the last monster to occupy this index
-		monsters_[at_index] = monsters_[num_monsters_ - 1];
-
-		// clear the pointer
-		monsters_[num_monsters_ - 1] = nullptr;
-	}
+	// delete this monster
+	SAFE_DELETE(monsters_.back());
+	// remove its pointer from the array
+	monsters_.pop_back();
 
 	// reduce number of monsters
 	--num_monsters_;
@@ -402,8 +389,7 @@ void MonsterChase::CreatePlayer(const char* name)
 	ASSERT(name != nullptr);
 
 	// create the player at the center of the grid
-	player_ = new (MonsterChase::game_allocator_) Player();
-	player_->GetIdentity()->SetName(name);
+	player_ = new (MonsterChase::game_allocator_) Player(name);
 
 	// time to start the game
 	game_state_ = GameStates::kGameStateInputNumMonsters;

@@ -9,8 +9,8 @@
 // game includes
 #include "Game\MonsterChase.h"
 
-Player::Player() : controller_(new (MonsterChase::GetAllocator()) PlayerController()),
-	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent())
+Player::Player(const char* name) : controller_(new (MonsterChase::GetAllocator()) PlayerController()),
+	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, name))
 {}
 
 Player::~Player()

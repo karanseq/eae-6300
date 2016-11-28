@@ -13,7 +13,7 @@
 class Player
 {
 public:
-	Player();
+	Player(const char* name);
 	~Player();
 
 	void Update();

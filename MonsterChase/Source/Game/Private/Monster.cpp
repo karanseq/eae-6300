@@ -9,8 +9,8 @@
 // game includes
 #include "Game\MonsterChase.h"
 
-Monster::Monster(MonsterControllers controller_type) : controller_(nullptr),
-	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent()),
+Monster::Monster(MonsterControllers controller_type, const char* name) : controller_(nullptr),
+	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, name)),
 	time_to_live_(0)
 {
 	ASSERT(controller_type != MonsterControllers::kNoMonsterController);
