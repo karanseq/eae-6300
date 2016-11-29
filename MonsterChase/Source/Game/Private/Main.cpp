@@ -54,7 +54,7 @@ int main(int* argv, char** argc)
 #endif
 
 #ifdef ENABLE_ALLOCATOR_TEST
-	printf("Beginning allocator test...\nCheck the Output window for details.\n");
+	//printf("Beginning allocator test...\nCheck the Output window for details.\n");
 #ifdef BUILD_DEBUG
 	HeapManager_UnitTest();
 #else
@@ -65,9 +65,9 @@ int main(int* argv, char** argc)
 	AllocatorTest::RunTest03();
 	AllocatorTest::Reset();
 #endif
-	printf("Finished test.\n");
-	_getch();
-	return 0;
+	//printf("Finished test.\n");
+	//_getch();
+	//return 0;
 #endif
 
 	// initialize game

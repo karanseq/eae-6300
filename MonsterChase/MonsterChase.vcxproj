@@ -185,8 +185,10 @@
   <ItemGroup>
     <ClInclude Include="Source\Game\GameTypes.h" />
     <ClInclude Include="Source\Game\GameUtils.h" />
+    <ClInclude Include="Source\Game\Monster-inl.h" />
     <ClInclude Include="Source\Game\Monster.h" />
     <ClInclude Include="Source\Game\MonsterChase.h" />
+    <ClInclude Include="Source\Game\Player-inl.h" />
     <ClInclude Include="Source\Game\PlayerController-inl.h" />
     <ClInclude Include="Source\Game\SillyMonsterController-inl.h" />
     <ClInclude Include="Source\Game\SillyMonsterController.h" />

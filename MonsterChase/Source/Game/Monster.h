@@ -18,30 +18,36 @@ public:
 	Monster(MonsterControllers controller_type, const char* name);
 	~Monster();
 
+	// copy constructor
+	Monster(const Monster& copy);
+	// move constructor
+	Monster(Monster&& copy);
+
+	// copy assignment operator
+	inline Monster& operator=(const Monster& monster);
+	// move assignment operator
+	inline Monster& operator=(Monster&& monster);
+
 	void Update();
 
 	void Print();
 
 	// accessors and mutators
-	inline engine::gameobject::InterfaceGameObjectController* GetController() const								{ return controller_; }
-	inline void SetController(engine::gameobject::InterfaceGameObjectController* controller)					{ ASSERT(controller); SAFE_DELETE(controller_); controller_ = controller; }
+	inline engine::gameobject::InterfaceGameObjectController* GetController() const;
+	inline void SetController(engine::gameobject::InterfaceGameObjectController* controller);
 
-	inline engine::gameobject::IdentityComponent* GetIdentity() const											{ return identity_; }
-	inline void SetIdentity(engine::gameobject::IdentityComponent* identity)									{ ASSERT(identity); SAFE_DELETE(identity_); identity_ = identity; }
+	inline engine::gameobject::IdentityComponent* GetIdentity() const;
+	inline void SetIdentity(engine::gameobject::IdentityComponent* identity);
 
-	inline uint8_t GetTimeToLive() const																		{ return time_to_live_; }
-	inline void SetTimeToLive(uint8_t time_to_live)																{ time_to_live_ = time_to_live; }
-
-private:
-	// disable default copy constructor
-	Monster(const Monster& copy);
-	// disable default assignment operator
-	Monster& operator=(const Monster& monster);
+	inline uint8_t GetTimeToLive() const;
+	inline void SetTimeToLive(uint8_t time_to_live);
 
 private:
 	engine::gameobject::InterfaceGameObjectController*			controller_;
 	engine::gameobject::IdentityComponent*						identity_;
 	uint8_t														time_to_live_;
 }; // class Monster
+
+#include "Game\Monster-inl.h"
 
 #endif // MONSTER_H_

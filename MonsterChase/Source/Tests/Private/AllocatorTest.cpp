@@ -8,14 +8,14 @@
 
 //#define SIMULATE_MEMORY_OVERWRITE
 
-uint8_t* AllocatorTest::memory_ = nullptr;
-engine::memory::BlockAllocator* AllocatorTest::block_allocator_ = nullptr;
+void*									AllocatorTest::memory_ = nullptr;
+engine::memory::BlockAllocator*			AllocatorTest::block_allocator_ = nullptr;
 
 void AllocatorTest::Init(size_t total_memory)
 {
 	LOG("Testing BlockAllocator TOTAL_MEM:%zu", total_memory);
 
-	memory_ = static_cast<uint8_t*>(_aligned_malloc(total_memory, DEFAULT_BYTE_ALIGNMENT));
+	memory_ = _aligned_malloc(total_memory, DEFAULT_BYTE_ALIGNMENT);
 
 	block_allocator_ = engine::memory::BlockAllocator::Create(memory_, total_memory);
 #ifdef BUILD_DEBUG

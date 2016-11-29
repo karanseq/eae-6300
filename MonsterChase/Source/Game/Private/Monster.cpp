@@ -34,6 +34,19 @@ Monster::~Monster()
 	SAFE_DELETE(identity_);
 }
 
+Monster::Monster(const Monster& copy) : controller_(copy.controller_->Clone()),
+	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(copy.identity_->GetID(), copy.identity_->GetTag(), copy.identity_->GetName())),
+	time_to_live_(copy.time_to_live_)
+{}
+
+Monster::Monster(Monster&& copy) : controller_(copy.controller_),
+	identity_(copy.identity_),
+	time_to_live_(copy.time_to_live_)
+{
+	copy.controller_ = nullptr;
+	copy.identity_ = nullptr;
+}
+
 void Monster::Update()
 {
 	controller_->UpdateGameObject();

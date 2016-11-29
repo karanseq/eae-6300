@@ -9,6 +9,8 @@
 #include "Game\SillyMonsterController.h"
 #include "Game\SmartMonsterController.h"
 #include "Game\PlayerController.h"
+#include "Game\Player.h"
+#include "Game\Monster.h"
 
 void TestMoveSemantics()
 {
@@ -32,14 +34,28 @@ void TestMoveSemantics()
 	PlayerController player_controller_b;
 	// test move assignment operator
 	player_controller_b = std::move(player_controller_a);
+
+	LOG("-------------------- Player --------------------");
+	Player player_a("AAA");
+	Player player_b("BBB");
+	// test move assignment operator
+	player_b = std::move(player_a);
+	LOG("Player-A's name:%s\t\tPlayer-B's name:%s", player_a.GetIdentity()->GetName(), player_b.GetIdentity()->GetName());
+
+	LOG("-------------------- Monster --------------------");
+	Monster monster_silly(MonsterControllers::kSillyMonsterController, "SILLY");
+	Monster monster_smart(MonsterControllers::kSmartMonsterController, "SMART");
+	// test move assignment operator
+	monster_smart = std::move(monster_silly);
+	LOG("Silly-Monster's name:%s\t\tSmart-Monster's name:%s", monster_silly.GetIdentity()->GetName(), monster_smart.GetIdentity()->GetName());
 	
 	LOG("-------------------- Testing Move Constructors --------------------");
-	const size_t num_controllers = 5;
+	const size_t num_objects = 3;
 	LOG("-------------------- SillyMonsterController --------------------");
 	std::vector<SillyMonsterController> silly_controllers;
-	silly_controllers.reserve(num_controllers);
+	silly_controllers.reserve(num_objects);
 
-	for (uint8_t i = 0; i < num_controllers; ++i)
+	for (uint8_t i = 0; i < num_objects; ++i)
 	{
 		silly_controllers.push_back(SillyMonsterController());
 	}
@@ -47,9 +63,9 @@ void TestMoveSemantics()
 
 	LOG("-------------------- SmartMonsterController --------------------");
 	std::vector<SmartMonsterController> smart_controllers;
-	smart_controllers.reserve(num_controllers);
+	smart_controllers.reserve(num_objects);
 
-	for (uint8_t i = 0; i < num_controllers; ++i)
+	for (uint8_t i = 0; i < num_objects; ++i)
 	{
 		smart_controllers.push_back(SmartMonsterController());
 	}
@@ -57,11 +73,31 @@ void TestMoveSemantics()
 
 	LOG("-------------------- PlayerController --------------------");
 	std::vector<PlayerController> player_controllers;
-	player_controllers.reserve(num_controllers);
+	player_controllers.reserve(num_objects);
 
-	for (uint8_t i = 0; i < num_controllers; ++i)
+	for (uint8_t i = 0; i < num_objects; ++i)
 	{
 		player_controllers.push_back(PlayerController());
 	}
 	player_controllers.clear();
+
+	LOG("-------------------- Player --------------------");
+	std::vector<Player> players;
+	players.reserve(num_objects);
+
+	for (uint8_t i = 0; i < num_objects; ++i)
+	{
+		players.push_back(Player(""));
+	}
+	players.clear();
+
+	LOG("-------------------- Monster --------------------");
+	std::vector<Monster> monsters;
+	monsters.reserve(num_objects);
+
+	for (uint8_t i = 0; i < num_objects; ++i)
+	{
+		monsters.push_back(Monster(i % 2 ? MonsterControllers::kSillyMonsterController : MonsterControllers::kSmartMonsterController, ""));
+	}
+	monsters.clear();
 }
