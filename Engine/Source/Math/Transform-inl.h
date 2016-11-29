@@ -14,6 +14,7 @@ namespace math {
 		position_ = transform.position_;
 		rotation_ = transform.rotation_;
 		scale_ = transform.scale_;
+		return *this;
 	}
 
 	inline const Vec3D& Transform::GetPosition() const
