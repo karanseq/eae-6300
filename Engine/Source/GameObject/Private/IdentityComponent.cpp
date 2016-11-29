@@ -12,20 +12,16 @@ namespace gameobject {
 		name_(_strdup(name))
 	{}
 
-	IdentityComponent::IdentityComponent(const IdentityComponent& copy)
-	{
-		id_ = copy.id_;
-		tag_ = copy.tag_;
+	IdentityComponent::IdentityComponent(const IdentityComponent& copy) : id_(copy.id_),
+		tag_(copy.tag_),
+		name_(_strdup(copy.name_))
+	{}
 
-		SAFE_FREE(name_);
-		name_ = _strdup(copy.name_);
-	}
-
-	IdentityComponent::IdentityComponent(IdentityComponent&& copy)
+	IdentityComponent::IdentityComponent(IdentityComponent&& copy) : id_(copy.id_),
+		tag_(copy.tag_),
+		name_(copy.name_)
 	{
-		id_ = copy.id_;
-		tag_ = copy.tag_;
-		std::swap(name_, copy.name_);
+		copy.name_ = nullptr;
 	}
 
 	IdentityComponent::~IdentityComponent()

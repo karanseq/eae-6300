@@ -65,6 +65,9 @@
     <ClCompile Include="Source\Tests\Private\FloatValidityTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Tests\Private\MoveSemanticsTest.cpp">
+      <Filter>Source Files\Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\resource.h">
@@ -95,6 +98,15 @@
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\GameUtils.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\PlayerController-inl.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\SillyMonsterController-inl.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\SmartMonsterController-inl.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>

@@ -179,6 +179,7 @@
     <ClCompile Include="Source\Tests\Private\AllocatorTest.cpp" />
     <ClCompile Include="Source\Tests\Private\FloatValidityTest.cpp" />
     <ClCompile Include="Source\Tests\Private\HeapManager_UnitTest.cpp" />
+    <ClCompile Include="Source\Tests\Private\MoveSemanticsTest.cpp" />
     <ClCompile Include="Source\Tests\Private\VectorConstnessTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -186,7 +187,10 @@
     <ClInclude Include="Source\Game\GameUtils.h" />
     <ClInclude Include="Source\Game\Monster.h" />
     <ClInclude Include="Source\Game\MonsterChase.h" />
+    <ClInclude Include="Source\Game\PlayerController-inl.h" />
+    <ClInclude Include="Source\Game\SillyMonsterController-inl.h" />
     <ClInclude Include="Source\Game\SillyMonsterController.h" />
+    <ClInclude Include="Source\Game\SmartMonsterController-inl.h" />
     <ClInclude Include="Source\Game\SmartMonsterController.h" />
     <ClInclude Include="Source\Game\Player.h" />
     <ClInclude Include="Source\Game\PlayerController.h" />

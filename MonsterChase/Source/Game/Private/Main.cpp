@@ -21,7 +21,8 @@ bool HeapManager_UnitTest();
 #endif // ENABLE_ALLOCATOR_TEST
 
 //#define ENABLE_VECTOR_CONST_TEST
-#define ENABLE_FLOAT_VALIDITY_TEST
+//#define ENABLE_FLOAT_VALIDITY_TEST
+//#define ENABLE_MOVE_SEMANTICS_TEST
 
 #ifdef ENABLE_VECTOR_CONST_TEST
 void TestVectorConstness();
@@ -30,6 +31,10 @@ void TestVectorConstness();
 #ifdef ENABLE_FLOAT_VALIDITY_TEST
 void TestFloatValidity();
 #endif // ENABLE_FLOAT_VALIDITY_TEST
+
+#ifdef ENABLE_MOVE_SEMANTICS_TEST
+void TestMoveSemantics();
+#endif // ENABLE_MOVE_SEMANTICS_TEST
 
 int main(int* argv, char** argc)
 {
@@ -42,6 +47,10 @@ int main(int* argv, char** argc)
 
 #ifdef ENABLE_FLOAT_VALIDITY_TEST
 	TestFloatValidity();
+#endif
+
+#ifdef ENABLE_MOVE_SEMANTICS_TEST
+	TestMoveSemantics();
 #endif
 
 #ifdef ENABLE_ALLOCATOR_TEST

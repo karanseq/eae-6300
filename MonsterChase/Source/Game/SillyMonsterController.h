@@ -11,23 +11,31 @@ class SillyMonsterController : public engine::gameobject::InterfaceGameObjectCon
 {
 public:
 	SillyMonsterController();
+	SillyMonsterController(engine::gameobject::GameObject* game_object);
 	virtual ~SillyMonsterController();
 
+	// copy constructor
+	SillyMonsterController(const SillyMonsterController& copy);
+	// move contructor
+	SillyMonsterController(SillyMonsterController&& copy);
+
+	// copy assignment operator
+	inline SillyMonsterController& operator=(const SillyMonsterController& controller);
+	// move assignment operator
+	inline SillyMonsterController& operator=(SillyMonsterController&& controller);
+
 	/* Implement InterfaceGameObjectController */
-	inline void SetGameObject(engine::gameobject::GameObject* game_object) override				{ ASSERT(game_object); SAFE_DELETE(game_object_); game_object_ = game_object; }
-	inline engine::gameobject::GameObject* GetGameObject() override								{ return game_object_; }
+	SillyMonsterController* Clone() const override;
+	inline engine::gameobject::GameObject* GetGameObject() override;
+	inline void SetGameObject(engine::gameobject::GameObject* game_object) override;
 
 	void UpdateGameObject() override;
 
 private:
-	// disable default copy constructor
-	SillyMonsterController(const SillyMonsterController& copy);
-	// disable default assignment operator
-	SillyMonsterController& operator=(const SillyMonsterController& monster);
-
-private:
 	engine::gameobject::GameObject* game_object_;
 }; // class SillyMonsterController
+
+#include "SillyMonsterController-inl.h"
 
 #endif // SILLY_MONSTER_CONTROLLER_H_
 

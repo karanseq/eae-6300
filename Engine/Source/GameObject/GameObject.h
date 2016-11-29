@@ -15,10 +15,20 @@ class GameObject
 public:
 	GameObject() : transform_()
 	{}
+	GameObject(const engine::math::Transform& transform) : transform_(transform)
+	{}
+
 	virtual ~GameObject()
 	{}
 
+	// copy constructor
+	GameObject(const GameObject& copy) : transform_(copy.transform_)
+	{}
 
+	// copy assignment operator
+	inline GameObject& operator=(const GameObject& game_object)						{ transform_ = game_object.transform_; }
+
+	// accessors and mutators
 	inline const engine::math::Transform& GetTransform() const						{ return transform_; }
 	inline void SetTransform(const engine::math::Transform& transform)				{ transform_ = transform; }
 
@@ -32,13 +42,7 @@ public:
 	inline void SetScale(const engine::math::Vec3D& scale)							{ transform_.SetScale(scale); }
 
 private:
-	// disable default copy constructor
-	GameObject(const GameObject& copy);
-	// disable default assignment operator
-	inline GameObject& operator=(const GameObject& game_object);
-
-private:
-	engine::math::Transform			transform_;
+	engine::math::Transform transform_;
 }; // class GameObject
 
 } // namespace gameobject

@@ -3,12 +3,6 @@
 #include "Game\Monster.h"
 #include "Game\GameUtils.h"
 
-// engine includes 
-#include "Math\Vec2D.h"
-#include "Assert\Assert.h"
-#include "Logger\Logger.h"
-#include "Memory\AllocatorOverrides.h"
-
 // library includes
 #include <stdio.h>
 #include <conio.h>
@@ -16,6 +10,12 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
+
+// engine includes 
+#include "Math\Vec2D.h"
+#include "Assert\Assert.h"
+#include "Logger\Logger.h"
+#include "Memory\AllocatorOverrides.h"
 
 // static member initialization
 engine::memory::BlockAllocator* MonsterChase::game_allocator_ = nullptr;

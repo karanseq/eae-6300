@@ -11,26 +11,33 @@ class SmartMonsterController : public engine::gameobject::InterfaceGameObjectCon
 {
 public:
 	SmartMonsterController();
+	SmartMonsterController(engine::gameobject::GameObject* game_object);
 	virtual ~SmartMonsterController();
 
-	/* Implement InterfaceGameObjectController */
-	inline void SetGameObject(engine::gameobject::GameObject* game_object) override				{ ASSERT(game_object); SAFE_DELETE(game_object_); game_object_ = game_object; }
-	inline engine::gameobject::GameObject* GetGameObject() override								{ return game_object_; }
+	// copy constructor
+	SmartMonsterController(const SmartMonsterController& copy);
+	// move constructor
+	SmartMonsterController(SmartMonsterController&& copy);
 
+	// copy assignment operator
+	inline SmartMonsterController& operator=(const SmartMonsterController& controller);
+	// move assignment operator
+	inline SmartMonsterController& operator=(SmartMonsterController&& controller);
+
+	/* Implement InterfaceGameObjectController */
+	SmartMonsterController* Clone() const override;
+	inline engine::gameobject::GameObject* GetGameObject() override;
+	inline void SetGameObject(engine::gameobject::GameObject* game_object) override;
 	void UpdateGameObject() override;
 
-	inline void SetTarget(engine::gameobject::GameObject* target)								{ ASSERT(target); SAFE_DELETE(target_); target_ = target; }
-	inline engine::gameobject::GameObject* GetTarget()											{ return target_; }
-
-private:
-	// disable default copy constructor
-	SmartMonsterController(const SmartMonsterController& copy);
-	// disable default assignment operator
-	SmartMonsterController& operator=(const SmartMonsterController& monster);
+	inline engine::gameobject::GameObject* GetTarget();
+	inline void SetTarget(engine::gameobject::GameObject* target);
 
 private:
 	engine::gameobject::GameObject* game_object_;
 	engine::gameobject::GameObject* target_;
 }; // class SmartMonsterController
+
+#include "SmartMonsterController-inl.h"
 
 #endif // SMART_MONSTER_CONTROLLER_H_

@@ -16,6 +16,8 @@ class InterfaceGameObjectController
 public:
 	virtual ~InterfaceGameObjectController() {}
 
+	virtual InterfaceGameObjectController* Clone() const = 0;
+
 	virtual GameObject* GetGameObject() = 0;
 	virtual void SetGameObject(GameObject* game_object) = 0;
 
