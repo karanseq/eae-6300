@@ -1,14 +1,14 @@
 #ifndef PLAYER_CONTROLLER_H_
 #define PLAYER_CONTROLLER_H_
 
-// game includes
-#include "Game\GameTypes.h"
-
 // engine includes
 #include "GameObject\InterfaceGameObjectController.h"
 #include "GameObject\GameObject.h"
 #include "Memory\AllocatorUtil.h"
 #include "Assert\Assert.h"
+
+// game includes
+#include "Game\GameTypes.h"
 
 class PlayerController : public engine::gameobject::InterfaceGameObjectController
 {
