@@ -1,6 +1,8 @@
 #ifndef MONSTER_CHASE_H_
 #define MONSTER_CHASE_H_
 
+#include <stdint.h>
+
 #include "Player.h"
 #include "Monster.h"
 
@@ -49,9 +51,9 @@ public:
 	void ValidateMove(const char* input);
 
 	// game logic
-	void SaveNumMonsters(int num_monsters);
+	void SaveNumMonsters(uint8_t num_monsters);
 	void CreateMonster(const char* input_name = NULL);
-	void DestroyMonster(int at_index);
+	void DestroyMonster(uint8_t at_index);
 	void UpdateMonsters();
 	void GetNameForMonster(char* name);
 
@@ -75,9 +77,9 @@ private:
 	Monster** monsters_;
 
 	// game counters
-	int initial_num_monsters_;
-	int num_monsters_;
-	int ascii_index_;
+	uint8_t initial_num_monsters_;
+	uint8_t num_monsters_;
+	uint8_t ascii_index_;
 };
 
 #endif // MONSTER_CHASE_H_

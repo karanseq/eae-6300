@@ -32,7 +32,7 @@ BlockAllocator::BlockAllocator() : block_(NULL),
 	Init();
 }
 
-BlockAllocator::BlockAllocator(const size_t block_size, const unsigned int num_block_descriptors) : block_(NULL),
+BlockAllocator::BlockAllocator(const size_t block_size, const uint32_t num_block_descriptors) : block_(NULL),
 	total_block_size_(block_size),
 	num_block_descriptors_(num_block_descriptors),
 	pool_head_(NULL),
@@ -48,7 +48,7 @@ BlockAllocator::~BlockAllocator()
 	block_ = NULL;
 }
 
-BlockAllocator* BlockAllocator::Create(const size_t block_size, const unsigned int num_block_descriptors)
+BlockAllocator* BlockAllocator::Create(const size_t block_size, const uint32_t num_block_descriptors)
 {
 	if (BlockAllocator::instance_ == NULL)
 	{
@@ -97,7 +97,7 @@ void BlockAllocator::InitBlockDescriptors()
 #endif
 
 	// initialize the pool of block descriptors
-	for (unsigned int i = 0; i < num_block_descriptors_; ++i)
+	for (uint32_t i = 0; i < num_block_descriptors_; ++i)
 	{
 		// initialize the block descriptor
 		BD* bd = (pool_head_ + i);
@@ -252,10 +252,10 @@ bool BlockAllocator::CheckMemoryOverwrite(BD* bd) const
 {
 	ASSERT(bd != NULL);
 
-	unsigned int lower_byte_counter = 0, upper_byte_counter = 0;
+	uint8_t lower_byte_counter = 0, upper_byte_counter = 0;
 	size_t search_size = DEFAULT_GUARDBAND_SIZE + DEFAULT_BYTE_ALIGNMENT + MAX_EXTRA_MEMORY;
 	search_size = search_size > bd->block_size_ ? bd->block_size_ : search_size;
-	for (unsigned int i = 0; i < search_size; ++i)
+	for (uint8_t i = 0; i < search_size; ++i)
 	{
 		// check lower guardband
 		lower_byte_counter += (*(bd->block_pointer_ + i) == GUARDBAND_FILL) ? 1 : 0;
@@ -360,7 +360,7 @@ void* BlockAllocator::Alloc(const size_t size)
 
 #ifdef BUILD_DEBUG
 	// add guardbands
-	for (unsigned int i = 0; i < DEFAULT_GUARDBAND_SIZE; ++i)
+	for (uint8_t i = 0; i < DEFAULT_GUARDBAND_SIZE; ++i)
 	{
 		*(new_bd->block_pointer_ + i) = GUARDBAND_FILL;
 		*(new_bd->block_pointer_ + DEFAULT_GUARDBAND_SIZE + size + i) = GUARDBAND_FILL;
@@ -435,7 +435,7 @@ void BlockAllocator::Defragment()
 {
 #ifdef BUILD_DEBUG
 	LOG("Defragmenting...");
-	unsigned int num_blocks_combined = 0;
+	uint32_t num_blocks_combined = 0;
 	size_t bytes_combined = 0;
 #endif
 
@@ -571,7 +571,7 @@ void BlockAllocator::PrintFreeDescriptors() const
 	if (free_list_head_ != NULL)
 	{
 		LOG("---------- %s ----------", __FUNCTION__);
-		unsigned int count = 0;
+		uint32_t count = 0;
 		LOG("FREE:");
 		for (BD* bd = free_list_head_; bd != NULL; bd = bd->next_)
 		{
@@ -588,7 +588,7 @@ void BlockAllocator::PrintUsedDescriptors() const
 	if (user_list_head_ != NULL)
 	{
 		LOG("---------- %s ----------", __FUNCTION__);
-		unsigned int count = 0;
+		uint32_t count = 0;
 		LOG("USER:");
 		for (BD* bd = user_list_head_; bd != NULL; bd = bd->next_)
 		{
