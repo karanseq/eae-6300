@@ -35,8 +35,8 @@ public:
 	size_t block_size_;					// size of the actual block of data
 
 #ifdef BUILD_DEBUG
-	static unsigned int counter_;		// a counter to keep track of all the descriptors
-	unsigned int id_;					// an identifier for each descriptor
+	static uint32_t counter_;		// a counter to keep track of all the descriptors
+	uint32_t id_;					// an identifier for each descriptor
 #endif
 
 	void Init();
@@ -53,7 +53,7 @@ class BlockAllocator
 {
 protected:
 	BlockAllocator();
-	BlockAllocator(const size_t block_size = DEFAULT_BLOCK_SIZE, const unsigned int num_block_descriptors = DEFAULT_NUM_BLOCK_DESCRIPTORS);
+	BlockAllocator(const size_t block_size = DEFAULT_BLOCK_SIZE, const uint32_t num_block_descriptors = DEFAULT_NUM_BLOCK_DESCRIPTORS);
 	~BlockAllocator();
 	static BlockAllocator* instance_;
 
@@ -74,7 +74,7 @@ protected:
 #endif
 
 public:
-	static BlockAllocator* Create(const size_t block_size = DEFAULT_BLOCK_SIZE, const unsigned int num_block_descriptors = DEFAULT_NUM_BLOCK_DESCRIPTORS);
+	static BlockAllocator* Create(const size_t block_size = DEFAULT_BLOCK_SIZE, const uint32_t num_block_descriptors = DEFAULT_NUM_BLOCK_DESCRIPTORS);
 	static void Destroy();
 
 	// Allocate a block of memory with given size
