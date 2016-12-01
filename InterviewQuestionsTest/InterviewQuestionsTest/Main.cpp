@@ -30,6 +30,9 @@ void PrintLinkedList(Node* head, const size_t num_nodes)
 	}
 }
 
+/*
+	Reverse a linked list in place.
+*/
 Node* ReverseLinkedList(Node* head)
 {
 	if (!head)
@@ -93,6 +96,9 @@ void TestReverseLinkedList()
 	printf("-------------------- %s ended --------------------\n", __FUNCTION__);
 }
 
+/*
+	Detect if a linked list is circular.
+*/
 bool IsCircularLinkedList(Node* head)
 {
 	if (!head)
@@ -158,14 +164,52 @@ void TestIsCircularLinkedList()
 	printf("-------------------- %s ended --------------------\n", __FUNCTION__);
 }
 
+/*
+	Reverse the words in a string in place.
+*/
 void ReverseWords(char* sentence)
-{}
+{
+	if (!sentence)
+	{
+		return;
+	}
+
+	uint16_t front = 0, back = 0;
+	while (true)
+	{
+		if (*(sentence + back) == ' ' || *(sentence + back) == '\0')
+		{
+			uint16_t i = front, j = back;
+			while (i < j)
+			{
+				char swap = *(sentence + i);
+				*(sentence + i) = *(sentence + j - 1);
+				*(sentence + j - 1) = swap;
+				++i;
+				--j;
+			}
+
+			if (*(sentence + back) == '\0')
+			{
+				break;
+			}
+			else
+			{
+				front = ++back;
+			}
+		}
+		else
+		{
+			++back;
+		}
+	}
+}
 
 void TestReverseWords()
 {
 	printf("-------------------- %s started --------------------\n", __FUNCTION__);
 
-	char sentence[14] = { 't', 'w', 'i', 'n', ' ', 'c', 'y', 'l', 'i', 'n', 'd', 'e', 'r', '\0' };
+	char sentence[20] = { 't', 'w', 'i', 'n', ' ', 'c', 'y', 'l', 'i', 'n', 'd', 'e', 'r', 's', '\0' };
 	printf("Sentence:%s\n", sentence);
 
 	ReverseWords(sentence);
@@ -173,6 +217,118 @@ void TestReverseWords()
 	printf("Reversed sentence:%s\n", sentence);
 
 	printf("-------------------- %s ended --------------------\n", __FUNCTION__);
+}
+
+/*
+	Implement the CRT strcmp(): int strcmp( const char * i_lhs, const char * i_rsh).
+*/
+int StringCompare(const char* s1, const char* s2)
+{
+	if (s1 && !s2)							return 1;
+	if (!s1 && s2)							return -1;
+	if (!s1 && !s2)							return 0;
+
+	uint16_t i = 0;
+	int return_value = 0;
+
+	// loop until characters are equal
+	while (*(s1 + i) && *(s2 + i))
+	{
+		if (*(s1 + i) == *(s2 + i))
+		{
+			++i;
+			continue;
+		}
+
+		return_value = (*(s1 + i) > *(s2 + i)) ? 1 : -1;
+		++i;
+		break;
+	}
+
+	// loop until end of string
+	while (*(s1 + i) && *(s2 + i))
+	{
+		++i;
+	}
+
+	if (*(s1 + i) && !*(s2 + i))			return 1;
+	else if (*(s2 + i) && !*(s1 + i))		return -1;
+
+	return return_value;
+}
+
+void TestStringCompare()
+{
+	printf("-------------------- %s started --------------------\n", __FUNCTION__);
+
+	const char* s1 = "baa";
+	const char* s2 = "bbb";
+
+	printf("StringCompare(%s, %s) = %d\n", s1, s2, StringCompare(s1, s2));
+
+	printf("-------------------- %s ended --------------------\n", __FUNCTION__);
+}
+
+/*
+	Reverse a string in place.
+*/
+void ReverseString(char* string)
+{
+	if (!string)
+	{
+		return;
+	}
+
+	uint16_t back = 0;
+	while (*(string + back) != '\0')
+	{
+		++back;
+	}
+
+	--back;
+	uint16_t front = 0;
+	while (front < back)
+	{
+		char swap = *(string + front);
+		*(string + front) = *(string + back);
+		*(string + back) = swap;
+		++front;
+		--back;
+	}
+}
+
+void TestReverseString()
+{
+	printf("-------------------- %s started --------------------\n", __FUNCTION__);
+
+	char string[7] = { '1', '3', '0', '0', 'c', 'c', '\0' };
+	printf("String:%s\n", string);
+
+	ReverseString(string);
+
+	printf("Reversed string:%s\n", string);
+
+	printf("-------------------- %s ended --------------------\n", __FUNCTION__);
+}
+
+/*
+	Remove a given character from a string in place ( "AABBAABBC" - 'A' becomes "BBBBC").
+*/
+void RemoveCharFromString(const char c, char* s)
+{
+
+}
+
+void TestRemoveCharFromString()
+{
+	char string[7] = { '1', '3', '0', '0', 'c', 'c', '\0' };
+	const char remove = '0';
+
+	printf("String before removing %c:%s\n", remove, string);
+
+	RemoveCharFromString(remove, string);
+
+	printf("String after removing %c:%s\n", remove, string);
 }
 
 int main()
@@ -186,6 +342,15 @@ int main()
 	printf("\n\n");
 
 	TestReverseWords();
+	printf("\n\n");
+
+	TestStringCompare();
+	printf("\n\n");
+
+	TestReverseString();
+	printf("\n\n");
+
+	TestRemoveCharFromString();
 	printf("\n\n");
 
 	_getch();
