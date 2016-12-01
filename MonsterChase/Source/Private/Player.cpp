@@ -22,8 +22,6 @@ Player::~Player()
 
 void Player::Move(MoveDirection move_direction)
 {
-	float new_row = 0, new_column = 0;
-
 	switch (move_direction)
 	{
 	case MoveDirectionLeft:

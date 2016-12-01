@@ -92,7 +92,7 @@ void BlockAllocator::InitFirstBlockDescriptor()
 	AddToList(&free_list_head_, &first_bd, false);
 }
 
-void BlockAllocator::AddToList(BD** head, BD** bd, bool enable_sort)
+void BlockAllocator::AddToList(BD** head, BD** bd, const bool enable_sort)
 {
 	ASSERT(head != NULL);
 	ASSERT(bd != NULL);
@@ -173,7 +173,7 @@ void BlockAllocator::RemoveFromList(BD** head, BD** bd)
 }
 
 #ifdef BUILD_DEBUG
-bool BlockAllocator::CheckMemoryOverwrite(BD* bd) const
+bool BlockAllocator::CheckMemoryOverwrite(const BD* bd) const
 {
 	ASSERT(bd != NULL);
 	unsigned int lower_byte_counter = 0, upper_byte_counter = 0;

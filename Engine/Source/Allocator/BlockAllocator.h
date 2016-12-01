@@ -30,8 +30,8 @@ public:
 
 #ifdef BUILD_DEBUG
 	size_t user_size_;					// size of the block requested by the user
-	unsigned int id_;					// an identifier for each descriptor
-	static unsigned int counter_;		// a counter to keep track of all the descriptors
+	uint32_t id_;						// an identifier for each descriptor
+	static uint32_t counter_;			// a counter to keep track of all the descriptors
 #endif
 
 	void Init();
@@ -55,12 +55,12 @@ protected:
 	void Init();
 	void InitFirstBlockDescriptor();
 
-	void AddToList(BD** head, BD** bd, bool enable_sort);
+	void AddToList(BD** head, BD** bd, const bool enable_sort);
 	void RemoveFromList(BD** head, BD** bd);
 
 #ifdef BUILD_DEBUG
-	bool CheckMemoryOverwrite(BD* bd) const;
-	inline void ClearBlock(BD* bd, const unsigned char fill);
+	bool CheckMemoryOverwrite(const BD* bd) const;
+	inline void ClearBlock(const BD* bd, const unsigned char fill);
 #endif
 
 public:

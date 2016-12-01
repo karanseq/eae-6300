@@ -16,7 +16,7 @@ MonsterChase::MonsterChase()
 	monsters_ = NULL;
 	num_monsters_ = 0;
 	ascii_index_ = 0;
-	srand((unsigned int)time(0));
+	srand(static_cast<unsigned int>(time(0)));
 }
 
 MonsterChase::~MonsterChase()
@@ -31,7 +31,7 @@ MonsterChase::~MonsterChase()
 	// deallocate the monsters
 	if (monsters_ != NULL)
 	{
-		for (int i = 0; i < num_monsters_; ++i)
+		for (uint8_t i = 0; i < num_monsters_; ++i)
 		{
 			if (monsters_[i] != NULL)
 			{
@@ -105,7 +105,7 @@ void MonsterChase::PrintMessageMonsterName()
 
 void MonsterChase::PrintGameInformation()
 {
-	for (int i = 0; i < num_monsters_; ++i)
+	for (uint8_t i = 0; i < num_monsters_; ++i)
 	{
 		monsters_[i]->Print();
 	}
@@ -158,8 +158,8 @@ void MonsterChase::ValidateNumber(const char* input)
 	}
 
 	// check if a number was entered
-	int number = -1;
-	if (sscanf_s(input, "%d", &number) > 0)
+	uint8_t number = -1;
+	if (sscanf_s(input, "%hhd", &number) > 0)
 	{
 		// check if the number was within our range
 		if (number > 0 && number <= Monster::MAX_MONSTERS)
@@ -185,14 +185,14 @@ void MonsterChase::ValidateName(const char* input)
 
 	// count the number of white spaces in the input
 	char c = 0;
-	int i = 0, count = 0;
+	uint8_t i = 0, count = 0;
 	while (input[i])
 	{
 		c = input[i++];
 		count += isblank(c) ? 1 : 0;
 	}
 
-	int input_length = static_cast<int>(strlen(input));
+	uint8_t input_length = static_cast<uint8_t>(strlen(input));
 	if (input_length > Player::MAX_NAME_LENGTH				// check if the name was within our range
 		|| count >= input_length - 1)						// check if the input contained only white spaces
 	{
@@ -269,7 +269,7 @@ void MonsterChase::ValidateMove(const char* input)
 	}
 }
 
-void MonsterChase::SaveNumMonsters(int num_monsters)
+void MonsterChase::SaveNumMonsters(uint8_t num_monsters)
 {
 	// validate input
 	ASSERT(num_monsters > 0);
@@ -323,7 +323,7 @@ void MonsterChase::CreateMonster(const char* input_name)
 	}
 }
 
-void MonsterChase::DestroyMonster(int at_index)
+void MonsterChase::DestroyMonster(uint8_t at_index)
 {
 	// validate inputs, bounds and data state
 	ASSERT(at_index >= 0);
@@ -353,13 +353,13 @@ void MonsterChase::DestroyMonster(int at_index)
 void MonsterChase::UpdateMonsters()
 {
 	// touch all monsters
-	for (int i = 0; i < num_monsters_; ++i)
+	for (uint8_t i = 0; i < num_monsters_; ++i)
 	{
 		monsters_[i]->Move(player_->GetPosition());
 	}
 
 	// check if any monsters must be deleted
-	for (int i = 0; i < num_monsters_; ++i)
+	for (uint8_t i = 0; i < num_monsters_; ++i)
 	{
 		if (monsters_[i]->GetTimeToLive() <= 0)
 		{

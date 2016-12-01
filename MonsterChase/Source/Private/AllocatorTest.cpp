@@ -98,14 +98,14 @@ void AllocatorTest::RunTest01()
 	const size_t num_pointers = 25;
 	char* pointers[num_pointers] = { 0 };
 
-	for (unsigned int i = 0; i < num_pointers; ++i)
+	for (uint8_t i = 0; i < num_pointers; ++i)
 	{
 		size_t rand_size = 1 + rand() % 512;
 		pointers[i] = static_cast<char*>(block_allocator_->Alloc(rand_size));
 
 		if (pointers[i])
 		{
-			for (unsigned int j = 0; j < rand_size; ++j)
+			for (uint16_t j = 0; j < rand_size; ++j)
 			{
 				pointers[i][j] = 65 + i;
 			}
@@ -129,7 +129,7 @@ void AllocatorTest::RunTest01()
 	block_allocator_->PrintAllDescriptors();
 #endif
 
-	for (unsigned int i = 0; i < num_pointers; ++i)
+	for (uint8_t i = 0; i < num_pointers; ++i)
 	{
 		if (pointers[i] != NULL)
 		{
@@ -141,7 +141,7 @@ void AllocatorTest::RunTest01()
 		}
 	}
 
-	for (unsigned int i = 0; i < num_pointers; ++i)
+	for (uint8_t i = 0; i < num_pointers; ++i)
 	{
 		LOG("Freeing %d...", i);
 		block_allocator_->Free(pointers[i]);
@@ -182,16 +182,16 @@ void AllocatorTest::RunTest02()
 void AllocatorTest::RunTest03()
 {
 	LOG("-------------------- Running Test 03 --------------------");
-	const unsigned int iterations = 512;
-	const unsigned int max_size = 1024 * 5;
+	const uint16_t iterations = 512;
+	const uint16_t max_size = 1024 * 5;
 
-	std::vector<void*> unfreed_pointers;
+	std::vector<uint8_t*> unfreed_pointers;
 
-	for (unsigned int i = 0; i < iterations; ++i)
+	for (uint16_t i = 0; i < iterations; ++i)
 	{
 		const size_t rand_size = static_cast<size_t>(rand() % max_size);
 		LOG("Request-%d Alloc size:%zu", i, rand_size);
-		void* buf = block_allocator_->Alloc(rand_size);
+		uint8_t* buf = static_cast<uint8_t*>(block_allocator_->Alloc(rand_size));
 		bool successful = (buf != NULL);
 
 		if (successful && (rand() % 10) > 3)
@@ -213,7 +213,7 @@ void AllocatorTest::RunTest03()
 
 	const size_t num_unfreed_pointers = unfreed_pointers.size();
 	LOG("Freeing %zu user allocations...", num_unfreed_pointers);
-	for (unsigned int i = 0; i < num_unfreed_pointers; ++i)
+	for (uint16_t i = 0; i < num_unfreed_pointers; ++i)
 	{
 		block_allocator_->Free(unfreed_pointers[i]);
 	}

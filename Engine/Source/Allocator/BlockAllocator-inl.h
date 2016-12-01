@@ -6,7 +6,7 @@
 namespace engine
 {
 #ifdef BUILD_DEBUG
-	inline void BlockAllocator::ClearBlock(BD* bd, const unsigned char fill)
+	inline void BlockAllocator::ClearBlock(const BD* bd, const unsigned char fill)
 	{
 		ASSERT(bd != NULL);
 		memset(bd->block_pointer_, fill, bd->block_size_);

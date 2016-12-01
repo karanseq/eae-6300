@@ -1,6 +1,8 @@
 #ifndef MONSTER_CHASE_H_
 #define MONSTER_CHASE_H_
 
+#include <stdint.h>
+
 #include "Player.h"
 #include "Monster.h"
 
@@ -49,9 +51,9 @@ public:
 	void ValidateMove(const char* input);
 
 	// game logic
-	void SaveNumMonsters(int num_monsters);
+	void SaveNumMonsters(uint8_t num_monsters);
 	void CreateMonster(const char* input_name = NULL);
-	void DestroyMonster(int at_index);
+	void DestroyMonster(uint8_t at_index);
 	void UpdateMonsters();
 	void GetNameForMonster(char* name);
 
@@ -60,11 +62,11 @@ public:
 	inline GameState GetState() const { return game_state_; }
 
 	// game constants
-	static const int MAX_INPUT_SIZE = 256;
-	static const int MAX_ROWS = 50;
-	static const int MAX_COLS = 50;
-	static const int START_ASCII = 97;
-	static const int MAX_ASCII = 25;
+	static const uint16_t MAX_INPUT_SIZE = 256;
+	static const uint8_t MAX_ROWS = 50;
+	static const uint8_t MAX_COLS = 50;
+	static const uint8_t START_ASCII = 97;
+	static const uint8_t MAX_ASCII = 25;
 
 private:
 	// field to maintain the current state of the game
@@ -75,9 +77,9 @@ private:
 	Monster** monsters_;
 
 	// game counters
-	int initial_num_monsters_;
-	int num_monsters_;
-	int ascii_index_;
+	uint8_t initial_num_monsters_;
+	uint8_t num_monsters_;
+	uint8_t ascii_index_;
 };
 
 #endif // MONSTER_CHASE_H_

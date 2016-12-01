@@ -178,8 +178,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AllocatorTest.h" />
+    <ClInclude Include="Source\Monster-inl.h" />
     <ClInclude Include="Source\Monster.h" />
     <ClInclude Include="Source\MonsterChase.h" />
+    <ClInclude Include="Source\Player-inl.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\resource.h" />
   </ItemGroup>

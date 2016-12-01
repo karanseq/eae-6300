@@ -1,6 +1,8 @@
 #ifndef MONSTER_H_
 #define MONSTER_H_
 
+#include <stdint.h>
+
 #include "Player.h"
 
 class engine::Vec2D;
@@ -17,16 +19,18 @@ public:
 	virtual void Print() const;
 
 	// accessors and mutators
-	inline int GetTimeToLive() const { return time_to_live_; }
-	inline void SetTimeToLive(int time_to_live) { time_to_live_ = time_to_live; }
+	inline int GetTimeToLive() const;
+	inline void SetTimeToLive(uint8_t time_to_live);
 
 	// constants
-	static const int MAX_MONSTERS = 10;
-	static const int MAX_MONSTER_TTL = 10;
+	static const uint8_t MAX_MONSTERS = 10;
+	static const uint8_t MAX_MONSTER_TTL = 10;
 
 protected:
 	// data
-	int time_to_live_;
+	uint8_t time_to_live_;
 };
+
+#include "Monster-inl.h"
 
 #endif // MONSTER_H_
