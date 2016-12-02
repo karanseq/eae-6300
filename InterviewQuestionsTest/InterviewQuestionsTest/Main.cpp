@@ -316,20 +316,64 @@ void TestReverseString()
 */
 void RemoveCharFromString(const char c, char* s)
 {
+	if (!s)
+	{
+		return;
+	}
 
+	uint16_t i = 0;
+	while (*(s + i) != '\0')
+	{
+		if (*(s + i) == c)
+		{
+			uint16_t j = i + 1;
+			while (*(s + j) != '\0')
+			{
+				if (*(s + j) != c)
+				{
+					char swap = *(s + j);
+					*(s + j) = *(s + i);
+					*(s + i) = swap;
+					break;
+				}
+				++j;
+			}
+
+			if (*(s + j) == '\0')
+			{
+				*(s + i) = '\0';
+			}
+		}
+		++i;
+	}
 }
 
 void TestRemoveCharFromString()
 {
+	printf("-------------------- %s started --------------------\n", __FUNCTION__);
+
 	char string[7] = { '1', '3', '0', '0', 'c', 'c', '\0' };
-	const char remove = '0';
+	const char remove = '\0';
 
 	printf("String before removing %c:%s\n", remove, string);
 
 	RemoveCharFromString(remove, string);
 
 	printf("String after removing %c:%s\n", remove, string);
+
+	printf("-------------------- %s ended --------------------\n", __FUNCTION__);
 }
+
+/*
+	TODO:
+	- Delete all the nodes in a linked list given a pointer to a function that returns true if the link data should be removed.
+	- Hard: You are given a linked list where the link nodes contain not only a next pointer but an additional pointer to another random node in the list. Write a function that creates a deep copy of this list.
+	- Split a sentence, given as const char *, into the individual words. Return an array of char *'s containing the words.
+	- Find the maximum depth of a binary tree.
+	- Implement the CRT itoa(): const char * itoa( int i_int );
+	- Given an array of ints move all the 0's to the end while maintaining the order of the non 0's in the list. Do this in place.
+	- Remove side-by-side duplicate characters in a string ("AAA BBB" becomes "A B") in place.
+*/
 
 int main()
 {
@@ -351,6 +395,9 @@ int main()
 	printf("\n\n");
 
 	TestRemoveCharFromString();
+	printf("\n\n");
+
+	TestRemoveAdjacentDuplicatesFromString();
 	printf("\n\n");
 
 	_getch();
