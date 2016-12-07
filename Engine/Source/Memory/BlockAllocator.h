@@ -6,6 +6,7 @@
 namespace engine {
 namespace memory {
 
+#define MAX_ALLOCATORS					5
 #define DEFAULT_BLOCK_SIZE				1024 * 1024
 #define DEFAULT_GUARDBAND_SIZE			4
 #define DEFAULT_BYTE_ALIGNMENT			4
@@ -25,7 +26,6 @@ class BlockAllocator;
 typedef struct BlockDescriptor
 {
 public:
-	BlockAllocator*			allocator_;				// pointer to the allocator managing this descriptor
 	BlockDescriptor*		next_;					// pointer to the next block descriptor
 	BlockDescriptor*		previous_;				// pointer to the previous block descriptor
 	uint8_t*				block_pointer_;			// pointer to the actual block of data
@@ -72,8 +72,14 @@ public:
 	static BlockAllocator* Create(void* memory, size_t block_size);
 	static void Destroy(BlockAllocator* allocator);
 
-	static BlockAllocator* CreateDefaultAllocator();
+	static BlockAllocator* GetDefaultAllocator();
+	static void CreateDefaultAllocator();
 	static void DestroyDefaultAllocator();
+
+	static bool IsAllocatorRegistered(BlockAllocator* allocator);
+	static bool RegisterAllocator(BlockAllocator* allocator);
+	static bool DeregisterAllocator(BlockAllocator* allocator);
+	static inline BlockAllocator** const GetRegisteredAllocators();
 
 	// Allocate a block of memory with given size
 	void* Alloc(const size_t size, const size_t alignment = DEFAULT_BYTE_ALIGNMENT);
@@ -113,7 +119,7 @@ private:
 	static uint32_t									counter_;								// a counter that will be used while setting ids for allocators
 #endif
 
-	static BlockAllocator*							default_allocator_;						// a reference to the default allocator
+	static BlockAllocator*							allocators_[MAX_ALLOCATORS];			// an array of block allocators
 
 }; // class BlockAllocator
 

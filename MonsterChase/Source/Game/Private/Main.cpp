@@ -39,7 +39,7 @@ void TestMoveSemantics();
 int main(int* argv, char** argc)
 {
 	// initialize the default allocator
-	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::CreateDefaultAllocator();
+	engine::memory::BlockAllocator::CreateDefaultAllocator();
 	
 #ifdef ENABLE_VECTOR_CONST_TEST
 	TestVectorConstness();

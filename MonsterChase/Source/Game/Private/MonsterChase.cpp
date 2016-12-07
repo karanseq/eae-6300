@@ -24,7 +24,7 @@ MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
 	player_(nullptr)
 {
 	// allocate memory for the game objects
-	void* aligned_memory = engine::memory::BlockAllocator::CreateDefaultAllocator()->Alloc(MEMORY_SIZE);
+	void* aligned_memory = engine::memory::BlockAllocator::GetDefaultAllocator()->Alloc(MEMORY_SIZE);
 	ASSERT(aligned_memory);
 
 	monsters_.reserve(MAX_MONSTERS);
@@ -32,6 +32,9 @@ MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
 	// create an allocator to manage memory for the game objects
 	MonsterChase::game_allocator_ = engine::memory::BlockAllocator::Create(aligned_memory, MEMORY_SIZE);
 	ASSERT(MonsterChase::game_allocator_);
+
+	// register the allocator
+	engine::memory::BlockAllocator::RegisterAllocator(MonsterChase::game_allocator_);
 
 	srand(static_cast<unsigned int>(time(0)));
 }
@@ -48,9 +51,13 @@ MonsterChase::~MonsterChase()
 	}
 	monsters_.clear();
 
+	// deregister the allocator
+	engine::memory::BlockAllocator::DeregisterAllocator(MonsterChase::game_allocator_);
+
 	// deallocate the allocator
 	engine::memory::BlockAllocator::Destroy(MonsterChase::game_allocator_);
-	engine::memory::BlockAllocator::CreateDefaultAllocator()->Free(MonsterChase::game_allocator_);
+	engine::memory::BlockAllocator::GetDefaultAllocator()->Free(MonsterChase::game_allocator_);
+	MonsterChase::game_allocator_ = nullptr;
 }
 
 void MonsterChase::Update()

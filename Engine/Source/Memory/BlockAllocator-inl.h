@@ -6,6 +6,11 @@
 namespace engine {
 namespace memory {
 
+	inline BlockAllocator** const BlockAllocator::GetRegisteredAllocators()
+	{
+		return allocators_;
+	}
+
 	inline size_t BlockAllocator::GetSizeOfBD()
 	{
 		return size_of_BD_;

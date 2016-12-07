@@ -14,7 +14,6 @@ unsigned int BlockDescriptor::counter_ = 0;
 
 void BlockDescriptor::Init()
 {
-	allocator_ = nullptr;
 	next_ = nullptr;
 	previous_ = nullptr;
 	block_pointer_ = nullptr;
@@ -27,7 +26,7 @@ void BlockDescriptor::Init()
 
 // initialize static members
 size_t				BlockAllocator::size_of_BD_ = sizeof(BD);
-BlockAllocator*		BlockAllocator::default_allocator_ = nullptr;
+BlockAllocator*		BlockAllocator::allocators_[MAX_ALLOCATORS] = { nullptr };
 
 #ifdef BUILD_DEBUG
 unsigned int		BlockAllocator::counter_ = 0;
@@ -70,49 +69,100 @@ BlockAllocator* BlockAllocator::Create(void* memory, size_t block_size)
 
 void BlockAllocator::Destroy(BlockAllocator* allocator)
 {
-	
+	// TODO: Print diagnostics
 }
 
-BlockAllocator* BlockAllocator::CreateDefaultAllocator()
+BlockAllocator* BlockAllocator::GetDefaultAllocator()
 {
-	if (default_allocator_ == nullptr)
+	if (allocators_[0] == nullptr)
 	{
-		size_t default_block_size = 1024 * 1024;
-
-		// allocate aligned memory for the default allocator
-		void* default_allocator_memory = _aligned_malloc(default_block_size, 4);
-		ASSERT(default_allocator_memory);
-
-		// add the allocator to the start of the aligned memory block
-		uint8_t* block_allocator_memory = static_cast<uint8_t*>(default_allocator_memory);
-		// move up the address of the usable block
-		block_allocator_memory += sizeof(BlockAllocator);
-		// reduce the size of the usable block
-		default_block_size -= sizeof(BlockAllocator);
-
-		// create the default allocator
-		default_allocator_ = new (default_allocator_memory) BlockAllocator(block_allocator_memory, default_block_size);
-		if (!default_allocator_)
-		{
-			// spit out an error
-			LOG_ERROR("Could not create a default allocator!");
-
-			// free the aligned memory
-			_aligned_free(default_allocator_memory);
-			default_allocator_memory = nullptr;
-			return nullptr;
-		}
+		CreateDefaultAllocator();
 	}
+	return allocators_[0];
+}
 
-	return default_allocator_;
+void BlockAllocator::CreateDefaultAllocator()
+{
+	size_t default_block_size = 1024 * 1024;
+
+	// allocate aligned memory for the default allocator
+	void* default_allocator_memory = _aligned_malloc(default_block_size, 4);
+	ASSERT(default_allocator_memory);
+
+	// add the allocator to the start of the aligned memory block
+	uint8_t* block_allocator_memory = static_cast<uint8_t*>(default_allocator_memory);
+	// move up the address of the usable block
+	block_allocator_memory += sizeof(BlockAllocator);
+	// reduce the size of the usable block
+	default_block_size -= sizeof(BlockAllocator);
+
+	// create the default allocator
+	allocators_[0] = new (default_allocator_memory) BlockAllocator(block_allocator_memory, default_block_size);
+	if (!allocators_[0])
+	{
+		// spit out an error
+		LOG_ERROR("Could not create the default allocator!");
+
+		// free the aligned memory
+		_aligned_free(default_allocator_memory);
+		default_allocator_memory = nullptr;
+		return;
+	}
 }
 
 void BlockAllocator::DestroyDefaultAllocator()
 {
-	Destroy(default_allocator_);
+	Destroy(allocators_[0]);
 
-	_aligned_free(default_allocator_);
-	default_allocator_ = nullptr;
+	_aligned_free(allocators_[0]);
+	allocators_[0] = nullptr;
+}
+
+bool BlockAllocator::IsAllocatorRegistered(BlockAllocator* allocator)
+{
+	ASSERT(allocator);
+
+	// search for the allocator
+	for (uint8_t i = 0; i < MAX_ALLOCATORS; ++i)
+	{
+		if (allocators_[i] == allocator)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool BlockAllocator::RegisterAllocator(BlockAllocator* allocator)
+{
+	ASSERT(allocator);
+
+	// find a suitable position in the list of registered allocators
+	for (uint8_t i = 0; i < MAX_ALLOCATORS; ++i)
+	{
+		if (!allocators_[i])
+		{
+			allocators_[i] = allocator;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool BlockAllocator::DeregisterAllocator(BlockAllocator* allocator)
+{
+	ASSERT(allocator);
+
+	// search for the allocator in the list of registered allocators
+	for (uint8_t i = 0; i < MAX_ALLOCATORS; ++i)
+	{
+		if (allocators_[i] == allocator)
+		{
+			allocators_[i] = nullptr;
+			return true;
+		}
+	}
+	return false;
 }
 
 void BlockAllocator::InitFirstBlockDescriptor()
@@ -120,7 +170,6 @@ void BlockAllocator::InitFirstBlockDescriptor()
 	// initialize the first descriptor
 	BD* first_bd = reinterpret_cast<BD*>(block_);
 	first_bd->Init();
-	first_bd->allocator_ = this;
 	first_bd->block_pointer_ = block_ + size_of_BD_;
 	first_bd->block_size_ = total_block_size_ - size_of_BD_;
 
@@ -269,7 +318,6 @@ void* BlockAllocator::Alloc(const size_t size, const size_t alignment)
 				// initialize the new block's descriptor
 				new_bd = reinterpret_cast<BD*>(new_block_pointer);
 				new_bd->Init();
-				new_bd->allocator_ = this;
 				new_bd->block_pointer_ = new_block_pointer + size_of_BD_;
 				new_bd->block_size_ = size + alignment_offset + guardband_size * 2;
 
@@ -355,6 +403,12 @@ bool BlockAllocator::Free(void* pointer)
 {
 	ASSERT(pointer != nullptr);
 
+	// return if this allocator does not contain this pointer
+	if (!Contains(pointer))
+	{
+		return false;
+	}
+
 	// calculate the address of the descriptor
 #ifdef BUILD_DEBUG
 	BD* bd = reinterpret_cast<BD*>(static_cast<uint8_t*>(pointer) - DEFAULT_GUARDBAND_SIZE - size_of_BD_);
@@ -418,7 +472,6 @@ void BlockAllocator::Defragment()
 			}
 
 			// clear next descriptor
-			next_bd->allocator_ = nullptr;
 			next_bd->next_ = nullptr;
 			next_bd->previous_ = nullptr;
 			next_bd->block_pointer_ = nullptr;
