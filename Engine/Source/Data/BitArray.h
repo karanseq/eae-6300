@@ -28,6 +28,7 @@ namespace data {
 
 		inline void ClearAll();
 		inline void SetAll();
+		inline void ToggleAll();
 
 		bool AreAllClear() const;
 		bool AreAllSet() const;
@@ -37,11 +38,13 @@ namespace data {
 
 		void SetBit(size_t bit_index);
 		void ClearBit(size_t bit_index);
+		void ToggleBit(size_t bit_index);
 
 		bool GetFirstSetBit(size_t &bit_index) const;
 		bool GetFirstClearBit(size_t &bit_index) const;
 
 		inline bool operator[](size_t bit_index) const;
+		inline size_t Size() const;
 
 	private:
 		engine::memory::BlockAllocator*					allocator_;

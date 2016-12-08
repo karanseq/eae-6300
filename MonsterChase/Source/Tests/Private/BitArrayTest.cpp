@@ -13,6 +13,9 @@ void TestBitArray()
 
 	engine::data::BitArray bit_array(64, false, allocator);
 
+	// test size
+	LOG("bit_array.Size() = %zu", bit_array.Size());
+
 	// test are all clear
 	LOG("bit_array.ClearAll()");
 	bit_array.ClearAll();
@@ -22,7 +25,6 @@ void TestBitArray()
 	bit_array.SetBit(9);
 	bool is_set = bit_array.IsBitSet(9);
 	bool is_clear = bit_array.IsBitClear(9);
-
 	LOG("After setting individual bit, bit_array.AreAllClear() = %s", bit_array.AreAllClear() ? "true" : "false");
 
 	// test are all set
@@ -34,14 +36,27 @@ void TestBitArray()
 	bit_array.ClearBit(9);
 	is_set = bit_array.IsBitSet(9);
 	is_clear = bit_array.IsBitClear(9);
-
 	LOG("After clearing individual bit, bit_array.AreAllSet() = %s", bit_array.AreAllSet() ? "true" : "false");
 
 	LOG("bit_array.ClearAll()");
 	bit_array.ClearAll();
 
+	// test toggle bit
+	size_t bit_index = 21;
+	LOG("Before toggling individual bit, bit_array[%zu] = %s", bit_index, bit_array[bit_index] ? "true" : "false");
+	bit_array.ToggleBit(bit_index);
+	LOG("After toggling individual bit, bit_array[%zu] = %s", bit_index, bit_array[bit_index] ? "true" : "false");
+
+	// test toggle all
+	engine::data::BitArray small_bit_array(8, false, allocator);
+	small_bit_array.SetBit(1);
+	small_bit_array.SetBit(3);
+	small_bit_array.SetBit(5);
+	small_bit_array.ToggleAll();
+	LOG("small_bit_array.ToggleAll()");
+
 	// test get first set bit
-	size_t bit_index = 13;
+	bit_index = 13;
 	LOG("Setting bit-%zu", bit_index);
 	bit_array.SetBit(bit_index);
 	

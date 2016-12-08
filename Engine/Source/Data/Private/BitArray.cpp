@@ -93,6 +93,18 @@ namespace data {
 		*(buckets_ + bucket_index) &= ~(static_cast<size_t>(1) << bit_index);
 	}
 
+	void BitArray::ToggleBit(size_t bit_index)
+	{
+		// validate input
+		ASSERT(bit_index >= 0);
+		ASSERT(bit_index < num_bits_);
+
+		// calculate the bucket index
+		size_t bucket_index = bit_index / BIT_DEPTH;
+
+		*(buckets_ + bucket_index) ^= static_cast<size_t>(1) << bit_index;
+	}
+
 	bool BitArray::GetFirstSetBit(size_t &bit_index) const
 	{
 		size_t bucket_index = 0;

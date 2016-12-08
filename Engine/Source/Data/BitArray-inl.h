@@ -50,6 +50,14 @@ namespace data {
 		memset(buckets_, ~0, sizeof(buckets_) * num_buckets_);
 	}
 
+	inline void BitArray::ToggleAll()
+	{
+		for (size_t i = 0; i < num_buckets_; ++i)
+		{
+			buckets_[i] = ~buckets_[i];
+		}
+	}
+
 	inline bool BitArray::IsBitSet(size_t bit_index) const
 	{
 		// validate input
@@ -70,6 +78,11 @@ namespace data {
 	inline bool BitArray::operator[](size_t bit_index) const
 	{
 		return IsBitSet(bit_index);
+	}
+
+	inline size_t BitArray::Size() const
+	{
+		return num_bits_;
 	}
 
 } // namespace data
