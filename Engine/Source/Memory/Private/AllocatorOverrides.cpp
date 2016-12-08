@@ -34,7 +34,7 @@ void operator delete(void* pointer)
 
 	// free the pointer from the appropriate allocator
 	uint8_t num_allocators = MAX_ALLOCATORS - 1;
-	while (num_allocators > 0)
+	while (num_allocators >= 0)
 	{
 		if (allocators[num_allocators] && allocators[num_allocators]->Free(pointer))
 		{
@@ -71,7 +71,7 @@ void operator delete[](void* pointer)
 
 	// free the pointer from the appropriate allocator
 	uint8_t num_allocators = MAX_ALLOCATORS - 1;
-	while (num_allocators > 0)
+	while (num_allocators >= 0)
 	{
 		if (allocators[num_allocators] && allocators[num_allocators]->Free(pointer))
 		{
