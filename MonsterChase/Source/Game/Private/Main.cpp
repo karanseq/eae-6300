@@ -60,7 +60,6 @@ int main(int* argv, char** argc)
 
 #ifdef ENABLE_BIT_ARRAY_TEST
 	TestBitArray();
-	return 0;
 #endif
 
 #ifdef ENABLE_ALLOCATOR_TEST

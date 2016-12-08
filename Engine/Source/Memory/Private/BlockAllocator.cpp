@@ -29,7 +29,7 @@ size_t				BlockAllocator::size_of_BD_ = sizeof(BD);
 BlockAllocator*		BlockAllocator::allocators_[MAX_ALLOCATORS] = { nullptr };
 
 #ifdef BUILD_DEBUG
-unsigned int		BlockAllocator::counter_ = 0;
+uint8_t				BlockAllocator::counter_ = 0;
 #endif
 
 BlockAllocator::BlockAllocator(void* memory, size_t block_size) : block_(nullptr),
@@ -69,7 +69,19 @@ BlockAllocator* BlockAllocator::Create(void* memory, size_t block_size)
 
 void BlockAllocator::Destroy(BlockAllocator* allocator)
 {
-	// TODO: Print diagnostics
+	// TODO: Print *more* diagnostics
+	if (allocator->user_list_head_ == nullptr)
+	{
+		return;
+	}
+
+	size_t unfreed_allocations = 0;
+	for (BD* bd = allocator->user_list_head_; bd != nullptr; bd = bd->next_)
+	{
+		++unfreed_allocations;
+	}
+
+	LOG_ERROR("WARNING! Found %zu unfreed allocations in allocator-%d", unfreed_allocations, allocator->id_);
 }
 
 BlockAllocator* BlockAllocator::GetDefaultAllocator()
@@ -307,7 +319,7 @@ void* BlockAllocator::Alloc(const size_t size, const size_t alignment)
 		{
 			// calculate the new address of the new block
 			uint8_t*				new_block_pointer = free_bd->block_pointer_ + free_bd->block_size_ - size_of_BD_ - guardband_size * 2 - size;
-			const uintptr_t			alignment_offset = (reinterpret_cast<uintptr_t>(new_block_pointer + size_of_BD_ + guardband_size)) % alignment;
+			const size_t			alignment_offset = reinterpret_cast<uintptr_t>(new_block_pointer + size_of_BD_ + guardband_size) & (alignment - 1);
 
 			// check if this block needs to be fragmented
 			if ((size_of_BD_ + guardband_size * 2 + size + alignment_offset + MAX_EXTRA_MEMORY) <= free_bd->block_size_)
@@ -331,7 +343,7 @@ void* BlockAllocator::Alloc(const size_t size, const size_t alignment)
 			else if ((size + guardband_size * 2) <= free_bd->block_size_)
 			{
 				// if we are to use the entire block as is, check to see if it is properly byte aligned 
-				if ((reinterpret_cast<uintptr_t>(free_bd->block_pointer_ + guardband_size) % alignment) == 0)
+				if ((reinterpret_cast<uintptr_t>(free_bd->block_pointer_ + guardband_size) & (alignment - 1)) == 0)
 				{
 					// block is slightly bigger so we'll use it whole
 					new_bd = free_bd;
@@ -561,7 +573,7 @@ void BlockAllocator::PrintFreeDescriptors() const
 	LOG("---------- %s ----------", __FUNCTION__);
 	if (free_list_head_ != nullptr)
 	{
-		uint32_t count = 0;
+		size_t count = 0;
 		LOG("FREE:");
 		for (BD* bd = free_list_head_; bd != nullptr; bd = bd->next_)
 		{
@@ -582,7 +594,7 @@ void BlockAllocator::PrintUsedDescriptors() const
 	LOG("---------- %s ----------", __FUNCTION__);
 	if (user_list_head_ != nullptr)
 	{
-		uint32_t count = 0;
+		size_t count = 0;
 		LOG("USER:");
 		for (BD* bd = user_list_head_; bd != nullptr; bd = bd->next_)
 		{

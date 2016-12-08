@@ -33,8 +33,8 @@ public:
 
 #ifdef BUILD_DEBUG
 	size_t					user_size_;				// size of the block requested by the user
-	uint32_t				id_;					// an identifier for each descriptor
-	static uint32_t			counter_;				// a counter to keep track of all the descriptors
+	uint32_t				id_;					// an identifier for each descriptor...might have to increase the size of this variable
+	static uint32_t			counter_;				// a counter to keep track of all the descriptors...might have to increase the size of this variable
 #endif
 
 	void Init();
@@ -115,8 +115,8 @@ private:
 	static											size_t size_of_BD_;						// size of a BlockDescriptor object
 
 #ifdef BUILD_DEBUG
-	uint32_t										id_;									// an id to keep track of this allocator in debug mode
-	static uint32_t									counter_;								// a counter that will be used while setting ids for allocators
+	uint8_t											id_;									// an id to keep track of this allocator in debug mode
+	static uint8_t									counter_;								// a counter that will be used while setting ids for allocators
 #endif
 
 	static BlockAllocator*							allocators_[MAX_ALLOCATORS];			// an array of block allocators
