@@ -150,6 +150,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Assert\Assert.h" />
+    <ClInclude Include="Source\Data\BitArray-inl.h" />
+    <ClInclude Include="Source\Data\BitArray.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
     <ClInclude Include="Source\GameObject\IdentityComponent-inl.h" />
     <ClInclude Include="Source\GameObject\InterfaceGameObjectController.h" />
@@ -168,6 +170,7 @@
     <ClInclude Include="Source\Memory\AllocatorOverrides.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Data\Private\BitArray.cpp" />
     <ClCompile Include="Source\GameObject\Private\IdentityComponent.cpp" />
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp" />
     <ClCompile Include="Source\Math\Private\Transform.cpp" />

@@ -68,6 +68,9 @@
     <ClCompile Include="Source\Tests\Private\MoveSemanticsTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Tests\Private\BitArrayTest.cpp">
+      <Filter>Source Files\Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\resource.h">

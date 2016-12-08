@@ -40,6 +40,12 @@
     <Filter Include="Source Files\Memory">
       <UniqueIdentifier>{514b9fd4-cdee-4a8c-b696-aee2eb05a28c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Data">
+      <UniqueIdentifier>{17c1acaf-c3e9-4694-8bc1-bf3d4969e505}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Data">
+      <UniqueIdentifier>{eb1265b3-364e-4193-ab92-1ea72ad6738c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -96,6 +102,12 @@
     <ClInclude Include="Source\GameObject\IdentityComponent-inl.h">
       <Filter>Header Files\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Data\BitArray.h">
+      <Filter>Header Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Data\BitArray-inl.h">
+      <Filter>Header Files\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -118,6 +130,9 @@
     </ClCompile>
     <ClCompile Include="Source\GameObject\Private\IdentityComponent.cpp">
       <Filter>Source Files\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Data\Private\BitArray.cpp">
+      <Filter>Source Files\Data</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
