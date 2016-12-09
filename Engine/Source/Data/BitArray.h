@@ -16,14 +16,19 @@ namespace data {
 
 	class BitArray
 	{
+	private:
+		BitArray(size_t num_bits, void* memory, bool start_set = false);
+
+		// disable copy constructor & copy assignment operator
+		BitArray(const BitArray& copy);
+		inline BitArray& operator=(const BitArray& bit_array);
+
 	public:
-		BitArray(size_t num_bits, bool start_set = false, engine::memory::BlockAllocator* allocator = engine::memory::BlockAllocator::GetDefaultAllocator());
+		static BitArray* Create(size_t num_bits, void* memory, bool start_set = false);
 		~BitArray();
 		
-		BitArray(const BitArray& copy);
 		BitArray(BitArray&& copy);
 
-		inline BitArray& operator=(const BitArray& bit_array);
 		inline BitArray& operator=(BitArray&& bit_array);
 
 		inline void ClearAll();
@@ -43,11 +48,12 @@ namespace data {
 		bool GetFirstSetBit(size_t &bit_index) const;
 		bool GetFirstClearBit(size_t &bit_index) const;
 
-		inline bool operator[](size_t bit_index) const;
+		inline bool Get(size_t bit_index) const;
 		inline size_t Size() const;
 
+		static inline size_t GetRequiredMemorySize(size_t num_bits);
+
 	private:
-		engine::memory::BlockAllocator*					allocator_;
 		size_t*											buckets_;
 		size_t											num_buckets_;
 		size_t											num_bits_;

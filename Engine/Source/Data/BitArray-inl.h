@@ -11,28 +11,10 @@
 namespace engine {
 namespace data {
 
-	inline BitArray& BitArray::operator=(const BitArray& bit_array)
-	{
-		if (this != &bit_array)
-		{
-			SAFE_DELETE_ARRAY(buckets_);
-
-			allocator_ = bit_array.allocator_;
-			
-			buckets_ = new (allocator_) size_t[bit_array.num_buckets_];
-			memcpy(buckets_, bit_array.buckets_, bit_array.num_buckets_);
-			
-			num_buckets_ = bit_array.num_buckets_;
-			num_bits_ = bit_array.num_bits_;
-		}
-		return *this;
-	}
-
 	inline BitArray& BitArray::operator=(BitArray&& bit_array)
 	{
 		if (this != &bit_array)
 		{
-			allocator_ = bit_array.allocator_;
 			std::swap(buckets_, bit_array.buckets_);
 			num_buckets_ = bit_array.num_buckets_;
 			num_bits_ = bit_array.num_bits_;
@@ -75,7 +57,7 @@ namespace data {
 		return !IsBitSet(bit_index);
 	}
 
-	inline bool BitArray::operator[](size_t bit_index) const
+	inline bool BitArray::Get(size_t bit_index) const
 	{
 		return IsBitSet(bit_index);
 	}
@@ -83,6 +65,12 @@ namespace data {
 	inline size_t BitArray::Size() const
 	{
 		return num_bits_;
+	}
+
+	inline size_t BitArray::GetRequiredMemorySize(size_t num_bits)
+	{
+		const size_t num_buckets = ((num_bits & (BIT_DEPTH - 1)) ? 1 : 0) + num_bits / BIT_DEPTH;
+		return sizeof(BitArray) + sizeof(size_t) * num_buckets;
 	}
 
 } // namespace data

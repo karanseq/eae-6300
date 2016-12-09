@@ -12,35 +12,34 @@
 namespace engine {
 namespace data {
 
-	BitArray::BitArray(size_t num_bits, bool start_set, engine::memory::BlockAllocator* allocator) : allocator_(allocator),
-		buckets_(nullptr),
+	BitArray::BitArray(size_t num_bits, void* memory, bool start_set) : buckets_(static_cast<size_t*>(memory)),
 		num_buckets_(((num_bits & (BIT_DEPTH - 1)) ? 1 : 0) + num_bits / BIT_DEPTH),
 		num_bits_(num_bits)
 	{
-		ASSERT(allocator_);
+		ASSERT(num_bits_ > 0);
+		ASSERT(buckets_);
 
-		// allocate required memory
-		buckets_ = new (allocator_) size_t[num_buckets_];
-
-		// start with set or clear
 		memset(buckets_, start_set ? ~0 : 0, sizeof(buckets_) * num_buckets_);
 	}
 
+	BitArray* BitArray::Create(size_t num_bits, void* memory, bool start_set)
+	{
+		ASSERT(num_bits > 0);
+		ASSERT(memory);
+
+		uint8_t* bit_array_memory = static_cast<uint8_t*>(memory);
+		bit_array_memory += sizeof(BitArray);
+		
+		BitArray* bit_array = new (memory) BitArray(num_bits, bit_array_memory, start_set);
+		ASSERT(bit_array);
+
+		return bit_array;
+	}
+	
 	BitArray::~BitArray()
-	{
-		SAFE_DELETE_ARRAY(buckets_);
-	}
+	{}
 
-	BitArray::BitArray(const BitArray& copy) : allocator_(copy.allocator_),
-		buckets_(new (allocator_) size_t[copy.num_buckets_]),
-		num_buckets_(copy.num_buckets_),
-		num_bits_(copy.num_bits_)
-	{
-		memcpy(buckets_, copy.buckets_, sizeof(buckets_) * num_buckets_);
-	}
-
-	BitArray::BitArray(BitArray&& copy) : allocator_(copy.allocator_),
-		buckets_(copy.buckets_),
+	BitArray::BitArray(BitArray&& copy) : buckets_(copy.buckets_),
 		num_buckets_(copy.num_buckets_),
 		num_bits_(copy.num_bits_)
 	{
