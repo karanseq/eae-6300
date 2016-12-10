@@ -6,6 +6,11 @@
 namespace engine {
 namespace memory {
 
+	inline FixedSizeAllocator** const FixedSizeAllocator::GetRegisteredFixedSizeAllocator()
+	{
+		return registered_allocators_;
+	}
+
 	inline uint8_t* FixedSizeAllocator::GetPointerForBlock(size_t bit_index) const
 	{
 		ASSERT(bit_index >= 0 && bit_index < num_blocks_);

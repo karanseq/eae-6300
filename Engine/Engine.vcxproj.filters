@@ -143,5 +143,8 @@
     <ClCompile Include="Source\Memory\Private\FixedSizeAllocator.cpp">
       <Filter>Source Files\Memory</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Memory\Private\AllocatorUtil.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -10,8 +10,7 @@ void RunTests();
 
 int main(int* argv, char** argc)
 {
-	// initialize the default allocator
-	engine::memory::BlockAllocator::CreateDefaultAllocator();
+	engine::memory::CreateAllocators();
 	
 	RunTests();
 
@@ -26,8 +25,7 @@ int main(int* argv, char** argc)
 	delete monster_chase;
 	monster_chase = nullptr;
 
-	// destroy the default allocator
-	engine::memory::BlockAllocator::DestroyDefaultAllocator();
+	engine::memory::DestroyAllocators();
 
 #if defined(_DEBUG)
 	_CrtDumpMemoryLeaks();

@@ -9,6 +9,7 @@
 namespace engine {
 namespace memory {
 
+// initialize static members
 FixedSizeAllocator*			FixedSizeAllocator::registered_allocators_[MAX_FIXED_SIZE_ALLOCATORS] = { nullptr };
 
 #ifdef BUILD_DEBUG
@@ -100,6 +101,53 @@ void FixedSizeAllocator::Destroy(FixedSizeAllocator* allocator)
 #endif
 
 	block_allocator->Free(allocator);
+}
+
+bool FixedSizeAllocator::IsFixedSizeAllocatorRegistered(FixedSizeAllocator* allocator)
+{
+	ASSERT(allocator);
+
+	// search for the allocator
+	for (uint8_t i = 0; i < MAX_FIXED_SIZE_ALLOCATORS; ++i)
+	{
+		if (registered_allocators_[i] == allocator)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool FixedSizeAllocator::RegisterFixedSizeAllocator(FixedSizeAllocator* allocator)
+{
+	ASSERT(allocator);
+
+	// find a suitable position in the list of registered allocators
+	for (uint8_t i = 0; i < MAX_FIXED_SIZE_ALLOCATORS; ++i)
+	{
+		if (!registered_allocators_[i])
+		{
+			registered_allocators_[i] = allocator;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool FixedSizeAllocator::DeregisterFixedSizeAllocator(FixedSizeAllocator* allocator)
+{
+	ASSERT(allocator);
+
+	// search for the allocator in the list of registered allocators
+	for (uint8_t i = 0; i < MAX_BLOCK_ALLOCATORS; ++i)
+	{
+		if (registered_allocators_[i] == allocator)
+		{
+			registered_allocators_[i] = nullptr;
+			return true;
+		}
+	}
+	return false;
 }
 
 #ifdef BUILD_DEBUG
