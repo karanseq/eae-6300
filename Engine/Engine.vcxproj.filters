@@ -108,6 +108,12 @@
     <ClInclude Include="Source\Data\BitArray-inl.h">
       <Filter>Header Files\Data</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Memory\FixedSizeAllocator.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Memory\FixedSizeAllocator-inl.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -133,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="Source\Data\Private\BitArray.cpp">
       <Filter>Source Files\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Memory\Private\FixedSizeAllocator.cpp">
+      <Filter>Source Files\Memory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

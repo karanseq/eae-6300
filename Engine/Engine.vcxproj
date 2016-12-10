@@ -168,6 +168,8 @@
     <ClInclude Include="Source\Memory\BlockAllocator-inl.h" />
     <ClInclude Include="Source\Memory\BlockAllocator.h" />
     <ClInclude Include="Source\Memory\AllocatorOverrides.h" />
+    <ClInclude Include="Source\Memory\FixedSizeAllocator-inl.h" />
+    <ClInclude Include="Source\Memory\FixedSizeAllocator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Data\Private\BitArray.cpp" />
@@ -178,6 +180,7 @@
     <ClCompile Include="Source\Math\Private\Vec3D.cpp" />
     <ClCompile Include="Source\Memory\Private\BlockAllocator.cpp" />
     <ClCompile Include="Source\Memory\Private\AllocatorOverrides.cpp" />
+    <ClCompile Include="Source\Memory\Private\FixedSizeAllocator.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

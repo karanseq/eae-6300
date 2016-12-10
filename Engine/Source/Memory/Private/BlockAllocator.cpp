@@ -1,15 +1,20 @@
 #include "Memory\BlockAllocator.h"
-#include "Assert\Assert.h"
-#include "Logger\Logger.h"
 
+// library includes
 #include <stdlib.h>			// for _aligned_malloc & _aligned_free
 #include <new>				// for placement new
+#include <limits>			// for numeric_limits
+
+// engine includes
+#include "Memory\AllocatorUtil.h"
+#include "Assert\Assert.h"
+#include "Logger\Logger.h"
 
 namespace engine {
 namespace memory {
 
 #ifdef BUILD_DEBUG
-unsigned int BlockDescriptor::counter_ = 0;
+uint32_t BlockDescriptor::counter_ = 0;
 #endif
 
 void BlockDescriptor::Init()
@@ -20,28 +25,31 @@ void BlockDescriptor::Init()
 	block_size_ = 0;
 #ifdef BUILD_DEBUG
 	user_size_ = 0;
-	id_ = BlockDescriptor::counter_++;
+	id_ = BD::counter_++;
+	BD::counter_ = (BD::counter_ >= std::numeric_limits<uint32_t>::max() ? 0 : BD::counter_);
 #endif
 }
 
 // initialize static members
 size_t				BlockAllocator::size_of_BD_ = sizeof(BD);
-BlockAllocator*		BlockAllocator::allocators_[MAX_ALLOCATORS] = { nullptr };
+BlockAllocator*		BlockAllocator::registered_allocators_[MAX_BLOCK_ALLOCATORS] = { nullptr };
 
 #ifdef BUILD_DEBUG
 uint8_t				BlockAllocator::counter_ = 0;
 #endif
 
-BlockAllocator::BlockAllocator(void* memory, size_t block_size) : block_(nullptr),
+BlockAllocator::BlockAllocator(void* memory, size_t block_size) : block_(static_cast<uint8_t*>(memory)),
 	user_list_head_(nullptr),
 	free_list_head_(nullptr),
 	total_block_size_(block_size)
 {
-	block_ = static_cast<uint8_t*>(memory);
+	ASSERT(block_);
+	ASSERT(block_size > 0);
+
 #ifdef BUILD_DEBUG
 	id_ = BlockAllocator::counter_++;
 	memset(block_, CLEAN_FILL, total_block_size_);
-	LOG("BlockAllocator-%d created with start address:%p\tend address:%p and size:%zu", id_, block_, (block_ + total_block_size_), total_block_size_);
+	LOG("BlockAllocator-%d created with size:%zu", id_, total_block_size_);
 #endif
 
 	InitFirstBlockDescriptor();
@@ -69,28 +77,30 @@ BlockAllocator* BlockAllocator::Create(void* memory, size_t block_size)
 
 void BlockAllocator::Destroy(BlockAllocator* allocator)
 {
+	ASSERT(allocator);
+
 	// TODO: Print *more* diagnostics
-	if (allocator->user_list_head_ == nullptr)
+	if (allocator->user_list_head_ != nullptr)
 	{
-		return;
+		size_t unfreed_allocations = 0;
+		for (BD* bd = allocator->user_list_head_; bd != nullptr; bd = bd->next_)
+		{
+			++unfreed_allocations;
+		}
+
+		LOG_ERROR("WARNING! Found %zu unfreed allocations in allocator-%d", unfreed_allocations, allocator->id_);		
 	}
 
-	size_t unfreed_allocations = 0;
-	for (BD* bd = allocator->user_list_head_; bd != nullptr; bd = bd->next_)
-	{
-		++unfreed_allocations;
-	}
-
-	LOG_ERROR("WARNING! Found %zu unfreed allocations in allocator-%d", unfreed_allocations, allocator->id_);
+	LOG("BlockAllocator-%d destroyed", allocator->id_);
 }
 
 BlockAllocator* BlockAllocator::GetDefaultAllocator()
 {
-	if (allocators_[0] == nullptr)
+	if (registered_allocators_[0] == nullptr)
 	{
 		CreateDefaultAllocator();
 	}
-	return allocators_[0];
+	return registered_allocators_[0];
 }
 
 void BlockAllocator::CreateDefaultAllocator()
@@ -109,8 +119,8 @@ void BlockAllocator::CreateDefaultAllocator()
 	default_block_size -= sizeof(BlockAllocator);
 
 	// create the default allocator
-	allocators_[0] = new (default_allocator_memory) BlockAllocator(block_allocator_memory, default_block_size);
-	if (!allocators_[0])
+	registered_allocators_[0] = new (default_allocator_memory) BlockAllocator(block_allocator_memory, default_block_size);
+	if (!registered_allocators_[0])
 	{
 		// spit out an error
 		LOG_ERROR("Could not create the default allocator!");
@@ -124,10 +134,10 @@ void BlockAllocator::CreateDefaultAllocator()
 
 void BlockAllocator::DestroyDefaultAllocator()
 {
-	Destroy(allocators_[0]);
+	Destroy(registered_allocators_[0]);
 
-	_aligned_free(allocators_[0]);
-	allocators_[0] = nullptr;
+	_aligned_free(registered_allocators_[0]);
+	registered_allocators_[0] = nullptr;
 }
 
 bool BlockAllocator::IsBlockAllocatorRegistered(BlockAllocator* allocator)
@@ -135,9 +145,9 @@ bool BlockAllocator::IsBlockAllocatorRegistered(BlockAllocator* allocator)
 	ASSERT(allocator);
 
 	// search for the allocator
-	for (uint8_t i = 0; i < MAX_ALLOCATORS; ++i)
+	for (uint8_t i = 0; i < MAX_BLOCK_ALLOCATORS; ++i)
 	{
-		if (allocators_[i] == allocator)
+		if (registered_allocators_[i] == allocator)
 		{
 			return true;
 		}
@@ -151,11 +161,11 @@ bool BlockAllocator::RegisterBlockAllocator(BlockAllocator* allocator)
 
 	// find a suitable position in the list of registered allocators
 	// i starts at 1 since the first position in the array is reserved for the default allocator
-	for (uint8_t i = 1; i < MAX_ALLOCATORS; ++i)
+	for (uint8_t i = 1; i < MAX_BLOCK_ALLOCATORS; ++i)
 	{
-		if (!allocators_[i])
+		if (!registered_allocators_[i])
 		{
-			allocators_[i] = allocator;
+			registered_allocators_[i] = allocator;
 			return true;
 		}
 	}
@@ -168,11 +178,11 @@ bool BlockAllocator::DeregisterBlockAllocator(BlockAllocator* allocator)
 
 	// search for the allocator in the list of registered allocators
 	// i starts at 1 since the first position in the array is reserved for the default allocator
-	for (uint8_t i = 1; i < MAX_ALLOCATORS; ++i)
+	for (uint8_t i = 1; i < MAX_BLOCK_ALLOCATORS; ++i)
 	{
-		if (allocators_[i] == allocator)
+		if (registered_allocators_[i] == allocator)
 		{
-			allocators_[i] = nullptr;
+			registered_allocators_[i] = nullptr;
 			return true;
 		}
 	}
@@ -377,7 +387,7 @@ void* BlockAllocator::Alloc(const size_t size, const size_t alignment)
 			}
 			else
 			{
-				LOG_ERROR("Insufficient memory!");
+				LOG_ERROR("BlockAllocator-%d ran out of memory!", id_);
 				return nullptr;
 			}
 		}
@@ -387,7 +397,7 @@ void* BlockAllocator::Alloc(const size_t size, const size_t alignment)
 	// this means we couldn't find a block even after defragmenting
 	if (new_bd == nullptr)
 	{
-		LOG_ERROR("Insufficient memory!");
+		LOG_ERROR("BlockAllocator-%d ran out of memory!", id_);
 		return nullptr;
 	}
 

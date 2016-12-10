@@ -8,7 +8,7 @@ namespace memory {
 
 	inline BlockAllocator** const BlockAllocator::GetRegisteredBlockAllocators()
 	{
-		return allocators_;
+		return registered_allocators_;
 	}
 
 	inline size_t BlockAllocator::GetSizeOfBD()
