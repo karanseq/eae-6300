@@ -24,7 +24,7 @@ void* operator new(size_t size)
 
 	// loop over the registered fixed size allocators to find the best fit
 	// this operator assumes that the FSAs are registered in ascending order of the size of the blocks they maintain
-	engine::memory::FixedSizeAllocator** const registered_fsas = engine::memory::FixedSizeAllocator::GetRegisteredFixedSizeAllocators();
+	engine::memory::FixedSizeAllocator** const registered_fsas = engine::memory::FixedSizeAllocator::GetAvailableFixedSizeAllocators();
 	for (uint8_t i = 0; i < MAX_FIXED_SIZE_ALLOCATORS; ++i)
 	{
 		// if the FSA exists and is big enough to service this request
@@ -62,7 +62,7 @@ void operator delete(void* pointer)
 	ASSERT(pointer);
 
 	// get all registered fixed size allocators
-	engine::memory::FixedSizeAllocator** const fixed_size_allocators = engine::memory::FixedSizeAllocator::GetRegisteredFixedSizeAllocators();
+	engine::memory::FixedSizeAllocator** const fixed_size_allocators = engine::memory::FixedSizeAllocator::GetAvailableFixedSizeAllocators();
 
 	// free the pointer from the appropriate allocator
 	uint8_t num_fixed_size_allocators = MAX_FIXED_SIZE_ALLOCATORS;
@@ -79,7 +79,7 @@ void operator delete(void* pointer)
 	}
 
 	// get all registered block allocators
-	engine::memory::BlockAllocator** const block_allocators = engine::memory::BlockAllocator::GetRegisteredBlockAllocators();
+	engine::memory::BlockAllocator** const block_allocators = engine::memory::BlockAllocator::GetAvailableBlockAllocators();
 
 	// free the pointer from the appropriate allocator
 	uint8_t num_block_allocators = MAX_BLOCK_ALLOCATORS - 1;
@@ -105,7 +105,7 @@ void* operator new[](size_t size)
 
 	// loop over the registered fixed size allocators to find the best fit
 	// this operator assumes that the FSAs are registered in ascending order of the size of the blocks they maintain
-	engine::memory::FixedSizeAllocator** const registered_fsas = engine::memory::FixedSizeAllocator::GetRegisteredFixedSizeAllocators();
+	engine::memory::FixedSizeAllocator** const registered_fsas = engine::memory::FixedSizeAllocator::GetAvailableFixedSizeAllocators();
 	for (uint8_t i = 0; i < MAX_FIXED_SIZE_ALLOCATORS; ++i)
 	{
 		// if the FSA exists and is big enough to service this request
@@ -143,7 +143,7 @@ void operator delete[](void* pointer)
 	ASSERT(pointer);
 
 	// get all registered fixed size allocators
-	engine::memory::FixedSizeAllocator** const fixed_size_allocators = engine::memory::FixedSizeAllocator::GetRegisteredFixedSizeAllocators();
+	engine::memory::FixedSizeAllocator** const fixed_size_allocators = engine::memory::FixedSizeAllocator::GetAvailableFixedSizeAllocators();
 
 	// free the pointer from the appropriate allocator
 	uint8_t num_fixed_size_allocators = MAX_FIXED_SIZE_ALLOCATORS;
@@ -160,7 +160,7 @@ void operator delete[](void* pointer)
 	}
 
 	// get all registered block allocators
-	engine::memory::BlockAllocator** const block_allocators = engine::memory::BlockAllocator::GetRegisteredBlockAllocators();
+	engine::memory::BlockAllocator** const block_allocators = engine::memory::BlockAllocator::GetAvailableBlockAllocators();
 
 	// free the pointer from the appropriate allocator
 	uint8_t num_block_allocators = MAX_BLOCK_ALLOCATORS - 1;

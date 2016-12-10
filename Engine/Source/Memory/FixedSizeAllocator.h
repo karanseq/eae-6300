@@ -6,6 +6,7 @@
 
 // engine includes
 #include "AllocatorUtil.h"
+#include "Assert\Assert.h"
 
 // forward declaration
 namespace engine {
@@ -51,10 +52,10 @@ public:
 	static FixedSizeAllocator* Create(size_t block_size, size_t num_blocks, BlockAllocator* allocator);
 	static void Destroy(FixedSizeAllocator* allocator);
 
-	static bool IsFixedSizeAllocatorRegistered(FixedSizeAllocator* allocator);
-	static bool RegisterFixedSizeAllocator(FixedSizeAllocator* allocator);
-	static bool DeregisterFixedSizeAllocator(FixedSizeAllocator* allocator);
-	static inline FixedSizeAllocator** const GetRegisteredFixedSizeAllocators();
+	static bool IsFixedSizeAllocatorAvailable(FixedSizeAllocator* allocator);
+	static bool AddFixedSizeAllocator(FixedSizeAllocator* allocator);
+	static bool RemoveFixedSizeAllocator(FixedSizeAllocator* allocator);
+	static inline FixedSizeAllocator** const GetAvailableFixedSizeAllocators();
 
 	// allocate a block of fixed size
 	void* Alloc();
@@ -88,7 +89,18 @@ private:
 	static uint8_t									counter_;												// a counter that will be used while setting ids for allocators
 #endif
 
-	static FixedSizeAllocator*						registered_allocators_[MAX_FIXED_SIZE_ALLOCATORS];		// an array of pointers to all registered fixed size allocators
+	struct FSASort
+	{
+		bool operator()(FixedSizeAllocator* a, FixedSizeAllocator* b)
+		{
+			if (!a)					return false;
+			else if (!b)			return true;
+			return (a->GetBlockSize() < b->GetBlockSize());
+		}
+	};
+
+	static FixedSizeAllocator*						available_allocators_[MAX_FIXED_SIZE_ALLOCATORS];		// an array of pointers to all available fixed size allocators
+	static FSASort									FSASorter;												// a custom function object to sort available fixed size allocators
 
 }; // class FixedSizeAllocator
 

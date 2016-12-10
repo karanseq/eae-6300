@@ -34,7 +34,7 @@ MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
 	ASSERT(MonsterChase::game_allocator_);
 
 	// register the allocator
-	engine::memory::BlockAllocator::RegisterBlockAllocator(MonsterChase::game_allocator_);
+	engine::memory::BlockAllocator::AddBlockAllocator(MonsterChase::game_allocator_);
 
 	srand(static_cast<unsigned int>(time(0)));
 }
@@ -52,7 +52,7 @@ MonsterChase::~MonsterChase()
 	monsters_.clear();
 
 	// deregister the allocator
-	engine::memory::BlockAllocator::DeregisterBlockAllocator(MonsterChase::game_allocator_);
+	engine::memory::BlockAllocator::RemoveBlockAllocator(MonsterChase::game_allocator_);
 
 	// deallocate the allocator
 	engine::memory::BlockAllocator::Destroy(MonsterChase::game_allocator_);

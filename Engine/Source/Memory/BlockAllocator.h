@@ -71,10 +71,10 @@ public:
 	static void CreateDefaultAllocator();
 	static void DestroyDefaultAllocator();
 
-	static bool IsBlockAllocatorRegistered(BlockAllocator* allocator);
-	static bool RegisterBlockAllocator(BlockAllocator* allocator);
-	static bool DeregisterBlockAllocator(BlockAllocator* allocator);
-	static inline BlockAllocator** const GetRegisteredBlockAllocators();
+	static bool IsBlockAllocatorAvailable(BlockAllocator* allocator);
+	static bool AddBlockAllocator(BlockAllocator* allocator);
+	static bool RemoveBlockAllocator(BlockAllocator* allocator);
+	static inline BlockAllocator** const GetAvailableBlockAllocators();
 
 	// Allocate a block of memory with given size & byte alignment
 	void* Alloc(const size_t size, const size_t alignment = DEFAULT_BYTE_ALIGNMENT);
@@ -114,7 +114,7 @@ private:
 	static uint8_t									counter_;												// a counter that will be used while setting ids for allocators
 #endif
 
-	static BlockAllocator*							registered_allocators_[MAX_BLOCK_ALLOCATORS];			// an array of pointers to all registered block allocators
+	static BlockAllocator*							available_allocators_[MAX_BLOCK_ALLOCATORS];			// an array of pointers to all registered block allocators
 
 }; // class BlockAllocator
 

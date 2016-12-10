@@ -71,10 +71,10 @@
     <ClCompile Include="Source\Tests\Private\Tests.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Tests\Private\FixedSizeAllocatorTest.cpp">
+    <ClCompile Include="Source\Tests\Private\BitArray_UnitTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Tests\Private\BitArray_UnitTest.cpp">
+    <ClCompile Include="Source\Tests\Private\FixedSizeAllocator_UnitTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
   </ItemGroup>

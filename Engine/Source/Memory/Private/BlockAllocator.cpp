@@ -32,7 +32,7 @@ void BlockDescriptor::Init()
 
 // initialize static members
 size_t				BlockAllocator::size_of_BD_ = sizeof(BD);
-BlockAllocator*		BlockAllocator::registered_allocators_[MAX_BLOCK_ALLOCATORS] = { nullptr };
+BlockAllocator*		BlockAllocator::available_allocators_[MAX_BLOCK_ALLOCATORS] = { nullptr };
 
 #ifdef BUILD_DEBUG
 uint8_t				BlockAllocator::counter_ = 0;
@@ -98,11 +98,11 @@ void BlockAllocator::Destroy(BlockAllocator* allocator)
 
 BlockAllocator* BlockAllocator::GetDefaultAllocator()
 {
-	if (registered_allocators_[0] == nullptr)
+	if (available_allocators_[0] == nullptr)
 	{
 		CreateDefaultAllocator();
 	}
-	return registered_allocators_[0];
+	return available_allocators_[0];
 }
 
 void BlockAllocator::CreateDefaultAllocator()
@@ -121,8 +121,8 @@ void BlockAllocator::CreateDefaultAllocator()
 	default_block_size -= sizeof(BlockAllocator);
 
 	// create the default allocator
-	registered_allocators_[0] = new (default_allocator_memory) BlockAllocator(block_allocator_memory, default_block_size);
-	if (!registered_allocators_[0])
+	available_allocators_[0] = new (default_allocator_memory) BlockAllocator(block_allocator_memory, default_block_size);
+	if (!available_allocators_[0])
 	{
 		// spit out an error
 		LOG_ERROR("Could not create the default allocator!");
@@ -136,20 +136,20 @@ void BlockAllocator::CreateDefaultAllocator()
 
 void BlockAllocator::DestroyDefaultAllocator()
 {
-	Destroy(registered_allocators_[0]);
+	Destroy(available_allocators_[0]);
 
-	_aligned_free(registered_allocators_[0]);
-	registered_allocators_[0] = nullptr;
+	_aligned_free(available_allocators_[0]);
+	available_allocators_[0] = nullptr;
 }
 
-bool BlockAllocator::IsBlockAllocatorRegistered(BlockAllocator* allocator)
+bool BlockAllocator::IsBlockAllocatorAvailable(BlockAllocator* allocator)
 {
 	ASSERT(allocator);
 
 	// search for the allocator
 	for (uint8_t i = 0; i < MAX_BLOCK_ALLOCATORS; ++i)
 	{
-		if (registered_allocators_[i] == allocator)
+		if (available_allocators_[i] == allocator)
 		{
 			return true;
 		}
@@ -157,7 +157,7 @@ bool BlockAllocator::IsBlockAllocatorRegistered(BlockAllocator* allocator)
 	return false;
 }
 
-bool BlockAllocator::RegisterBlockAllocator(BlockAllocator* allocator)
+bool BlockAllocator::AddBlockAllocator(BlockAllocator* allocator)
 {
 	ASSERT(allocator);
 
@@ -165,16 +165,16 @@ bool BlockAllocator::RegisterBlockAllocator(BlockAllocator* allocator)
 	// i starts at 1 since the first position in the array is reserved for the default allocator
 	for (uint8_t i = 1; i < MAX_BLOCK_ALLOCATORS; ++i)
 	{
-		if (!registered_allocators_[i])
+		if (!available_allocators_[i])
 		{
-			registered_allocators_[i] = allocator;
+			available_allocators_[i] = allocator;
 			return true;
 		}
 	}
 	return false;
 }
 
-bool BlockAllocator::DeregisterBlockAllocator(BlockAllocator* allocator)
+bool BlockAllocator::RemoveBlockAllocator(BlockAllocator* allocator)
 {
 	ASSERT(allocator);
 
@@ -182,9 +182,9 @@ bool BlockAllocator::DeregisterBlockAllocator(BlockAllocator* allocator)
 	// i starts at 1 since the first position in the array is reserved for the default allocator
 	for (uint8_t i = 1; i < MAX_BLOCK_ALLOCATORS; ++i)
 	{
-		if (registered_allocators_[i] == allocator)
+		if (available_allocators_[i] == allocator)
 		{
-			registered_allocators_[i] = nullptr;
+			available_allocators_[i] = nullptr;
 			return true;
 		}
 	}

@@ -10,7 +10,8 @@ namespace engine {
 namespace memory {
 
 // initialize static members
-FixedSizeAllocator*			FixedSizeAllocator::registered_allocators_[MAX_FIXED_SIZE_ALLOCATORS] = { nullptr };
+FixedSizeAllocator*							FixedSizeAllocator::available_allocators_[MAX_FIXED_SIZE_ALLOCATORS] = { nullptr };
+FixedSizeAllocator::FSASort					FixedSizeAllocator::FSASorter;
 
 #ifdef BUILD_DEBUG
 uint8_t						FixedSizeAllocator::counter_ = 0;
@@ -108,7 +109,7 @@ void FixedSizeAllocator::Destroy(FixedSizeAllocator* allocator)
 	block_allocator->Free(allocator);
 }
 
-bool FixedSizeAllocator::IsFixedSizeAllocatorRegistered(FixedSizeAllocator* allocator)
+bool FixedSizeAllocator::IsFixedSizeAllocatorAvailable(FixedSizeAllocator* allocator)
 {
 	// validate input
 	ASSERT(allocator);
@@ -116,7 +117,7 @@ bool FixedSizeAllocator::IsFixedSizeAllocatorRegistered(FixedSizeAllocator* allo
 	// search for the allocator
 	for (uint8_t i = 0; i < MAX_FIXED_SIZE_ALLOCATORS; ++i)
 	{
-		if (registered_allocators_[i] == allocator)
+		if (available_allocators_[i] == allocator)
 		{
 			return true;
 		}
@@ -124,38 +125,61 @@ bool FixedSizeAllocator::IsFixedSizeAllocatorRegistered(FixedSizeAllocator* allo
 	return false;
 }
 
-bool FixedSizeAllocator::RegisterFixedSizeAllocator(FixedSizeAllocator* allocator)
+bool FixedSizeAllocator::AddFixedSizeAllocator(FixedSizeAllocator* allocator)
 {
 	// validate input
 	ASSERT(allocator);
 
-	// find a suitable position in the list of registered allocators
+	bool space_available = false;
+	// add the element at the first available position
 	for (uint8_t i = 0; i < MAX_FIXED_SIZE_ALLOCATORS; ++i)
 	{
-		if (!registered_allocators_[i])
+		if (available_allocators_[i])
 		{
-			registered_allocators_[i] = allocator;
-			return true;
+			// prevent two allocators from having the same block size
+			ASSERT(available_allocators_[i]->GetBlockSize() != allocator->GetBlockSize());
+		}
+		else
+		{
+			available_allocators_[i] = allocator;
+			space_available = true;
+			break;
 		}
 	}
-	return false;
+
+	// ensure we have space for one more allocator
+	ASSERT(space_available);
+
+	// sort the allocators in ascending order of the block sizes they maintain
+	std::sort(available_allocators_, (available_allocators_ + MAX_FIXED_SIZE_ALLOCATORS - 1), FSASorter);
+
+	return true;
 }
 
-bool FixedSizeAllocator::DeregisterFixedSizeAllocator(FixedSizeAllocator* allocator)
+bool FixedSizeAllocator::RemoveFixedSizeAllocator(FixedSizeAllocator* allocator)
 {
 	// validate input
 	ASSERT(allocator);
 
+	bool found = false;
 	// search for the allocator in the list of registered allocators
 	for (uint8_t i = 0; i < MAX_BLOCK_ALLOCATORS; ++i)
 	{
-		if (registered_allocators_[i] == allocator)
+		if (available_allocators_[i] == allocator)
 		{
-			registered_allocators_[i] = nullptr;
-			return true;
+			available_allocators_[i] = nullptr;
+			found = true;
+			break;
 		}
 	}
-	return false;
+
+	// ensure we found the allocator
+	ASSERT(found);
+
+	// sort the allocators in ascending order of the block sizes they maintain
+	std::sort(available_allocators_, (available_allocators_ + MAX_FIXED_SIZE_ALLOCATORS - 1), FSASorter);
+
+	return true;
 }
 
 #ifdef BUILD_DEBUG

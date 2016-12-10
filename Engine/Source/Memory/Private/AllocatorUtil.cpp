@@ -12,28 +12,26 @@ namespace memory {
 		BlockAllocator* default_allocator = BlockAllocator::GetDefaultAllocator();
 
 		// initialize the fixed size allocators
-		// IMPORTANT: ensure that these are in ascending order of the size of the blocks they manage
-		// the new & delete operators rely on this order to deallocate from the correct FSA
 		FixedSizeAllocator* fsa = FixedSizeAllocator::Create(8, 32, default_allocator);
-		FixedSizeAllocator::RegisterFixedSizeAllocator(fsa);
+		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
 		fsa = FixedSizeAllocator::Create(16, 56, default_allocator);
-		FixedSizeAllocator::RegisterFixedSizeAllocator(fsa);
+		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
 		fsa = FixedSizeAllocator::Create(36, 24, default_allocator);
-		FixedSizeAllocator::RegisterFixedSizeAllocator(fsa);
+		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
 		fsa = FixedSizeAllocator::Create(76, 20, default_allocator);
-		FixedSizeAllocator::RegisterFixedSizeAllocator(fsa);
+		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
 		fsa = FixedSizeAllocator::Create(252, 20, default_allocator);
-		FixedSizeAllocator::RegisterFixedSizeAllocator(fsa);
+		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 	}
 
 	void DestroyAllocators()
 	{
 		// destroy the fixed size allocators
-		FixedSizeAllocator** const registered_fsas = FixedSizeAllocator::GetRegisteredFixedSizeAllocators();
+		FixedSizeAllocator** const registered_fsas = FixedSizeAllocator::GetAvailableFixedSizeAllocators();
 
 		for (uint8_t i = 0; i < MAX_FIXED_SIZE_ALLOCATORS; ++i)
 		{

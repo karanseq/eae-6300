@@ -6,9 +6,9 @@
 namespace engine {
 namespace memory {
 
-	inline FixedSizeAllocator** const FixedSizeAllocator::GetRegisteredFixedSizeAllocators()
+	inline FixedSizeAllocator** const FixedSizeAllocator::GetAvailableFixedSizeAllocators()
 	{
-		return registered_allocators_;
+		return available_allocators_;
 	}
 
 	inline uint8_t* FixedSizeAllocator::GetPointerForBlock(size_t bit_index) const
