@@ -15,7 +15,7 @@ namespace memory {
 	{
 		ASSERT(bit_index >= 0 && bit_index < num_blocks_);
 #ifdef BUILD_DEBUG
-		return block_ + (bit_index * (DEFAULT_GUARDBAND_SIZE * 2 + fixed_block_size_));
+		return block_ + (bit_index * (DEFAULT_GUARDBAND_SIZE * 2 + sizeof(size_t) + fixed_block_size_));
 #else
 		return block_ + (bit_index * fixed_block_size_);
 #endif

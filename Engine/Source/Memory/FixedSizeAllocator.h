@@ -58,6 +58,8 @@ public:
 
 	// allocate a block of fixed size
 	void* Alloc();
+	// allocate a block of given size
+	void* Alloc(const size_t size);
 	// deallocate a block of memory
 	bool Free(void* pointer);
 

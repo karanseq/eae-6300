@@ -47,18 +47,22 @@ FixedSizeAllocator::FixedSizeAllocator(void* memory, size_t total_block_size, si
 
 FixedSizeAllocator* FixedSizeAllocator::Create(size_t block_size, size_t num_blocks, BlockAllocator* allocator)
 {
+	// validate input
 	ASSERT(block_size);
 	ASSERT(num_blocks);
 	ASSERT(allocator);
 
 #ifdef BUILD_DEBUG
 	const size_t guardband_size = DEFAULT_GUARDBAND_SIZE;
+	const size_t size_type = sizeof(size_t);
 #else
 	const size_t guardband_size = 0;
+	const size_t size_type = 0;
 #endif
 
 	// calculate the amount of memory required to create an FSA
-	size_t fsa_memory_size = sizeof(FixedSizeAllocator) + num_blocks * (block_size + guardband_size * 2) + engine::data::BitArray::GetRequiredMemorySize(num_blocks);
+	// per block, the FSA adds an overhead of 12 (32-bit) to 16 (64-bit) bytes in debug mode
+	size_t fsa_memory_size = sizeof(FixedSizeAllocator) + num_blocks * (block_size + size_type + guardband_size * 2) + engine::data::BitArray::GetRequiredMemorySize(num_blocks);
 
 	// allocate memory
 	void* memory = allocator->Alloc(fsa_memory_size);
@@ -78,6 +82,7 @@ FixedSizeAllocator* FixedSizeAllocator::Create(size_t block_size, size_t num_blo
 
 void FixedSizeAllocator::Destroy(FixedSizeAllocator* allocator)
 {
+	// validate input
 	ASSERT(allocator);
 
 	BlockAllocator* block_allocator = allocator->block_allocator_;
@@ -105,6 +110,7 @@ void FixedSizeAllocator::Destroy(FixedSizeAllocator* allocator)
 
 bool FixedSizeAllocator::IsFixedSizeAllocatorRegistered(FixedSizeAllocator* allocator)
 {
+	// validate input
 	ASSERT(allocator);
 
 	// search for the allocator
@@ -120,6 +126,7 @@ bool FixedSizeAllocator::IsFixedSizeAllocatorRegistered(FixedSizeAllocator* allo
 
 bool FixedSizeAllocator::RegisterFixedSizeAllocator(FixedSizeAllocator* allocator)
 {
+	// validate input
 	ASSERT(allocator);
 
 	// find a suitable position in the list of registered allocators
@@ -136,6 +143,7 @@ bool FixedSizeAllocator::RegisterFixedSizeAllocator(FixedSizeAllocator* allocato
 
 bool FixedSizeAllocator::DeregisterFixedSizeAllocator(FixedSizeAllocator* allocator)
 {
+	// validate input
 	ASSERT(allocator);
 
 	// search for the allocator in the list of registered allocators
@@ -153,9 +161,16 @@ bool FixedSizeAllocator::DeregisterFixedSizeAllocator(FixedSizeAllocator* alloca
 #ifdef BUILD_DEBUG
 bool FixedSizeAllocator::CheckMemoryOverwrite(size_t bit_index) const
 {
+	// validate input
 	ASSERT(bit_index >= 0 && bit_index < num_blocks_);
 
+	// get this block's starting address
 	uint8_t* block = GetPointerForBlock(bit_index);
+
+	// extract the size of this block as was requested by a user
+	const size_t user_size = *block;
+	// move the block ahead
+	block += sizeof(size_t);
 
 	uint8_t lower_byte_counter = 0, upper_byte_counter = 0;
 	for (uint8_t i = 0; i < DEFAULT_GUARDBAND_SIZE; ++i)
@@ -164,7 +179,7 @@ bool FixedSizeAllocator::CheckMemoryOverwrite(size_t bit_index) const
 		lower_byte_counter += (*(block + i) == GUARDBAND_FILL) ? 1 : 0;
 
 		// check upper guardband
-		upper_byte_counter += (*(block + DEFAULT_GUARDBAND_SIZE + fixed_block_size_ + i) == GUARDBAND_FILL) ? 1 : 0;
+		upper_byte_counter += (*(block + DEFAULT_GUARDBAND_SIZE + user_size + i) == GUARDBAND_FILL) ? 1 : 0;
 	}
 
 	bool found_overwrite = !(lower_byte_counter >= DEFAULT_GUARDBAND_SIZE && upper_byte_counter >= DEFAULT_GUARDBAND_SIZE);
@@ -179,10 +194,18 @@ bool FixedSizeAllocator::CheckMemoryOverwrite(size_t bit_index) const
 
 void* FixedSizeAllocator::Alloc()
 {
+	return Alloc(fixed_block_size_);
+}
+
+void* FixedSizeAllocator::Alloc(const size_t size)
+{
+	// validate input
+	ASSERT(size <= fixed_block_size_);
+
 	// check if there are any blocks available
 	size_t bit_index = -1;
 	bool block_available = block_state_->GetFirstClearBit(bit_index);
-	
+
 	// return nullptr if nothing was available
 	if (!block_available)
 	{
@@ -198,31 +221,39 @@ void* FixedSizeAllocator::Alloc()
 	block_state_->SetBit(bit_index);
 
 #ifdef BUILD_DEBUG
-	const size_t	guardband_size = DEFAULT_GUARDBAND_SIZE;
+	const size_t guardband_size = DEFAULT_GUARDBAND_SIZE;
+	const size_t size_type = sizeof(size_t);
 #else
-	const size_t	guardband_size = 0;
+	const size_t guardband_size = 0;
+	const size_t size_type = 0;
 #endif
 
 	// calculate the block's address
-	uint8_t* block = block_ + bit_index * (guardband_size * 2 + fixed_block_size_);
+	uint8_t* block = block_ + bit_index * (guardband_size * 2 + size_type + fixed_block_size_);
 
 #ifdef BUILD_DEBUG
+	// cast to size_t* is needed since the block is of type uint8_t*
+	size_t* block_size_t = reinterpret_cast<size_t*>(block);
+	// save the size of this block
+	*(block_size_t) = size;
+
 	// clear the block
-	memset(block + guardband_size, CLEAN_FILL, fixed_block_size_);
+	memset(block + size_type + guardband_size, CLEAN_FILL, fixed_block_size_);
 
 	// add guardbands
 	for (uint8_t i = 0; i < guardband_size; ++i)
 	{
-		*(block + i) = GUARDBAND_FILL;
-		*(block + guardband_size + fixed_block_size_ + i) = GUARDBAND_FILL;
+		*(block + size_type + i) = GUARDBAND_FILL;
+		*(block + size_type + guardband_size + size + i) = GUARDBAND_FILL;
 	}
 #endif
 
-	return (block + guardband_size);
+	return (block + size_type + guardband_size);
 }
 
 bool FixedSizeAllocator::Free(void* pointer)
 {
+	// validate input
 	ASSERT(pointer != nullptr);
 
 	// return if this allocator does not contain this pointer
@@ -232,16 +263,18 @@ bool FixedSizeAllocator::Free(void* pointer)
 	}
 
 #ifdef BUILD_DEBUG
-	const size_t	guardband_size = DEFAULT_GUARDBAND_SIZE;
+	const size_t guardband_size = DEFAULT_GUARDBAND_SIZE;
+	const size_t size_type = sizeof(size_t);
 #else
-	const size_t	guardband_size = 0;
+	const size_t guardband_size = 0;
+	const size_t size_type = 0;
 #endif
 
 	// get a pointer to a block
-	uint8_t* block = static_cast<uint8_t*>(pointer) - guardband_size;
+	uint8_t* block = static_cast<uint8_t*>(pointer) - guardband_size - size_type;
 
 	// check if we recognize this pointer
-	if ((block - block_) % (fixed_block_size_ + guardband_size * 2))
+	if ((block - block_) % (fixed_block_size_ + size_type + guardband_size * 2))
 	{
 #ifdef BUILD_DEBUG
 		LOG_ERROR("FixedSizeAllocator-%d could not find pointer=%p passed into Free...bad adress!", id_, pointer);
@@ -252,7 +285,7 @@ bool FixedSizeAllocator::Free(void* pointer)
 	}
 
 	// calculate the index of the bit that represents this block
-	size_t bit_index = (block - block_) / (fixed_block_size_ + guardband_size * 2);
+	size_t bit_index = (block - block_) / (fixed_block_size_ + size_type + guardband_size * 2);
 
 	// validate bit_index
 	if (bit_index < 0 || bit_index >= num_blocks_)
@@ -281,7 +314,7 @@ bool FixedSizeAllocator::Free(void* pointer)
 	ASSERT(!CheckMemoryOverwrite(bit_index));
 
 	// clear the block
-	memset(block, DEAD_FILL, fixed_block_size_ + guardband_size * 2);
+	memset(block, DEAD_FILL, fixed_block_size_ + size_type + guardband_size * 2);
 #endif
 
 	// clear the bit at this index
