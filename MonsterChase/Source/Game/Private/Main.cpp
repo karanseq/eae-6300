@@ -3,81 +3,17 @@
 #include <crtdbg.h>
 #endif // BUILD_DEBUG
 
-#ifdef ENABLE_ALLOCATOR_TEST
-#include "Tests\AllocatorTest.h"
-#include <stdio.h>
-#include <conio.h>
-
-// engine includes
-#include "Memory\BlockAllocator.h"
-#include "Memory\AllocatorUtil.h"
-#include "Memory\AllocatorOverrides.h"
-#include "Math\MathUtil.h"
-
 // game includes
 #include "Game\MonsterChase.h"
 
-bool HeapManager_UnitTest();
-#endif // ENABLE_ALLOCATOR_TEST
-
-//#define ENABLE_VECTOR_CONST_TEST
-//#define ENABLE_FLOAT_VALIDITY_TEST
-//#define ENABLE_MOVE_SEMANTICS_TEST
-#define ENABLE_BIT_ARRAY_TEST
-
-#ifdef ENABLE_VECTOR_CONST_TEST
-void TestVectorConstness();
-#endif // ENABLE_VECTOR_CONST_TEST
-
-#ifdef ENABLE_FLOAT_VALIDITY_TEST
-void TestFloatValidity();
-#endif // ENABLE_FLOAT_VALIDITY_TEST
-
-#ifdef ENABLE_MOVE_SEMANTICS_TEST
-void TestMoveSemantics();
-#endif // ENABLE_MOVE_SEMANTICS_TEST
-
-#ifdef ENABLE_BIT_ARRAY_TEST
-void TestBitArray();
-#endif // ENABLE_BIT_ARRAY_TEST
+void RunTests();
 
 int main(int* argv, char** argc)
 {
 	// initialize the default allocator
 	engine::memory::BlockAllocator::CreateDefaultAllocator();
 	
-#ifdef ENABLE_VECTOR_CONST_TEST
-	TestVectorConstness();
-#endif
-
-#ifdef ENABLE_FLOAT_VALIDITY_TEST
-	TestFloatValidity();
-#endif
-
-#ifdef ENABLE_MOVE_SEMANTICS_TEST
-	TestMoveSemantics();
-#endif
-
-#ifdef ENABLE_BIT_ARRAY_TEST
-	TestBitArray();
-#endif
-
-#ifdef ENABLE_ALLOCATOR_TEST
-	//printf("Beginning allocator test...\nCheck the Output window for details.\n");
-#ifdef BUILD_DEBUG
-	HeapManager_UnitTest();
-#else
-	AllocatorTest::Init();
-	AllocatorTest::RunTest00();
-	AllocatorTest::RunTest01();
-	AllocatorTest::RunTest02();
-	AllocatorTest::RunTest03();
-	AllocatorTest::Reset();
-#endif
-	//printf("Finished test.\n");
-	//_getch();
-	//return 0;
-#endif
+	RunTests();
 
 	// initialize game
 	MonsterChase* monster_chase = new MonsterChase();

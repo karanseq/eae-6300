@@ -38,9 +38,6 @@
     <ClCompile Include="Source\Game\Private\MonsterChase.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Tests\Private\AllocatorTest.cpp">
-      <Filter>Source Files\Tests</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Tests\Private\HeapManager_UnitTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
@@ -68,7 +65,16 @@
     <ClCompile Include="Source\Tests\Private\MoveSemanticsTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Tests\Private\BitArrayTest.cpp">
+    <ClCompile Include="Source\Tests\Private\BlockAllocatorTest.cpp">
+      <Filter>Source Files\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Tests\Private\Tests.cpp">
+      <Filter>Source Files\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Tests\Private\FixedSizeAllocatorTest.cpp">
+      <Filter>Source Files\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Tests\Private\BitArray_UnitTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
   </ItemGroup>
@@ -78,9 +84,6 @@
     </ClInclude>
     <ClInclude Include="Source\Game\MonsterChase.h">
       <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Tests\AllocatorTest.h">
-      <Filter>Header Files\Tests</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Monster.h">
       <Filter>Header Files\Game</Filter>
@@ -117,6 +120,9 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Player-inl.h">
       <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\BlockAllocatorTest.h">
+      <Filter>Header Files\Tests</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

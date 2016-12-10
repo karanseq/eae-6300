@@ -66,6 +66,9 @@ public:
 	// Query whether a given pointer is an outstanding allocation
 	bool IsAllocated(const void* pointer) const;
 
+	inline size_t GetBlockSize() const;
+	inline size_t GetNumBlocks() const;
+
 #ifdef BUILD_DEBUG
 	inline unsigned int GetID() const;
 #endif

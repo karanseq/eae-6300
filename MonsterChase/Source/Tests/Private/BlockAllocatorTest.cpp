@@ -1,17 +1,20 @@
 #ifdef ENABLE_ALLOCATOR_TEST
 
-#include "Tests/AllocatorTest.h"
-#include "Logger/Logger.h"
+#include "Tests/BlockAllocatorTest.h"
 
+// library includes
 #include <stdlib.h>
 #include <vector>		// required ONLY for test03
 
+// engine includes
+#include "Logger/Logger.h"
+
 //#define SIMULATE_MEMORY_OVERWRITE
 
-void*									AllocatorTest::memory_ = nullptr;
-engine::memory::BlockAllocator*			AllocatorTest::block_allocator_ = nullptr;
+void*									BlockAllocatorTest::memory_ = nullptr;
+engine::memory::BlockAllocator*			BlockAllocatorTest::block_allocator_ = nullptr;
 
-void AllocatorTest::Init(size_t total_memory)
+void BlockAllocatorTest::Init(size_t total_memory)
 {
 	LOG("Testing BlockAllocator TOTAL_MEM:%zu", total_memory);
 
@@ -23,7 +26,7 @@ void AllocatorTest::Init(size_t total_memory)
 #endif
 }
 
-void AllocatorTest::Reset()
+void BlockAllocatorTest::Reset()
 {
 	LOG("Destroying BlockAllocator...");
 	engine::memory::BlockAllocator::Destroy(block_allocator_);
@@ -33,7 +36,7 @@ void AllocatorTest::Reset()
 	memory_ = nullptr;
 }
 
-char* AllocatorTest::DoAlloc(const size_t size)
+char* BlockAllocatorTest::DoAlloc(const size_t size)
 {
 	LOG("Alloc-%zu", size);
 	char* ret = static_cast<char*>(block_allocator_->Alloc(size));
@@ -43,7 +46,7 @@ char* AllocatorTest::DoAlloc(const size_t size)
 	return ret;
 }
 
-void AllocatorTest::DoFree(char* pointer, const size_t size)
+void BlockAllocatorTest::DoFree(char* pointer, const size_t size)
 {
 	LOG("Free-%zu", size);
 	block_allocator_->Free(pointer);
@@ -52,7 +55,7 @@ void AllocatorTest::DoFree(char* pointer, const size_t size)
 #endif
 }
 
-void AllocatorTest::RunTest00()
+void BlockAllocatorTest::RunTest00()
 {
 	LOG("-------------------- Running Test 00 --------------------");
 
@@ -90,7 +93,7 @@ void AllocatorTest::RunTest00()
 	LOG("-------------------- Finished Test 00 --------------------");
 }
 
-void AllocatorTest::RunTest01()
+void BlockAllocatorTest::RunTest01()
 {
 	LOG("-------------------- Running Test 01 --------------------");
 
@@ -157,7 +160,7 @@ void AllocatorTest::RunTest01()
 	LOG("-------------------- Finished Test 01 --------------------");
 }
 
-void AllocatorTest::RunTest02()
+void BlockAllocatorTest::RunTest02()
 {
 	LOG("-------------------- Running Test 02 --------------------");
 
@@ -189,7 +192,7 @@ void AllocatorTest::RunTest02()
 	LOG("-------------------- Finished Test 02 --------------------");
 }
 
-void AllocatorTest::RunTest03()
+void BlockAllocatorTest::RunTest03()
 {
 	LOG("-------------------- Running Test 03 --------------------");
 	const uint16_t			iterations = 512;

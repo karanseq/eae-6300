@@ -138,11 +138,11 @@ void* FixedSizeAllocator::Alloc()
 #endif
 
 	// calculate the block's address
-	uint8_t* block = block_ + bit_index * (DEFAULT_GUARDBAND_SIZE * 2 + fixed_block_size_);
+	uint8_t* block = block_ + bit_index * (guardband_size * 2 + fixed_block_size_);
 
 #ifdef BUILD_DEBUG
 	// clear the block
-	memset(block, CLEAN_FILL, fixed_block_size_);
+	memset(block + guardband_size, CLEAN_FILL, fixed_block_size_);
 
 	// add guardbands
 	for (uint8_t i = 0; i < guardband_size; ++i)
@@ -175,14 +175,14 @@ bool FixedSizeAllocator::Free(void* pointer)
 	uint8_t* block = static_cast<uint8_t*>(pointer) - guardband_size;
 
 	// check if we recognize this pointer
-	if ((block - block_) & ((fixed_block_size_ + guardband_size) - 1))
+	if ((block - block_) % (fixed_block_size_ + guardband_size * 2))
 	{
 		LOG_ERROR("FixedSizeAllocator-%d could not find pointer=%p passed into Free...bad adress!", id_, pointer);
 		return false;
 	}
 
 	// calculate the index of the bit that represents this block
-	size_t bit_index = (block - block_) / (fixed_block_size_ + guardband_size);
+	size_t bit_index = (block - block_) / (fixed_block_size_ + guardband_size * 2);
 
 	// validate bit_index
 	if (bit_index < 0 || bit_index >= num_blocks_)

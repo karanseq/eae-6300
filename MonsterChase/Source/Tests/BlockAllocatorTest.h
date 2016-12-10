@@ -5,13 +5,13 @@
 
 #include "Memory/BlockAllocator.h"
 
-class AllocatorTest
+class BlockAllocatorTest
 {
 private:
-	AllocatorTest() {};
-	~AllocatorTest() {};
-	AllocatorTest(const AllocatorTest& copy);
-	AllocatorTest& operator=(const AllocatorTest& at);
+	BlockAllocatorTest() {};
+	~BlockAllocatorTest() {};
+	BlockAllocatorTest(const BlockAllocatorTest& copy);
+	BlockAllocatorTest& operator=(const BlockAllocatorTest& at);
 
 	static char* DoAlloc(const size_t size);
 	static void DoFree(char* pointer, const size_t size);

@@ -128,8 +128,12 @@ namespace data {
 #endif
 		if (is_non_zero)
 		{
-			bit_index = bit_index_long;
-			return true;
+			size_t new_bit_index = bucket_index * BIT_DEPTH + bit_index_long;
+			if (new_bit_index < num_bits_)
+			{
+				bit_index = new_bit_index;
+				return true;
+			}
 		}
 
 		return false;
@@ -159,8 +163,12 @@ namespace data {
 #endif
 		if (is_non_zero)
 		{
-			bit_index = bit_index_long;
-			return true;
+			size_t new_bit_index = bucket_index * BIT_DEPTH + bit_index_long;
+			if (new_bit_index < num_bits_)
+			{
+				bit_index = new_bit_index;
+				return true;
+			}
 		}
 
 		return false;

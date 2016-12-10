@@ -79,6 +79,7 @@ void BlockAllocator::Destroy(BlockAllocator* allocator)
 {
 	ASSERT(allocator);
 
+#ifdef BUILD_DEBUG
 	// TODO: Print *more* diagnostics
 	if (allocator->user_list_head_ != nullptr)
 	{
@@ -90,6 +91,7 @@ void BlockAllocator::Destroy(BlockAllocator* allocator)
 
 		LOG_ERROR("WARNING! Found %zu unfreed allocations in allocator-%d", unfreed_allocations, allocator->id_);		
 	}
+#endif
 
 	LOG("BlockAllocator-%d destroyed", allocator->id_);
 }

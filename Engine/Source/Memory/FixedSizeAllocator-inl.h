@@ -37,5 +37,15 @@ namespace memory {
 		return (static_cast<const uint8_t*>(pointer) >= block_ && static_cast<const uint8_t*>(pointer) <= (block_ + total_block_size_));
 	}
 
+	inline size_t FixedSizeAllocator::GetBlockSize() const
+	{
+		return fixed_block_size_;
+	}
+
+	inline size_t FixedSizeAllocator::GetNumBlocks() const
+	{
+		return num_blocks_;
+	}
+
 } // namespace memory
 } // namespace engine
