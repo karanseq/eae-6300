@@ -51,5 +51,6 @@ void BitArray_UnitTest(void)
 	pMyArray->ClearAll();
 	assert(pMyArray->GetFirstSetBit(firstSetBit) == false);
 
-	delete pMyArray;
+	//delete pMyArray;
+	engine::memory::BlockAllocator::GetDefaultAllocator()->Free(pMyArray);
 }

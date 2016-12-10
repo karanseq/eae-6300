@@ -1,10 +1,6 @@
 #ifndef CUSTOM_NEW_H_
 #define CUSTOM_NEW_H_
 
-#include "Memory\BlockAllocator.h"
-#include "Assert\Assert.h"
-#include "Logger\Logger.h"
-
 namespace engine {
 namespace memory {
 
@@ -16,6 +12,10 @@ namespace memory {
 		ALIGNMENT_32 = 32,
 		ALIGNMENT_64 = 64
 	};
+
+	// forward declaration
+	class BlockAllocator;
+	class FixedSizeAllocator;
 
 } // namespace memory
 } // namespace engine
@@ -37,6 +37,12 @@ void operator delete(void* pointer, engine::memory::BlockAllocator* allocator);
 
 void* operator new[](size_t size, engine::memory::BlockAllocator* allocator);
 void operator delete[](void* pointer, engine::memory::BlockAllocator* allocator);
+
+void* operator new(size_t size, engine::memory::FixedSizeAllocator* allocator);
+void operator delete(void* pointer, engine::memory::FixedSizeAllocator* allocator);
+
+void* operator new[](size_t size, engine::memory::FixedSizeAllocator* allocator);
+void operator delete[](void* pointer, engine::memory::FixedSizeAllocator* allocator);
 
 void* operator new(size_t size, engine::memory::BlockAllocator* allocator, engine::memory::AlignmentType alignment);
 void operator delete(void* pointer, engine::memory::BlockAllocator* allocator, engine::memory::AlignmentType alignment);

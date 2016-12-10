@@ -6,7 +6,7 @@
 namespace engine {
 namespace memory {
 
-	inline FixedSizeAllocator** const FixedSizeAllocator::GetRegisteredFixedSizeAllocator()
+	inline FixedSizeAllocator** const FixedSizeAllocator::GetRegisteredFixedSizeAllocators()
 	{
 		return registered_allocators_;
 	}

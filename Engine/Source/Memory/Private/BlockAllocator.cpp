@@ -300,7 +300,7 @@ bool BlockAllocator::CheckMemoryOverwrite(BD* bd) const
 	bool found_overwrite = !(lower_byte_counter >= DEFAULT_GUARDBAND_SIZE && upper_byte_counter >= DEFAULT_GUARDBAND_SIZE);
 	if (found_overwrite)
 	{
-		LOG_ERROR("Detected overwritten memory!");
+		LOG_ERROR("BlockAllocator-%d detected overwritten memory!");
 	}
 
 	return found_overwrite;

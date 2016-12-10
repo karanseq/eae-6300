@@ -54,7 +54,7 @@ public:
 	static bool IsFixedSizeAllocatorRegistered(FixedSizeAllocator* allocator);
 	static bool RegisterFixedSizeAllocator(FixedSizeAllocator* allocator);
 	static bool DeregisterFixedSizeAllocator(FixedSizeAllocator* allocator);
-	static inline FixedSizeAllocator** const GetRegisteredFixedSizeAllocator();
+	static inline FixedSizeAllocator** const GetRegisteredFixedSizeAllocators();
 
 	// allocate a block of fixed size
 	void* Alloc();

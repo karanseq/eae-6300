@@ -168,7 +168,7 @@ bool FixedSizeAllocator::CheckMemoryOverwrite(size_t bit_index) const
 	uint8_t* block = GetPointerForBlock(bit_index);
 
 	// extract the size of this block as was requested by a user
-	const size_t user_size = *block;
+	const size_t user_size = *reinterpret_cast<size_t*>(block);
 	// move the block ahead
 	block += sizeof(size_t);
 
@@ -185,7 +185,7 @@ bool FixedSizeAllocator::CheckMemoryOverwrite(size_t bit_index) const
 	bool found_overwrite = !(lower_byte_counter >= DEFAULT_GUARDBAND_SIZE && upper_byte_counter >= DEFAULT_GUARDBAND_SIZE);
 	if (found_overwrite)
 	{
-		LOG_ERROR("Detected overwritten memory!");
+		LOG_ERROR("FixedSizeAllocator-%d with fixed_block_size_=%zu detected overwritten memory!", id_, fixed_block_size_);
 	}
 
 	return found_overwrite;
@@ -210,7 +210,7 @@ void* FixedSizeAllocator::Alloc(const size_t size)
 	if (!block_available)
 	{
 #ifdef BUILD_DEBUG
-		LOG_ERROR("FixedSizeAllocator-%d with block_size=%zu ran out of memory!", id_, fixed_block_size_);
+		LOG_ERROR("FixedSizeAllocator-%d with fixed_block_size_=%zu ran out of memory!", id_, fixed_block_size_);
 #else
 		LOG_ERROR("A FixedSizeAllocator ran out of memory!");
 #endif
