@@ -64,12 +64,12 @@ void RunTests()
 #ifdef BUILD_DEBUG
 	HeapManager_UnitTest();
 #else
-	AllocatorTest::Init();
-	AllocatorTest::RunTest00();
-	AllocatorTest::RunTest01();
-	AllocatorTest::RunTest02();
-	AllocatorTest::RunTest03();
-	AllocatorTest::Reset();
+	BlockAllocatorTest::Init();
+	BlockAllocatorTest::RunTest00();
+	BlockAllocatorTest::RunTest01();
+	BlockAllocatorTest::RunTest02();
+	BlockAllocatorTest::RunTest03();
+	BlockAllocatorTest::Reset();
 #endif
 #endif
 }

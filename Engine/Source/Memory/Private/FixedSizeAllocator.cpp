@@ -79,13 +79,27 @@ void FixedSizeAllocator::Destroy(FixedSizeAllocator* allocator)
 {
 	ASSERT(allocator);
 
-	// TODO: print diagnostics
-
 	BlockAllocator* block_allocator = allocator->block_allocator_;
-	uint8_t id = allocator->id_;
-	block_allocator->Free(allocator);
 
+#ifdef BUILD_DEBUG
+	// TODO: print *more* diagnostics
+	size_t first_set_bit = -1;
+	if (allocator->block_state_->GetFirstSetBit(first_set_bit))
+	{
+		size_t unfreed_allocations = 0;
+		for (size_t i = first_set_bit; i < allocator->num_blocks_; ++i)
+		{
+			unfreed_allocations += allocator->block_state_->IsBitSet(i) ? 1 : 0;
+		}
+
+		LOG_ERROR("WARNING! Found %zu unfreed allocations in FixedSizeAllocator-%d with fixed_block_size:%zu", unfreed_allocations, allocator->id_, allocator->fixed_block_size_);
+	}
+
+	uint8_t id = allocator->id_;
 	LOG("FixedSizeAllocator-%d destroyed", id);
+#endif
+
+	block_allocator->Free(allocator);
 }
 
 #ifdef BUILD_DEBUG
@@ -124,7 +138,11 @@ void* FixedSizeAllocator::Alloc()
 	// return nullptr if nothing was available
 	if (!block_available)
 	{
+#ifdef BUILD_DEBUG
 		LOG_ERROR("FixedSizeAllocator-%d with block_size=%zu ran out of memory!", id_, fixed_block_size_);
+#else
+		LOG_ERROR("A FixedSizeAllocator ran out of memory!");
+#endif
 		return nullptr;
 	}
 
@@ -177,7 +195,11 @@ bool FixedSizeAllocator::Free(void* pointer)
 	// check if we recognize this pointer
 	if ((block - block_) % (fixed_block_size_ + guardband_size * 2))
 	{
+#ifdef BUILD_DEBUG
 		LOG_ERROR("FixedSizeAllocator-%d could not find pointer=%p passed into Free...bad adress!", id_, pointer);
+#else
+		LOG_ERROR("Bad input passed to FixedSizeAllocator::Free!");
+#endif
 		return false;
 	}
 
@@ -187,14 +209,22 @@ bool FixedSizeAllocator::Free(void* pointer)
 	// validate bit_index
 	if (bit_index < 0 || bit_index >= num_blocks_)
 	{
+#ifdef BUILD_DEBUG
 		LOG_ERROR("FixedSizeAllocator-%d could not find pointer=%p passed into Free...couldn't map to an index!", id_, pointer);
+#else
+		LOG_ERROR("Bad input passed to FixedSizeAllocator::Free!");
+#endif
 		return false;
 	}
 
 	// check if this block is currently allocated
 	if (block_state_->IsBitClear(bit_index))
 	{
+#ifdef BUILD_DEBUG
 		LOG_ERROR("FixedSizeAllocator-%d could not free pointer=%p since it is not currently allocated!", id_, pointer);
+#else
+		LOG_ERROR("Bad input passed to FixedSizeAllocator::Free!");
+#endif
 		return false;
 	}
 

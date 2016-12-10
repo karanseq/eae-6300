@@ -31,7 +31,7 @@ void ExhaustAllocator(engine::memory::FixedSizeAllocator* fsa)
 		if ((num_allocs % free_every) == 0)
 		{
 			++num_frees;
-			fsa->Free(pointer);
+			//fsa->Free(pointer);
 		}
 		else
 		{

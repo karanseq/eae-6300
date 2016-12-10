@@ -89,11 +89,11 @@ void BlockAllocator::Destroy(BlockAllocator* allocator)
 			++unfreed_allocations;
 		}
 
-		LOG_ERROR("WARNING! Found %zu unfreed allocations in allocator-%d", unfreed_allocations, allocator->id_);		
+		LOG_ERROR("WARNING! Found %zu unfreed allocations in BlockAllocator-%d", unfreed_allocations, allocator->id_);
 	}
-#endif
 
 	LOG("BlockAllocator-%d destroyed", allocator->id_);
+#endif
 }
 
 BlockAllocator* BlockAllocator::GetDefaultAllocator()
@@ -389,7 +389,11 @@ void* BlockAllocator::Alloc(const size_t size, const size_t alignment)
 			}
 			else
 			{
+#ifdef BUILD_DEBUG
 				LOG_ERROR("BlockAllocator-%d ran out of memory!", id_);
+#else
+				LOG_ERROR("A BlockAllocator ran out of memory!");
+#endif
 				return nullptr;
 			}
 		}
@@ -399,7 +403,11 @@ void* BlockAllocator::Alloc(const size_t size, const size_t alignment)
 	// this means we couldn't find a block even after defragmenting
 	if (new_bd == nullptr)
 	{
+#ifdef BUILD_DEBUG
 		LOG_ERROR("BlockAllocator-%d ran out of memory!", id_);
+#else
+		LOG_ERROR("A BlockAllocator ran out of memory!");
+#endif
 		return nullptr;
 	}
 
