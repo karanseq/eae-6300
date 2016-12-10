@@ -130,7 +130,7 @@ void BlockAllocator::DestroyDefaultAllocator()
 	allocators_[0] = nullptr;
 }
 
-bool BlockAllocator::IsAllocatorRegistered(BlockAllocator* allocator)
+bool BlockAllocator::IsBlockAllocatorRegistered(BlockAllocator* allocator)
 {
 	ASSERT(allocator);
 
@@ -145,12 +145,13 @@ bool BlockAllocator::IsAllocatorRegistered(BlockAllocator* allocator)
 	return false;
 }
 
-bool BlockAllocator::RegisterAllocator(BlockAllocator* allocator)
+bool BlockAllocator::RegisterBlockAllocator(BlockAllocator* allocator)
 {
 	ASSERT(allocator);
 
 	// find a suitable position in the list of registered allocators
-	for (uint8_t i = 0; i < MAX_ALLOCATORS; ++i)
+	// i starts at 1 since the first position in the array is reserved for the default allocator
+	for (uint8_t i = 1; i < MAX_ALLOCATORS; ++i)
 	{
 		if (!allocators_[i])
 		{
@@ -161,12 +162,13 @@ bool BlockAllocator::RegisterAllocator(BlockAllocator* allocator)
 	return false;
 }
 
-bool BlockAllocator::DeregisterAllocator(BlockAllocator* allocator)
+bool BlockAllocator::DeregisterBlockAllocator(BlockAllocator* allocator)
 {
 	ASSERT(allocator);
 
 	// search for the allocator in the list of registered allocators
-	for (uint8_t i = 0; i < MAX_ALLOCATORS; ++i)
+	// i starts at 1 since the first position in the array is reserved for the default allocator
+	for (uint8_t i = 1; i < MAX_ALLOCATORS; ++i)
 	{
 		if (allocators_[i] == allocator)
 		{

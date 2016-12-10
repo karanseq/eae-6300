@@ -30,7 +30,7 @@ void operator delete(void* pointer)
 	ASSERT(pointer);
 
 	// get all registered allocators
-	engine::memory::BlockAllocator** const allocators = engine::memory::BlockAllocator::GetRegisteredAllocators();
+	engine::memory::BlockAllocator** const allocators = engine::memory::BlockAllocator::GetRegisteredBlockAllocators();
 
 	// free the pointer from the appropriate allocator
 	uint8_t num_allocators = MAX_ALLOCATORS - 1;
@@ -67,7 +67,7 @@ void operator delete[](void* pointer)
 	ASSERT(pointer);
 
 	// get all registered allocators
-	engine::memory::BlockAllocator** const allocators = engine::memory::BlockAllocator::GetRegisteredAllocators();
+	engine::memory::BlockAllocator** const allocators = engine::memory::BlockAllocator::GetRegisteredBlockAllocators();
 
 	// free the pointer from the appropriate allocator
 	uint8_t num_allocators = MAX_ALLOCATORS - 1;

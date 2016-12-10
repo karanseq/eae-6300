@@ -76,10 +76,10 @@ public:
 	static void CreateDefaultAllocator();
 	static void DestroyDefaultAllocator();
 
-	static bool IsAllocatorRegistered(BlockAllocator* allocator);
-	static bool RegisterAllocator(BlockAllocator* allocator);
-	static bool DeregisterAllocator(BlockAllocator* allocator);
-	static inline BlockAllocator** const GetRegisteredAllocators();
+	static bool IsBlockAllocatorRegistered(BlockAllocator* allocator);
+	static bool RegisterBlockAllocator(BlockAllocator* allocator);
+	static bool DeregisterBlockAllocator(BlockAllocator* allocator);
+	static inline BlockAllocator** const GetRegisteredBlockAllocators();
 
 	// Allocate a block of memory with given size
 	void* Alloc(const size_t size, const size_t alignment = DEFAULT_BYTE_ALIGNMENT);

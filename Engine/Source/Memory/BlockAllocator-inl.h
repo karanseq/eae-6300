@@ -6,7 +6,7 @@
 namespace engine {
 namespace memory {
 
-	inline BlockAllocator** const BlockAllocator::GetRegisteredAllocators()
+	inline BlockAllocator** const BlockAllocator::GetRegisteredBlockAllocators()
 	{
 		return allocators_;
 	}
