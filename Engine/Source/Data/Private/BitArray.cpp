@@ -12,8 +12,10 @@
 namespace engine {
 namespace data {
 
+	const size_t BitArray::bit_depth_ = sizeof(size_t) * 8;
+
 	BitArray::BitArray(size_t num_bits, void* memory, bool start_set) : buckets_(static_cast<size_t*>(memory)),
-		num_buckets_(((num_bits & (BIT_DEPTH - 1)) ? 1 : 0) + num_bits / BIT_DEPTH),
+		num_buckets_(((num_bits & (bit_depth_ - 1)) ? 1 : 0) + num_bits / bit_depth_),
 		num_bits_(num_bits)
 	{
 		ASSERT(num_bits_ > 0);
@@ -73,10 +75,10 @@ namespace data {
 		ASSERT(bit_index < num_bits_);
 
 		// calculate the bucket index
-		size_t bucket_index = bit_index / BIT_DEPTH;
+		size_t bucket_index = bit_index / bit_depth_;
 
 		// set the respective bit in the respective bucket
-		*(buckets_ + bucket_index) |= static_cast<size_t>(1) << bit_index;
+		buckets_[bucket_index] |= static_cast<size_t>(1) << bit_index;
 	}
 
 	void BitArray::ClearBit(size_t bit_index)
@@ -86,10 +88,10 @@ namespace data {
 		ASSERT(bit_index < num_bits_);
 
 		// calculate the bucket index
-		size_t bucket_index = bit_index / BIT_DEPTH;
+		size_t bucket_index = bit_index / bit_depth_;
 
 		// set the respective bit in the respective bucket
-		*(buckets_ + bucket_index) &= ~(static_cast<size_t>(1) << bit_index);
+		buckets_[bucket_index] &= ~(static_cast<size_t>(1) << bit_index);
 	}
 
 	void BitArray::ToggleBit(size_t bit_index)
@@ -99,9 +101,9 @@ namespace data {
 		ASSERT(bit_index < num_bits_);
 
 		// calculate the bucket index
-		size_t bucket_index = bit_index / BIT_DEPTH;
+		size_t bucket_index = bit_index / bit_depth_;
 
-		*(buckets_ + bucket_index) ^= static_cast<size_t>(1) << bit_index;
+		buckets_[bucket_index] ^= static_cast<size_t>(1) << bit_index;
 	}
 
 	bool BitArray::GetFirstSetBit(size_t &bit_index) const
@@ -128,7 +130,7 @@ namespace data {
 #endif
 		if (is_non_zero)
 		{
-			size_t new_bit_index = bucket_index * BIT_DEPTH + bit_index_long;
+			size_t new_bit_index = bucket_index * bit_depth_ + bit_index_long;
 			if (new_bit_index < num_bits_)
 			{
 				bit_index = new_bit_index;
@@ -163,7 +165,7 @@ namespace data {
 #endif
 		if (is_non_zero)
 		{
-			size_t new_bit_index = bucket_index * BIT_DEPTH + bit_index_long;
+			size_t new_bit_index = bucket_index * bit_depth_ + bit_index_long;
 			if (new_bit_index < num_bits_)
 			{
 				bit_index = new_bit_index;

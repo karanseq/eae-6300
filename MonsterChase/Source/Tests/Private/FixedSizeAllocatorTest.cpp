@@ -31,7 +31,7 @@ void ExhaustAllocator(engine::memory::FixedSizeAllocator* fsa)
 		if ((num_allocs % free_every) == 0)
 		{
 			++num_frees;
-			//fsa->Free(pointer);
+			fsa->Free(pointer);
 		}
 		else
 		{
@@ -53,25 +53,25 @@ void ExhaustAllocator(engine::memory::FixedSizeAllocator* fsa)
 
 void TestFixedSizeAllocator()
 {
-	engine::memory::BlockAllocator*			default_allocator = engine::memory::BlockAllocator::GetDefaultAllocator();
+	engine::memory::BlockAllocator*				default_allocator = engine::memory::BlockAllocator::GetDefaultAllocator();
 
-	engine::memory::FixedSizeAllocator*		fsa_8 = engine::memory::FixedSizeAllocator::Create(8, 128, default_allocator);
+	engine::memory::FixedSizeAllocator*			fsa_8 = engine::memory::FixedSizeAllocator::Create(8, 128, default_allocator);
 	ExhaustAllocator(fsa_8);
 	engine::memory::FixedSizeAllocator::Destroy(fsa_8);
 
-	engine::memory::FixedSizeAllocator*		fsa_24 = engine::memory::FixedSizeAllocator::Create(24, 512, default_allocator);
+	engine::memory::FixedSizeAllocator*			fsa_24 = engine::memory::FixedSizeAllocator::Create(24, 512, default_allocator);
 	ExhaustAllocator(fsa_24);
 	engine::memory::FixedSizeAllocator::Destroy(fsa_24);
 
-	engine::memory::FixedSizeAllocator*		fsa_48 = engine::memory::FixedSizeAllocator::Create(48, 1024, default_allocator);
+	engine::memory::FixedSizeAllocator*			fsa_48 = engine::memory::FixedSizeAllocator::Create(48, 1024, default_allocator);
 	ExhaustAllocator(fsa_48);
 	engine::memory::FixedSizeAllocator::Destroy(fsa_48);
 
-	engine::memory::FixedSizeAllocator*		fsa_128 = engine::memory::FixedSizeAllocator::Create(128, 256, default_allocator);
+	engine::memory::FixedSizeAllocator*			fsa_128 = engine::memory::FixedSizeAllocator::Create(128, 256, default_allocator);
 	ExhaustAllocator(fsa_128);
 	engine::memory::FixedSizeAllocator::Destroy(fsa_128);
 
-	engine::memory::FixedSizeAllocator*		fsa_256 = engine::memory::FixedSizeAllocator::Create(256, 128, default_allocator);
+	engine::memory::FixedSizeAllocator*			fsa_256 = engine::memory::FixedSizeAllocator::Create(256, 128, default_allocator);
 	ExhaustAllocator(fsa_256);
 	engine::memory::FixedSizeAllocator::Destroy(fsa_256);
 }

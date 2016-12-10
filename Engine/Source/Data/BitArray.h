@@ -6,14 +6,6 @@
 namespace engine {
 namespace data {
 
-#if defined(_WIN64)
-	typedef uint64_t			uintx_t;
-	#define BIT_DEPTH			64
-#else
-	typedef uint32_t			uintx_t;
-	#define BIT_DEPTH			32
-#endif
-
 	class BitArray
 	{
 	private:
@@ -57,6 +49,7 @@ namespace data {
 		size_t*											buckets_;
 		size_t											num_buckets_;
 		size_t											num_bits_;
+		static const size_t								bit_depth_;
 
 	}; // class BitArray
 

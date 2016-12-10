@@ -47,9 +47,9 @@ namespace data {
 		ASSERT(bit_index < num_bits_);
 
 		// calculate the bucket index
-		size_t bucket_index = bit_index / BIT_DEPTH;
+		size_t bucket_index = bit_index / bit_depth_;
 
-		return (*(buckets_ + bucket_index) >> bit_index) & static_cast<size_t>(1);
+		return (buckets_[bucket_index] >> bit_index) & static_cast<size_t>(1);
 	}
 
 	inline bool BitArray::IsBitClear(size_t bit_index) const
@@ -69,7 +69,7 @@ namespace data {
 
 	inline size_t BitArray::GetRequiredMemorySize(size_t num_bits)
 	{
-		const size_t num_buckets = ((num_bits & (BIT_DEPTH - 1)) ? 1 : 0) + num_bits / BIT_DEPTH;
+		const size_t num_buckets = ((num_bits & (bit_depth_ - 1)) ? 1 : 0) + num_bits / bit_depth_;
 		return sizeof(BitArray) + sizeof(size_t) * num_buckets;
 	}
 
