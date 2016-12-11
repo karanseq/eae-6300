@@ -83,13 +83,7 @@ void BlockAllocator::Destroy(BlockAllocator* allocator)
 	// TODO: Print *more* diagnostics
 	if (allocator->user_list_head_ != nullptr)
 	{
-		size_t unfreed_allocations = 0;
-		for (BD* bd = allocator->user_list_head_; bd != nullptr; bd = bd->next_)
-		{
-			++unfreed_allocations;
-		}
-
-		LOG_ERROR("WARNING! Found %zu unfreed allocations in BlockAllocator-%d", unfreed_allocations, allocator->id_);
+		LOG_ERROR("WARNING! Found %zu unfreed allocations in BlockAllocator-%d", allocator->GetNumOustandingBlocks(), allocator->id_);
 	}
 
 	LOG("BlockAllocator-%d destroyed", allocator->id_);
@@ -567,20 +561,6 @@ const size_t BlockAllocator::GetLargestFreeBlockSize(const size_t alignment) con
 #else
 	return largest_size - alignment;
 #endif
-}
-
-const size_t BlockAllocator::GetTotalFreeMemorySize() const
-{
-	size_t total_size = 0;
-	// loop the free list
-	BD* bd = free_list_head_;
-	while (bd != nullptr)
-	{
-		total_size += bd->block_size_;
-		bd = bd->next_;
-	}
-
-	return total_size;
 }
 
 #ifdef BUILD_DEBUG

@@ -15,7 +15,7 @@ namespace memory {
 		return available_allocators_;
 	}
 
-	inline uint8_t* FixedSizeAllocator::GetPointerForBlock(size_t bit_index) const
+	inline uint8_t* FixedSizeAllocator::GetPointerForBlock(const size_t bit_index) const
 	{
 		ASSERT(bit_index >= 0 && bit_index < num_blocks_);
 #ifdef BUILD_DEBUG
@@ -46,7 +46,7 @@ namespace memory {
 		return (static_cast<const uint8_t*>(pointer) >= block_ && static_cast<const uint8_t*>(pointer) <= (block_ + total_block_size_));
 	}
 
-	inline size_t FixedSizeAllocator::GetNumAvailableBlocks() const
+	inline const size_t FixedSizeAllocator::GetNumAvailableBlocks() const
 	{
 		size_t num_available_blocks = 0;
 		for (size_t i = 0; i < num_blocks_; ++i)
@@ -56,17 +56,17 @@ namespace memory {
 		return num_available_blocks;
 	}
 
-	inline size_t FixedSizeAllocator::GetNumOustandingBlocks() const
+	inline const size_t FixedSizeAllocator::GetNumOustandingBlocks() const
 	{
 		return num_blocks_ - GetNumAvailableBlocks();
 	}
 
-	inline size_t FixedSizeAllocator::GetBlockSize() const
+	inline const size_t FixedSizeAllocator::GetBlockSize() const
 	{
 		return fixed_block_size_;
 	}
 
-	inline size_t FixedSizeAllocator::GetNumBlocks() const
+	inline const size_t FixedSizeAllocator::GetNumBlocks() const
 	{
 		return num_blocks_;
 	}

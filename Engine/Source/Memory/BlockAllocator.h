@@ -91,7 +91,9 @@ public:
 
 	static inline size_t GetSizeOfBD();
 	const size_t GetLargestFreeBlockSize(const size_t alignment = DEFAULT_BYTE_ALIGNMENT) const;
-	const size_t GetTotalFreeMemorySize() const;
+	inline const size_t GetTotalFreeMemorySize() const;
+
+	inline const size_t GetNumOustandingBlocks() const;
 
 #ifdef BUILD_DEBUG
 	inline unsigned int GetID() const;

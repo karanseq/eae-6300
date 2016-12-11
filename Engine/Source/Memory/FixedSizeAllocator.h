@@ -38,18 +38,18 @@ private:
 	FixedSizeAllocator(const FixedSizeAllocator& copy);
 	FixedSizeAllocator& operator=(const FixedSizeAllocator& fsa);
 
-	FixedSizeAllocator(void* memory, size_t total_block_size, size_t fixed_block_size, size_t num_blocks, BlockAllocator* allocator);
+	FixedSizeAllocator(void* memory, const size_t total_block_size, const size_t fixed_block_size, const size_t num_blocks, BlockAllocator* allocator);
 	~FixedSizeAllocator();
 
-	inline uint8_t* GetPointerForBlock(size_t bit_index) const;
+	inline uint8_t* GetPointerForBlock(const size_t bit_index) const;
 
 #ifdef BUILD_DEBUG
-	bool CheckMemoryOverwrite(size_t bit_index) const;
-	inline void ClearBlock(size_t bit_index, const unsigned char fill);
+	bool CheckMemoryOverwrite(const size_t bit_index) const;
+	inline void ClearBlock(const size_t bit_index, const unsigned char fill);
 #endif
 
 public:
-	static FixedSizeAllocator* Create(size_t block_size, size_t num_blocks, BlockAllocator* allocator);
+	static FixedSizeAllocator* Create(const size_t block_size, const size_t num_blocks, BlockAllocator* allocator);
 	static void Destroy(FixedSizeAllocator* allocator);
 
 	static bool IsFixedSizeAllocatorAvailable(FixedSizeAllocator* allocator);
@@ -69,11 +69,11 @@ public:
 	// Query whether a given pointer is an outstanding allocation
 	bool IsAllocated(const void* pointer) const;
 
-	inline size_t GetNumAvailableBlocks() const;
-	inline size_t GetNumOustandingBlocks() const;
+	inline const size_t GetNumAvailableBlocks() const;
+	inline const size_t GetNumOustandingBlocks() const;
 
-	inline size_t GetBlockSize() const;
-	inline size_t GetNumBlocks() const;
+	inline const size_t GetBlockSize() const;
+	inline const size_t GetNumBlocks() const;
 
 #ifdef BUILD_DEBUG
 	inline unsigned int GetID() const;

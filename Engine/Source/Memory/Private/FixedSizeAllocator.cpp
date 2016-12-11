@@ -17,7 +17,7 @@ FixedSizeAllocator::FSASort					FixedSizeAllocator::FSASorter;
 uint8_t						FixedSizeAllocator::counter_ = 0;
 #endif
 
-FixedSizeAllocator::FixedSizeAllocator(void* memory, size_t total_block_size, size_t fixed_block_size, size_t num_blocks, BlockAllocator* allocator) : block_(static_cast<uint8_t*>(memory)),
+FixedSizeAllocator::FixedSizeAllocator(void* memory, const size_t total_block_size, const size_t fixed_block_size, const size_t num_blocks, BlockAllocator* allocator) : block_(static_cast<uint8_t*>(memory)),
 	total_block_size_(total_block_size),
 	fixed_block_size_(fixed_block_size),
 	num_blocks_(num_blocks),
@@ -46,7 +46,7 @@ FixedSizeAllocator::FixedSizeAllocator(void* memory, size_t total_block_size, si
 #endif
 }
 
-FixedSizeAllocator* FixedSizeAllocator::Create(size_t block_size, size_t num_blocks, BlockAllocator* allocator)
+FixedSizeAllocator* FixedSizeAllocator::Create(const size_t block_size, const size_t num_blocks, BlockAllocator* allocator)
 {
 	// validate input
 	ASSERT(block_size);
@@ -93,13 +93,7 @@ void FixedSizeAllocator::Destroy(FixedSizeAllocator* allocator)
 	size_t first_set_bit = -1;
 	if (allocator->block_state_->GetFirstSetBit(first_set_bit))
 	{
-		size_t unfreed_allocations = 0;
-		for (size_t i = first_set_bit; i < allocator->num_blocks_; ++i)
-		{
-			unfreed_allocations += allocator->block_state_->IsBitSet(i) ? 1 : 0;
-		}
-
-		LOG_ERROR("WARNING! Found %zu unfreed allocations in FixedSizeAllocator-%d with fixed_block_size:%zu", unfreed_allocations, allocator->id_, allocator->fixed_block_size_);
+		LOG_ERROR("WARNING! Found %zu unfreed allocations in FixedSizeAllocator-%d with fixed_block_size:%zu", allocator->GetNumOustandingBlocks(), allocator->id_, allocator->fixed_block_size_);
 	}
 
 	uint8_t id = allocator->id_;
@@ -183,7 +177,7 @@ bool FixedSizeAllocator::RemoveFixedSizeAllocator(FixedSizeAllocator* allocator)
 }
 
 #ifdef BUILD_DEBUG
-bool FixedSizeAllocator::CheckMemoryOverwrite(size_t bit_index) const
+bool FixedSizeAllocator::CheckMemoryOverwrite(const size_t bit_index) const
 {
 	// validate input
 	ASSERT(bit_index >= 0 && bit_index < num_blocks_);
