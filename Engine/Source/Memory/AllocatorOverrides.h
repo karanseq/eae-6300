@@ -1,6 +1,10 @@
 #ifndef CUSTOM_NEW_H_
 #define CUSTOM_NEW_H_
 
+// library includes
+//#include <corecrt.h>
+//#include <corecrt_malloc.h>
+
 namespace engine {
 namespace memory {
 
@@ -17,11 +21,18 @@ namespace memory {
 	class BlockAllocator;
 	class FixedSizeAllocator;
 
+	void* DoAlloc(size_t size, const char* function_name);
+	void DoFree(void* pointer, const char* function_name);
+
 } // namespace memory
 } // namespace engine
 
-//void* malloc(size_t size);
-//void free(void* pointer);
+/*_Check_return_ _Ret_maybenull_ _Post_writable_byte_size_(size)
+_ACRTIMP _CRTALLOCATOR _CRT_JIT_INTRINSIC _CRTRESTRICT
+void* __cdecl malloc(_In_ _CRT_GUARDOVERFLOW size_t size);
+
+_ACRTIMP
+void __cdecl free(_Pre_maybenull_ _Post_invalid_ void* pointer);*/
 
 void* operator new(size_t size);
 void operator delete(void* pointer);

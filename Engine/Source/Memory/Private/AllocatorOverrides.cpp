@@ -1,183 +1,42 @@
 #include "Memory\AllocatorOverrides.h"
 
+// engine includes
 #include "Memory\BlockAllocator.h"
 #include "Memory\FixedSizeAllocator.h"
 #include "Assert\Assert.h"
 #include "Logger\Logger.h"
 
-//void* malloc(size_t size)
+//_Check_return_ _Ret_maybenull_ _Post_writable_byte_size_(size)
+///*_ACRTIMP*/ _CRTALLOCATOR _CRT_JIT_INTRINSIC _CRTRESTRICT
+//void* __cdecl malloc(_In_ _CRT_GUARDOVERFLOW size_t size)
 //{
-//	LOG("Calling malloc(size = %zu)...", size);
-//	return engine::memory::BlockAllocator::GetInstance()->Alloc(size);
+//	return engine::memory::DoAlloc(size, __FUNCTION__);
 //}
 //
-//void free(void* pointer)
+///*_ACRTIMP*/
+//void __cdecl free(_Pre_maybenull_ _Post_invalid_ void* pointer)
 //{
-//	ASSERT(pointer);
-//	LOG("Calling free(pointer = %p)...", pointer);
-//	engine::memory::BlockAllocator::GetInstance()->Free(pointer);
+//	engine::memory::DoFree(pointer, __FUNCTION__);
 //}
 
 void* operator new(size_t size)
 {
-	void* pointer = nullptr;
-
-	// loop over the registered fixed size allocators to find the best fit
-	// this operator assumes that the FSAs are registered in ascending order of the size of the blocks they maintain
-	engine::memory::FixedSizeAllocator** const registered_fsas = engine::memory::FixedSizeAllocator::GetAvailableFixedSizeAllocators();
-	for (uint8_t i = 0; i < MAX_FIXED_SIZE_ALLOCATORS; ++i)
-	{
-		// if the FSA exists and is big enough to service this request
-		if (registered_fsas[i] && registered_fsas[i]->GetBlockSize() >= size)
-		{
-			pointer = registered_fsas[i]->Alloc(size);
-			if (pointer)
-			{
-#ifdef BUILD_DEBUG
-				LOG("Calling new(size = %zu) on FixedSizeAllocator-%d with fixed_block_size:%zu", size, registered_fsas[i]->GetID(), registered_fsas[i]->GetBlockSize());
-#endif
-				return pointer;
-			}
-			// at this point, we're choosing to try and allocate using the next available FSA.
-			// we could choose to break out of this loop and allocate using the default block allocator instead.
-		}
-	}
-
-	// service this request using the default block allocator
-	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::GetDefaultAllocator();
-	ASSERT(default_allocator);
-
-#ifdef BUILD_DEBUG
-	LOG("Calling new(size = %zu) on BlockAllocator-%d", size, default_allocator->GetID());
-#endif
-	
-	pointer = default_allocator->Alloc(size);
-	ASSERT(pointer);
-
-	return pointer;
+	return engine::memory::DoAlloc(size, __FUNCTION__);
 }
 
 void operator delete(void* pointer)
 {
-	ASSERT(pointer);
-
-	// get all registered fixed size allocators
-	engine::memory::FixedSizeAllocator** const fixed_size_allocators = engine::memory::FixedSizeAllocator::GetAvailableFixedSizeAllocators();
-
-	// free the pointer from the appropriate allocator
-	uint8_t num_fixed_size_allocators = MAX_FIXED_SIZE_ALLOCATORS;
-	while (num_fixed_size_allocators > 0)
-	{
-		if (fixed_size_allocators[num_fixed_size_allocators - 1] && fixed_size_allocators[num_fixed_size_allocators - 1]->Free(pointer))
-		{
-#ifdef BUILD_DEBUG
-			LOG("Called delete(pointer = %p) on FixedSizeAllocator-%d with fixed_block_size:%zu", pointer, fixed_size_allocators[num_fixed_size_allocators - 1]->GetID(), fixed_size_allocators[num_fixed_size_allocators - 1]->GetBlockSize());
-#endif
-			return;
-		}
-		--num_fixed_size_allocators;
-	}
-
-	// get all registered block allocators
-	engine::memory::BlockAllocator** const block_allocators = engine::memory::BlockAllocator::GetAvailableBlockAllocators();
-
-	// free the pointer from the appropriate allocator
-	uint8_t num_block_allocators = MAX_BLOCK_ALLOCATORS - 1;
-	while (num_block_allocators >= 0)
-	{
-		if (block_allocators[num_block_allocators] && block_allocators[num_block_allocators]->Free(pointer))
-		{
-#ifdef BUILD_DEBUG
-			LOG("Called delete(pointer = %p) on BlockAllocator-%d", pointer, block_allocators[num_block_allocators]->GetID());
-#endif
-			return;
-		}
-		--num_block_allocators;
-	}
-
-	// this means the pointer could not be deleted
-	LOG_ERROR("Could not delete(pointer = %p) on any of the allocators!", pointer);
+	engine::memory::DoFree(pointer, __FUNCTION__);
 }
 
 void* operator new[](size_t size)
 {
-	void* pointer = nullptr;
-
-	// loop over the registered fixed size allocators to find the best fit
-	// this operator assumes that the FSAs are registered in ascending order of the size of the blocks they maintain
-	engine::memory::FixedSizeAllocator** const registered_fsas = engine::memory::FixedSizeAllocator::GetAvailableFixedSizeAllocators();
-	for (uint8_t i = 0; i < MAX_FIXED_SIZE_ALLOCATORS; ++i)
-	{
-		// if the FSA exists and is big enough to service this request
-		if (registered_fsas[i] && registered_fsas[i]->GetBlockSize() >= size)
-		{
-			pointer = registered_fsas[i]->Alloc(size);
-			if (pointer)
-			{
-#ifdef BUILD_DEBUG
-				LOG("Calling new(size = %zu) on FixedSizeAllocator-%d with fixed_block_size:%zu", size, registered_fsas[i]->GetID(), registered_fsas[i]->GetBlockSize());
-#endif
-				return pointer;
-			}
-			// at this point, we're choosing to try and allocate using the next available FSA.
-			// we could choose to break out of this loop and allocate using the default block allocator instead.
-		}
-	}
-
-	// service this request using the default block allocator
-	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::GetDefaultAllocator();
-	ASSERT(default_allocator);
-
-#ifdef BUILD_DEBUG
-	LOG("Calling new(size = %zu) on BlockAllocator-%d", size, default_allocator->GetID());
-#endif
-
-	pointer = default_allocator->Alloc(size);
-	ASSERT(pointer);
-
-	return pointer;
+	return engine::memory::DoAlloc(size, __FUNCTION__);
 }
 
 void operator delete[](void* pointer)
 {
-	ASSERT(pointer);
-
-	// get all registered fixed size allocators
-	engine::memory::FixedSizeAllocator** const fixed_size_allocators = engine::memory::FixedSizeAllocator::GetAvailableFixedSizeAllocators();
-
-	// free the pointer from the appropriate allocator
-	uint8_t num_fixed_size_allocators = MAX_FIXED_SIZE_ALLOCATORS;
-	while (num_fixed_size_allocators >= 0)
-	{
-		if (fixed_size_allocators[num_fixed_size_allocators - 1] && fixed_size_allocators[num_fixed_size_allocators - 1]->Free(pointer))
-		{
-#ifdef BUILD_DEBUG
-			LOG("Called delete(pointer = %p) on FixedSizeAllocator-%d with fixed_block_size:%zu", pointer, fixed_size_allocators[num_fixed_size_allocators - 1]->GetID(), fixed_size_allocators[num_fixed_size_allocators - 1]->GetBlockSize());
-#endif
-			return;
-		}
-		--num_fixed_size_allocators;
-	}
-
-	// get all registered block allocators
-	engine::memory::BlockAllocator** const block_allocators = engine::memory::BlockAllocator::GetAvailableBlockAllocators();
-
-	// free the pointer from the appropriate allocator
-	uint8_t num_block_allocators = MAX_BLOCK_ALLOCATORS - 1;
-	while (num_block_allocators >= 0)
-	{
-		if (block_allocators[num_block_allocators] && block_allocators[num_block_allocators]->Free(pointer))
-		{
-#ifdef BUILD_DEBUG
-			LOG("Called delete(pointer = %p) on BlockAllocator-%d", pointer, block_allocators[num_block_allocators]->GetID());
-#endif
-			return;
-		}
-		--num_block_allocators;
-	}
-
-	// this means the pointer could not be deleted
-	LOG_ERROR("Could not delete(pointer = %p) on any of the allocators!", pointer);
+	engine::memory::DoFree(pointer, __FUNCTION__);
 }
 
 void* operator new(size_t size, engine::memory::AlignmentType alignment)
@@ -328,3 +187,89 @@ void operator delete(void* pointer, const char* file_name, unsigned int line)
 	default_allocator->Free(pointer);
 }
 #endif
+
+namespace engine {
+namespace memory {
+
+	void* DoAlloc(size_t size, const char* function_name)
+	{
+		void* pointer = nullptr;
+
+		// loop over the registered fixed size allocators to find the best fit
+		engine::memory::FixedSizeAllocator** const available_fsas = engine::memory::FixedSizeAllocator::GetAvailableFixedSizeAllocators();
+		for (uint8_t i = 0; i < MAX_FIXED_SIZE_ALLOCATORS; ++i)
+		{
+			// if the FSA exists and is big enough to service this request
+			if (available_fsas[i] && available_fsas[i]->GetBlockSize() >= size)
+			{
+				pointer = available_fsas[i]->Alloc(size);
+				if (pointer)
+				{
+	#ifdef BUILD_DEBUG
+					LOG("Calling %s(size = %zu) on FixedSizeAllocator-%d with fixed_block_size:%zu", function_name, size, available_fsas[i]->GetID(), available_fsas[i]->GetBlockSize());
+	#endif
+					return pointer;
+				}
+				// at this point, we're choosing to try and allocate using the next available FSA.
+				// we could choose to break out of this loop and allocate using the default block allocator instead.
+			}
+		}
+
+		// service this request using the default block allocator
+		engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::GetDefaultAllocator();
+		ASSERT(default_allocator);
+
+	#ifdef BUILD_DEBUG
+		LOG("Calling %s(size = %zu) on BlockAllocator-%d", function_name, size, default_allocator->GetID());
+	#endif
+
+		pointer = default_allocator->Alloc(size);
+		ASSERT(pointer);
+
+		return pointer;
+	}
+
+	void DoFree(void* pointer, const char* function_name)
+	{
+		ASSERT(pointer);
+
+		// get all registered fixed size allocators
+		engine::memory::FixedSizeAllocator** const fixed_size_allocators = engine::memory::FixedSizeAllocator::GetAvailableFixedSizeAllocators();
+
+		// free the pointer from the appropriate allocator
+		uint8_t num_fixed_size_allocators = MAX_FIXED_SIZE_ALLOCATORS;
+		while (num_fixed_size_allocators >= 0)
+		{
+			if (fixed_size_allocators[num_fixed_size_allocators - 1] && fixed_size_allocators[num_fixed_size_allocators - 1]->Free(pointer))
+			{
+	#ifdef BUILD_DEBUG
+				LOG("Called %s(pointer = %p) on FixedSizeAllocator-%d with fixed_block_size:%zu", function_name, pointer, fixed_size_allocators[num_fixed_size_allocators - 1]->GetID(), fixed_size_allocators[num_fixed_size_allocators - 1]->GetBlockSize());
+	#endif
+				return;
+			}
+			--num_fixed_size_allocators;
+		}
+
+		// get all registered block allocators
+		engine::memory::BlockAllocator** const block_allocators = engine::memory::BlockAllocator::GetAvailableBlockAllocators();
+
+		// free the pointer from the appropriate allocator
+		uint8_t num_block_allocators = MAX_BLOCK_ALLOCATORS - 1;
+		while (num_block_allocators >= 0)
+		{
+			if (block_allocators[num_block_allocators] && block_allocators[num_block_allocators]->Free(pointer))
+			{
+	#ifdef BUILD_DEBUG
+				LOG("Called %s(pointer = %p) on BlockAllocator-%d", function_name, pointer, block_allocators[num_block_allocators]->GetID());
+	#endif
+				return;
+			}
+			--num_block_allocators;
+		}
+
+		// this means the pointer could not be deleted
+		LOG_ERROR("Could not %s(pointer = %p) on any of the allocators!", function_name, pointer);
+	}
+
+} // namespace memory
+} // namespace engine

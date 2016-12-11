@@ -1,8 +1,7 @@
 #ifndef ENGINE_ALLOCATOR_UTIL_H_
 #define ENGINE_ALLOCATOR_UTIL_H_
 
-#include <stdlib.h>									// for free
-//#include "Memory\AllocatorOverrides.h"
+#include "Memory\AllocatorOverrides.h"
 
 #define DEFAULT_BLOCK_SIZE				1024 * 1024
 #define DEFAULT_GUARDBAND_SIZE			4
