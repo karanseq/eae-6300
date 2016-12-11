@@ -13,11 +13,48 @@ void ExhaustAllocator(engine::memory::FixedSizeAllocator* fsa)
 	LOG("-------------------- Exhausting FixedSizeAllocator block_size:%zu num_blocks:%zu --------------------", fsa->GetBlockSize(), fsa->GetNumBlocks());
 	std::vector<void*> allocations;
 
-	size_t num_allocs = 0, num_frees = 0;
+	// run first pass
+	// make <num_blocks> allocs
+	const size_t num_blocks = fsa->GetNumBlocks();
+	for (size_t i = 0; i < num_blocks; ++i)
+	{
+		void* pointer = fsa->Alloc();
+		ASSERT(pointer);
+		allocations.push_back(pointer);
+		LOG("Alloc-%zu num available blocks:%zu", i, fsa->GetNumAvailableBlocks());
+	}
 
+	ASSERT(!fsa->Alloc());
+	ASSERT(fsa->GetNumOustandingBlocks() == num_blocks);
+	ASSERT(fsa->GetNumAvailableBlocks() == 0);
+
+	// free <num_blocks> in random order
+	std::random_shuffle(allocations.begin(), allocations.end());
+	for (size_t i = 0; i < num_blocks; ++i)
+	{
+		void* pointer = allocations.back();
+		allocations.pop_back();
+
+		bool success = fsa->Contains(pointer);
+		assert(success);
+
+		//success = IsAllocated( pHeapManager, pPtr );
+		success = fsa->IsAllocated(pointer);
+		assert(success);
+
+		success = fsa->Free(pointer);
+		assert(success);
+		LOG("Free-%zu num outstanding blocks:%zu", i, fsa->GetNumOustandingBlocks());
+	}
+
+	ASSERT(fsa->GetNumAvailableBlocks() == num_blocks);
+	ASSERT(fsa->GetNumOustandingBlocks() == 0);
+
+	// run second pass
+	size_t num_allocs = 0, num_frees = 0;
 	do
 	{
-		const uint8_t free_every = 5;
+		const uint8_t free_every = 10;
 
 		void* pointer = fsa->Alloc();
 		if (!pointer)
@@ -32,46 +69,48 @@ void ExhaustAllocator(engine::memory::FixedSizeAllocator* fsa)
 		{
 			++num_frees;
 			fsa->Free(pointer);
+			LOG("Free-%zu num outstanding blocks:%zu", num_frees, fsa->GetNumOustandingBlocks());
 		}
 		else
 		{
 			allocations.push_back(pointer);
 		}
 
+		LOG("Alloc-%zu num available blocks:%zu", num_allocs, fsa->GetNumAvailableBlocks());
+
 	} while (true);
+
+	ASSERT(fsa->GetNumOustandingBlocks() == num_blocks);
+	ASSERT(fsa->GetNumAvailableBlocks() == 0);
 
 	size_t unfreed_allocations = allocations.size();
 	while (unfreed_allocations-- > 0)
 	{
 		void* pointer = allocations.back();
-		fsa->Free(pointer);
 		allocations.pop_back();
+
+		bool success = fsa->Contains(pointer);
+		assert(success);
+
+		//success = IsAllocated( pHeapManager, pPtr );
+		success = fsa->IsAllocated(pointer);
+		assert(success);
+
+		success = fsa->Free(pointer);
+		assert(success);
 	}
 
-	LOG("-------------------- Finished exhausting FixedSizeAllocator block_size:%zu num_blocks:%zu num_allocs:%zu num_frees:%zu --------------------", fsa->GetBlockSize(), fsa->GetNumBlocks(), num_allocs, num_frees);
+	ASSERT(fsa->GetNumAvailableBlocks() == num_blocks);
+	ASSERT(fsa->GetNumOustandingBlocks() == 0);
+
+	LOG("-------------------- Finished exhausting FixedSizeAllocator block_size:%zu num_blocks:%zu --------------------", fsa->GetBlockSize(), fsa->GetNumBlocks());
 }
 
 void TestFixedSizeAllocator()
 {
 	engine::memory::BlockAllocator*				default_allocator = engine::memory::BlockAllocator::GetDefaultAllocator();
 
-	engine::memory::FixedSizeAllocator*			fsa_8 = engine::memory::FixedSizeAllocator::Create(8, 128, default_allocator);
-	ExhaustAllocator(fsa_8);
-	engine::memory::FixedSizeAllocator::Destroy(fsa_8);
-
-	engine::memory::FixedSizeAllocator*			fsa_24 = engine::memory::FixedSizeAllocator::Create(24, 512, default_allocator);
-	ExhaustAllocator(fsa_24);
-	engine::memory::FixedSizeAllocator::Destroy(fsa_24);
-
 	engine::memory::FixedSizeAllocator*			fsa_48 = engine::memory::FixedSizeAllocator::Create(48, 1024, default_allocator);
 	ExhaustAllocator(fsa_48);
 	engine::memory::FixedSizeAllocator::Destroy(fsa_48);
-
-	engine::memory::FixedSizeAllocator*			fsa_128 = engine::memory::FixedSizeAllocator::Create(128, 256, default_allocator);
-	ExhaustAllocator(fsa_128);
-	engine::memory::FixedSizeAllocator::Destroy(fsa_128);
-
-	engine::memory::FixedSizeAllocator*			fsa_256 = engine::memory::FixedSizeAllocator::Create(256, 128, default_allocator);
-	ExhaustAllocator(fsa_256);
-	engine::memory::FixedSizeAllocator::Destroy(fsa_256);
 }

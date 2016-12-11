@@ -1,7 +1,11 @@
 #include "FixedSizeAllocator.h"
-#include "Assert\Assert.h"
 
+// library includes
 #include <string.h>			// for memset
+
+// engine includes
+#include "Assert\Assert.h"
+#include "Data\BitArray.h"
 
 namespace engine {
 namespace memory {
@@ -40,6 +44,21 @@ namespace memory {
 	{
 		ASSERT(pointer != nullptr);
 		return (static_cast<const uint8_t*>(pointer) >= block_ && static_cast<const uint8_t*>(pointer) <= (block_ + total_block_size_));
+	}
+
+	inline size_t FixedSizeAllocator::GetNumAvailableBlocks() const
+	{
+		size_t num_available_blocks = 0;
+		for (size_t i = 0; i < num_blocks_; ++i)
+		{
+			num_available_blocks += (block_state_->IsBitClear(i) ? 1 : 0);
+		}
+		return num_available_blocks;
+	}
+
+	inline size_t FixedSizeAllocator::GetNumOustandingBlocks() const
+	{
+		return num_blocks_ - GetNumAvailableBlocks();
 	}
 
 	inline size_t FixedSizeAllocator::GetBlockSize() const

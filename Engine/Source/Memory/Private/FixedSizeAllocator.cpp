@@ -358,22 +358,24 @@ bool FixedSizeAllocator::IsAllocated(const void* pointer) const
 	}
 
 #ifdef BUILD_DEBUG
-	const size_t	guardband_size = DEFAULT_GUARDBAND_SIZE;
+	const size_t guardband_size = DEFAULT_GUARDBAND_SIZE;
+	const size_t size_type = sizeof(size_t);
 #else
-	const size_t	guardband_size = 0;
+	const size_t guardband_size = 0;
+	const size_t size_type = 0;
 #endif
 
 	// get a pointer to a block
-	const uint8_t* block = static_cast<const uint8_t*>(pointer) - guardband_size;
+	const uint8_t* block = static_cast<const uint8_t*>(pointer) - guardband_size - size_type;
 
 	// check if we recognize this pointer
-	if ((block - block_) & ((fixed_block_size_ + guardband_size) - 1))
+	if ((block - block_) % (fixed_block_size_ + size_type + guardband_size * 2))
 	{
 		return false;
 	}
 
 	// calculate the index of the bit that represents this block
-	size_t bit_index = (block - block_) / (fixed_block_size_ + guardband_size);
+	size_t bit_index = (block - block_) / (fixed_block_size_ + size_type + guardband_size * 2);
 
 	// validate bit_index
 	if (bit_index < 0 || bit_index >= num_blocks_)
@@ -381,8 +383,8 @@ bool FixedSizeAllocator::IsAllocated(const void* pointer) const
 		return false;
 	}
 
-	// check if this block is currently allocated
-	if (block_state_->IsBitSet(bit_index))
+	// check if this block is currently unallocated
+	if (block_state_->IsBitClear(bit_index))
 	{
 		return false;
 	}
