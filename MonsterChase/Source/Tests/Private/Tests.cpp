@@ -30,7 +30,7 @@ void TestMoveSemantics();
 #endif // ENABLE_MOVE_SEMANTICS_TEST
 
 #ifdef ENABLE_BIT_ARRAY_TEST
-void BitArray_UnitTest();
+void RunBitArray_UnitTest();
 #endif // ENABLE_BIT_ARRAY_TEST
 
 
@@ -55,7 +55,7 @@ void RunTests()
 
 	LOG("\n");
 #ifdef ENABLE_BIT_ARRAY_TEST
-	BitArray_UnitTest();
+	RunBitArray_UnitTest();
 #endif
 
 	LOG("\n");

@@ -2,28 +2,25 @@
 #include "Logger\Logger.h"
 #include "Memory\BlockAllocator.h"
 
-void BitArray_UnitTest(void)
+void BitArray_UnitTest(const size_t bitCount)
 {
-	LOG("-------------------- Running BitArray_UnitTest --------------------");
-
 	using namespace engine::data;
-
-	const size_t bitCount = 1000;
 
 	const size_t bit_array_memory_size = BitArray::GetRequiredMemorySize(bitCount);
 	void* bit_array_memory = engine::memory::BlockAllocator::GetDefaultAllocator()->Alloc(bit_array_memory_size);
 
 	BitArray* pMyArray = BitArray::Create(bitCount, bit_array_memory);
 
-	pMyArray->SetBit(20);
+	size_t testBitIndex = 5 >= bitCount ? bitCount - 1 : 5;
+	pMyArray->SetBit(testBitIndex);
 
 	size_t firstSetBit = 0;
 	size_t firstClearBit = 0;
 
 	bool foundSetBit = pMyArray->GetFirstSetBit(firstSetBit);
-	assert(foundSetBit && (firstSetBit == 20));
+	assert(foundSetBit && (firstSetBit == testBitIndex));
 
-	pMyArray->ClearBit(20);
+	pMyArray->ClearBit(testBitIndex);
 	foundSetBit = pMyArray->GetFirstSetBit(firstSetBit);
 	assert(foundSetBit == false);
 
@@ -56,6 +53,21 @@ void BitArray_UnitTest(void)
 
 	//delete pMyArray;
 	engine::memory::BlockAllocator::GetDefaultAllocator()->Free(pMyArray);
+}
+
+void RunBitArray_UnitTest()
+{
+	LOG("-------------------- Running BitArray_UnitTest --------------------");
+
+	for (size_t i = 1; i < 65; ++i)
+	{
+		LOG("Testing with %zu bit/s...", i);
+		BitArray_UnitTest(i);
+	}
+
+	size_t bit_count = 1000;
+	LOG("Testing with %zu bits...", bit_count);
+	BitArray_UnitTest(bit_count);
 
 	LOG("-------------------- Finished BitArray_UnitTest --------------------");
 }
