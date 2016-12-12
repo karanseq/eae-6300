@@ -1,21 +1,24 @@
 #include "Game\MonsterChase.h"
-#include "Game\Player.h"
-#include "Game\Monster.h"
-#include "Game\GameUtils.h"
 
 // library includes
-#include <stdio.h>
 #include <conio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <time.h>
 #include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
 // engine includes 
-#include "Math\Vec2D.h"
 #include "Assert\Assert.h"
 #include "Logger\Logger.h"
+#include "Math\Vec2D.h"
 #include "Memory\AllocatorOverrides.h"
+#include "Memory\BlockAllocator.h"
+
+// game includes
+#include "Game\GameUtils.h"
+#include "Game\Monster.h"
+#include "Game\Player.h"
 
 // static member initialization
 engine::memory::BlockAllocator* MonsterChase::game_allocator_ = nullptr;
@@ -45,7 +48,7 @@ MonsterChase::~MonsterChase()
 	SAFE_DELETE(player_);
 
 	// deallocate the monsters
-	for (int i = 0; i < num_monsters_; ++i)
+	for (uint8_t i = 0; i < num_monsters_; ++i)
 	{
 		SAFE_DELETE(monsters_[i]);
 	}
@@ -122,7 +125,7 @@ void MonsterChase::PrintMessageMonsterName()
 
 void MonsterChase::PrintGameInformation()
 {
-	for (int i = 0; i < num_monsters_; ++i)
+	for (uint8_t i = 0; i < num_monsters_; ++i)
 	{
 		monsters_[i]->Print();
 	}
@@ -202,14 +205,14 @@ void MonsterChase::ValidateName(const char* input)
 
 	// count the number of white spaces in the input
 	char		c = 0;
-	int			i = 0, count = 0;
+	uint8_t		i = 0, count = 0;
 	while (input[i])
 	{
 		c = input[i++];
 		count += isblank(c) ? 1 : 0;
 	}
 
-	int input_length = static_cast<int>(strlen(input));
+	uint8_t input_length = static_cast<uint8_t>(strlen(input));
 	if (input_length > MAX_NAME_LENGTH						// check if the name was within our range
 		|| count >= input_length - 1)						// check if the input contained only white spaces
 	{
@@ -270,7 +273,7 @@ void MonsterChase::ValidateMove(const char* input)
 	}
 }
 
-void MonsterChase::SaveNumMonsters(int num_monsters)
+void MonsterChase::SaveNumMonsters(uint8_t num_monsters)
 {
 	// validate input
 	ASSERT(num_monsters > 0);
@@ -335,7 +338,7 @@ void MonsterChase::CreateMonster(const char* input_name)
 	}
 }
 
-void MonsterChase::DestroyMonster(int at_index)
+void MonsterChase::DestroyMonster(uint8_t at_index)
 {
 	// validate inputs, bounds and data state
 	ASSERT(at_index >= 0);
@@ -357,13 +360,13 @@ void MonsterChase::DestroyMonster(int at_index)
 void MonsterChase::UpdateMonsters()
 {
 	// touch all monsters
-	for (int i = 0; i < num_monsters_; ++i)
+	for (uint8_t i = 0; i < num_monsters_; ++i)
 	{
 		monsters_[i]->Update();
 	}
 
 	// check if any monsters must be deleted
-	for (int i = 0; i < num_monsters_; ++i)
+	for (uint8_t i = 0; i < num_monsters_; ++i)
 	{
 		if (monsters_[i]->GetTimeToLive() <= 0)
 		{

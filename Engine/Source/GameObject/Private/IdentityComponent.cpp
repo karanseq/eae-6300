@@ -1,8 +1,8 @@
 #include "GameObject\IdentityComponent.h"
 
 // library includes
-#include <string.h>
 #include <algorithm>
+#include <string.h>
 
 namespace engine {
 namespace gameobject {

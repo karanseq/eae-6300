@@ -1,5 +1,5 @@
-#ifndef FIXED_SIZE_ALLOCATOR_H_
-#define FIXED_SIZE_ALLOCATOR_H_
+#ifndef ENGINE_FIXED_SIZE_ALLOCATOR_H_
+#define ENGINE_FIXED_SIZE_ALLOCATOR_H_
 
 // library includes
 #include <stdint.h>
@@ -111,4 +111,4 @@ private:
 
 #include "FixedSizeAllocator-inl.h"
 
-#endif // FIXED_SIZE_ALLOCATOR_H_
+#endif // ENGINE_FIXED_SIZE_ALLOCATOR_H_

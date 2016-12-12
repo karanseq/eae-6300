@@ -5,12 +5,12 @@
 #include "Logger\Logger.h"
 
 // game includes
+#include "Game\Monster.h"
 #include "Game\MonsterChase.h"
+#include "Game\Player.h"
+#include "Game\PlayerController.h"
 #include "Game\SillyMonsterController.h"
 #include "Game\SmartMonsterController.h"
-#include "Game\PlayerController.h"
-#include "Game\Player.h"
-#include "Game\Monster.h"
 
 void TestMoveSemantics()
 {

@@ -2,10 +2,10 @@
 #define SMART_MONSTER_CONTROLLER_H_
 
 // engine includes
-#include "GameObject\InterfaceGameObjectController.h"
-#include "GameObject\GameObject.h"
-#include "Memory\AllocatorUtil.h"
 #include "Assert\Assert.h"
+#include "GameObject\GameObject.h"
+#include "GameObject\InterfaceGameObjectController.h"
+#include "Memory\AllocatorUtil.h"
 
 class SmartMonsterController : public engine::gameobject::InterfaceGameObjectController
 {

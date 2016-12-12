@@ -28,7 +28,7 @@
 	#if defined(VERBOSITY_LEVEL) && (VERBOSITY_LEVEL > 0)
 		#define LOG(format, ...)			engine::Print("DEBUG: ", (format), __VA_ARGS__)
 		#define LOG_ERROR(format, ...)		engine::Print("ERROR: ", (format), __VA_ARGS__)
-		#define VERBOSE(format, ...)		engine::Print(__FUNCTION__, __LINE__, (format), __VA_ARGS__)
+		#define VERBOSE(format, ...)		engine::Print("VERBOSE: ", (format), __VA_ARGS__)
 	#else
 		#define LOG(format, ...)			engine::Print("DEBUG: ", (format), __VA_ARGS__)
 		#define LOG_ERROR(format, ...)		engine::Print("ERROR: ", (format), __VA_ARGS__)

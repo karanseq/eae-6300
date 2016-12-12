@@ -1,12 +1,12 @@
 #include "IdentityComponent.h"
 
 // library includes
-#include <string.h>
 #include <algorithm>
+#include <string.h>
 
 // engine includes
-#include "Memory\AllocatorUtil.h"
 #include "Assert\Assert.h"
+#include "Memory\AllocatorUtil.h"
 
 namespace engine {
 namespace gameobject {

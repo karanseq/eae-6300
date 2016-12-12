@@ -1,11 +1,11 @@
 #include "Memory\FixedSizeAllocator.h"
 
 // engine includes
+#include "Assert\Assert.h"
+#include "Data\BitArray.h"
+#include "Logger\Logger.h"
 #include "Memory\AllocatorUtil.h"
 #include "Memory\BlockAllocator.h"
-#include "Data\BitArray.h"
-#include "Assert\Assert.h"
-#include "Logger\Logger.h"
 
 namespace engine {
 namespace memory {
@@ -25,6 +25,7 @@ FixedSizeAllocator::FixedSizeAllocator(void* memory, const size_t total_block_si
 	block_allocator_(allocator),
 	block_state_(nullptr)
 {
+	// validate input
 	ASSERT(block_);
 	ASSERT(fixed_block_size_ > 0);
 	ASSERT(num_blocks_ > 0);
@@ -43,7 +44,7 @@ FixedSizeAllocator::FixedSizeAllocator(void* memory, const size_t total_block_si
 #ifdef BUILD_DEBUG
 	id_ = FixedSizeAllocator::counter_++;
 	memset(block_, CLEAN_FILL, total_block_size_);
-	LOG("FixedSizeAllocator-%d created with %zu blocks of size:%zu", id_, num_blocks_, fixed_block_size_);
+	VERBOSE("FixedSizeAllocator-%d created with %zu blocks of size:%zu", id_, num_blocks_, fixed_block_size_);
 #endif
 }
 
@@ -98,7 +99,7 @@ void FixedSizeAllocator::Destroy(FixedSizeAllocator* allocator)
 	}
 
 	uint8_t id = allocator->id_;
-	LOG("FixedSizeAllocator-%d destroyed", id);
+	VERBOSE("FixedSizeAllocator-%d destroyed", id);
 #endif
 
 	block_allocator->Free(allocator);
@@ -344,7 +345,8 @@ bool FixedSizeAllocator::Free(void* pointer)
 
 bool FixedSizeAllocator::IsAllocated(const void* pointer) const
 {
-	ASSERT(pointer != nullptr);
+	// validate input
+	ASSERT(pointer);
 
 	// return if this allocator does not contain this pointer
 	if (!Contains(pointer))

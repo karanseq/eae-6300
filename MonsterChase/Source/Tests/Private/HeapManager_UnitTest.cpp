@@ -1,10 +1,13 @@
 #ifdef BUILD_DEBUG
-#include "Memory\BlockAllocator.h"
-#include "Logger\Logger.h"
 
+// library includes
 #include <assert.h>
 #include <algorithm>
 #include <vector>
+
+// engine includes
+#include "Memory\BlockAllocator.h"
+#include "Logger\Logger.h"
 
 #define TEST_SINGLE_LARGE_ALLOCATION
 #define __TRACK_ALLOCATIONS

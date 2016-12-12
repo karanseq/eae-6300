@@ -11,6 +11,7 @@ namespace data {
 
 	inline BitArray& BitArray::operator=(BitArray&& bit_array)
 	{
+		// check for self assignment
 		if (this != &bit_array)
 		{
 			std::swap(buckets_, bit_array.buckets_);

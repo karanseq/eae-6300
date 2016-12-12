@@ -5,6 +5,7 @@
 
 // engine includes
 #include "Logger\Logger.h"
+#include "Memory\AllocatorUtil.h"
 
 // game includes
 #include "Game\MonsterChase.h"
@@ -19,7 +20,6 @@ int main(int* argv, char** argc)
 	LOG("\n");
 
 	LOG("-------------------- Running MonsterChase --------------------");
-	// initialize game
 	MonsterChase* monster_chase = new MonsterChase();
 
 	while (monster_chase->GetState() != GameStates::kGameStateQuit)

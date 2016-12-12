@@ -27,7 +27,7 @@ void BitArray_UnitTest(void)
 	foundSetBit = pMyArray->GetFirstSetBit(firstSetBit);
 	assert(foundSetBit == false);
 
-	for (unsigned int i = 0; i < bitCount; i++)
+	for (uint16_t i = 0; i < bitCount; i++)
 	{
 		assert(pMyArray->IsBitClear(i) == true);
 		assert(pMyArray->IsBitSet(i) == false);

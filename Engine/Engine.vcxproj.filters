@@ -31,9 +31,6 @@
     <Filter Include="Source Files\GameObject">
       <UniqueIdentifier>{e7140026-e588-4ca0-a885-1a29ba3dd89b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Assert">
-      <UniqueIdentifier>{736dea9f-f22e-4df4-87d1-1603858ca447}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Memory">
       <UniqueIdentifier>{c79b3a65-ac38-4796-a6c2-2b1f1110efc2}</UniqueIdentifier>
     </Filter>
@@ -45,6 +42,9 @@
     </Filter>
     <Filter Include="Source Files\Data">
       <UniqueIdentifier>{eb1265b3-364e-4193-ab92-1ea72ad6738c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Assert">
+      <UniqueIdentifier>{736dea9f-f22e-4df4-87d1-1603858ca447}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,8 @@
 #include "Data\BitArray.h"
 
 // library includes
-#include <string.h>
 #include <intrin.h>
+#include <string.h>
 
 // engine includes
 #include "Assert\Assert.h"
@@ -18,8 +18,8 @@ namespace data {
 		num_buckets_(((num_bits & (bit_depth_ - 1)) ? 1 : 0) + num_bits / bit_depth_),
 		num_bits_(num_bits)
 	{
-		ASSERT(num_bits_ > 0);
 		ASSERT(buckets_);
+		ASSERT(num_bits_ > 0);
 
 		memset(buckets_, start_set ? ~0 : 0, sizeof(buckets_) * num_buckets_);
 	}
