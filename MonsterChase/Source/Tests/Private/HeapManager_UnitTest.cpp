@@ -11,6 +11,7 @@
 
 bool HeapManager_UnitTest()
 {
+	LOG("-------------------- Running HeapManager_UnitTest --------------------");
 	using namespace engine::memory;
 
 	const size_t 		sizeHeap = 1024 * 1024;
@@ -257,6 +258,8 @@ bool HeapManager_UnitTest()
 	pHeapManager = nullptr;
 
 	_aligned_free( pHeapMemory );
+
+	LOG("-------------------- Finished HeapManager_UnitTest --------------------");
 
 	// we succeeded
 	return true;

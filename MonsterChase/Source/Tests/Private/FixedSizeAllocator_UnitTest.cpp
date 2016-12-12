@@ -108,9 +108,11 @@ void ExhaustAllocator(engine::memory::FixedSizeAllocator* fsa)
 
 void TestFixedSizeAllocator()
 {
+	LOG("-------------------- Running FixedSizeAllocator_UnitTest --------------------");
 	engine::memory::BlockAllocator*				default_allocator = engine::memory::BlockAllocator::GetDefaultAllocator();
 
 	engine::memory::FixedSizeAllocator*			fsa_48 = engine::memory::FixedSizeAllocator::Create(48, 100, default_allocator);
 	ExhaustAllocator(fsa_48);
 	engine::memory::FixedSizeAllocator::Destroy(fsa_48);
+	LOG("-------------------- Finished FixedSizeAllocator_UnitTest --------------------");
 }

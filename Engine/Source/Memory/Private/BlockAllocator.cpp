@@ -13,23 +13,6 @@
 namespace engine {
 namespace memory {
 
-#ifdef BUILD_DEBUG
-uint32_t BlockDescriptor::counter_ = 0;
-#endif
-
-void BlockDescriptor::Init()
-{
-	next_ = nullptr;
-	previous_ = nullptr;
-	block_pointer_ = nullptr;
-	block_size_ = 0;
-#ifdef BUILD_DEBUG
-	user_size_ = 0;
-	id_ = BD::counter_++;
-	BD::counter_ = (BD::counter_ >= std::numeric_limits<uint32_t>::max() ? 0 : BD::counter_);
-#endif
-}
-
 // initialize static members
 size_t				BlockAllocator::size_of_BD_ = sizeof(BD);
 BlockAllocator*		BlockAllocator::available_allocators_[MAX_BLOCK_ALLOCATORS] = { nullptr };
@@ -47,6 +30,7 @@ BlockAllocator::BlockAllocator(void* memory, size_t block_size) : block_(static_
 	ASSERT(block_size > 0);
 
 #ifdef BUILD_DEBUG
+	descriptor_counter_ = 0;
 	id_ = BlockAllocator::counter_++;
 	memset(block_, CLEAN_FILL, total_block_size_);
 	LOG("BlockAllocator-%d created with size:%zu", id_, total_block_size_);
@@ -189,9 +173,11 @@ void BlockAllocator::InitFirstBlockDescriptor()
 {
 	// initialize the first descriptor
 	BD* first_bd = reinterpret_cast<BD*>(block_);
-	first_bd->Init();
 	first_bd->block_pointer_ = block_ + size_of_BD_;
 	first_bd->block_size_ = total_block_size_ - size_of_BD_;
+#ifdef BUILD_DEBUG
+	first_bd->id_ = descriptor_counter_++;
+#endif
 
 	// add the descriptor to the free list
 	AddToList(&free_list_head_, &first_bd, false);
@@ -337,9 +323,12 @@ void* BlockAllocator::Alloc(const size_t size, const size_t alignment)
 
 				// initialize the new block's descriptor
 				new_bd = reinterpret_cast<BD*>(new_block_pointer);
-				new_bd->Init();
 				new_bd->block_pointer_ = new_block_pointer + size_of_BD_;
 				new_bd->block_size_ = size + alignment_offset + guardband_size * 2;
+#ifdef BUILD_DEBUG
+				new_bd->id_ = descriptor_counter_++;
+				descriptor_counter_ = (descriptor_counter_ >= std::numeric_limits<uint32_t>::max() ? 0 : descriptor_counter_);
+#endif
 
 				// splice the free block
 				free_bd->block_size_ -= (size_of_BD_ + new_bd->block_size_);

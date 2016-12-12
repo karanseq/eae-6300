@@ -1,8 +1,11 @@
 #include "Data\BitArray.h"
+#include "Logger\Logger.h"
 #include "Memory\BlockAllocator.h"
 
 void BitArray_UnitTest(void)
 {
+	LOG("-------------------- Running BitArray_UnitTest --------------------");
+
 	using namespace engine::data;
 
 	const size_t bitCount = 1000;
@@ -53,4 +56,6 @@ void BitArray_UnitTest(void)
 
 	//delete pMyArray;
 	engine::memory::BlockAllocator::GetDefaultAllocator()->Free(pMyArray);
+
+	LOG("-------------------- Finished BitArray_UnitTest --------------------");
 }

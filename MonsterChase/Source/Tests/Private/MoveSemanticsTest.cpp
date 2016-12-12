@@ -14,6 +14,8 @@
 
 void TestMoveSemantics()
 {
+	LOG("-------------------- Running Move Semantics Test --------------------");
+
 	MonsterChase monster_chase;
 
 	LOG("-------------------- Testing Move Assignment Operators --------------------");
@@ -100,4 +102,6 @@ void TestMoveSemantics()
 		monsters.push_back(Monster(i % 2 ? MonsterControllers::kSillyMonsterController : MonsterControllers::kSmartMonsterController, ""));
 	}
 	monsters.clear();
+
+	LOG("-------------------- Finished Move Semantics Test --------------------");
 }

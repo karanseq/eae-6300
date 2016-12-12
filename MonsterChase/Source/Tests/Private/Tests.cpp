@@ -1,14 +1,9 @@
 /************************ MEMORY TESTS ************************/
 #ifdef ENABLE_ALLOCATOR_TEST
 #include "Tests\BlockAllocatorTest.h"
-#include <stdio.h>
-#include <conio.h>
 
 // engine includes
-#include "Memory\BlockAllocator.h"
-#include "Memory\AllocatorUtil.h"
-#include "Memory\AllocatorOverrides.h"
-#include "Math\MathUtil.h"
+#include "Logger\Logger.h"
 
 bool HeapManager_UnitTest();
 
@@ -17,9 +12,9 @@ void TestFixedSizeAllocator();
 
 /************************ ENABLE OTHER TESTS ************************/
 
-//#define ENABLE_VECTOR_CONST_TEST
-//#define ENABLE_FLOAT_VALIDITY_TEST
-//#define ENABLE_MOVE_SEMANTICS_TEST
+#define ENABLE_VECTOR_CONST_TEST
+#define ENABLE_FLOAT_VALIDITY_TEST
+#define ENABLE_MOVE_SEMANTICS_TEST
 #define ENABLE_BIT_ARRAY_TEST
 
 #ifdef ENABLE_VECTOR_CONST_TEST
@@ -43,24 +38,30 @@ void BitArray_UnitTest();
 
 void RunTests()
 {
+	LOG("\n");
 #ifdef ENABLE_VECTOR_CONST_TEST
 	TestVectorConstness();
 #endif
 
+	LOG("\n");
 #ifdef ENABLE_FLOAT_VALIDITY_TEST
 	TestFloatValidity();
 #endif
 
+	LOG("\n");
 #ifdef ENABLE_MOVE_SEMANTICS_TEST
 	TestMoveSemantics();
 #endif
 
+	LOG("\n");
 #ifdef ENABLE_BIT_ARRAY_TEST
 	BitArray_UnitTest();
 #endif
 
+	LOG("\n");
 #ifdef ENABLE_ALLOCATOR_TEST
 	TestFixedSizeAllocator();
+	LOG("\n");
 #ifdef BUILD_DEBUG
 	HeapManager_UnitTest();
 #else

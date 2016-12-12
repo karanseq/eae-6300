@@ -3,6 +3,9 @@
 #include <crtdbg.h>
 #endif // BUILD_DEBUG
 
+// engine includes
+#include "Logger\Logger.h"
+
 // game includes
 #include "Game\MonsterChase.h"
 
@@ -13,7 +16,9 @@ int main(int* argv, char** argc)
 	engine::memory::CreateAllocators();
 	
 	RunTests();
+	LOG("\n");
 
+	LOG("-------------------- Running MonsterChase --------------------");
 	// initialize game
 	MonsterChase* monster_chase = new MonsterChase();
 
@@ -24,6 +29,8 @@ int main(int* argv, char** argc)
 
 	delete monster_chase;
 	monster_chase = nullptr;
+
+	LOG("-------------------- Finished MonsterChase --------------------\n\n");
 
 	engine::memory::DestroyAllocators();
 
