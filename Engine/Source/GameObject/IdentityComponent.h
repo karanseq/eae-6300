@@ -2,11 +2,7 @@
 #define ENGINE_IDENTITY_COMPONENT_H_
 
 // library includes
-#include <cstdint>
-
-// engine includes
-#include "Memory\AllocatorUtil.h"
-#include "Assert\Assert.h"
+#include <stdint.h>
 
 namespace engine {
 namespace gameobject {

@@ -6,7 +6,6 @@ namespace gameobject {
 
 // forward declaration
 class GameObject;
-class Vec2D;
 
 /*
 	An interface that offers handles to control a GameObject.

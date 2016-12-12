@@ -4,6 +4,10 @@
 #include <string.h>
 #include <algorithm>
 
+// engine includes
+#include "Memory\AllocatorUtil.h"
+#include "Assert\Assert.h"
+
 namespace engine {
 namespace gameobject {
 

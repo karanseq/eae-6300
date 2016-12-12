@@ -1,8 +1,6 @@
 #ifndef ENGINE_BIT_ARRAY_H_
 #define ENGINE_BIT_ARRAY_H_
 
-#include "Memory\BlockAllocator.h"
-
 namespace engine {
 namespace data {
 

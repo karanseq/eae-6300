@@ -6,7 +6,6 @@
 
 // engine includes
 #include "AllocatorUtil.h"
-#include "Assert\Assert.h"
 
 // forward declaration
 namespace engine {

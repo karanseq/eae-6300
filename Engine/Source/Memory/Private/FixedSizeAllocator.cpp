@@ -2,6 +2,7 @@
 
 // engine includes
 #include "Memory\AllocatorUtil.h"
+#include "Memory\BlockAllocator.h"
 #include "Data\BitArray.h"
 #include "Assert\Assert.h"
 #include "Logger\Logger.h"
@@ -14,7 +15,7 @@ FixedSizeAllocator*							FixedSizeAllocator::available_allocators_[MAX_FIXED_SI
 FixedSizeAllocator::FSASort					FixedSizeAllocator::FSASorter;
 
 #ifdef BUILD_DEBUG
-uint8_t						FixedSizeAllocator::counter_ = 0;
+uint8_t										FixedSizeAllocator::counter_ = 0;
 #endif
 
 FixedSizeAllocator::FixedSizeAllocator(void* memory, const size_t total_block_size, const size_t fixed_block_size, const size_t num_blocks, BlockAllocator* allocator) : block_(static_cast<uint8_t*>(memory)),
