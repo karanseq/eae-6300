@@ -39,13 +39,12 @@ namespace math {
 	inline Vec2D& Vec2D::operator=(const Vec2D& vec)
 	{
 		// check for self assignment
-		if (this == &vec)
+		if (this != &vec)
 		{
-			return *this;
+			x_ = vec.x_;
+			y_ = vec.y_;
 		}
 
-		x_ = vec.x_;
-		y_ = vec.y_;
 		return *this;
 	}
 

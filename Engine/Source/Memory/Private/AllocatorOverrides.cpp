@@ -43,11 +43,11 @@ void* operator new(size_t size, engine::memory::AlignmentType alignment)
 {
 	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::GetDefaultAllocator();
 	ASSERT(default_allocator);
-#ifdef BUILD_DEBUG
-	LOG("Calling new(size = %zu, alignemnt = %d) on the default allocator", size, alignment);
-#endif
 	void* pointer = default_allocator->Alloc(size, alignment);
 	ASSERT(pointer);
+#ifdef BUILD_DEBUG
+	LOG("Called %s(size = %zu, alignemnt = %d) on the default allocator", __FUNCTION__, size, alignment);
+#endif
 	return pointer;
 }
 
@@ -56,20 +56,20 @@ void operator delete(void* pointer, engine::memory::AlignmentType alignment)
 	ASSERT(pointer);
 	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::GetDefaultAllocator();
 	ASSERT(default_allocator);
-#ifdef BUILD_DEBUG
-	LOG("Calling delete(pointer = %p, alignemnt = %d) on the default allocator", pointer, alignment);
-#endif
 	default_allocator->Free(pointer);
+#ifdef BUILD_DEBUG
+	LOG("Called %s(pointer = %p, alignemnt = %d) on the default allocator", __FUNCTION__, pointer, alignment);
+#endif
 }
 
 void* operator new(size_t size, engine::memory::BlockAllocator* allocator)
 {
 	ASSERT(allocator);
-#ifdef BUILD_DEBUG
-	LOG("Calling new(size = %zu, allocator = %p) on BlockAllocator-%d", size, allocator, allocator->GetID());
-#endif
 	void* pointer = allocator->Alloc(size);
 	ASSERT(pointer);
+#ifdef BUILD_DEBUG
+	LOG("Called %s(size = %zu, allocator = %p) on BlockAllocator-%d", __FUNCTION__, size, allocator, allocator->GetID());
+#endif
 	return pointer;
 }
 
@@ -77,20 +77,20 @@ void operator delete(void* pointer, engine::memory::BlockAllocator* allocator)
 {
 	ASSERT(pointer);
 	ASSERT(allocator);
-#ifdef BUILD_DEBUG
-	LOG("Calling delete(pointer = %p, allocator = %p) on BlockAllocator-%d", pointer, allocator, allocator->GetID());
-#endif
 	allocator->Free(pointer);
+#ifdef BUILD_DEBUG
+	LOG("Called %s(pointer = %p, allocator = %p) on BlockAllocator-%d", __FUNCTION__, pointer, allocator, allocator->GetID());
+#endif
 }
 
 void* operator new[](size_t size, engine::memory::BlockAllocator* allocator)
 {
 	ASSERT(allocator);
-#ifdef BUILD_DEBUG
-	LOG("Calling new[](size = %zu, allocator = %p) on BlockAllocator-%d", size, allocator, allocator->GetID());
-#endif
 	void* pointer = allocator->Alloc(size);
 	ASSERT(pointer);
+#ifdef BUILD_DEBUG
+	LOG("Called %s(size = %zu, allocator = %p) on BlockAllocator-%d", __FUNCTION__, size, allocator, allocator->GetID());
+#endif
 	return pointer;
 }
 
@@ -98,20 +98,20 @@ void operator delete[](void* pointer, engine::memory::BlockAllocator* allocator)
 {
 	ASSERT(pointer);
 	ASSERT(allocator);
-#ifdef BUILD_DEBUG
-	LOG("Calling delete[](pointer = %p, allocator = %p) on BlockAllocator-%d", pointer, allocator, allocator->GetID());
-#endif
 	allocator->Free(pointer);
+#ifdef BUILD_DEBUG
+	LOG("Called %s(pointer = %p, allocator = %p) on BlockAllocator-%d", __FUNCTION__, pointer, allocator, allocator->GetID());
+#endif
 }
 
 void* operator new(size_t size, engine::memory::FixedSizeAllocator* allocator)
 {
 	ASSERT(allocator);
-#ifdef BUILD_DEBUG
-	LOG("Calling new(size = %zu, allocator = %p) on FixedSizeAllocator-%d with fixed_block_size:%zu", size, allocator, allocator->GetID(), allocator->GetBlockSize());
-#endif
 	void* pointer = allocator->Alloc(size);
 	ASSERT(pointer);
+#ifdef BUILD_DEBUG
+	LOG("Called %s(size = %zu, allocator = %p) on FixedSizeAllocator-%d with fixed_block_size:%zu", __FUNCTION__, size, allocator, allocator->GetID(), allocator->GetBlockSize());
+#endif
 	return pointer;
 }
 
@@ -119,20 +119,20 @@ void operator delete(void* pointer, engine::memory::FixedSizeAllocator* allocato
 {
 	ASSERT(pointer);
 	ASSERT(allocator);
-#ifdef BUILD_DEBUG
-	LOG("Calling delete(pointer = %p, allocator = %p) on FixedSizeAllocator-%d with fixed_block_size:%zu", pointer, allocator, allocator->GetID(), allocator->GetBlockSize());
-#endif
 	allocator->Free(pointer);
+#ifdef BUILD_DEBUG
+	LOG("Called %s(pointer = %p, allocator = %p) on FixedSizeAllocator-%d with fixed_block_size:%zu", __FUNCTION__, pointer, allocator, allocator->GetID(), allocator->GetBlockSize());
+#endif
 }
 
 void* operator new[](size_t size, engine::memory::FixedSizeAllocator* allocator)
 {
 	ASSERT(allocator);
-#ifdef BUILD_DEBUG
-	LOG("Calling new[](size = %zu, allocator = %p) on FixedSizeAllocator-%d with fixed_block_size:%zu", size, allocator, allocator->GetID(), allocator->GetBlockSize());
-#endif
 	void* pointer = allocator->Alloc(size);
 	ASSERT(pointer);
+#ifdef BUILD_DEBUG
+	LOG("Called %s(size = %zu, allocator = %p) on FixedSizeAllocator-%d with fixed_block_size:%zu", __FUNCTION__, size, allocator, allocator->GetID(), allocator->GetBlockSize());
+#endif
 	return pointer;
 }
 
@@ -140,20 +140,20 @@ void operator delete[](void* pointer, engine::memory::FixedSizeAllocator* alloca
 {
 	ASSERT(pointer);
 	ASSERT(allocator);
-#ifdef BUILD_DEBUG
-	LOG("Calling delete[](pointer = %p, allocator = %p) on FixedSizeAllocator-%d with fixed_block_size:%zu", pointer, allocator, allocator->GetID(), allocator->GetBlockSize());
-#endif
 	allocator->Free(pointer);
+#ifdef BUILD_DEBUG
+	LOG("Called %s(pointer = %p, allocator = %p) on FixedSizeAllocator-%d with fixed_block_size:%zu", __FUNCTION__, pointer, allocator, allocator->GetID(), allocator->GetBlockSize());
+#endif
 }
 
 void* operator new(size_t size, engine::memory::BlockAllocator* allocator, engine::memory::AlignmentType alignment)
 {
 	ASSERT(allocator);
-#ifdef BUILD_DEBUG
-	LOG("Calling new(size = %zu, allocator = %p, alignment = %d) on allocator-%d", size, allocator, alignment, allocator->GetID());
-#endif
 	void* pointer = allocator->Alloc(size, alignment);
 	ASSERT(pointer);
+#ifdef BUILD_DEBUG
+	LOG("Called %s(size = %zu, allocator = %p, alignment = %d) on allocator-%d", __FUNCTION__, size, allocator, alignment, allocator->GetID());
+#endif
 	return pointer;
 }
 
@@ -161,10 +161,10 @@ void operator delete(void* pointer, engine::memory::BlockAllocator* allocator, e
 {
 	ASSERT(pointer);
 	ASSERT(allocator);
-#ifdef BUILD_DEBUG
-	LOG("Calling delete(pointer = %p, allocator = %p, alignment = %d) on allocator-%d", pointer, allocator, alignment, allocator->GetID());
-#endif
 	allocator->Free(pointer);
+#ifdef BUILD_DEBUG
+	LOG("Called %s(pointer = %p, allocator = %p, alignment = %d) on allocator-%d", __FUNCTION__, pointer, allocator, alignment, allocator->GetID());
+#endif
 }
 
 #ifdef BUILD_DEBUG
@@ -173,9 +173,9 @@ void* operator new(size_t size, const char* file_name, unsigned int line)
 {
 	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::GetDefaultAllocator();
 	ASSERT(default_allocator);
-	LOG("Calling new(size = %zu, file_name = %s, line = %d) on allocator-%d", size, file_name, line, default_allocator->GetID());
 	void* pointer = default_allocator->Alloc(size);
 	ASSERT(pointer);
+	LOG("Called %s(size = %zu, file_name = %s, line = %d) on allocator-%d", __FUNCTION__, size, file_name, line, default_allocator->GetID());
 	return pointer;
 }
 
@@ -183,8 +183,8 @@ void operator delete(void* pointer, const char* file_name, unsigned int line)
 {
 	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::GetDefaultAllocator();
 	ASSERT(default_allocator);
-	LOG("Calling delete(pointer = %p, file_name = %s, line = %d) on allocator-%d", pointer, file_name, line, default_allocator->GetID());
 	default_allocator->Free(pointer);
+	LOG("Called %s(pointer = %p, file_name = %s, line = %d) on allocator-%d", __FUNCTION__, pointer, file_name, line, default_allocator->GetID());
 }
 #endif
 
@@ -195,7 +195,7 @@ namespace memory {
 	{
 		void* pointer = nullptr;
 
-		// loop over the registered fixed size allocators to find the best fit
+		// loop over the available fixed size allocators to find the best fit
 		engine::memory::FixedSizeAllocator** const available_fsas = engine::memory::FixedSizeAllocator::GetAvailableFixedSizeAllocators();
 		for (uint8_t i = 0; i < MAX_FIXED_SIZE_ALLOCATORS; ++i)
 		{
@@ -206,7 +206,7 @@ namespace memory {
 				if (pointer)
 				{
 	#ifdef BUILD_DEBUG
-					LOG("Calling %s(size = %zu) on FixedSizeAllocator-%d with fixed_block_size:%zu", function_name, size, available_fsas[i]->GetID(), available_fsas[i]->GetBlockSize());
+					LOG("Called %s(size = %zu) on FixedSizeAllocator-%d with fixed_block_size:%zu", function_name, size, available_fsas[i]->GetID(), available_fsas[i]->GetBlockSize());
 	#endif
 					return pointer;
 				}
@@ -219,12 +219,12 @@ namespace memory {
 		engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::GetDefaultAllocator();
 		ASSERT(default_allocator);
 
-	#ifdef BUILD_DEBUG
-		LOG("Calling %s(size = %zu) on BlockAllocator-%d", function_name, size, default_allocator->GetID());
-	#endif
-
 		pointer = default_allocator->Alloc(size);
 		ASSERT(pointer);
+
+	#ifdef BUILD_DEBUG
+		LOG("Called %s(size = %zu) on BlockAllocator-%d", function_name, size, default_allocator->GetID());
+	#endif
 
 		return pointer;
 	}
@@ -233,12 +233,12 @@ namespace memory {
 	{
 		ASSERT(pointer);
 
-		// get all registered fixed size allocators
+		// get all available fixed size allocators
 		engine::memory::FixedSizeAllocator** const fixed_size_allocators = engine::memory::FixedSizeAllocator::GetAvailableFixedSizeAllocators();
 
 		// free the pointer from the appropriate allocator
 		uint8_t num_fixed_size_allocators = MAX_FIXED_SIZE_ALLOCATORS;
-		while (num_fixed_size_allocators >= 0)
+		while (num_fixed_size_allocators > 0)
 		{
 			if (fixed_size_allocators[num_fixed_size_allocators - 1] && fixed_size_allocators[num_fixed_size_allocators - 1]->Free(pointer))
 			{
@@ -250,17 +250,17 @@ namespace memory {
 			--num_fixed_size_allocators;
 		}
 
-		// get all registered block allocators
+		// get all available block allocators
 		engine::memory::BlockAllocator** const block_allocators = engine::memory::BlockAllocator::GetAvailableBlockAllocators();
 
 		// free the pointer from the appropriate allocator
-		uint8_t num_block_allocators = MAX_BLOCK_ALLOCATORS - 1;
-		while (num_block_allocators >= 0)
+		uint8_t num_block_allocators = MAX_BLOCK_ALLOCATORS;
+		while (num_block_allocators > 0)
 		{
-			if (block_allocators[num_block_allocators] && block_allocators[num_block_allocators]->Free(pointer))
+			if (block_allocators[num_block_allocators - 1] && block_allocators[num_block_allocators - 1]->Free(pointer))
 			{
 	#ifdef BUILD_DEBUG
-				LOG("Called %s(pointer = %p) on BlockAllocator-%d", function_name, pointer, block_allocators[num_block_allocators]->GetID());
+				LOG("Called %s(pointer = %p) on BlockAllocator-%d", function_name, pointer, block_allocators[num_block_allocators - 1]->GetID());
 	#endif
 				return;
 			}

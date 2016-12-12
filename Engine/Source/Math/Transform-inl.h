@@ -6,14 +6,12 @@ namespace math {
 	inline Transform& Transform::operator=(const Transform& transform)
 	{
 		// check for self assignment
-		if (this == &transform)
+		if (this != &transform)
 		{
-			return *this;
+			position_ = transform.position_;
+			rotation_ = transform.rotation_;
+			scale_ = transform.scale_;
 		}
-
-		position_ = transform.position_;
-		rotation_ = transform.rotation_;
-		scale_ = transform.scale_;
 		return *this;
 	}
 

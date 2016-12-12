@@ -26,20 +26,20 @@ public:
 	{}
 
 	// copy assignment operator
-	inline GameObject& operator=(const GameObject& game_object)						{ transform_ = game_object.transform_; }
+	inline GameObject& operator=(const GameObject& game_object);
 
 	// accessors and mutators
-	inline const engine::math::Transform& GetTransform() const						{ return transform_; }
-	inline void SetTransform(const engine::math::Transform& transform)				{ transform_ = transform; }
+	inline const engine::math::Transform& GetTransform() const;
+	inline void SetTransform(const engine::math::Transform& transform);
 
-	inline const engine::math::Vec3D& GetPosition() const							{ return transform_.GetPosition(); }
-	inline void SetPosition(const engine::math::Vec3D& position)					{ transform_.SetPosition(position); }
+	inline const engine::math::Vec3D& GetPosition() const;
+	inline void SetPosition(const engine::math::Vec3D& position);
 
-	inline const engine::math::Vec3D& GetRotation() const							{ return transform_.GetRotation(); }
-	inline void SetRotation(const engine::math::Vec3D& rotation)					{ transform_.SetRotation(rotation); }
+	inline const engine::math::Vec3D& GetRotation() const;
+	inline void SetRotation(const engine::math::Vec3D& rotation);
 
-	inline const engine::math::Vec3D& GetScale() const								{ return transform_.GetScale(); }
-	inline void SetScale(const engine::math::Vec3D& scale)							{ transform_.SetScale(scale); }
+	inline const engine::math::Vec3D& GetScale() const;
+	inline void SetScale(const engine::math::Vec3D& scale);
 
 private:
 	engine::math::Transform transform_;
@@ -47,5 +47,7 @@ private:
 
 } // namespace gameobject
 } // namespace engine
+
+#include "GameObject-inl.h"
 
 #endif // ENGINE_GAME_OBJECT_H_

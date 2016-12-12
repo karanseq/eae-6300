@@ -14,16 +14,14 @@ namespace gameobject {
 	inline IdentityComponent& IdentityComponent::operator=(const IdentityComponent& ic)
 	{
 		// check for self assignment
-		if (this == &ic)
+		if (this != &ic)
 		{
-			return *this;
+			id_ = ic.id_;
+			tag_ = ic.tag_;
+
+			SAFE_FREE(name_);
+			name_ = _strdup(ic.name_);
 		}
-
-		id_ = ic.id_;
-		tag_ = ic.tag_;
-
-		SAFE_FREE(name_);
-		name_ = _strdup(ic.name_);
 
 		return *this;
 	}
@@ -31,14 +29,12 @@ namespace gameobject {
 	inline IdentityComponent& IdentityComponent::operator=(IdentityComponent&& ic)
 	{
 		// check for self assignment
-		if (this == &ic)
+		if (this != &ic)
 		{
-			return *this;
+			id_ = ic.id_;
+			tag_ = ic.tag_;
+			std::swap(name_, ic.name_);
 		}
-
-		id_ = ic.id_;
-		tag_ = ic.tag_;
-		std::swap(name_, ic.name_);
 
 		return *this;
 	}

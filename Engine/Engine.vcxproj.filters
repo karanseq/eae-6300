@@ -114,6 +114,9 @@
     <ClInclude Include="Source\Memory\FixedSizeAllocator-inl.h">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GameObject\GameObject-inl.h">
+      <Filter>Header Files\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">

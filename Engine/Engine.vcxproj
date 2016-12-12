@@ -152,6 +152,7 @@
     <ClInclude Include="Source\Assert\Assert.h" />
     <ClInclude Include="Source\Data\BitArray-inl.h" />
     <ClInclude Include="Source\Data\BitArray.h" />
+    <ClInclude Include="Source\GameObject\GameObject-inl.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
     <ClInclude Include="Source\GameObject\IdentityComponent-inl.h" />
     <ClInclude Include="Source\GameObject\InterfaceGameObjectController.h" />

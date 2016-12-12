@@ -51,14 +51,13 @@ namespace math {
 	inline Vec3D& Vec3D::operator=(const Vec3D& vec)
 	{
 		// check for self assignment
-		if (this == &vec)
+		if (this != &vec)
 		{
-			return *this;
+			x_ = vec.x_;
+			y_ = vec.y_;
+			z_ = vec.z_;
 		}
 
-		x_ = vec.x_;
-		y_ = vec.y_;
-		z_ = vec.z_;
 		return *this;
 	}
 
