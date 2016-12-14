@@ -8,7 +8,8 @@ namespace gameobject {
 class GameObject;
 
 /*
-	An interface that offers handles to control a GameObject.
+	InterfaceGameObjectController
+	- An interface that offers handles to control a GameObject.
 */
 class InterfaceGameObjectController
 {

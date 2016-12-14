@@ -7,6 +7,8 @@
 	A simple assert utility.
 	Features:
 	- Supports a simple assert function in debug mode at all verbosity levels
+	ToDo:
+	- Add an assert that outputs a message
 */
 
 #if defined(BUILD_DEBUG)

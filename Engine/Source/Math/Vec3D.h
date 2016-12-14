@@ -4,6 +4,12 @@
 namespace engine {
 namespace math {
 
+	/*
+		Vec3D
+		- A class that represents a 3D vector
+		- Overloads basic arithmetic operators, validates against bad floats
+	*/
+
 	class Vec3D
 	{
 	public:

@@ -7,3 +7,6 @@ Release/
 *.opendb
 *.sdf
 .vs/
+
+# Mac OS stuff
+.DS_Store

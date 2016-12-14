@@ -14,9 +14,10 @@ namespace memory {
 
 /*
 	BlockDescriptor
-	A block descriptor describes a block of memory that is managed by the block allocator.
+	- A struct that describes a block of memory managed by the block allocator
 	- It contains a pointer to a block of memory as well as its size
 	- It contains a pointer to the next & previous descriptor in a list or nullptr if its not part of a list
+	- In debug mode, it contains an integer id that can be used to track memory leaks
 */
 typedef struct BlockDescriptor
 {
@@ -34,10 +35,15 @@ public:
 
 /*
 	BlockAllocator
-	A simple block allocator that users can use to request for memory.
-	- Users need to provide the size of the memory block they need.
-	- If the request was successful, users will receive a pointer to the start of the memory block.
-	- If the request was unsuccessful, users will receive a nullptr pointer.
+	- A simple block allocator that uses a linked list to keep track of allocations
+	- It needs to be provided raw memory to operate on
+	- It provides functions to allocate, free and defragment memory on demand
+	- To allocate memory, users must pass in the desired size and desired byte alignment (defaults to 4-byte alignment)
+	- In debug mode, it checks for memory overwrites by adding guardbands around the memory returned to the user
+	- In debug mode, it provides functions to track allocations by uniquely identifying each descriptor to user memory
+	- No more than 5 (MAX_BLOCK_ALLOCATORS) instances of this class must be created
+	- In order to be within overridden versions of new, delete, malloc & free, an instance must be "registered" using
+	  the static AddBlockAllocator function
 */
 class BlockAllocator
 {

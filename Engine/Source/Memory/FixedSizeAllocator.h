@@ -24,10 +24,12 @@ class BlockAllocator;
 
 /*
 	FixedSizeAllocator
-	A simple fixed size allocator that users can use to request for memory of a fixed size.
-	- Users need to provide the size of each fixed size block, the total number of blocks and a block allocator to allocate necessary memory from.
-	- If the request was successful, users will receive a pointer to the start of the memory block.
-	- If the request was unsuccessful, users will receive nullptr.
+	- A simple fixed size allocator that users can use to request for memory of a fixed size
+	- Users need to provide the size of each fixed size block, the total number of blocks
+	  and a block allocator to allocate necessary memory from (usually the default block allocator)
+	- No more than 5 (MAX_FIXED_SIZE_ALLOCATORS) instances of this class must be created & no two instances can have the same block size
+	- In order to be within overridden versions of new, delete, malloc & free, an instance must be "registered" using
+	  the static AddBlockAllocator function
 */
 class FixedSizeAllocator
 {

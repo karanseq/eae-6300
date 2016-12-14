@@ -7,6 +7,11 @@
 namespace engine {
 namespace gameobject {
 
+	/*
+		IdentityComponent
+		- A component that can be used to uniquely identify any object within the engine
+	*/
+
 	class IdentityComponent
 	{
 	public:

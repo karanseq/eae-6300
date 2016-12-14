@@ -12,11 +12,9 @@ namespace math {
 		y_(y)
 	{}
 
-	Vec2D::Vec2D(const Vec2D& copy)
-	{
-		x_ = copy.x();
-		y_ = copy.y();
-	}
+	Vec2D::Vec2D(const Vec2D& copy) : x_(copy.x_),
+		y_(copy.y_)
+	{}
 
 } // namespace math
 } // namespace engine

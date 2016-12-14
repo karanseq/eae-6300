@@ -4,6 +4,12 @@
 namespace engine {
 namespace math {
 
+	/*
+		Vec2D
+		- A class that represents a 2D vector
+		- Overloads basic arithmetic operators, validates against bad floats
+	*/
+
 	class Vec2D
 	{
 	public:

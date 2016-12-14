@@ -5,7 +5,6 @@
 	A simple logging utility.
 	Features:
 	- Supports a simple log function in both debug and release modes at various verbosity levels (see Variables section)
-	- Supports a simple verbose function that adds file name and line number to a regular log in debug mode at max verbosity (see Variables section)
 
 	Variables:
 	- BUILD_DEBUG: Define this only when we're in debug mode.

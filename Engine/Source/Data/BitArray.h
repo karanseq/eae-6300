@@ -4,6 +4,13 @@
 namespace engine {
 namespace data {
 
+	/*
+		BitArray
+		- Creates and maintains an array of bits
+		- Bits can be set, cleared or toggled both individually and altogether
+		- Needs to be provided raw memory to create an instance of itself
+	*/
+
 	class BitArray
 	{
 	private:

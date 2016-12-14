@@ -14,12 +14,10 @@ namespace math {
 		z_(z)
 	{}
 
-	Vec3D::Vec3D(const Vec3D& copy)
-	{
-		x_ = copy.x();
-		y_ = copy.y();
-		z_ = copy.z();
-	}
+	Vec3D::Vec3D(const Vec3D& copy) : x_(copy.x_),
+		y_(copy.y_),
+		z_(copy.z_)
+	{}
 
 } // namespace math
 } // namespace engine

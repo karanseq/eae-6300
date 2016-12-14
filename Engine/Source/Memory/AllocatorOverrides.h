@@ -8,6 +8,10 @@
 namespace engine {
 namespace memory {
 
+	/*
+		AlignmentType
+		- An enum that defines the various types of alignment supported by the overloaded new operator
+	*/
 	enum AlignmentType
 	{
 		ALIGNMENT_DEFAULT = 4,
@@ -17,7 +21,7 @@ namespace memory {
 		ALIGNMENT_64 = 64
 	};
 
-	// forward declaration
+	// forward declarations
 	class BlockAllocator;
 	class FixedSizeAllocator;
 

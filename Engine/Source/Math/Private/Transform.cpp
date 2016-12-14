@@ -8,12 +8,10 @@ namespace math {
 		scale_(scale)
 	{}
 
-	Transform::Transform(const Transform& copy)
-	{
-		position_ = copy.position_;
-		rotation_ = copy.rotation_;
-		scale_ = copy.scale_;
-	}
+	Transform::Transform(const Transform& copy) : position_(copy.position_),
+		rotation_(copy.rotation_),
+		scale_(copy.scale_)
+	{}
 
 } // namespace math
 } // namespace engine

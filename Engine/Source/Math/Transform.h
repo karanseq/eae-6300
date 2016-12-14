@@ -6,6 +6,11 @@
 namespace engine {
 namespace math {
 
+	/*
+		Transform
+		- A class that represents the position, scale and rotation of an object in 3D space
+	*/
+
 	class Transform
 	{
 	public:

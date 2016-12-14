@@ -8,7 +8,8 @@ namespace engine {
 namespace gameobject {
 
 /*
-	A simple class to represent an object in space.
+	GameObject
+	- A simple class that uses a transform to represent an object in space.
 */
 class GameObject
 {
