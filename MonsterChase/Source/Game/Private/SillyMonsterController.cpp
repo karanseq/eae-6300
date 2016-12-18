@@ -1,11 +1,11 @@
 #include "Game\SillyMonsterController.h"
-#include "Game\GameTypes.h"
-#include "Game\GameUtils.h"
 
 // engine includes
 #include "Memory\AllocatorOverrides.h"
 
 // game includes
+#include "Game\GameTypes.h"
+#include "Game\GameUtils.h"
 #include "Game\MonsterChase.h"
 
 SillyMonsterController::SillyMonsterController() : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject())

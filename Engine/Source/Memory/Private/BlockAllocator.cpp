@@ -1,9 +1,12 @@
 #include "Memory\BlockAllocator.h"
+
+// library includes
+#include <new>				// for placement new
+#include <stdlib.h>			// for _aligned_malloc & _aligned_free
+
+// engine includes
 #include "Assert\Assert.h"
 #include "Logger\Logger.h"
-
-#include <stdlib.h>			// for _aligned_malloc & _aligned_free
-#include <new>				// for placement new
 
 namespace engine {
 namespace memory {

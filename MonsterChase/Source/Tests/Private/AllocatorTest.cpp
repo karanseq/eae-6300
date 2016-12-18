@@ -1,10 +1,14 @@
 #ifdef ENABLE_ALLOCATOR_TEST
 
-#include "Tests/AllocatorTest.h"
-#include "Logger/Logger.h"
-
+// library includes
 #include <stdlib.h>
 #include <vector>		// required ONLY for test03
+
+// engine includes
+#include "Logger/Logger.h"
+
+// game includes
+#include "Tests/AllocatorTest.h"
 
 //#define SIMULATE_MEMORY_OVERWRITE
 

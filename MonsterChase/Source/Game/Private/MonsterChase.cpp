@@ -1,21 +1,23 @@
 #include "Game\MonsterChase.h"
-#include "Game\Player.h"
-#include "Game\Monster.h"
-#include "Game\GameUtils.h"
-
-// engine includes 
-#include "Math\Vec2D.h"
-#include "Assert\Assert.h"
-#include "Logger\Logger.h"
-#include "Memory\AllocatorOverrides.h"
 
 // library includes
-#include <stdio.h>
 #include <conio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <time.h>
 #include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+// engine includes 
+#include "Assert\Assert.h"
+#include "Logger\Logger.h"
+#include "Math\Vec2D.h"
+#include "Memory\AllocatorOverrides.h"
+
+// game includes
+#include "Game\GameUtils.h"
+#include "Game\Monster.h"
+#include "Game\Player.h"
 
 // static member initialization
 engine::memory::BlockAllocator* MonsterChase::game_allocator_ = nullptr;

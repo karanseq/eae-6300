@@ -6,8 +6,8 @@
 #include <string.h>
 
 // engine includes
-#include "Memory\AllocatorUtil.h"
 #include "Assert\Assert.h"
+#include "Memory\AllocatorUtil.h"
 
 namespace engine {
 namespace gameobject {

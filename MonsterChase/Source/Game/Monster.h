@@ -2,15 +2,15 @@
 #define MONSTER_H_
 
 // engine includes
-#include "GameObject\InterfaceGameObjectController.h"
-#include "GameObject\IdentityComponent.h"
-#include "Memory\AllocatorUtil.h"
 #include "Assert\Assert.h"
+#include "GameObject\IdentityComponent.h"
+#include "GameObject\InterfaceGameObjectController.h"
+#include "Memory\AllocatorUtil.h"
 
 // game includes
 #include "Game\GameTypes.h"
-#include "Game\SmartMonsterController.h"
 #include "Game\SillyMonsterController.h"
+#include "Game\SmartMonsterController.h"
 
 class Monster
 {

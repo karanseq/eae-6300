@@ -4,18 +4,16 @@
 #endif // BUILD_DEBUG
 
 #ifdef ENABLE_ALLOCATOR_TEST
-#include "Tests\AllocatorTest.h"
+// library includes
 #include <stdio.h>
 #include <conio.h>
 
 // engine includes
 #include "Memory\BlockAllocator.h"
-#include "Memory\AllocatorUtil.h"
-#include "Memory\AllocatorOverrides.h"
-#include "Math\MathUtil.h"
 
 // game includes
 #include "Game\MonsterChase.h"
+#include "Tests\AllocatorTest.h"
 
 bool HeapManager_UnitTest();
 #endif // ENABLE_ALLOCATOR_TEST

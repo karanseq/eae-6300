@@ -1,7 +1,10 @@
 #include "BlockAllocator.h"
-#include "Assert\Assert.h"
 
+// library includes
 #include <string.h>			// for memset
+
+// engine includes
+#include "Assert\Assert.h"
 
 namespace engine {
 namespace memory {

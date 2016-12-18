@@ -4,7 +4,7 @@
 namespace engine {
 namespace gameobject {
 
-// forward declaration
+// forward declarations
 class GameObject;
 class Vec2D;
 

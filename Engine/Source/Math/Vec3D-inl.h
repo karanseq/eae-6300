@@ -1,4 +1,6 @@
 #include "Vec3D.h"
+
+// engine includes
 #include "Assert\Assert.h"
 #include "Math\MathUtil.h"
 
