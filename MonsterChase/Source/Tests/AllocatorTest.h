@@ -10,14 +10,14 @@ class AllocatorTest
 private:
 	AllocatorTest() {};
 	~AllocatorTest() {};
-	AllocatorTest(const AllocatorTest& copy);
-	AllocatorTest& operator=(const AllocatorTest& at);
+	AllocatorTest(const AllocatorTest& i_copy);
+	AllocatorTest& operator=(const AllocatorTest& i_at);
 
-	static char* DoAlloc(const size_t size);
-	static void DoFree(char* pointer, const size_t size);
+	static char* DoAlloc(const size_t i_size);
+	static void DoFree(char* i_pointer, const size_t i_size);
 
 public:
-	static void Init(const size_t total_memory = 1024 * 1024);
+	static void Init(const size_t i_total_memory);
 	static void Reset();
 
 	static void RunTest00();

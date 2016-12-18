@@ -17,21 +17,21 @@ public:
 	~Player();
 
 	void Update();
-	bool HandleUserInput(char input);
+	bool HandleUserInput(char i_input);
 	void Print();
 
 	// accessors and mutators
 	inline engine::gameobject::InterfaceGameObjectController* GetController() const								{ return controller_; }
-	inline void SetController(engine::gameobject::InterfaceGameObjectController* controller)					{ ASSERT(controller); SAFE_DELETE(controller_); controller_ = controller; }
+	inline void SetController(engine::gameobject::InterfaceGameObjectController* i_controller)					{ ASSERT(i_controller); SAFE_DELETE(controller_); controller_ = i_controller; }
 
 	inline engine::gameobject::IdentityComponent* GetIdentity() const											{ return identity_; }
-	inline void SetIdentity(engine::gameobject::IdentityComponent* identity)									{ ASSERT(identity); SAFE_DELETE(identity_); identity_ = identity; }
+	inline void SetIdentity(engine::gameobject::IdentityComponent* i_identity)									{ ASSERT(i_identity); SAFE_DELETE(identity_); identity_ = i_identity; }
 
 private:
 	// disable default copy constructor
-	Player(const Player& copy);
+	Player(const Player& i_copy);
 	// disable default assignment operator
-	Player& operator=(const Player& monster);
+	Player& operator=(const Player& i_player);
 
 private:
 	engine::gameobject::InterfaceGameObjectController*					controller_;

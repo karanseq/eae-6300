@@ -11,13 +11,13 @@
 uint8_t* AllocatorTest::memory_ = nullptr;
 engine::memory::BlockAllocator* AllocatorTest::block_allocator_ = nullptr;
 
-void AllocatorTest::Init(size_t total_memory)
+void AllocatorTest::Init(size_t i_total_memory)
 {
-	LOG("Testing BlockAllocator TOTAL_MEM:%zu", total_memory);
+	LOG("Testing BlockAllocator TOTAL_MEM:%zu", i_total_memory);
 
-	memory_ = static_cast<uint8_t*>(_aligned_malloc(total_memory, DEFAULT_BYTE_ALIGNMENT));
+	memory_ = static_cast<uint8_t*>(_aligned_malloc(i_total_memory, DEFAULT_BYTE_ALIGNMENT));
 
-	block_allocator_ = engine::memory::BlockAllocator::Create(memory_, total_memory);
+	block_allocator_ = engine::memory::BlockAllocator::Create(memory_, i_total_memory);
 #ifdef BUILD_DEBUG
 	block_allocator_->PrintAllDescriptors();
 #endif
@@ -33,20 +33,20 @@ void AllocatorTest::Reset()
 	memory_ = nullptr;
 }
 
-char* AllocatorTest::DoAlloc(const size_t size)
+char* AllocatorTest::DoAlloc(const size_t i_size)
 {
-	LOG("Alloc-%zu", size);
-	char* ret = static_cast<char*>(block_allocator_->Alloc(size));
+	LOG("Alloc-%zu", i_size);
+	char* ret = static_cast<char*>(block_allocator_->Alloc(i_size));
 #ifdef BUILD_DEBUG
 	block_allocator_->PrintAllDescriptors();
 #endif
 	return ret;
 }
 
-void AllocatorTest::DoFree(char* pointer, const size_t size)
+void AllocatorTest::DoFree(char* i_pointer, const size_t i_size)
 {
-	LOG("Free-%zu", size);
-	block_allocator_->Free(pointer);
+	LOG("Free-%zu", i_size);
+	block_allocator_->Free(i_pointer);
 #ifdef BUILD_DEBUG
 	block_allocator_->PrintAllDescriptors();
 #endif

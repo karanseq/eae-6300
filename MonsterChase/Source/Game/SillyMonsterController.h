@@ -14,16 +14,16 @@ public:
 	virtual ~SillyMonsterController();
 
 	/* Implement InterfaceGameObjectController */
-	inline void SetGameObject(engine::gameobject::GameObject* game_object) override				{ ASSERT(game_object); SAFE_DELETE(game_object_); game_object_ = game_object; }
-	inline engine::gameobject::GameObject* GetGameObject() override								{ return game_object_; }
+	inline void SetGameObject(engine::gameobject::GameObject* i_game_object) override				{ ASSERT(i_game_object); SAFE_DELETE(game_object_); game_object_ = i_game_object; }
+	inline engine::gameobject::GameObject* GetGameObject() override									{ return game_object_; }
 
 	void UpdateGameObject() override;
 
 private:
 	// disable default copy constructor
-	SillyMonsterController(const SillyMonsterController& copy);
+	SillyMonsterController(const SillyMonsterController& i_copy);
 	// disable default assignment operator
-	SillyMonsterController& operator=(const SillyMonsterController& monster);
+	SillyMonsterController& operator=(const SillyMonsterController& i_controller);
 
 private:
 	engine::gameobject::GameObject* game_object_;

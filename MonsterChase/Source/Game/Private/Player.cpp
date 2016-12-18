@@ -24,24 +24,24 @@ void Player::Update()
 	controller_->UpdateGameObject();
 }
 
-bool Player::HandleUserInput(char input)
+bool Player::HandleUserInput(char i_input)
 {
-	if (input == 'a' || input == 'A')
+	if (i_input == 'a' || i_input == 'A')
 	{
 		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionLeft);
 		return true;
 	}
-	else if (input == 'd' || input == 'D')
+	else if (i_input == 'd' || i_input == 'D')
 	{
 		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionRight);
 		return true;
 	}
-	else if (input == 'w' || input == 'W')
+	else if (i_input == 'w' || i_input == 'W')
 	{
 		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionUp);
 		return true;
 	}
-	else if (input == 's' || input == 'S')
+	else if (i_input == 's' || i_input == 'S')
 	{
 		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionDown);
 		return true;

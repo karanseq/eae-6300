@@ -64,9 +64,9 @@ void MonsterChase::Update()
 	AcceptInput();
 }
 
-void MonsterChase::PrintMessage(const char* message)
+void MonsterChase::PrintMessage(const char* i_message)
 {
-	printf(message);
+	printf(i_message);
 }
 
 void MonsterChase::PrintMessage()
@@ -139,29 +139,29 @@ void MonsterChase::AcceptInput()
 	ValidateInput(input_str);
 }
 
-void MonsterChase::ValidateInput(const char* input)
+void MonsterChase::ValidateInput(const char* i_input)
 {
 	switch (game_state_)
 	{
 	case GameStates::kGameStateInputNumMonsters:
-		ValidateNumber(input);
+		ValidateNumber(i_input);
 		break;
 
 	case GameStates::kGameStateInputMonsterNames:
 	case GameStates::kGameStateInputPlayerName:
-		ValidateName(input);
+		ValidateName(i_input);
 		break;
 
 	case GameStates::kGameStateRunning:
-		ValidateMove(input);
+		ValidateMove(i_input);
 		break;
 	}
 }
 
-void MonsterChase::ValidateNumber(const char* input)
+void MonsterChase::ValidateNumber(const char* i_input)
 {
 	// valide input
-	ASSERT(input != nullptr);
+	ASSERT(i_input != nullptr);
 
 	// execute this function only in this state
 	if (game_state_ != GameStates::kGameStateInputNumMonsters)
@@ -171,7 +171,7 @@ void MonsterChase::ValidateNumber(const char* input)
 
 	// check if a number was entered
 	int number = -1;
-	if (sscanf_s(input, "%d", &number) > 0)
+	if (sscanf_s(i_input, "%d", &number) > 0)
 	{
 		// check if the number was within our range
 		if (number > 0 && number <= MAX_MONSTERS)
@@ -184,10 +184,10 @@ void MonsterChase::ValidateNumber(const char* input)
 	PrintMessage("Please pick a number from 1 to 10.\n");
 }
 
-void MonsterChase::ValidateName(const char* input)
+void MonsterChase::ValidateName(const char* i_input)
 {
 	// validate input
-	ASSERT(input != nullptr);
+	ASSERT(i_input != nullptr);
 
 	// execute this function only in these states
 	if (game_state_ != GameStates::kGameStateInputMonsterNames && game_state_ != GameStates::kGameStateInputPlayerName)
@@ -198,13 +198,13 @@ void MonsterChase::ValidateName(const char* input)
 	// count the number of white spaces in the input
 	char		c = 0;
 	int			i = 0, count = 0;
-	while (input[i])
+	while (i_input[i])
 	{
-		c = input[i++];
+		c = i_input[i++];
 		count += isblank(c) ? 1 : 0;
 	}
 
-	int input_length = static_cast<int>(strlen(input));
+	int input_length = static_cast<int>(strlen(i_input));
 	if (input_length > MAX_NAME_LENGTH						// check if the name was within our range
 		|| count >= input_length - 1)						// check if the input contained only white spaces
 	{
@@ -218,7 +218,7 @@ void MonsterChase::ValidateName(const char* input)
 
 	// remove the newline character from the input
 	char name[MAX_NAME_LENGTH] = { 0 };
-	strncpy_s(name, input, strlen(input) - 1);
+	strncpy_s(name, i_input, strlen(i_input) - 1);
 
 	// handle both states differently
 	if (game_state_ == GameStates::kGameStateInputPlayerName)
@@ -231,10 +231,10 @@ void MonsterChase::ValidateName(const char* input)
 	}
 }
 
-void MonsterChase::ValidateMove(const char* input)
+void MonsterChase::ValidateMove(const char* i_input)
 {
 	// validate input
-	ASSERT(input != nullptr);
+	ASSERT(i_input != nullptr);
 
 	// execute this function only in this state
 	if (game_state_ != GameStates::kGameStateRunning)
@@ -243,7 +243,7 @@ void MonsterChase::ValidateMove(const char* input)
 	}
 
 	bool is_valid_input = false;
-	char move = input[0];
+	char move = i_input[0];
 	if (move == 'q' || move == 'Q')
 	{
 		game_state_ = GameStates::kGameStateQuit;
@@ -265,13 +265,13 @@ void MonsterChase::ValidateMove(const char* input)
 	}
 }
 
-void MonsterChase::SaveNumMonsters(int num_monsters)
+void MonsterChase::SaveNumMonsters(int i_num_monsters)
 {
 	// validate input
-	ASSERT(num_monsters > 0);
+	ASSERT(i_num_monsters > 0);
 
 	// save the number of monsters
-	initial_num_monsters_ = num_monsters;
+	initial_num_monsters_ = i_num_monsters;
 
 	// create the array
 	monsters_ = new (MonsterChase::game_allocator_) Monster*[MAX_MONSTERS];
@@ -280,7 +280,7 @@ void MonsterChase::SaveNumMonsters(int num_monsters)
 	game_state_ = GameStates::kGameStateInputMonsterNames;
 }
 
-void MonsterChase::CreateMonster(const char* input_name)
+void MonsterChase::CreateMonster(const char* i_input_name)
 {
 	// limit number of monsters
 	if (num_monsters_ >= MAX_MONSTERS)
@@ -292,13 +292,13 @@ void MonsterChase::CreateMonster(const char* input_name)
 	char name[MAX_INPUT_SIZE] = { 0 };
 
 	// if no name was provided, generate one
-	if (input_name == nullptr)
+	if (i_input_name == nullptr)
 	{
 		GetNameForMonster(name);
 	}
 	else
 	{
-		sprintf_s(name, "%s", input_name);
+		sprintf_s(name, "%s", i_input_name);
 	}
 
 	// calculate random position for this monster
@@ -334,23 +334,23 @@ void MonsterChase::CreateMonster(const char* input_name)
 	}
 }
 
-void MonsterChase::DestroyMonster(int at_index)
+void MonsterChase::DestroyMonster(int i_at_index)
 {
 	// validate inputs, bounds and data state
-	ASSERT(at_index >= 0);
-	ASSERT(at_index < num_monsters_);
+	ASSERT(i_at_index >= 0);
+	ASSERT(i_at_index < num_monsters_);
 	ASSERT(num_monsters_ != 0);
 
 	// delete the monster at index
-	SAFE_DELETE(monsters_[at_index]);
+	SAFE_DELETE(monsters_[i_at_index]);
 
 	// check if this monster is the last one
-	if (at_index != num_monsters_ - 1)
+	if (i_at_index != num_monsters_ - 1)
 	{
 		// TODO: move last object and reduce fragmentation
 
 		// swap the last monster to occupy this index
-		monsters_[at_index] = monsters_[num_monsters_ - 1];
+		monsters_[i_at_index] = monsters_[num_monsters_ - 1];
 
 		// clear the pointer
 		monsters_[num_monsters_ - 1] = nullptr;
@@ -383,27 +383,27 @@ void MonsterChase::UpdateMonsters()
 	}
 }	
 
-void MonsterChase::GetNameForMonster(char* name)
+void MonsterChase::GetNameForMonster(char* o_name)
 {
 	// validate input
-	ASSERT(name != nullptr);
+	ASSERT(o_name != nullptr);
 
 	// generate a name based by appending an incrementing ASCII value
-	sprintf_s(name, MAX_INPUT_SIZE, "foo%c", (START_ASCII + ascii_index_++));
+	sprintf_s(o_name, MAX_INPUT_SIZE, "foo%c", (START_ASCII + ascii_index_++));
 	if (ascii_index_ > MAX_ASCII)
 	{
 		ascii_index_ = 0;
 	}
 }
 
-void MonsterChase::CreatePlayer(const char* name)
+void MonsterChase::CreatePlayer(const char* i_name)
 {
 	// validate inputs
-	ASSERT(name != nullptr);
+	ASSERT(i_name != nullptr);
 
 	// create the player at the center of the grid
 	player_ = new (MonsterChase::game_allocator_) Player();
-	player_->GetIdentity()->SetName(name);
+	player_->GetIdentity()->SetName(i_name);
 
 	// time to start the game
 	game_state_ = GameStates::kGameStateInputNumMonsters;

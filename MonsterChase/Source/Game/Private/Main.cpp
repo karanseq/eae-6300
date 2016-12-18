@@ -31,7 +31,7 @@ void TestVectorConstness();
 void TestFloatValidity();
 #endif // ENABLE_FLOAT_VALIDITY_TEST
 
-int main(int* argv, char** argc)
+int main(int* i_argv, char** i_argc)
 {
 	// initialize the default allocator
 	engine::memory::BlockAllocator* default_allocator = engine::memory::BlockAllocator::CreateDefaultAllocator();
@@ -49,7 +49,8 @@ int main(int* argv, char** argc)
 #ifdef BUILD_DEBUG
 	HeapManager_UnitTest();
 #else
-	AllocatorTest::Init();
+	const size_t allocator_test_memory = 1024 * 1024;
+	AllocatorTest::Init(allocator_test_memory);
 	AllocatorTest::RunTest00();
 	AllocatorTest::RunTest01();
 	AllocatorTest::RunTest02();

@@ -22,26 +22,26 @@ public:
 	void Update();
 
 	// functions to print game information
-	void PrintMessage(const char* message);
+	void PrintMessage(const char* i_message);
 	void PrintMessage();
 	void PrintMessageMonsterName();	
 	void PrintGameInformation();
 
 	// functions to scan and validate user input
 	void AcceptInput();
-	void ValidateInput(const char* input);
-	void ValidateNumber(const char* input);
-	void ValidateName(const char* input);
-	void ValidateMove(const char* input);
+	void ValidateInput(const char* i_input);
+	void ValidateNumber(const char* i_input);
+	void ValidateName(const char* i_input);
+	void ValidateMove(const char* i_input);
 
 	// game logic
-	void SaveNumMonsters(int num_monsters);
-	void CreateMonster(const char* input_name = nullptr);
-	void DestroyMonster(int at_index);
+	void SaveNumMonsters(int i_num_monsters);
+	void CreateMonster(const char* i_input_name = nullptr);
+	void DestroyMonster(int i_at_index);
 	void UpdateMonsters();
-	void GetNameForMonster(char* name);
+	void GetNameForMonster(char* i_name);
 
-	void CreatePlayer(const char* name);
+	void CreatePlayer(const char* i_name);
 
 	inline GameStates GetState() const												{ return game_state_; }
 	static inline engine::memory::BlockAllocator* GetAllocator()					{ return MonsterChase::game_allocator_; }
@@ -59,9 +59,9 @@ public:
 
 private:
 	// disable default copy constructor
-	MonsterChase(const MonsterChase& copy);
+	MonsterChase(const MonsterChase& i_copy);
 	// disable default assignment operator
-	MonsterChase& operator=(const MonsterChase& monster);
+	MonsterChase& operator=(const MonsterChase& i_monster);
 
 private:
 	// reference to an instance of an allocator specifically for game objects

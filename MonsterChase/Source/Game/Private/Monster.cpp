@@ -9,12 +9,12 @@
 // game includes
 #include "Game\MonsterChase.h"
 
-Monster::Monster(MonsterControllers controller_type) : controller_(nullptr),
+Monster::Monster(MonsterControllers i_controller_type) : controller_(nullptr),
 	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent()),
 	time_to_live_(0)
 {
-	ASSERT(controller_type != MonsterControllers::kNoMonsterController);
-	switch (controller_type)
+	ASSERT(i_controller_type != MonsterControllers::kNoMonsterController);
+	switch (i_controller_type)
 	{
 	case MonsterControllers::kSmartMonsterController:
 		controller_ = new (MonsterChase::GetAllocator()) SmartMonsterController();
