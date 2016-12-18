@@ -15,18 +15,18 @@ namespace gameobject {
 	class IdentityComponent
 	{
 	public:
-		IdentityComponent(uint32_t id = 0, uint32_t tag = 0, const char* name = "") : id_(id),
-			tag_(tag),
-			name_(_strdup(name))
+		IdentityComponent(uint32_t i_id = 0, uint32_t i_tag = 0, const char* i_name = "") : id_(i_id),
+			tag_(i_tag),
+			name_(_strdup(i_name))
 		{}
 	
-		IdentityComponent(const IdentityComponent& copy)
+		IdentityComponent(const IdentityComponent& i_copy)
 		{
-			id_ = copy.GetID();
-			tag_ = copy.GetTag();
+			id_ = i_copy.GetID();
+			tag_ = i_copy.GetTag();
 			
 			SAFE_FREE(name_);
-			name_ = _strdup(copy.GetName());
+			name_ = _strdup(i_copy.GetName());
 		}
 
 		~IdentityComponent()
@@ -35,29 +35,29 @@ namespace gameobject {
 		}
 
 		// accessors and mutators
-		inline void SetID(uint32_t id)								{ id_ = id; }
-		inline uint32_t GetID() const								{ return id_; }
+		inline void SetID(uint32_t i_id)								{ id_ = i_id; }
+		inline uint32_t GetID() const									{ return id_; }
 
-		inline void SetTag(uint32_t tag)							{ tag_ = tag; }
-		inline uint32_t GetTag() const								{ return tag_; }
+		inline void SetTag(uint32_t i_tag)								{ tag_ = i_tag; }
+		inline uint32_t GetTag() const									{ return tag_; }
 
-		inline void SetName(const char* name)						{ ASSERT(name); SAFE_FREE(name_); name_ = _strdup(name); }
-		inline const char* GetName() const							{ return name_; }
+		inline void SetName(const char* i_name)							{ ASSERT(i_name); SAFE_FREE(name_); name_ = _strdup(i_name); }
+		inline const char* GetName() const								{ return name_; }
 
 		// assignment
-		inline IdentityComponent& operator=(const IdentityComponent& ic)
+		inline IdentityComponent& operator=(const IdentityComponent& i_ic)
 		{
 			// check for self assignment
-			if (this == &ic)
+			if (this == &i_ic)
 			{
 				return *this;
 			}
 
-			id_ = ic.id_;
-			tag_ = ic.tag_;
+			id_ = i_ic.id_;
+			tag_ = i_ic.tag_;
 
 			SAFE_FREE(name_);
-			name_ = _strdup(ic.name_);
+			name_ = _strdup(i_ic.name_);
 			
 			return *this;
 		}

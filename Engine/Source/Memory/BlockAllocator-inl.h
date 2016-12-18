@@ -12,10 +12,10 @@ namespace memory {
 	}
 
 #ifdef BUILD_DEBUG
-	inline void BlockAllocator::ClearBlock(BD* bd, const unsigned char fill)
+	inline void BlockAllocator::ClearBlock(BD* i_bd, const unsigned char i_fill)
 	{
-		ASSERT(bd != nullptr);
-		memset(bd->block_pointer_, fill, bd->block_size_);
+		ASSERT(i_bd != nullptr);
+		memset(i_bd->block_pointer, i_fill, i_bd->block_size);
 	}
 
 	inline unsigned int BlockAllocator::GetID() const
@@ -25,10 +25,10 @@ namespace memory {
 #endif
 
 	// Query whether a given pointer is within this allocator's range
-	inline bool BlockAllocator::Contains(const void* pointer) const
+	inline bool BlockAllocator::Contains(const void* i_pointer) const
 	{
-		ASSERT(pointer != nullptr);
-		return (static_cast<const uint8_t*>(pointer) >= block_ && static_cast<const uint8_t*>(pointer) <= (block_ + total_block_size_));
+		ASSERT(i_pointer != nullptr);
+		return (static_cast<const uint8_t*>(i_pointer) >= block_ && static_cast<const uint8_t*>(i_pointer) <= (block_ + total_block_size_));
 	}
 
 } // namespace memory

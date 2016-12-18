@@ -7,34 +7,34 @@ namespace math {
 	class Vec3D
 	{
 	public:
-		Vec3D(float x = 0.0f, float y = 0.0f, float z = 0.0f);
-		Vec3D(const Vec3D& copy);
+		Vec3D(float i_x = 0.0f, float i_y = 0.0f, float i_z = 0.0f);
+		Vec3D(const Vec3D& i_copy);
 
 		~Vec3D()
 		{}
 
 		// accessors and mutators
 		inline float x() const;
-		inline void x(float x);
+		inline void x(float i_x);
 		inline float y() const;
-		inline void y(float y);
+		inline void y(float i_y);
 		inline float z() const;
-		inline void z(float z);
-		inline void set(float x = 0.0f, float y = 0.0f, float z = 0.0f);
+		inline void z(float i_z);
+		inline void set(float i_x = 0.0f, float i_y = 0.0f, float i_z = 0.0f);
 
 		// assignment
-		inline Vec3D& operator=(const Vec3D& vec);
+		inline Vec3D& operator=(const Vec3D& i_vec);
 
 		// arithmetic
-		inline Vec3D operator+(const Vec3D& vec) const;
-		inline Vec3D& operator+=(const Vec3D& vec);
-		inline Vec3D operator-(const Vec3D& vec) const;
-		inline Vec3D& operator-=(const Vec3D& vec);
-		inline Vec3D& operator*=(float scale);
+		inline Vec3D operator+(const Vec3D& i_vec) const;
+		inline Vec3D& operator+=(const Vec3D& i_vec);
+		inline Vec3D operator-(const Vec3D& i_vec) const;
+		inline Vec3D& operator-=(const Vec3D& i_vec);
+		inline Vec3D& operator*=(float i_scale);
 
 		// relational
-		inline bool operator==(const Vec3D& vec) const;
-		inline bool operator!=(const Vec3D& vec) const;
+		inline bool operator==(const Vec3D& i_vec) const;
+		inline bool operator!=(const Vec3D& i_vec) const;
 
 		// unary
 		inline Vec3D operator-() const;

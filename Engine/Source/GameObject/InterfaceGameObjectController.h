@@ -17,7 +17,7 @@ public:
 	virtual ~InterfaceGameObjectController() {}
 
 	virtual GameObject* GetGameObject() = 0;
-	virtual void SetGameObject(GameObject* game_object) = 0;
+	virtual void SetGameObject(GameObject* i_game_object) = 0;
 
 	virtual void UpdateGameObject() = 0;
 };
