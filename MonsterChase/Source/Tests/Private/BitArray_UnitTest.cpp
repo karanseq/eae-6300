@@ -2,16 +2,16 @@
 #include "Logger\Logger.h"
 #include "Memory\BlockAllocator.h"
 
-void BitArray_UnitTest(const size_t bitCount)
+void BitArray_UnitTest(const size_t i_bitCount)
 {
 	using namespace engine::data;
 
-	const size_t bit_array_memory_size = BitArray::GetRequiredMemorySize(bitCount);
+	const size_t bit_array_memory_size = BitArray::GetRequiredMemorySize(i_bitCount);
 	void* bit_array_memory = engine::memory::BlockAllocator::GetDefaultAllocator()->Alloc(bit_array_memory_size);
 
-	BitArray* pMyArray = BitArray::Create(bitCount, bit_array_memory);
+	BitArray* pMyArray = BitArray::Create(i_bitCount, bit_array_memory);
 
-	size_t testBitIndex = 5 >= bitCount ? bitCount - 1 : 5;
+	size_t testBitIndex = 5 >= i_bitCount ? i_bitCount - 1 : 5;
 	pMyArray->SetBit(testBitIndex);
 
 	size_t firstSetBit = 0;
@@ -24,7 +24,7 @@ void BitArray_UnitTest(const size_t bitCount)
 	foundSetBit = pMyArray->GetFirstSetBit(firstSetBit);
 	assert(foundSetBit == false);
 
-	for (uint16_t i = 0; i < bitCount; i++)
+	for (uint16_t i = 0; i < i_bitCount; i++)
 	{
 		assert(pMyArray->IsBitClear(i) == true);
 		assert(pMyArray->IsBitSet(i) == false);
@@ -40,7 +40,7 @@ void BitArray_UnitTest(const size_t bitCount)
 		assert(pMyArray->IsBitSet(i) == true);
 
 		bool success = pMyArray->GetFirstClearBit(bit);
-		assert(((i < (bitCount - 1)) && success && (bit == (i + 1))) || ((i == (bitCount - 1)) && !success));
+		assert(((i < (i_bitCount - 1)) && success && (bit == (i + 1))) || ((i == (i_bitCount - 1)) && !success));
 	}
 
 	//pMyArray->SetAllBits();

@@ -6,16 +6,16 @@
 #include "Math\Vec2D.h"
 #include "Math\Vec3D.h"
 
-void VecToString(const engine::math::Vec2D& vec, char* buf)
+void VecToString(const engine::math::Vec2D& i_vec, char* o_buf)
 {
-	ASSERT(buf);
-	sprintf_s(buf, 128, "%f, %f", vec.x(), vec.y());
+	ASSERT(o_buf);
+	sprintf_s(o_buf, 128, "%f, %f", i_vec.x(), i_vec.y());
 }
 
-void VecToString(const engine::math::Vec3D& vec, char* buf)
+void VecToString(const engine::math::Vec3D& i_vec, char* o_buf)
 {
-	ASSERT(buf);
-	sprintf_s(buf, 128, "%f, %f, %f", vec.x(), vec.y(), vec.z());
+	ASSERT(o_buf);
+	sprintf_s(o_buf, 128, "%f, %f, %f", i_vec.x(), i_vec.y(), i_vec.z());
 }
 
 void TestVectorConstness()

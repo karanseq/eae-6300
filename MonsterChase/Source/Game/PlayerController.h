@@ -14,28 +14,28 @@ class PlayerController : public engine::gameobject::InterfaceGameObjectControlle
 {
 public:
 	PlayerController();
-	PlayerController(engine::gameobject::GameObject* game_object);
+	PlayerController(engine::gameobject::GameObject* i_game_object);
 	virtual ~PlayerController();
 
 	// copy constructor
-	PlayerController(const PlayerController& copy);
+	PlayerController(const PlayerController& i_copy);
 	// move constructor
-	PlayerController(PlayerController&& copy);
+	PlayerController(PlayerController&& i_copy);
 
 	// copy assignment operator
-	inline PlayerController& operator=(const PlayerController& controller);
+	inline PlayerController& operator=(const PlayerController& i_controller);
 	// move assignment operator
-	inline PlayerController& operator=(PlayerController&& controller);
+	inline PlayerController& operator=(PlayerController&& i_controller);
 
 	/* Implement InterfaceGameObjectController */
 	PlayerController* Clone() const override;
 	inline engine::gameobject::GameObject* GetGameObject();
-	inline void SetGameObject(engine::gameobject::GameObject* game_object);
+	inline void SetGameObject(engine::gameobject::GameObject* i_game_object);
 
 	void UpdateGameObject() override;
 
 	inline MoveDirections GetMoveDirection() const;
-	inline void SetMoveDirection(MoveDirections move_direction);
+	inline void SetMoveDirection(MoveDirections i_move_direction);
 
 private:
 	engine::gameobject::GameObject*					game_object_;

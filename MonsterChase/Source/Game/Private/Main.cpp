@@ -12,7 +12,7 @@
 
 void RunTests();
 
-int main(int* argv, char** argc)
+int main(int* i_argv, char** i_argc)
 {
 	engine::memory::CreateAllocators();
 	

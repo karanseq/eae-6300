@@ -9,8 +9,8 @@
 // game includes
 #include "Game\MonsterChase.h"
 
-Player::Player(const char* name) : controller_(new (MonsterChase::GetAllocator()) PlayerController()),
-	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, name))
+Player::Player(const char* i_name) : controller_(new (MonsterChase::GetAllocator()) PlayerController()),
+	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, i_name))
 {}
 
 Player::~Player()
@@ -19,15 +19,15 @@ Player::~Player()
 	SAFE_DELETE(identity_);
 }
 
-Player::Player(const Player& copy) : controller_(copy.controller_->Clone()),
-	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(copy.identity_->GetID(), copy.identity_->GetTag(), copy.identity_->GetName()))
+Player::Player(const Player& i_copy) : controller_(i_copy.controller_->Clone()),
+	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(i_copy.identity_->GetID(), i_copy.identity_->GetTag(), i_copy.identity_->GetName()))
 {}
 
-Player::Player(Player&& copy) : controller_(copy.controller_),
-	identity_(copy.identity_)
+Player::Player(Player&& i_copy) : controller_(i_copy.controller_),
+	identity_(i_copy.identity_)
 {
-	copy.controller_ = nullptr;
-	copy.identity_ = nullptr;
+	i_copy.controller_ = nullptr;
+	i_copy.identity_ = nullptr;
 }
 
 void Player::Update()
@@ -35,24 +35,24 @@ void Player::Update()
 	controller_->UpdateGameObject();
 }
 
-bool Player::HandleUserInput(char input)
+bool Player::HandleUserInput(char i_input)
 {
-	if (input == 'a' || input == 'A')
+	if (i_input == 'a' || i_input == 'A')
 	{
 		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionLeft);
 		return true;
 	}
-	else if (input == 'd' || input == 'D')
+	else if (i_input == 'd' || i_input == 'D')
 	{
 		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionRight);
 		return true;
 	}
-	else if (input == 'w' || input == 'W')
+	else if (i_input == 'w' || i_input == 'W')
 	{
 		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionUp);
 		return true;
 	}
-	else if (input == 's' || input == 'S')
+	else if (i_input == 's' || i_input == 'S')
 	{
 		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionDown);
 		return true;

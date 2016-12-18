@@ -11,7 +11,7 @@
 SillyMonsterController::SillyMonsterController() : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject())
 {}
 
-SillyMonsterController::SillyMonsterController(engine::gameobject::GameObject* game_object) : game_object_(game_object)
+SillyMonsterController::SillyMonsterController(engine::gameobject::GameObject* i_game_object) : game_object_(i_game_object)
 {}
 
 SillyMonsterController::~SillyMonsterController()
@@ -19,12 +19,12 @@ SillyMonsterController::~SillyMonsterController()
 	SAFE_DELETE(game_object_);
 }
 
-SillyMonsterController::SillyMonsterController(const SillyMonsterController& copy) : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject(copy.game_object_->GetTransform()))
+SillyMonsterController::SillyMonsterController(const SillyMonsterController& i_copy) : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject(i_copy.game_object_->GetTransform()))
 {}
 
-SillyMonsterController::SillyMonsterController(SillyMonsterController&& copy) : game_object_(copy.game_object_)
+SillyMonsterController::SillyMonsterController(SillyMonsterController&& i_copy) : game_object_(i_copy.game_object_)
 {
-	copy.game_object_ = nullptr;
+	i_copy.game_object_ = nullptr;
 }
 
 SillyMonsterController* SillyMonsterController::Clone() const

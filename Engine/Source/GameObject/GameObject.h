@@ -16,31 +16,31 @@ class GameObject
 public:
 	GameObject() : transform_()
 	{}
-	GameObject(const engine::math::Transform& transform) : transform_(transform)
+	GameObject(const engine::math::Transform& i_transform) : transform_(i_transform)
 	{}
 
 	virtual ~GameObject()
 	{}
 
 	// copy constructor
-	GameObject(const GameObject& copy) : transform_(copy.transform_)
+	GameObject(const GameObject& i_copy) : transform_(i_copy.transform_)
 	{}
 
 	// copy assignment operator
-	inline GameObject& operator=(const GameObject& game_object);
+	inline GameObject& operator=(const GameObject& i_game_object);
 
 	// accessors and mutators
 	inline const engine::math::Transform& GetTransform() const;
-	inline void SetTransform(const engine::math::Transform& transform);
+	inline void SetTransform(const engine::math::Transform& i_transform);
 
 	inline const engine::math::Vec3D& GetPosition() const;
-	inline void SetPosition(const engine::math::Vec3D& position);
+	inline void SetPosition(const engine::math::Vec3D& i_position);
 
 	inline const engine::math::Vec3D& GetRotation() const;
-	inline void SetRotation(const engine::math::Vec3D& rotation);
+	inline void SetRotation(const engine::math::Vec3D& i_rotation);
 
 	inline const engine::math::Vec3D& GetScale() const;
-	inline void SetScale(const engine::math::Vec3D& scale);
+	inline void SetScale(const engine::math::Vec3D& i_scale);
 
 private:
 	engine::math::Transform transform_;

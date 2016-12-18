@@ -1,27 +1,27 @@
 #include "Monster.h"
 
-inline Monster& Monster::operator=(const Monster& monster)
+inline Monster& Monster::operator=(const Monster& i_monster)
 {
-	if (this != &monster)
+	if (this != &i_monster)
 	{
 		SAFE_DELETE(controller_);
-		controller_ = monster.controller_->Clone();
+		controller_ = i_monster.controller_->Clone();
 
 		SAFE_DELETE(identity_);
-		identity_ = new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(monster.identity_->GetID(), monster.identity_->GetTag(), monster.identity_->GetName());
+		identity_ = new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(i_monster.identity_->GetID(), i_monster.identity_->GetTag(), i_monster.identity_->GetName());
 
-		time_to_live_ = monster.time_to_live_;
+		time_to_live_ = i_monster.time_to_live_;
 	}
 	return *this;
 }
 
-inline Monster& Monster::operator=(Monster&& monster)
+inline Monster& Monster::operator=(Monster&& i_monster)
 {
-	if (this != &monster)
+	if (this != &i_monster)
 	{
-		std::swap(controller_, monster.controller_);
-		std::swap(identity_, monster.identity_);
-		time_to_live_ = monster.time_to_live_;
+		std::swap(controller_, i_monster.controller_);
+		std::swap(identity_, i_monster.identity_);
+		time_to_live_ = i_monster.time_to_live_;
 	}
 	return *this;
 }
@@ -31,11 +31,11 @@ inline engine::gameobject::InterfaceGameObjectController* Monster::GetController
 	return controller_;
 }
 
-inline void Monster::SetController(engine::gameobject::InterfaceGameObjectController* controller)
+inline void Monster::SetController(engine::gameobject::InterfaceGameObjectController* i_controller)
 {
-	ASSERT(controller);
+	ASSERT(i_controller);
 	SAFE_DELETE(controller_);
-	controller_ = controller;
+	controller_ = i_controller;
 }
 
 inline engine::gameobject::IdentityComponent* Monster::GetIdentity() const
@@ -43,11 +43,11 @@ inline engine::gameobject::IdentityComponent* Monster::GetIdentity() const
 	return identity_;
 }
 
-inline void Monster::SetIdentity(engine::gameobject::IdentityComponent* identity)
+inline void Monster::SetIdentity(engine::gameobject::IdentityComponent* i_identity)
 {
-	ASSERT(identity);
+	ASSERT(i_identity);
 	SAFE_DELETE(identity_);
-	identity_ = identity;
+	identity_ = i_identity;
 }
 
 inline uint8_t Monster::GetTimeToLive() const
@@ -55,7 +55,7 @@ inline uint8_t Monster::GetTimeToLive() const
 	return time_to_live_;
 }
 
-inline void Monster::SetTimeToLive(uint8_t time_to_live)
+inline void Monster::SetTimeToLive(uint8_t i_time_to_live)
 {
-	time_to_live_ = time_to_live;
+	time_to_live_ = i_time_to_live;
 }

@@ -9,12 +9,12 @@
 // game includes
 #include "Game\MonsterChase.h"
 
-Monster::Monster(MonsterControllers controller_type, const char* name) : controller_(nullptr),
-	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, name)),
+Monster::Monster(MonsterControllers i_controller_type, const char* i_name) : controller_(nullptr),
+	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, i_name)),
 	time_to_live_(0)
 {
-	ASSERT(controller_type != MonsterControllers::kNoMonsterController);
-	switch (controller_type)
+	ASSERT(i_controller_type != MonsterControllers::kNoMonsterController);
+	switch (i_controller_type)
 	{
 	case MonsterControllers::kSmartMonsterController:
 		controller_ = new (MonsterChase::GetAllocator()) SmartMonsterController();
@@ -34,17 +34,17 @@ Monster::~Monster()
 	SAFE_DELETE(identity_);
 }
 
-Monster::Monster(const Monster& copy) : controller_(copy.controller_->Clone()),
-	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(copy.identity_->GetID(), copy.identity_->GetTag(), copy.identity_->GetName())),
-	time_to_live_(copy.time_to_live_)
+Monster::Monster(const Monster& i_copy) : controller_(i_copy.controller_->Clone()),
+	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(i_copy.identity_->GetID(), i_copy.identity_->GetTag(), i_copy.identity_->GetName())),
+	time_to_live_(i_copy.time_to_live_)
 {}
 
-Monster::Monster(Monster&& copy) : controller_(copy.controller_),
-	identity_(copy.identity_),
-	time_to_live_(copy.time_to_live_)
+Monster::Monster(Monster&& i_copy) : controller_(i_copy.controller_),
+	identity_(i_copy.identity_),
+	time_to_live_(i_copy.time_to_live_)
 {
-	copy.controller_ = nullptr;
-	copy.identity_ = nullptr;
+	i_copy.controller_ = nullptr;
+	i_copy.identity_ = nullptr;
 }
 
 void Monster::Update()

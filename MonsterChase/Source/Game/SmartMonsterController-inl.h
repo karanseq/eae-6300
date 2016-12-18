@@ -6,23 +6,23 @@
 // game includes
 #include "MonsterChase.h"
 
-inline SmartMonsterController& SmartMonsterController::operator=(const SmartMonsterController& controller)
+inline SmartMonsterController& SmartMonsterController::operator=(const SmartMonsterController& i_controller)
 {
-	if (this != &controller)
+	if (this != &i_controller)
 	{
 		SAFE_DELETE(game_object_);
-		game_object_ = new (MonsterChase::GetAllocator()) engine::gameobject::GameObject(controller.game_object_->GetTransform());
-		target_ = controller.target_;
+		game_object_ = new (MonsterChase::GetAllocator()) engine::gameobject::GameObject(i_controller.game_object_->GetTransform());
+		target_ = i_controller.target_;
 	}
 	return *this;
 }
 
-inline SmartMonsterController& SmartMonsterController::operator=(SmartMonsterController&& controller)
+inline SmartMonsterController& SmartMonsterController::operator=(SmartMonsterController&& i_controller)
 {
-	if (this != &controller)
+	if (this != &i_controller)
 	{
-		std::swap(game_object_, controller.game_object_);
-		target_ = controller.target_;
+		std::swap(game_object_, i_controller.game_object_);
+		target_ = i_controller.target_;
 	}
 	return *this;
 }
@@ -32,11 +32,11 @@ inline engine::gameobject::GameObject* SmartMonsterController::GetGameObject()
 	return game_object_;
 }
 
-inline void SmartMonsterController::SetGameObject(engine::gameobject::GameObject* game_object)
+inline void SmartMonsterController::SetGameObject(engine::gameobject::GameObject* i_game_object)
 { 
-	ASSERT(game_object);
+	ASSERT(i_game_object);
 	SAFE_DELETE(game_object_);
-	game_object_ = game_object;
+	game_object_ = i_game_object;
 }
 
 inline engine::gameobject::GameObject* SmartMonsterController::GetTarget()
@@ -44,9 +44,9 @@ inline engine::gameobject::GameObject* SmartMonsterController::GetTarget()
 	return target_;
 }
 
-inline void SmartMonsterController::SetTarget(engine::gameobject::GameObject* target) 
+inline void SmartMonsterController::SetTarget(engine::gameobject::GameObject* i_target) 
 { 
-	ASSERT(target);
+	ASSERT(i_target);
 	SAFE_DELETE(target_);
-	target_ = target;
+	target_ = i_target;
 }

@@ -11,23 +11,23 @@ class SillyMonsterController : public engine::gameobject::InterfaceGameObjectCon
 {
 public:
 	SillyMonsterController();
-	SillyMonsterController(engine::gameobject::GameObject* game_object);
+	SillyMonsterController(engine::gameobject::GameObject* i_game_object);
 	virtual ~SillyMonsterController();
 
 	// copy constructor
-	SillyMonsterController(const SillyMonsterController& copy);
+	SillyMonsterController(const SillyMonsterController& i_copy);
 	// move contructor
-	SillyMonsterController(SillyMonsterController&& copy);
+	SillyMonsterController(SillyMonsterController&& i_copy);
 
 	// copy assignment operator
-	inline SillyMonsterController& operator=(const SillyMonsterController& controller);
+	inline SillyMonsterController& operator=(const SillyMonsterController& i_controller);
 	// move assignment operator
-	inline SillyMonsterController& operator=(SillyMonsterController&& controller);
+	inline SillyMonsterController& operator=(SillyMonsterController&& i_controller);
 
 	/* Implement InterfaceGameObjectController */
 	SillyMonsterController* Clone() const override;
 	inline engine::gameobject::GameObject* GetGameObject() override;
-	inline void SetGameObject(engine::gameobject::GameObject* game_object) override;
+	inline void SetGameObject(engine::gameobject::GameObject* i_game_object) override;
 
 	void UpdateGameObject() override;
 

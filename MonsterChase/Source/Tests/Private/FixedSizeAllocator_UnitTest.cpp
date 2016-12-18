@@ -7,26 +7,26 @@
 #include "Memory\BlockAllocator.h"
 #include "Memory\FixedSizeAllocator.h"
 
-void ExhaustAllocator(engine::memory::FixedSizeAllocator* fsa)
+void ExhaustAllocator(engine::memory::FixedSizeAllocator* i_fsa)
 {
-	ASSERT(fsa);
-	LOG("-------------------- Exhausting FixedSizeAllocator block_size:%zu num_blocks:%zu --------------------", fsa->GetBlockSize(), fsa->GetNumBlocks());
+	ASSERT(i_fsa);
+	LOG("-------------------- Exhausting FixedSizeAllocator block_size:%zu num_blocks:%zu --------------------", i_fsa->GetBlockSize(), i_fsa->GetNumBlocks());
 	std::vector<void*> allocations;
 
 	// run first pass
 	// make <num_blocks> allocs
-	const size_t num_blocks = fsa->GetNumBlocks();
+	const size_t num_blocks = i_fsa->GetNumBlocks();
 	for (size_t i = 0; i < num_blocks; ++i)
 	{
-		void* pointer = fsa->Alloc();
+		void* pointer = i_fsa->Alloc();
 		ASSERT(pointer);
 		allocations.push_back(pointer);
-		LOG("Alloc-%zu num available blocks:%zu", i, fsa->GetNumAvailableBlocks());
+		LOG("Alloc-%zu num available blocks:%zu", i, i_fsa->GetNumAvailableBlocks());
 	}
 
-	ASSERT(!fsa->Alloc());
-	ASSERT(fsa->GetNumOustandingBlocks() == num_blocks);
-	ASSERT(fsa->GetNumAvailableBlocks() == 0);
+	ASSERT(!i_fsa->Alloc());
+	ASSERT(i_fsa->GetNumOustandingBlocks() == num_blocks);
+	ASSERT(i_fsa->GetNumAvailableBlocks() == 0);
 
 	// free <num_blocks> in random order
 	std::random_shuffle(allocations.begin(), allocations.end());
@@ -35,20 +35,20 @@ void ExhaustAllocator(engine::memory::FixedSizeAllocator* fsa)
 		void* pointer = allocations.back();
 		allocations.pop_back();
 
-		bool success = fsa->Contains(pointer);
+		bool success = i_fsa->Contains(pointer);
 		assert(success);
 
 		//success = IsAllocated( pHeapManager, pPtr );
-		success = fsa->IsAllocated(pointer);
+		success = i_fsa->IsAllocated(pointer);
 		assert(success);
 
-		success = fsa->Free(pointer);
+		success = i_fsa->Free(pointer);
 		assert(success);
-		LOG("Free-%zu num outstanding blocks:%zu", i, fsa->GetNumOustandingBlocks());
+		LOG("Free-%zu num outstanding blocks:%zu", i, i_fsa->GetNumOustandingBlocks());
 	}
 
-	ASSERT(fsa->GetNumAvailableBlocks() == num_blocks);
-	ASSERT(fsa->GetNumOustandingBlocks() == 0);
+	ASSERT(i_fsa->GetNumAvailableBlocks() == num_blocks);
+	ASSERT(i_fsa->GetNumOustandingBlocks() == 0);
 
 	// run second pass
 	size_t num_allocs = 0, num_frees = 0;
@@ -56,32 +56,32 @@ void ExhaustAllocator(engine::memory::FixedSizeAllocator* fsa)
 	{
 		const uint8_t free_every = 10;
 
-		void* pointer = fsa->Alloc();
+		void* pointer = i_fsa->Alloc();
 		if (!pointer)
 		{
 			break;
 		}
 
 		++num_allocs;
-		memset(pointer, 65, fsa->GetBlockSize());
+		memset(pointer, 65, i_fsa->GetBlockSize());
 
 		if ((num_allocs % free_every) == 0)
 		{
 			++num_frees;
-			fsa->Free(pointer);
-			LOG("Free-%zu num outstanding blocks:%zu", num_frees, fsa->GetNumOustandingBlocks());
+			i_fsa->Free(pointer);
+			LOG("Free-%zu num outstanding blocks:%zu", num_frees, i_fsa->GetNumOustandingBlocks());
 		}
 		else
 		{
 			allocations.push_back(pointer);
 		}
 
-		LOG("Alloc-%zu num available blocks:%zu", num_allocs, fsa->GetNumAvailableBlocks());
+		LOG("Alloc-%zu num available blocks:%zu", num_allocs, i_fsa->GetNumAvailableBlocks());
 
 	} while (true);
 
-	ASSERT(fsa->GetNumOustandingBlocks() == num_blocks);
-	ASSERT(fsa->GetNumAvailableBlocks() == 0);
+	ASSERT(i_fsa->GetNumOustandingBlocks() == num_blocks);
+	ASSERT(i_fsa->GetNumAvailableBlocks() == 0);
 
 	size_t unfreed_allocations = allocations.size();
 	while (unfreed_allocations-- > 0)
@@ -89,21 +89,21 @@ void ExhaustAllocator(engine::memory::FixedSizeAllocator* fsa)
 		void* pointer = allocations.back();
 		allocations.pop_back();
 
-		bool success = fsa->Contains(pointer);
+		bool success = i_fsa->Contains(pointer);
 		assert(success);
 
 		//success = IsAllocated( pHeapManager, pPtr );
-		success = fsa->IsAllocated(pointer);
+		success = i_fsa->IsAllocated(pointer);
 		assert(success);
 
-		success = fsa->Free(pointer);
+		success = i_fsa->Free(pointer);
 		assert(success);
 	}
 
-	ASSERT(fsa->GetNumAvailableBlocks() == num_blocks);
-	ASSERT(fsa->GetNumOustandingBlocks() == 0);
+	ASSERT(i_fsa->GetNumAvailableBlocks() == num_blocks);
+	ASSERT(i_fsa->GetNumOustandingBlocks() == 0);
 
-	LOG("-------------------- Finished exhausting FixedSizeAllocator block_size:%zu num_blocks:%zu --------------------", fsa->GetBlockSize(), fsa->GetNumBlocks());
+	LOG("-------------------- Finished exhausting FixedSizeAllocator block_size:%zu num_blocks:%zu --------------------", i_fsa->GetBlockSize(), i_fsa->GetNumBlocks());
 }
 
 void TestFixedSizeAllocator()

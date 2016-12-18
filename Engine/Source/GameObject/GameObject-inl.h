@@ -3,11 +3,11 @@
 namespace engine {
 namespace gameobject {
 
-inline GameObject& GameObject::operator=(const GameObject& game_object)
+inline GameObject& GameObject::operator=(const GameObject& i_game_object)
 {
-	if (this != &game_object)
+	if (this != &i_game_object)
 	{
-		transform_ = game_object.transform_;
+		transform_ = i_game_object.transform_;
 	}
 	return *this;
 }
@@ -17,9 +17,9 @@ inline const engine::math::Transform& GameObject::GetTransform() const
 	return transform_;
 }
 
-inline void GameObject::SetTransform(const engine::math::Transform& transform)
+inline void GameObject::SetTransform(const engine::math::Transform& i_transform)
 {
-	transform_ = transform;
+	transform_ = i_transform;
 }
 
 inline const engine::math::Vec3D& GameObject::GetPosition() const
@@ -27,9 +27,9 @@ inline const engine::math::Vec3D& GameObject::GetPosition() const
 	return transform_.GetPosition();
 }
 
-inline void GameObject::SetPosition(const engine::math::Vec3D& position)
+inline void GameObject::SetPosition(const engine::math::Vec3D& i_position)
 {
-	transform_.SetPosition(position);
+	transform_.SetPosition(i_position);
 }
 
 inline const engine::math::Vec3D& GameObject::GetRotation() const
@@ -37,9 +37,9 @@ inline const engine::math::Vec3D& GameObject::GetRotation() const
 	return transform_.GetRotation();
 }
 
-inline void GameObject::SetRotation(const engine::math::Vec3D& rotation)
+inline void GameObject::SetRotation(const engine::math::Vec3D& i_rotation)
 {
-	transform_.SetRotation(rotation);
+	transform_.SetRotation(i_rotation);
 }
 
 inline const engine::math::Vec3D& GameObject::GetScale() const
@@ -47,9 +47,9 @@ inline const engine::math::Vec3D& GameObject::GetScale() const
 	return transform_.GetScale();
 }
 
-inline void GameObject::SetScale(const engine::math::Vec3D& scale)
+inline void GameObject::SetScale(const engine::math::Vec3D& i_scale)
 {
-	transform_.SetScale(scale);
+	transform_.SetScale(i_scale);
 }
 
 } // namespace gameobject

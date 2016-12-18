@@ -15,18 +15,18 @@
 class Monster
 {
 public:
-	Monster(MonsterControllers controller_type, const char* name);
+	Monster(MonsterControllers i_controller_type, const char* i_name);
 	~Monster();
 
 	// copy constructor
-	Monster(const Monster& copy);
+	Monster(const Monster& i_copy);
 	// move constructor
-	Monster(Monster&& copy);
+	Monster(Monster&& i_copy);
 
 	// copy assignment operator
-	inline Monster& operator=(const Monster& monster);
+	inline Monster& operator=(const Monster& i_monster);
 	// move assignment operator
-	inline Monster& operator=(Monster&& monster);
+	inline Monster& operator=(Monster&& i_monster);
 
 	void Update();
 
@@ -34,13 +34,13 @@ public:
 
 	// accessors and mutators
 	inline engine::gameobject::InterfaceGameObjectController* GetController() const;
-	inline void SetController(engine::gameobject::InterfaceGameObjectController* controller);
+	inline void SetController(engine::gameobject::InterfaceGameObjectController* i_controller);
 
 	inline engine::gameobject::IdentityComponent* GetIdentity() const;
-	inline void SetIdentity(engine::gameobject::IdentityComponent* identity);
+	inline void SetIdentity(engine::gameobject::IdentityComponent* i_identity);
 
 	inline uint8_t GetTimeToLive() const;
-	inline void SetTimeToLive(uint8_t time_to_live);
+	inline void SetTimeToLive(uint8_t i_time_to_live);
 
 private:
 	engine::gameobject::InterfaceGameObjectController*			controller_;

@@ -11,27 +11,27 @@ class SmartMonsterController : public engine::gameobject::InterfaceGameObjectCon
 {
 public:
 	SmartMonsterController();
-	SmartMonsterController(engine::gameobject::GameObject* game_object);
+	SmartMonsterController(engine::gameobject::GameObject* i_game_object);
 	virtual ~SmartMonsterController();
 
 	// copy constructor
-	SmartMonsterController(const SmartMonsterController& copy);
+	SmartMonsterController(const SmartMonsterController& i_copy);
 	// move constructor
-	SmartMonsterController(SmartMonsterController&& copy);
+	SmartMonsterController(SmartMonsterController&& i_copy);
 
 	// copy assignment operator
-	inline SmartMonsterController& operator=(const SmartMonsterController& controller);
+	inline SmartMonsterController& operator=(const SmartMonsterController& i_controller);
 	// move assignment operator
-	inline SmartMonsterController& operator=(SmartMonsterController&& controller);
+	inline SmartMonsterController& operator=(SmartMonsterController&& i_controller);
 
 	/* Implement InterfaceGameObjectController */
 	SmartMonsterController* Clone() const override;
 	inline engine::gameobject::GameObject* GetGameObject() override;
-	inline void SetGameObject(engine::gameobject::GameObject* game_object) override;
+	inline void SetGameObject(engine::gameobject::GameObject* i_game_object) override;
 	void UpdateGameObject() override;
 
 	inline engine::gameobject::GameObject* GetTarget();
-	inline void SetTarget(engine::gameobject::GameObject* target);
+	inline void SetTarget(engine::gameobject::GameObject* i_target);
 
 private:
 	engine::gameobject::GameObject* game_object_;

@@ -65,7 +65,8 @@ void RunTests()
 #ifdef BUILD_DEBUG
 	HeapManager_UnitTest();
 #else
-	BlockAllocatorTest::Init();
+	const size_t mem_size = 1024 * 1024;
+	BlockAllocatorTest::Init(mem_size);
 	BlockAllocatorTest::RunTest00();
 	BlockAllocatorTest::RunTest01();
 	BlockAllocatorTest::RunTest02();

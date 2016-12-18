@@ -11,7 +11,7 @@ PlayerController::PlayerController() : game_object_(new (MonsterChase::GetAlloca
 	move_direction_(MoveDirections::kMoveDirectionNone)
 {}
 
-PlayerController::PlayerController(engine::gameobject::GameObject* game_object) : game_object_(game_object),
+PlayerController::PlayerController(engine::gameobject::GameObject* i_game_object) : game_object_(i_game_object),
 	move_direction_(MoveDirections::kMoveDirectionNone)
 {}
 
@@ -20,14 +20,14 @@ PlayerController::~PlayerController()
 	SAFE_DELETE(game_object_);
 }
 
-PlayerController::PlayerController(const PlayerController& copy) : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject(copy.game_object_->GetTransform())),
-	move_direction_(copy.move_direction_)
+PlayerController::PlayerController(const PlayerController& i_copy) : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject(i_copy.game_object_->GetTransform())),
+	move_direction_(i_copy.move_direction_)
 {}
 
-PlayerController::PlayerController(PlayerController&& copy) : game_object_(copy.game_object_),
-	move_direction_(copy.move_direction_)
+PlayerController::PlayerController(PlayerController&& i_copy) : game_object_(i_copy.game_object_),
+	move_direction_(i_copy.move_direction_)
 {
-	copy.game_object_ = nullptr;
+	i_copy.game_object_ = nullptr;
 }
 
 PlayerController* PlayerController::Clone() const

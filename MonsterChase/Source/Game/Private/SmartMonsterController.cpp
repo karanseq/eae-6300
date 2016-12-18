@@ -10,7 +10,7 @@ SmartMonsterController::SmartMonsterController() : game_object_(new (MonsterChas
 	target_(nullptr)
 {}
 
-SmartMonsterController::SmartMonsterController(engine::gameobject::GameObject* game_object) : game_object_(game_object),
+SmartMonsterController::SmartMonsterController(engine::gameobject::GameObject* i_game_object) : game_object_(i_game_object),
 	target_(nullptr)
 {}
 
@@ -19,14 +19,14 @@ SmartMonsterController::~SmartMonsterController()
 	SAFE_DELETE(game_object_);
 }
 
-SmartMonsterController::SmartMonsterController(const SmartMonsterController& copy) : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject(copy.game_object_->GetTransform())),
-	target_(copy.target_)
+SmartMonsterController::SmartMonsterController(const SmartMonsterController& i_copy) : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject(i_copy.game_object_->GetTransform())),
+	target_(i_copy.target_)
 {}
 
-SmartMonsterController::SmartMonsterController(SmartMonsterController&& copy) : game_object_(copy.game_object_),
-	target_(copy.target_)
+SmartMonsterController::SmartMonsterController(SmartMonsterController&& i_copy) : game_object_(i_copy.game_object_),
+	target_(i_copy.target_)
 {
-	copy.game_object_ = nullptr;
+	i_copy.game_object_ = nullptr;
 }
 
 SmartMonsterController* SmartMonsterController::Clone() const

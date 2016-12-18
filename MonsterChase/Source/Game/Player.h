@@ -13,29 +13,29 @@
 class Player
 {
 public:
-	Player(const char* name);
+	Player(const char* i_name);
 	~Player();
 
 	// copy constructor
-	Player(const Player& copy);
+	Player(const Player& i_copy);
 	// move constructor
-	Player(Player&& copy);
+	Player(Player&& i_copy);
 
 	// copy assignment operator
-	inline Player& operator=(const Player& player);
+	inline Player& operator=(const Player& i_player);
 	// move assignment operator
-	inline Player& operator=(Player&& player);
+	inline Player& operator=(Player&& i_player);
 
 	void Update();
-	bool HandleUserInput(char input);
+	bool HandleUserInput(char i_input);
 	void Print();
 
 	// accessors and mutators
 	inline engine::gameobject::InterfaceGameObjectController* GetController() const;
-	inline void SetController(engine::gameobject::InterfaceGameObjectController* controller);
+	inline void SetController(engine::gameobject::InterfaceGameObjectController* i_controller);
 
 	inline engine::gameobject::IdentityComponent* GetIdentity() const;
-	inline void SetIdentity(engine::gameobject::IdentityComponent* identity);
+	inline void SetIdentity(engine::gameobject::IdentityComponent* i_identity);
 
 private:
 	engine::gameobject::InterfaceGameObjectController*					controller_;

@@ -8,12 +8,12 @@ namespace math {
 	const Vec2D Vec2D::UNIT_X(1.0f, 0.0f);
 	const Vec2D Vec2D::UNIT_Y(0.0f, 1.0f);
 
-	Vec2D::Vec2D(float x, float y) : x_(x),
-		y_(y)
+	Vec2D::Vec2D(float i_x, float i_y) : x_(i_x),
+		y_(i_y)
 	{}
 
-	Vec2D::Vec2D(const Vec2D& copy) : x_(copy.x_),
-		y_(copy.y_)
+	Vec2D::Vec2D(const Vec2D& i_copy) : x_(i_copy.x_),
+		y_(i_copy.y_)
 	{}
 
 } // namespace math
