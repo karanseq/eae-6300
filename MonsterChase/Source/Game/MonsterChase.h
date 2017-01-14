@@ -85,4 +85,8 @@ private:
 	uint8_t												ascii_index_;
 }; // class MonsterChase
 
+namespace monsterchase {
+	void AcceptKey(unsigned int i_key_id, bool i_went_down);	
+}; // namespace MonsterChase
+
 #endif // MONSTER_CHASE_H_

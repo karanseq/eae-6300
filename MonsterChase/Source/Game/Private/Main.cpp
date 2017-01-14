@@ -27,7 +27,7 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 	RunTests();
 	LOG("\n");
 
-	/*LOG("-------------------- Running MonsterChase --------------------");
+	LOG("-------------------- Running MonsterChase --------------------");
 	MonsterChase* monster_chase = new MonsterChase();
 
 	while (monster_chase->GetState() != GameStates::kGameStateQuit)
@@ -38,7 +38,7 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 	delete monster_chase;
 	monster_chase = nullptr;
 
-	LOG("-------------------- Finished MonsterChase --------------------\n\n");*/
+	LOG("-------------------- Finished MonsterChase --------------------\n\n");
 
 	// cleanup GLib
 	GLib::Shutdown();

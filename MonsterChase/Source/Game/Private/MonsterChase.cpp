@@ -10,6 +10,7 @@
 
 // engine includes 
 #include "Assert\Assert.h"
+#include "GLib.h"
 #include "Logger\Logger.h"
 #include "Math\Vec2D.h"
 #include "Memory\AllocatorOverrides.h"
@@ -35,6 +36,9 @@ MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
 	// create an allocator to manage memory for the game objects
 	MonsterChase::game_allocator_ = engine::memory::BlockAllocator::Create(aligned_memory, MEMORY_SIZE);
 	ASSERT(MonsterChase::game_allocator_);
+
+	// register the key callback
+	GLib::SetKeyStateChangeCallback(monsterchase::AcceptKey);
 
 	// register the allocator
 	engine::memory::BlockAllocator::AddBlockAllocator(MonsterChase::game_allocator_);
@@ -65,11 +69,15 @@ MonsterChase::~MonsterChase()
 
 void MonsterChase::Update()
 {
-	// first display game information
+	/*// first display game information
 	PrintMessage();
 
 	// then wait for input
-	AcceptInput();
+	AcceptInput();*/
+
+	// TODO: change this to a dynamic value
+	bool quit = false;
+	GLib::Service(quit);
 }
 
 void MonsterChase::PrintMessage(const char* i_message)
@@ -403,4 +411,17 @@ void MonsterChase::CreatePlayer(const char* i_name)
 
 	// time to start the game
 	game_state_ = GameStates::kGameStateInputNumMonsters;
+}
+
+namespace monsterchase {
+	void AcceptKey(unsigned int i_key_id, bool i_went_down)
+	{
+#ifdef BUILD_DEBUG
+		const size_t		buffer_size = 65;
+		char				buffer[buffer_size];
+
+		sprintf_s(buffer, buffer_size, "Key 0x%04x went %s\n", i_key_id, i_went_down ? "down" : "up");
+		LOG(buffer);
+#endif
+	}
 }
