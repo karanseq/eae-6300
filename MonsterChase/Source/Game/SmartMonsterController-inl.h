@@ -6,6 +6,8 @@
 // game includes
 #include "MonsterChase.h"
 
+namespace monsterchase {
+
 inline SmartMonsterController& SmartMonsterController::operator=(const SmartMonsterController& i_controller)
 {
 	if (this != &i_controller)
@@ -50,3 +52,5 @@ inline void SmartMonsterController::SetTarget(engine::gameobject::GameObject* i_
 	SAFE_DELETE(target_);
 	target_ = i_target;
 }
+
+} // namespace monsterchase

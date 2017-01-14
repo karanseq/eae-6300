@@ -6,6 +6,8 @@
 // game includes
 #include "Game\MonsterChase.h"
 
+namespace monsterchase {
+
 SmartMonsterController::SmartMonsterController() : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject()),
 	target_(nullptr)
 {}
@@ -63,3 +65,5 @@ void SmartMonsterController::UpdateGameObject()
 		game_object_->SetPosition(game_object_->GetPosition() - engine::math::Vec3D::UNIT_X);
 	}
 }
+
+} // namespace monsterchase

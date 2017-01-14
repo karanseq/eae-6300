@@ -1,5 +1,7 @@
 #include "Monster.h"
 
+namespace monsterchase {
+
 inline Monster& Monster::operator=(const Monster& i_monster)
 {
 	if (this != &i_monster)
@@ -59,3 +61,5 @@ inline void Monster::SetTimeToLive(uint8_t i_time_to_live)
 {
 	time_to_live_ = i_time_to_live;
 }
+
+} // namespace monsterchase

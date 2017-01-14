@@ -12,6 +12,8 @@
 #include "Game\SillyMonsterController.h"
 #include "Game\SmartMonsterController.h"
 
+namespace monsterchase {
+
 class Monster
 {
 public:
@@ -47,6 +49,8 @@ private:
 	engine::gameobject::IdentityComponent*						identity_;
 	uint8_t														time_to_live_;
 }; // class Monster
+
+} // namespace monsterchase
 
 #include "Game\Monster-inl.h"
 

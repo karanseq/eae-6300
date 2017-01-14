@@ -8,6 +8,8 @@
 #include "Game\GameUtils.h"
 #include "Game\MonsterChase.h"
 
+namespace monsterchase {
+
 SillyMonsterController::SillyMonsterController() : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject())
 {}
 
@@ -62,3 +64,5 @@ void SillyMonsterController::UpdateGameObject()
 		break;
 	}
 }
+
+} // namespace monsterchase

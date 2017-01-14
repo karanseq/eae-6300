@@ -28,15 +28,14 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 	LOG("\n");
 
 	LOG("-------------------- Running MonsterChase --------------------");
-	MonsterChase* monster_chase = new MonsterChase();
+	monsterchase::MonsterChase* monster_chase = monsterchase::MonsterChase::Create();
 
 	while (monster_chase->GetState() != GameStates::kGameStateQuit)
 	{
 		monster_chase->Update();
 	}
 
-	delete monster_chase;
-	monster_chase = nullptr;
+	monsterchase::MonsterChase::Destroy();
 
 	LOG("-------------------- Finished MonsterChase --------------------\n\n");
 

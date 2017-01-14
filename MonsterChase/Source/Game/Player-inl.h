@@ -1,5 +1,7 @@
 #include "Player.h"
 
+namespace monsterchase {
+
 inline Player& Player::operator=(const Player& i_player)
 {
 	if (this != &i_player)
@@ -46,3 +48,5 @@ inline void Player::SetIdentity(engine::gameobject::IdentityComponent* i_identit
 	SAFE_DELETE(identity_);
 	identity_ = i_identity;
 }
+
+} // namespace monsterchase

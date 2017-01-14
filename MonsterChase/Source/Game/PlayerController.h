@@ -10,6 +10,8 @@
 // game includes
 #include "Game\GameTypes.h"
 
+namespace monsterchase {
+
 class PlayerController : public engine::gameobject::InterfaceGameObjectController
 {
 public:
@@ -42,6 +44,8 @@ private:
 	MoveDirections									move_direction_;
 
 }; // class PlayerController
+
+} // namespace monsterchase
 
 #include "PlayerController-inl.h"
 

@@ -21,8 +21,37 @@
 #include "Game\Monster.h"
 #include "Game\Player.h"
 
+namespace monsterchase {
+
+// TODO: Find a better place for this
+void AcceptKey(unsigned int i_key_id, bool i_went_down)
+{
+#ifdef BUILD_DEBUG
+	const size_t		buffer_size = 65;
+	char				buffer[buffer_size];
+
+	sprintf_s(buffer, buffer_size, "Key 0x%04x went %s\n", i_key_id, i_went_down ? "down" : "up");
+	LOG(buffer);
+#endif
+}
+
 // static member initialization
+MonsterChase* MonsterChase::instance_ = nullptr;
 engine::memory::BlockAllocator* MonsterChase::game_allocator_ = nullptr;
+
+MonsterChase* MonsterChase::Create()
+{
+	if (!MonsterChase::instance_)
+	{
+		MonsterChase::instance_ = new MonsterChase();
+	}
+	return MonsterChase::instance_;
+}
+
+void MonsterChase::Destroy()
+{
+	SAFE_DELETE(MonsterChase::instance_);
+}
 
 MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
 	player_(nullptr)
@@ -386,7 +415,7 @@ void MonsterChase::UpdateMonsters()
 			--i;
 		}
 	}
-}	
+}
 
 void MonsterChase::GetNameForMonster(char* o_name)
 {
@@ -413,15 +442,4 @@ void MonsterChase::CreatePlayer(const char* i_name)
 	game_state_ = GameStates::kGameStateInputNumMonsters;
 }
 
-namespace monsterchase {
-	void AcceptKey(unsigned int i_key_id, bool i_went_down)
-	{
-#ifdef BUILD_DEBUG
-		const size_t		buffer_size = 65;
-		char				buffer[buffer_size];
-
-		sprintf_s(buffer, buffer_size, "Key 0x%04x went %s\n", i_key_id, i_went_down ? "down" : "up");
-		LOG(buffer);
-#endif
-	}
-}
+} // namespace monsterchase

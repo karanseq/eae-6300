@@ -9,6 +9,8 @@
 // game includes
 #include "Game\MonsterChase.h"
 
+namespace monsterchase {
+
 Monster::Monster(MonsterControllers i_controller_type, const char* i_name) : controller_(nullptr),
 	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, i_name)),
 	time_to_live_(0)
@@ -57,3 +59,5 @@ void Monster::Print()
 {
 	printf("Monster %s of type %d, %s [%f, %f]\n", identity_->GetName(), identity_->GetTag(), (time_to_live_ <= 1 ? "is about to die at" : "is at"), controller_->GetGameObject()->GetPosition().x(), controller_->GetGameObject()->GetPosition().y());
 }
+
+} // namespace monsterchase

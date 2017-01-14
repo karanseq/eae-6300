@@ -6,6 +6,8 @@
 // game includes
 #include "MonsterChase.h"
 
+namespace monsterchase {
+
 inline PlayerController& PlayerController::operator=(const PlayerController& i_controller)
 {
 	if (this != &i_controller)
@@ -48,3 +50,5 @@ inline void PlayerController::SetMoveDirection(MoveDirections i_move_direction)
 {
 	move_direction_ = i_move_direction;
 }
+
+} // namespace monsterchase

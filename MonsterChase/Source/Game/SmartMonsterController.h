@@ -7,6 +7,8 @@
 #include "GameObject\InterfaceGameObjectController.h"
 #include "Memory\AllocatorUtil.h"
 
+namespace monsterchase {
+
 class SmartMonsterController : public engine::gameobject::InterfaceGameObjectController
 {
 public:
@@ -37,6 +39,8 @@ private:
 	engine::gameobject::GameObject* game_object_;
 	engine::gameobject::GameObject* target_;
 }; // class SmartMonsterController
+
+} // namespace monsterchase
 
 #include "SmartMonsterController-inl.h"
 

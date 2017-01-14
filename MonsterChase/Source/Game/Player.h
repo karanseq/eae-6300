@@ -10,6 +10,8 @@
 // game includes
 #include "Game\PlayerController.h"
 
+namespace monsterchase {
+
 class Player
 {
 public:
@@ -41,6 +43,8 @@ private:
 	engine::gameobject::InterfaceGameObjectController*					controller_;
 	engine::gameobject::IdentityComponent*								identity_;
 }; // class Player
+
+} // namespace monsterchase
 
 #include "Game\Player-inl.h"
 

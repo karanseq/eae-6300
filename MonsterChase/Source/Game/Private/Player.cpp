@@ -9,6 +9,8 @@
 // game includes
 #include "Game\MonsterChase.h"
 
+namespace monsterchase {
+
 Player::Player(const char* i_name) : controller_(new (MonsterChase::GetAllocator()) PlayerController()),
 	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, i_name))
 {}
@@ -68,3 +70,5 @@ void Player::Print()
 {
 	printf("Player %s is at [%f, %f]\n", identity_->GetName(), controller_->GetGameObject()->GetPosition().x(), controller_->GetGameObject()->GetPosition().y());
 }
+
+} // namespace monsterchase

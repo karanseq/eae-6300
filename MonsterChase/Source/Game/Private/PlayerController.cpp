@@ -7,6 +7,8 @@
 // game includes
 #include "Game\MonsterChase.h"
 
+namespace monsterchase {
+
 PlayerController::PlayerController() : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject()),
 	move_direction_(MoveDirections::kMoveDirectionNone)
 {}
@@ -65,3 +67,5 @@ void PlayerController::UpdateGameObject()
 		break;
 	}
 }
+
+} // namespace monsterchase

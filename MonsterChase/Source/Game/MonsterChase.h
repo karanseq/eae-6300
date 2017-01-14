@@ -13,14 +13,26 @@ namespace memory {
 	class BlockAllocator;
 }
 }
+
+namespace monsterchase {
+// forward declarations
 class Player;
 class Monster;
 
+// TODO: Find a better place for this
+void AcceptKey(unsigned int i_key_id, bool i_went_down);
+
 class MonsterChase
 {
-public:
+private:
 	MonsterChase();
 	~MonsterChase();
+	static MonsterChase* instance_;
+
+public:
+	static MonsterChase* Create();
+	static inline MonsterChase* GetInstance()										{ return instance_; }
+	static void Destroy();
 
 	// the main game loop
 	// called every tick from main
@@ -85,8 +97,6 @@ private:
 	uint8_t												ascii_index_;
 }; // class MonsterChase
 
-namespace monsterchase {
-	void AcceptKey(unsigned int i_key_id, bool i_went_down);	
-}; // namespace MonsterChase
+} // namespace monsterchase
 
 #endif // MONSTER_CHASE_H_

@@ -6,6 +6,8 @@
 // game includes
 #include "MonsterChase.h"
 
+namespace monsterchase {
+
 inline SillyMonsterController& SillyMonsterController::operator=(const SillyMonsterController& i_controller)
 {
 	if (this != &i_controller)
@@ -36,3 +38,5 @@ inline void SillyMonsterController::SetGameObject(engine::gameobject::GameObject
 	SAFE_DELETE(game_object_);
 	game_object_ = i_game_object;
 }
+
+} // namespace monsterchase
