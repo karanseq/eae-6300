@@ -4,32 +4,46 @@
 #include <stdio.h>
 
 // engine includes
+#include "GLib.h"
+#include "Logger\Logger.h"
 #include "Memory\AllocatorOverrides.h"
 
 // game includes
+#include "Game\GameUtils.h"
 #include "Game\MonsterChase.h"
 
 namespace monsterchase {
 
+// static member initialization
+const char* Player::texture_name_ = "Data\\clown.dds";
+
 Player::Player(const char* i_name) : controller_(new (MonsterChase::GetAllocator()) PlayerController()),
-	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, i_name))
+	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, i_name)),
+	sprite_(GameUtils::CreateSprite(Player::texture_name_))
 {}
 
 Player::~Player()
 {
 	SAFE_DELETE(controller_);
 	SAFE_DELETE(identity_);
+	if (sprite_)
+	{
+		GLib::Sprites::Release(sprite_);
+	}
 }
 
 Player::Player(const Player& i_copy) : controller_(i_copy.controller_->Clone()),
-	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(i_copy.identity_->GetID(), i_copy.identity_->GetTag(), i_copy.identity_->GetName()))
+	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(i_copy.identity_->GetID(), i_copy.identity_->GetTag(), i_copy.identity_->GetName())),
+	sprite_(GameUtils::CreateSprite(Player::texture_name_))
 {}
 
 Player::Player(Player&& i_copy) : controller_(i_copy.controller_),
-	identity_(i_copy.identity_)
+	identity_(i_copy.identity_),
+	sprite_(i_copy.sprite_)
 {
 	i_copy.controller_ = nullptr;
 	i_copy.identity_ = nullptr;
+	i_copy.sprite_ = nullptr;
 }
 
 void Player::Update()
@@ -37,30 +51,32 @@ void Player::Update()
 	controller_->UpdateGameObject();
 }
 
-bool Player::HandleUserInput(char i_input)
+void Player::Render()
 {
-	if (i_input == 'a' || i_input == 'A')
+	if (sprite_)
 	{
+		GLib::Point2D offset = { controller_->GetGameObject()->GetPosition().x() * MonsterChase::TILE_SIZE, controller_->GetGameObject()->GetPosition().y() * MonsterChase::TILE_SIZE };
+		GLib::Sprites::RenderSprite(*sprite_, offset, 0.0f);
+	}
+}
+
+bool Player::HandleUserInput(KeyboardKeys i_key)
+{
+	switch (i_key)
+	{
+	case KeyboardKeys::kA:
 		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionLeft);
 		return true;
-	}
-	else if (i_input == 'd' || i_input == 'D')
-	{
+	case KeyboardKeys::kD:
 		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionRight);
 		return true;
-	}
-	else if (i_input == 'w' || i_input == 'W')
-	{
+	case KeyboardKeys::kW:
 		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionUp);
 		return true;
-	}
-	else if (i_input == 's' || i_input == 'S')
-	{
+	case KeyboardKeys::kS:
 		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionDown);
 		return true;
-	}
-	else
-	{
+	default:
 		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionNone);
 		return false;
 	}
@@ -68,7 +84,7 @@ bool Player::HandleUserInput(char i_input)
 
 void Player::Print()
 {
-	printf("Player %s is at [%f, %f]\n", identity_->GetName(), controller_->GetGameObject()->GetPosition().x(), controller_->GetGameObject()->GetPosition().y());
+	LOG("Player %s is at [%f, %f]", identity_->GetName(), controller_->GetGameObject()->GetPosition().x(), controller_->GetGameObject()->GetPosition().y());
 }
 
 } // namespace monsterchase

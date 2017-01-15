@@ -10,6 +10,13 @@
 // game includes
 #include "Game\PlayerController.h"
 
+// forward declarations
+namespace GLib {
+namespace Sprites {
+	struct Sprite;
+}
+}
+
 namespace monsterchase {
 
 class Player
@@ -29,7 +36,8 @@ public:
 	inline Player& operator=(Player&& i_player);
 
 	void Update();
-	bool HandleUserInput(char i_input);
+	void Render();
+	bool HandleUserInput(KeyboardKeys i_key);
 	void Print();
 
 	// accessors and mutators
@@ -42,6 +50,8 @@ public:
 private:
 	engine::gameobject::InterfaceGameObjectController*					controller_;
 	engine::gameobject::IdentityComponent*								identity_;
+	GLib::Sprites::Sprite*												sprite_;
+	static const char*													texture_name_;
 }; // class Player
 
 } // namespace monsterchase

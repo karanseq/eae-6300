@@ -1,5 +1,11 @@
 #include "Player.h"
 
+// engine includes
+#include "GLib.h"
+
+// game includes
+#include "Game\GameUtils.h"
+
 namespace monsterchase {
 
 inline Player& Player::operator=(const Player& i_player)
@@ -11,6 +17,12 @@ inline Player& Player::operator=(const Player& i_player)
 
 		SAFE_DELETE(identity_);
 		identity_ = new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(i_player.identity_->GetID(), i_player.identity_->GetTag(), i_player.identity_->GetName());
+
+		if (sprite_)
+		{
+			GLib::Sprites::Release(sprite_);
+		}
+		sprite_ = GameUtils::CreateSprite(Player::texture_name_);
 	}
 	return *this;
 }
@@ -21,6 +33,7 @@ inline Player& Player::operator=(Player&& i_player)
 	{
 		std::swap(controller_, i_player.controller_);
 		std::swap(identity_, i_player.identity_);
+		std::swap(sprite_, i_player.sprite_);
 	}
 	return *this;
 }

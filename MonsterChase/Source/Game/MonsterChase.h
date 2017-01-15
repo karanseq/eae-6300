@@ -34,30 +34,24 @@ public:
 	static inline MonsterChase* GetInstance()										{ return instance_; }
 	static void Destroy();
 
+	// game initialization
+	void Init();
 	// the main game loop
 	// called every tick from main
 	void Update();
+	// the rendering loop
+	// called every tick from Update
+	void Render();
 
-	// functions to print game information
-	void PrintMessage(const char* i_message);
-	void PrintMessage();
-	void PrintMessageMonsterName();	
+	// I/O functions
 	void PrintGameInformation();
-
-	// functions to scan and validate user input
-	void AcceptInput();
-	void ValidateInput(const char* i_input);
-	void ValidateNumber(const char* i_input);
-	void ValidateName(const char* i_input);
-	void ValidateMove(const char* i_input);
+	void ValidateInput(uint8_t i_input);
 
 	// game logic
-	void SaveNumMonsters(uint8_t i_num_monsters);
 	void CreateMonster(const char* i_input_name = nullptr);
 	void DestroyMonster(uint8_t i_at_index);
 	void UpdateMonsters();
 	void GetNameForMonster(char* o_name);
-
 	void CreatePlayer(const char* i_name);
 
 	inline GameStates GetState() const												{ return game_state_; }
@@ -66,13 +60,14 @@ public:
 	// game constants
 	static const size_t									MEMORY_SIZE = 1024 * 5;
 	static const uint16_t								MAX_INPUT_SIZE = 256;
-	static const uint8_t								MAX_ROWS = 50;
-	static const uint8_t								MAX_COLS = 50;
+	static const uint8_t								MAX_ROWS = 30;
+	static const uint8_t								MAX_COLS = 60;
 	static const uint8_t								START_ASCII = 97;
 	static const uint8_t								MAX_ASCII = 25;
 	static const uint8_t								MAX_MONSTERS = 10;
-	static const uint8_t								MAX_MONSTER_TTL = 10;
+	static const uint8_t								MAX_MONSTER_TTL = 25;
 	static const uint8_t								MAX_NAME_LENGTH = 10;
+	static const uint8_t								TILE_SIZE = 20;
 
 private:
 	// disable default copy constructor

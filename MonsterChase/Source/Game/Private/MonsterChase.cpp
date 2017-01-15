@@ -23,16 +23,21 @@
 
 namespace monsterchase {
 
-// TODO: Find a better place for this
+// TODO: Find a better place/scope for this
 void AcceptKey(unsigned int i_key_id, bool i_went_down)
 {
 #ifdef BUILD_DEBUG
 	const size_t		buffer_size = 65;
 	char				buffer[buffer_size];
 
-	sprintf_s(buffer, buffer_size, "Key 0x%04x went %s\n", i_key_id, i_went_down ? "down" : "up");
+	sprintf_s(buffer, buffer_size, "Key 0x%04x | %d went %s\n", i_key_id, i_key_id, i_went_down ? "down" : "up");
 	LOG(buffer);
 #endif
+
+	if (i_went_down)
+	{
+		MonsterChase::GetInstance()->ValidateInput(i_key_id);
+	}
 }
 
 // static member initialization
@@ -96,68 +101,57 @@ MonsterChase::~MonsterChase()
 	MonsterChase::game_allocator_ = nullptr;
 }
 
+void MonsterChase::Init()
+{
+	ASSERT(game_state_ == GameStates::kGameStateBegin);
+
+	// create the player
+	CreatePlayer("player");
+	LOG("Created the player...");
+
+	// create the monsters
+	const uint8_t num_monsters = (MAX_MONSTERS / 2) + rand() % (MAX_MONSTERS / 2);
+	for (uint8_t i = 0; i < num_monsters; ++i)
+	{
+		CreateMonster();
+	}
+	LOG("Created %d monsters...",  num_monsters_);
+
+	game_state_ = GameStates::kGameStateRunning;
+}
+
 void MonsterChase::Update()
 {
-	/*// first display game information
-	PrintMessage();
-
-	// then wait for input
-	AcceptInput();*/
-
 	// TODO: change this to a dynamic value
 	bool quit = false;
 	GLib::Service(quit);
-}
 
-void MonsterChase::PrintMessage(const char* i_message)
-{
-	printf(i_message);
-}
-
-void MonsterChase::PrintMessage()
-{
-	switch (game_state_)
+	if (!quit)
 	{
-	case GameStates::kGameStateBegin:
-		PrintMessage("Welcome to MonsterChase!\n\n");
-		game_state_ = GameStates::kGameStateInputPlayerName;
-		PrintMessage();
-		break;
-
-	case GameStates::kGameStateInputPlayerName:
-		PrintMessage("What would you like to name the player? ");
-		break;
-
-	case GameStates::kGameStateInputNumMonsters:
-		PrintMessage("How many monsters would you like to start with? ");
-		break;
-
-	case GameStates::kGameStateInputMonsterNames:
-		PrintMessageMonsterName();
-		break;
-
-	case GameStates::kGameStateRunning:
-		PrintGameInformation();
-		PrintMessage("\nPress A to move left, D to move right, W to move up, S to move down, M to spawn a new monster and Q to quit.\n");
-		break;
-
-	default:
-		PrintMessage("MonsterChase has reached an undefined state... :-(\nPlease press Q to exit.");
-		break;
-	}
-}
-
-void MonsterChase::PrintMessageMonsterName()
-{
-	if (game_state_ != GameStates::kGameStateInputMonsterNames)
-	{
-		return;
+		Render();
 	}
 
-	const size_t		message_size = 256;
-	char				message[message_size] = { 0 };
-	sprintf_s(message, message_size, "What would you like to name Monster-%d? ", num_monsters_ + 1);
-	PrintMessage(message);
+	// quit if GLib says we should quit
+	game_state_ = quit ? GameStates::kGameStateQuit : game_state_;
+}
+
+void MonsterChase::Render()
+{
+	// Tell GLib that we want to start rendering
+	GLib::BeginRendering();
+	// Tell GLib that we want to render some sprites
+	GLib::Sprites::BeginRendering();
+
+	player_->Render();
+	for (uint8_t i = 0; i < num_monsters_; ++i)
+	{
+		monsters_[i]->Render();
+	}
+
+	// Tell GLib we're done rendering sprites
+	GLib::Sprites::EndRendering();
+	// Tell GLib we're done rendering
+	GLib::EndRendering();
 }
 
 void MonsterChase::PrintGameInformation()
@@ -170,117 +164,8 @@ void MonsterChase::PrintGameInformation()
 	player_->Print();
 }
 
-void MonsterChase::AcceptInput()
+void MonsterChase::ValidateInput(uint8_t i_input)
 {
-	char input_str[MAX_INPUT_SIZE + 1] = { 0 };
-	if (game_state_ == GameStates::kGameStateRunning)
-	{
-		input_str[0] = _getch();
-	}
-	else
-	{
-		fgets(input_str, sizeof(input_str), stdin);
-	}
-	ValidateInput(input_str);
-}
-
-void MonsterChase::ValidateInput(const char* i_input)
-{
-	switch (game_state_)
-	{
-	case GameStates::kGameStateInputNumMonsters:
-		ValidateNumber(i_input);
-		break;
-
-	case GameStates::kGameStateInputMonsterNames:
-	case GameStates::kGameStateInputPlayerName:
-		ValidateName(i_input);
-		break;
-
-	case GameStates::kGameStateRunning:
-		ValidateMove(i_input);
-		break;
-	}
-}
-
-void MonsterChase::ValidateNumber(const char* i_input)
-{
-	// valide input
-	ASSERT(i_input != nullptr);
-
-	// execute this function only in this state
-	if (game_state_ != GameStates::kGameStateInputNumMonsters)
-	{
-		return;
-	}
-
-	// check if a number was entered
-	int number = -1;
-	if (sscanf_s(i_input, "%d", &number) > 0)
-	{
-		// check if the number was within our range
-		if (number > 0 && number <= MAX_MONSTERS)
-		{
-			SaveNumMonsters(number);
-			return;
-		}
-	}
-
-	PrintMessage("Please pick a number from 1 to 10.\n");
-}
-
-void MonsterChase::ValidateName(const char* i_input)
-{
-	// validate input
-	ASSERT(i_input != nullptr);
-
-	// execute this function only in these states
-	if (game_state_ != GameStates::kGameStateInputMonsterNames && game_state_ != GameStates::kGameStateInputPlayerName)
-	{
-		return;
-	}
-
-	// count the number of white spaces in the input
-	char		c = 0;
-	uint8_t		i = 0, count = 0;
-	while (i_input[i])
-	{
-		c = i_input[i++];
-		count += isblank(c) ? 1 : 0;
-	}
-
-	uint8_t input_length = static_cast<uint8_t>(strlen(i_input));
-	if (input_length > MAX_NAME_LENGTH						// check if the name was within our range
-		|| count >= input_length - 1)						// check if the input contained only white spaces
-	{
-		// print an error message
-		const size_t message_size = 256;
-		char buf[message_size] = { 0 };
-		sprintf_s(buf, message_size, "Please enter a name that is 1 to %d characters long.\n", MAX_NAME_LENGTH);
-		PrintMessage(buf);
-		return;
-	}
-
-	// remove the newline character from the input
-	char name[MAX_NAME_LENGTH] = { 0 };
-	strncpy_s(name, i_input, strlen(i_input) - 1);
-
-	// handle both states differently
-	if (game_state_ == GameStates::kGameStateInputPlayerName)
-	{
-		CreatePlayer(name);
-	}
-	else if (game_state_ == GameStates::kGameStateInputMonsterNames)
-	{
-		CreateMonster(name);
-	}
-}
-
-void MonsterChase::ValidateMove(const char* i_input)
-{
-	// validate input
-	ASSERT(i_input != nullptr);
-
 	// execute this function only in this state
 	if (game_state_ != GameStates::kGameStateRunning)
 	{
@@ -288,38 +173,27 @@ void MonsterChase::ValidateMove(const char* i_input)
 	}
 
 	bool is_valid_input = false;
-	char move = i_input[0];
-	if (move == 'q' || move == 'Q')
+	if (i_input == static_cast<uint8_t>(KeyboardKeys::kQ))
 	{
 		game_state_ = GameStates::kGameStateQuit;
 		return;
 	}
 
-	if (move == 'm' || move == 'M')
+	if (i_input == static_cast<uint8_t>(KeyboardKeys::kM))
 	{
 		is_valid_input = true;
 		CreateMonster();
 	}
 
-	is_valid_input = player_->HandleUserInput(move);
+	is_valid_input = player_->HandleUserInput(static_cast<KeyboardKeys>(i_input));
 
 	if (is_valid_input)
 	{
 		player_->Update();
 		UpdateMonsters();
+
+		PrintGameInformation();
 	}
-}
-
-void MonsterChase::SaveNumMonsters(uint8_t i_num_monsters)
-{
-	// validate input
-	ASSERT(i_num_monsters > 0);
-
-	// save the number of monsters
-	initial_num_monsters_ = i_num_monsters;
-
-	// time to query the names of each monster
-	game_state_ = GameStates::kGameStateInputMonsterNames;
 }
 
 void MonsterChase::CreateMonster(const char* i_input_name)
@@ -344,7 +218,7 @@ void MonsterChase::CreateMonster(const char* i_input_name)
 	}
 
 	// calculate random position for this monster
-	engine::math::Vec3D monster_position = GameUtils::GetRandomVec3D(MAX_ROWS, MAX_COLS);
+	engine::math::Vec3D monster_position = GameUtils::GetRandomVec3D(MAX_COLS, MAX_ROWS);
 	monster_position *= (rand() % 10) > 5 ? 1.0f : -1.0f;
 
 	MonsterControllers controller_type = (rand() % 10) > 5 ? MonsterControllers::kSmartMonsterController : MonsterControllers::kSillyMonsterController;

@@ -77,6 +77,9 @@
     <ClCompile Include="Source\Tests\Private\FixedSizeAllocator_UnitTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Private\GameUtils.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\resource.h">

@@ -13,7 +13,9 @@
 // game includes
 #include "Game\MonsterChase.h"
 
+#ifdef ENABLE_TESTS
 void RunTests();
+#endif // ENABLE_TESTS
 
 int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR i_lp_cmd_line, int i_n_cmd_show )
 {
@@ -21,16 +23,19 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 	engine::memory::CreateAllocators();
 	
 	// initialize GLib
-	bool success = GLib::Initialize(i_h_instance, i_n_cmd_show, "MonsterChase", -1, 800, 600);
+	bool success = GLib::Initialize(i_h_instance, i_n_cmd_show, "MonsterChase", -1, 1280, 800);
 	ASSERT(success);
 
+#ifdef ENABLE_TESTS
 	RunTests();
 	LOG("\n");
+#endif // ENABLE_TESTS
 
 	LOG("-------------------- Running MonsterChase --------------------");
 	monsterchase::MonsterChase* monster_chase = monsterchase::MonsterChase::Create();
+	monster_chase->Init();
 
-	while (monster_chase->GetState() != GameStates::kGameStateQuit)
+	while (monster_chase->GetState() != monsterchase::GameStates::kGameStateQuit)
 	{
 		monster_chase->Update();
 	}

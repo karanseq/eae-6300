@@ -1,5 +1,11 @@
 #include "Monster.h"
 
+// engine includes
+#include "GLib.h"
+
+// game includes
+#include "Game\GameUtils.h"
+
 namespace monsterchase {
 
 inline Monster& Monster::operator=(const Monster& i_monster)
@@ -12,6 +18,13 @@ inline Monster& Monster::operator=(const Monster& i_monster)
 		SAFE_DELETE(identity_);
 		identity_ = new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(i_monster.identity_->GetID(), i_monster.identity_->GetTag(), i_monster.identity_->GetName());
 
+		if (sprite_)
+		{
+			GLib::Sprites::Release(sprite_);
+		}
+		sprite_ = i_monster.controller_type_ == MonsterControllers::kSillyMonsterController ? GameUtils::CreateSprite(Monster::silly_monster_texture_name_) : (i_monster.controller_type_ == MonsterControllers::kSmartMonsterController ? GameUtils::CreateSprite(Monster::smart_monster_texture_name_) : nullptr);
+
+		controller_type_ = i_monster.controller_type_;
 		time_to_live_ = i_monster.time_to_live_;
 	}
 	return *this;
@@ -23,6 +36,8 @@ inline Monster& Monster::operator=(Monster&& i_monster)
 	{
 		std::swap(controller_, i_monster.controller_);
 		std::swap(identity_, i_monster.identity_);
+		std::swap(sprite_, i_monster.sprite_);
+		controller_type_ = i_monster.controller_type_;
 		time_to_live_ = i_monster.time_to_live_;
 	}
 	return *this;

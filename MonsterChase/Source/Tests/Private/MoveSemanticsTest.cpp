@@ -47,8 +47,8 @@ void TestMoveSemantics()
 		LOG("Player-A's name:%s\t\tPlayer-B's name:%s", player_a.GetIdentity()->GetName(), player_b.GetIdentity()->GetName());
 
 		LOG("-------------------- Monster --------------------");
-		monsterchase::Monster monster_silly(MonsterControllers::kSillyMonsterController, "SILLY");
-		monsterchase::Monster monster_smart(MonsterControllers::kSmartMonsterController, "SMART");
+		monsterchase::Monster monster_silly(monsterchase::MonsterControllers::kSillyMonsterController, "SILLY");
+		monsterchase::Monster monster_smart(monsterchase::MonsterControllers::kSmartMonsterController, "SMART");
 		// test move assignment operator
 		monster_smart = std::move(monster_silly);
 		LOG("Silly-Monster's name:%s\t\tSmart-Monster's name:%s", monster_silly.GetIdentity()->GetName(), monster_smart.GetIdentity()->GetName());
@@ -101,7 +101,7 @@ void TestMoveSemantics()
 
 		for (uint8_t i = 0; i < num_objects; ++i)
 		{
-			monsters.push_back(monsterchase::Monster(i % 2 ? MonsterControllers::kSillyMonsterController : MonsterControllers::kSmartMonsterController, ""));
+			monsters.push_back(monsterchase::Monster(i % 2 ? monsterchase::MonsterControllers::kSillyMonsterController : monsterchase::MonsterControllers::kSmartMonsterController, ""));
 		}
 		monsters.clear();
 	}

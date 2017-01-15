@@ -1,3 +1,5 @@
+#ifdef ENABLE_TESTS
+
 /************************ MEMORY TESTS ************************/
 #ifdef ENABLE_ALLOCATOR_TEST
 #include "Tests\BlockAllocatorTest.h"
@@ -11,7 +13,6 @@ void TestFixedSizeAllocator();
 #endif // ENABLE_ALLOCATOR_TEST
 
 /************************ ENABLE OTHER TESTS ************************/
-
 #define ENABLE_VECTOR_CONST_TEST
 #define ENABLE_FLOAT_VALIDITY_TEST
 #define ENABLE_MOVE_SEMANTICS_TEST
@@ -35,43 +36,46 @@ void RunBitArray_UnitTest();
 
 
 /************************ RUN TESTS ************************/
-
 void RunTests()
 {
 	LOG("\n");
 #ifdef ENABLE_VECTOR_CONST_TEST
 	TestVectorConstness();
-#endif
+#endif // ENABLE_VECTOR_CONST_TEST
 
 	LOG("\n");
 #ifdef ENABLE_FLOAT_VALIDITY_TEST
 	TestFloatValidity();
-#endif
+#endif // ENABLE_FLOAT_VALIDITY_TEST
 
 	LOG("\n");
 #ifdef ENABLE_MOVE_SEMANTICS_TEST
 	TestMoveSemantics();
-#endif
+#endif // ENABLE_MOVE_SEMANTICS_TEST
 
 	LOG("\n");
 #ifdef ENABLE_BIT_ARRAY_TEST
 	RunBitArray_UnitTest();
-#endif
+#endif // ENABLE_BIT_ARRAY_TEST
 
 	LOG("\n");
 #ifdef ENABLE_ALLOCATOR_TEST
 	TestFixedSizeAllocator();
 	LOG("\n");
+
 #ifdef BUILD_DEBUG
-	HeapManager_UnitTest();
+		HeapManager_UnitTest();
 #else
-	const size_t mem_size = 1024 * 1024;
-	BlockAllocatorTest::Init(mem_size);
-	BlockAllocatorTest::RunTest00();
-	BlockAllocatorTest::RunTest01();
-	BlockAllocatorTest::RunTest02();
-	BlockAllocatorTest::RunTest03();
-	BlockAllocatorTest::Reset();
-#endif
-#endif
+		const size_t mem_size = 1024 * 1024;
+		BlockAllocatorTest::Init(mem_size);
+		BlockAllocatorTest::RunTest00();
+		BlockAllocatorTest::RunTest01();
+		BlockAllocatorTest::RunTest02();
+		BlockAllocatorTest::RunTest03();
+		BlockAllocatorTest::Reset();
+#endif // BUILD_DEBUG
+
+#endif // ENABLE_ALLOCATOR_TEST
 }
+
+#endif // ENABLE_TESTS

@@ -169,6 +169,7 @@
     <ResourceCompile Include="MonsterChase.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\Private\GameUtils.cpp" />
     <ClCompile Include="Source\Game\Private\Main.cpp" />
     <ClCompile Include="Source\Game\Private\Monster.cpp" />
     <ClCompile Include="Source\Game\Private\MonsterChase.cpp" />

@@ -1,6 +1,8 @@
 #ifndef GAME_TYPES_H_
 #define GAME_TYPES_H_
 
+namespace monsterchase {
+
 enum class GameStates
 {
 	kGameStateNone = 0,
@@ -28,5 +30,17 @@ enum class MoveDirections
 	kMoveDirectionDown,
 	kMoveDirectionMax
 };
+
+enum class KeyboardKeys
+{
+	kA = 65,
+	kD = 68,
+	kM = 77,
+	kQ = 81,
+	kS = 83,
+	kW = 87
+};
+
+} // namespace monsterchase
 
 #endif // GAME_TYPES_H_
