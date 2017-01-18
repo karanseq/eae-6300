@@ -9,6 +9,7 @@
 #include "GLib.h"
 #include "Logger\Logger.h"
 #include "Memory\AllocatorUtil.h"
+#include "Timer\TimerUtil.h"
 
 // game includes
 #include "Game\MonsterChase.h"
@@ -31,7 +32,7 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 	LOG("\n");
 #endif // ENABLE_TESTS
 
-	LOG("-------------------- Running MonsterChase --------------------");
+	/*LOG("-------------------- Running MonsterChase --------------------");
 	monsterchase::MonsterChase* monster_chase = monsterchase::MonsterChase::Create();
 	monster_chase->Init();
 
@@ -42,7 +43,12 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 
 	monsterchase::MonsterChase::Destroy();
 
-	LOG("-------------------- Finished MonsterChase --------------------\n\n");
+	LOG("-------------------- Finished MonsterChase --------------------\n\n");*/
+
+	while (true)
+	{
+		LOG("Last frame time ms:%f", engine::TimerUtil::CalculateLastFrameTime_ms());
+	}
 
 	// cleanup GLib
 	GLib::Shutdown();

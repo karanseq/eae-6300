@@ -46,6 +46,12 @@
     <Filter Include="Header Files\Assert">
       <UniqueIdentifier>{736dea9f-f22e-4df4-87d1-1603858ca447}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Timer">
+      <UniqueIdentifier>{7bb64fa2-4cba-4de1-99c1-7d44adcaf43f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Timer">
+      <UniqueIdentifier>{2159208c-fe85-48fa-b150-c9307672e9d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -117,6 +123,9 @@
     <ClInclude Include="Source\GameObject\GameObject-inl.h">
       <Filter>Header Files\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Timer\TimerUtil.h">
+      <Filter>Header Files\Timer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -148,6 +157,12 @@
     </ClCompile>
     <ClCompile Include="Source\Memory\Private\AllocatorUtil.cpp">
       <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Timer\Private\TimerUtil.cpp">
+      <Filter>Source Files\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Timer\Private\TimerUtil.win32.cpp">
+      <Filter>Source Files\Timer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
