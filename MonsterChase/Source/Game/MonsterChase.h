@@ -35,7 +35,7 @@ public:
 	static void Destroy();
 
 	// game initialization
-	void Init();
+	bool Init();
 	// the main game loop
 	// called every tick from main
 	void Update();
@@ -46,6 +46,7 @@ public:
 	// I/O functions
 	void PrintGameInformation();
 	void ValidateInput(uint8_t i_input);
+	bool LoadTextures();
 
 	// game logic
 	void CreateMonster(const char* i_input_name = nullptr);

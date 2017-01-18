@@ -11,6 +11,11 @@
 
 namespace monsterchase {
 
+// static member initialization
+const char* GameUtils::PLAYER_TEXTURE_NAME = "Data\\clown.dds";
+const char* GameUtils::SILLY_MONSTER_TEXTURE_NAME = "Data\\enemy_01.dds";
+const char* GameUtils::SMART_MONSTER_TEXTURE_NAME = "Data\\enemy_05.dds";
+
 GLib::Sprites::Sprite* GameUtils::CreateSprite(const char* i_filename)
 {
 	ASSERT(i_filename);

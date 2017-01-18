@@ -37,6 +37,10 @@ public:
 
 	static void* LoadFile(const char* i_filename, size_t& o_filesize);
 
+	static const char*					PLAYER_TEXTURE_NAME;
+	static const char*					SILLY_MONSTER_TEXTURE_NAME;
+	static const char*					SMART_MONSTER_TEXTURE_NAME;
+
 }; // class GameUtils
 
 } // namespace monsterchase

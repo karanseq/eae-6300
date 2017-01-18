@@ -101,9 +101,15 @@ MonsterChase::~MonsterChase()
 	MonsterChase::game_allocator_ = nullptr;
 }
 
-void MonsterChase::Init()
+bool MonsterChase::Init()
 {
 	ASSERT(game_state_ == GameStates::kGameStateBegin);
+
+	// load all textures
+	if (!LoadTextures())
+	{
+		return false;
+	}
 
 	// create the player
 	CreatePlayer("player");
@@ -118,6 +124,8 @@ void MonsterChase::Init()
 	LOG("Created %d monsters...",  num_monsters_);
 
 	game_state_ = GameStates::kGameStateRunning;
+
+	return true;
 }
 
 void MonsterChase::Update()
@@ -194,6 +202,13 @@ void MonsterChase::ValidateInput(uint8_t i_input)
 
 		PrintGameInformation();
 	}
+}
+
+bool MonsterChase::LoadTextures()
+{
+
+
+	return true;
 }
 
 void MonsterChase::CreateMonster(const char* i_input_name)
@@ -311,9 +326,6 @@ void MonsterChase::CreatePlayer(const char* i_name)
 
 	// create the player at the center of the grid
 	player_ = new (MonsterChase::game_allocator_) Player(i_name);
-
-	// time to start the game
-	game_state_ = GameStates::kGameStateInputNumMonsters;
 }
 
 } // namespace monsterchase

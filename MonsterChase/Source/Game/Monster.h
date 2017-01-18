@@ -57,9 +57,6 @@ private:
 	GLib::Sprites::Sprite*										sprite_;
 	MonsterControllers											controller_type_;
 	uint8_t														time_to_live_;
-
-	static const char*											silly_monster_texture_name_;
-	static const char*											smart_monster_texture_name_;
 }; // class Monster
 
 } // namespace monsterchase

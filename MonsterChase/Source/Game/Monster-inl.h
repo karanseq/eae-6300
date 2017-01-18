@@ -22,7 +22,7 @@ inline Monster& Monster::operator=(const Monster& i_monster)
 		{
 			GLib::Sprites::Release(sprite_);
 		}
-		sprite_ = i_monster.controller_type_ == MonsterControllers::kSillyMonsterController ? GameUtils::CreateSprite(Monster::silly_monster_texture_name_) : (i_monster.controller_type_ == MonsterControllers::kSmartMonsterController ? GameUtils::CreateSprite(Monster::smart_monster_texture_name_) : nullptr);
+		sprite_ = i_monster.controller_type_ == MonsterControllers::kSillyMonsterController ? GameUtils::CreateSprite(GameUtils::SILLY_MONSTER_TEXTURE_NAME) : (i_monster.controller_type_ == MonsterControllers::kSmartMonsterController ? GameUtils::CreateSprite(GameUtils::SMART_MONSTER_TEXTURE_NAME) : nullptr);
 
 		controller_type_ = i_monster.controller_type_;
 		time_to_live_ = i_monster.time_to_live_;

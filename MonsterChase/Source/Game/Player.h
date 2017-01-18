@@ -51,7 +51,6 @@ private:
 	engine::gameobject::InterfaceGameObjectController*					controller_;
 	engine::gameobject::IdentityComponent*								identity_;
 	GLib::Sprites::Sprite*												sprite_;
-	static const char*													texture_name_;
 }; // class Player
 
 } // namespace monsterchase

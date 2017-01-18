@@ -14,10 +14,6 @@
 
 namespace monsterchase {
 
-// static member initialization
-const char* Monster::silly_monster_texture_name_ = "Data\\enemy_01.dds";
-const char* Monster::smart_monster_texture_name_ = "Data\\enemy_05.dds";
-
 Monster::Monster(MonsterControllers i_controller_type, const char* i_name) : controller_(nullptr),
 	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, i_name)),
 	sprite_(nullptr),
@@ -30,13 +26,13 @@ Monster::Monster(MonsterControllers i_controller_type, const char* i_name) : con
 	case MonsterControllers::kSmartMonsterController:
 		controller_ = new (MonsterChase::GetAllocator()) SmartMonsterController();
 		identity_->SetTag(static_cast<uint32_t>(MonsterControllers::kSmartMonsterController));
-		sprite_ = GameUtils::CreateSprite(Monster::smart_monster_texture_name_);
+		sprite_ = GameUtils::CreateSprite(GameUtils::SMART_MONSTER_TEXTURE_NAME);
 		break;
 
 	case MonsterControllers::kSillyMonsterController:
 		controller_ = new (MonsterChase::GetAllocator()) SillyMonsterController();
 		identity_->SetTag(static_cast<uint32_t>(MonsterControllers::kSillyMonsterController));
-		sprite_ = GameUtils::CreateSprite(Monster::silly_monster_texture_name_);
+		sprite_ = GameUtils::CreateSprite(GameUtils::SILLY_MONSTER_TEXTURE_NAME);
 		break;
 	}
 }
@@ -53,7 +49,7 @@ Monster::~Monster()
 
 Monster::Monster(const Monster& i_copy) : controller_(i_copy.controller_->Clone()),
 	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(i_copy.identity_->GetID(), i_copy.identity_->GetTag(), i_copy.identity_->GetName())),
-	sprite_(i_copy.controller_type_ == MonsterControllers::kSillyMonsterController ? GameUtils::CreateSprite(Monster::silly_monster_texture_name_) : (i_copy.controller_type_ == MonsterControllers::kSmartMonsterController ? GameUtils::CreateSprite(Monster::smart_monster_texture_name_) : nullptr)),
+	sprite_(i_copy.controller_type_ == MonsterControllers::kSillyMonsterController ? GameUtils::CreateSprite(GameUtils::SILLY_MONSTER_TEXTURE_NAME) : (i_copy.controller_type_ == MonsterControllers::kSmartMonsterController ? GameUtils::CreateSprite(GameUtils::SMART_MONSTER_TEXTURE_NAME) : nullptr)),
 	controller_type_(i_copy.controller_type_),
 	time_to_live_(i_copy.time_to_live_)
 {}

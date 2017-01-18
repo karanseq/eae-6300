@@ -7,9 +7,6 @@ enum class GameStates
 {
 	kGameStateNone = 0,
 	kGameStateBegin,
-	kGameStateInputPlayerName,
-	kGameStateInputNumMonsters,
-	kGameStateInputMonsterNames,
 	kGameStateRunning,
 	kGameStateQuit
 };
