@@ -1,13 +1,5 @@
 #include "Game\MonsterChase.h"
 
-// library includes
-#include <conio.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-
 // engine includes 
 #include "Assert\Assert.h"
 #include "GLib.h"
@@ -38,6 +30,36 @@ void AcceptKey(unsigned int i_key_id, bool i_went_down)
 	{
 		MonsterChase::GetInstance()->ValidateInput(i_key_id);
 	}
+}
+
+bool StartUp()
+{
+	// create an instance of the game
+	MonsterChase* mc_instance = MonsterChase::Create();
+	if (mc_instance == nullptr)
+	{
+		LOG_ERROR("Could not create an instance of MonsterChase!");
+		return false;
+	}
+
+	// initialize the game
+	bool success = mc_instance->Init();
+	if (success)
+	{
+		LOG("-------------------- MonsterChase StartUp --------------------");
+	}
+	else
+	{
+		LOG_ERROR("Could not initialize MonsterChase!");
+	}
+
+	return success;
+}
+
+void Shutdown()
+{
+	MonsterChase::Destroy();
+	LOG("-------------------- MonsterChase Shutdown --------------------");
 }
 
 // static member initialization
@@ -80,8 +102,6 @@ MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
 
 	// reserve memory for the monster pointers
 	monsters_.reserve(MAX_MONSTERS);
-
-	srand(static_cast<unsigned int>(time(0)));
 }
 
 MonsterChase::~MonsterChase()

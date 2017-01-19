@@ -1,8 +1,5 @@
 #include "Game\Player.h"
 
-// library includes
-#include <stdio.h>
-
 // engine includes
 #include "GLib.h"
 #include "Logger\Logger.h"
@@ -81,7 +78,7 @@ bool Player::HandleUserInput(KeyboardKeys i_key)
 
 void Player::Print()
 {
-	LOG("Player %s is at [%f, %f]", identity_->GetName(), controller_->GetGameObject()->GetPosition().x(), controller_->GetGameObject()->GetPosition().y());
+	VERBOSE("Player %s is at [%f, %f]", identity_->GetName(), controller_->GetGameObject()->GetPosition().x(), controller_->GetGameObject()->GetPosition().y());
 }
 
 } // namespace monsterchase

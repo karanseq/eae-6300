@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Assert\Assert.h" />
+    <ClInclude Include="Source\Common\Engine.h" />
     <ClInclude Include="Source\Data\BitArray-inl.h" />
     <ClInclude Include="Source\Data\BitArray.h" />
     <ClInclude Include="Source\GameObject\GameObject-inl.h" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Source\Timer\TimerUtil.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Common\Private\Engine.cpp" />
     <ClCompile Include="Source\Data\Private\BitArray.cpp" />
     <ClCompile Include="Source\GameObject\Private\IdentityComponent.cpp" />
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp" />

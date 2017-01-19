@@ -52,6 +52,12 @@
     <Filter Include="Source Files\Timer">
       <UniqueIdentifier>{2159208c-fe85-48fa-b150-c9307672e9d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Common">
+      <UniqueIdentifier>{caaa9181-16ff-473f-a98e-9ad9b862fa3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{272385d7-9fe6-49ac-9876-17b235118cda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -126,6 +132,9 @@
     <ClInclude Include="Source\Timer\TimerUtil.h">
       <Filter>Header Files\Timer</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Common\Engine.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -163,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="Source\Timer\Private\TimerUtil.win32.cpp">
       <Filter>Source Files\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Private\Engine.cpp">
+      <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

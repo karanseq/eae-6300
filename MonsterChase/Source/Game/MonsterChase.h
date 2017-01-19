@@ -2,9 +2,7 @@
 #define MONSTER_CHASE_H_
 
 // library includes
-#include <map>
 #include <vector>
-#include <string>
 
 // game includes
 #include "Game\GameTypes.h"
@@ -23,6 +21,10 @@ class Monster;
 
 // TODO: Find a better place for this
 void AcceptKey(unsigned int i_key_id, bool i_went_down);
+
+bool StartUp();
+
+void Shutdown();
 
 class MonsterChase
 {

@@ -1,8 +1,5 @@
 #include "Game\Monster.h"
 
-// library includes
-#include <stdio.h>
-
 // engine includes
 #include "GLib.h"
 #include "Logger\Logger.h"
@@ -81,7 +78,7 @@ void Monster::Render()
 
 void Monster::Print()
 {
-	LOG("Monster %s of type %d, %s [%f, %f]", identity_->GetName(), identity_->GetTag(), (time_to_live_ <= 1 ? "is about to die at" : "is at"), controller_->GetGameObject()->GetPosition().x(), controller_->GetGameObject()->GetPosition().y());
+	VERBOSE("Monster %s of type %d, %s [%f, %f]", identity_->GetName(), identity_->GetTag(), (time_to_live_ <= 1 ? "is about to die at" : "is at"), controller_->GetGameObject()->GetPosition().x(), controller_->GetGameObject()->GetPosition().y());
 }
 
 } // namespace monsterchase

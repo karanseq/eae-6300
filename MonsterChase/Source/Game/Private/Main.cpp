@@ -6,6 +6,7 @@
 
 // engine includes
 #include "Assert\Assert.h"
+#include "Common\Engine.h"
 #include "GLib.h"
 #include "Logger\Logger.h"
 #include "Memory\AllocatorUtil.h"
@@ -20,36 +21,41 @@ void RunTests();
 
 int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR i_lp_cmd_line, int i_n_cmd_show )
 {
-	// initialize allocators
-	engine::memory::CreateAllocators();
-	
-	// initialize GLib
-	bool success = GLib::Initialize(i_h_instance, i_n_cmd_show, "MonsterChase", -1, 1280, 800);
-	ASSERT(success);
+	// init engine
+	if (engine::StartUp())
+	{
+		// TODO: Is this the right place to do this?
+		// initialize GLib
+		bool success = GLib::Initialize(i_h_instance, i_n_cmd_show, "MonsterChase", -1, 1280, 800);
+		ASSERT(success);
 
 #ifdef ENABLE_TESTS
-	RunTests();
-	LOG("\n");
+		RunTests();
+		LOG("\n");
 #endif // ENABLE_TESTS
 
-	LOG("-------------------- Running MonsterChase --------------------");
-	monsterchase::MonsterChase* monster_chase = monsterchase::MonsterChase::Create();
-	monster_chase->Init();
+		// init game
+		if (monsterchase::StartUp())
+		{
+			monsterchase::MonsterChase* monster_chase = monsterchase::MonsterChase::GetInstance();
 
-	while (monster_chase->GetState() != monsterchase::GameStates::kGameStateQuit)
-	{
-		monster_chase->Update();
+			// TODO: Replace this with a blocking function
+			while (monster_chase->GetState() != monsterchase::GameStates::kGameStateQuit)
+			{
+				monster_chase->Update();
+			}
+		}
+
+		// cleanup game
+		monsterchase::Shutdown();
+
+		// TODO: Is this the right place to do this?
+		// cleanup GLib
+		GLib::Shutdown();
 	}
 
-	monsterchase::MonsterChase::Destroy();
-
-	LOG("-------------------- Finished MonsterChase --------------------\n\n");
-
-	// cleanup GLib
-	GLib::Shutdown();
-
-	// cleanup allocators
-	engine::memory::DestroyAllocators();
+	// cleanup
+	engine::Shutdown();
 
 #if defined(_DEBUG)
 	_CrtDumpMemoryLeaks();

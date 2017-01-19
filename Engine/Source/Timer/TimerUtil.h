@@ -9,8 +9,8 @@ private:
 	TimerUtil();
 	~TimerUtil();
 
-	TimerUtil(const TimerUtil& copy);
-	TimerUtil operator=(const TimerUtil& copy);
+	TimerUtil(const TimerUtil& i_copy);
+	TimerUtil operator=(const TimerUtil& i_copy);
 
 public:
 	static float GetLastFrameTime_ms();
@@ -25,8 +25,8 @@ private:
 	static double GetCounter();
 	static double GetFrequency();
 
-	static double							pc_frequency_;
-	static double							last_frame_start_tick_;
+	static double						pc_frequency_;
+	static double						last_frame_start_tick_;
 	static float						last_frame_time_ms_;
 
 }; // class TimerUtil
