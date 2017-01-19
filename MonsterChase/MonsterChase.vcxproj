@@ -169,6 +169,7 @@
     <ResourceCompile Include="MonsterChase.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\Private\GameData.cpp" />
     <ClCompile Include="Source\Game\Private\GameUtils.cpp" />
     <ClCompile Include="Source\Game\Private\Main.cpp" />
     <ClCompile Include="Source\Game\Private\Monster.cpp" />
@@ -187,6 +188,7 @@
     <ClCompile Include="Source\Tests\Private\VectorConstnessTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\GameData.h" />
     <ClInclude Include="Source\Game\GameTypes.h" />
     <ClInclude Include="Source\Game\GameUtils.h" />
     <ClInclude Include="Source\Game\Monster-inl.h" />

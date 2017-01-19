@@ -4,6 +4,7 @@
 // library includes
 #include <stdint.h>
 #include <stdlib.h>
+#include <string>
 
 // engine includes
 #include "Math\Vec3D.h"
@@ -35,11 +36,8 @@ public:
 
 	static GLib::Sprites::Sprite* CreateSprite(const char* i_filename);
 
-	static void* LoadFile(const char* i_filename, size_t& o_filesize);
-
-	static const char*					PLAYER_TEXTURE_NAME;
-	static const char*					SILLY_MONSTER_TEXTURE_NAME;
-	static const char*					SMART_MONSTER_TEXTURE_NAME;
+	static uint8_t* LoadFile(const char* i_filename, bool i_cache_file, size_t& o_filesize);
+	static uint8_t* LoadFile(const char* i_filename, bool i_cache_file = true);
 
 }; // class GameUtils
 

@@ -65,17 +65,21 @@ MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
 	void* aligned_memory = engine::memory::BlockAllocator::GetDefaultAllocator()->Alloc(MEMORY_SIZE);
 	ASSERT(aligned_memory);
 
-	monsters_.reserve(MAX_MONSTERS);
-
 	// create an allocator to manage memory for the game objects
 	MonsterChase::game_allocator_ = engine::memory::BlockAllocator::Create(aligned_memory, MEMORY_SIZE);
 	ASSERT(MonsterChase::game_allocator_);
+
+	// init game data
+	GameData::Create();
 
 	// register the key callback
 	GLib::SetKeyStateChangeCallback(monsterchase::AcceptKey);
 
 	// register the allocator
 	engine::memory::BlockAllocator::AddBlockAllocator(MonsterChase::game_allocator_);
+
+	// reserve memory for the monster pointers
+	monsters_.reserve(MAX_MONSTERS);
 
 	srand(static_cast<unsigned int>(time(0)));
 }
@@ -92,6 +96,9 @@ MonsterChase::~MonsterChase()
 	}
 	monsters_.clear();
 
+	// delete game data
+	GameData::Destroy();
+
 	// deregister the allocator
 	engine::memory::BlockAllocator::RemoveBlockAllocator(MonsterChase::game_allocator_);
 
@@ -105,8 +112,8 @@ bool MonsterChase::Init()
 {
 	ASSERT(game_state_ == GameStates::kGameStateBegin);
 
-	// load all textures
-	if (!LoadTextures())
+	// load game data
+	if (!LoadGameData())
 	{
 		return false;
 	}
@@ -204,10 +211,12 @@ void MonsterChase::ValidateInput(uint8_t i_input)
 	}
 }
 
-bool MonsterChase::LoadTextures()
+bool MonsterChase::LoadGameData()
 {
-
-
+	// load textures
+	GameUtils::LoadFile(GameData::PLAYER_TEXTURE_NAME);
+	GameUtils::LoadFile(GameData::SILLY_MONSTER_TEXTURE_NAME);
+	GameUtils::LoadFile(GameData::SMART_MONSTER_TEXTURE_NAME);
 	return true;
 }
 
@@ -251,16 +260,6 @@ void MonsterChase::CreateMonster(const char* i_input_name)
 	if (controller_type == MonsterControllers::kSmartMonsterController)
 	{
 		reinterpret_cast<SmartMonsterController*>(monster->GetController())->SetTarget(player_->GetController()->GetGameObject());
-	}
-
-	// check if all monsters have been created
-	if (initial_num_monsters_ != -1 && num_monsters_ >= initial_num_monsters_)
-	{
-		// enter this loop only when creating the monsters for the first time
-		initial_num_monsters_ = -1;
-
-		// now its the player's turn
-		game_state_ = GameStates::kGameStateRunning;
 	}
 }
 

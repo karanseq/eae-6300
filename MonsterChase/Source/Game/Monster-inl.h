@@ -4,6 +4,7 @@
 #include "GLib.h"
 
 // game includes
+#include "Game\GameData.h"
 #include "Game\GameUtils.h"
 
 namespace monsterchase {
@@ -22,7 +23,7 @@ inline Monster& Monster::operator=(const Monster& i_monster)
 		{
 			GLib::Sprites::Release(sprite_);
 		}
-		sprite_ = i_monster.controller_type_ == MonsterControllers::kSillyMonsterController ? GameUtils::CreateSprite(GameUtils::SILLY_MONSTER_TEXTURE_NAME) : (i_monster.controller_type_ == MonsterControllers::kSmartMonsterController ? GameUtils::CreateSprite(GameUtils::SMART_MONSTER_TEXTURE_NAME) : nullptr);
+		sprite_ = i_monster.controller_type_ == MonsterControllers::kSillyMonsterController ? GameUtils::CreateSprite(GameData::SILLY_MONSTER_TEXTURE_NAME) : (i_monster.controller_type_ == MonsterControllers::kSmartMonsterController ? GameUtils::CreateSprite(GameData::SMART_MONSTER_TEXTURE_NAME) : nullptr);
 
 		controller_type_ = i_monster.controller_type_;
 		time_to_live_ = i_monster.time_to_live_;

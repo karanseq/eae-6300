@@ -2,7 +2,9 @@
 #define MONSTER_CHASE_H_
 
 // library includes
+#include <map>
 #include <vector>
+#include <string>
 
 // game includes
 #include "Game\GameTypes.h"
@@ -46,7 +48,7 @@ public:
 	// I/O functions
 	void PrintGameInformation();
 	void ValidateInput(uint8_t i_input);
-	bool LoadTextures();
+	bool LoadGameData();
 
 	// game logic
 	void CreateMonster(const char* i_input_name = nullptr);
@@ -88,7 +90,6 @@ private:
 	std::vector<Monster*>								monsters_;
 
 	// game counters
-	uint8_t												initial_num_monsters_;
 	uint8_t												num_monsters_;
 	uint8_t												ascii_index_;
 }; // class MonsterChase

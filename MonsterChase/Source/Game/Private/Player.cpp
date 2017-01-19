@@ -16,7 +16,7 @@ namespace monsterchase {
 
 Player::Player(const char* i_name) : controller_(new (MonsterChase::GetAllocator()) PlayerController()),
 	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, i_name)),
-	sprite_(GameUtils::CreateSprite(GameUtils::PLAYER_TEXTURE_NAME))
+	sprite_(GameUtils::CreateSprite(GameData::PLAYER_TEXTURE_NAME))
 {}
 
 Player::~Player()
@@ -31,7 +31,7 @@ Player::~Player()
 
 Player::Player(const Player& i_copy) : controller_(i_copy.controller_->Clone()),
 	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(i_copy.identity_->GetID(), i_copy.identity_->GetTag(), i_copy.identity_->GetName())),
-	sprite_(GameUtils::CreateSprite(GameUtils::PLAYER_TEXTURE_NAME))
+	sprite_(GameUtils::CreateSprite(GameData::PLAYER_TEXTURE_NAME))
 {}
 
 Player::Player(Player&& i_copy) : controller_(i_copy.controller_),

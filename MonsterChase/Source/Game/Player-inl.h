@@ -4,6 +4,7 @@
 #include "GLib.h"
 
 // game includes
+#include "Game\GameData.h"
 #include "Game\GameUtils.h"
 
 namespace monsterchase {
@@ -22,7 +23,7 @@ inline Player& Player::operator=(const Player& i_player)
 		{
 			GLib::Sprites::Release(sprite_);
 		}
-		sprite_ = GameUtils::CreateSprite(GameUtils::PLAYER_TEXTURE_NAME);
+		sprite_ = GameUtils::CreateSprite(GameData::PLAYER_TEXTURE_NAME);
 	}
 	return *this;
 }
