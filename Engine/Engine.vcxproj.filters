@@ -58,6 +58,12 @@
     <Filter Include="Source Files\Time">
       <UniqueIdentifier>{ab236536-4803-40ad-9ef6-3eb441c3e26c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{d5fa6457-d6f8-484e-a599-2fa5d9c5b9a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{02c8a987-fdc6-4a4d-99bd-0fdc627d2d90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -159,6 +165,18 @@
     <ClInclude Include="Source\Time\Updater-inl.h">
       <Filter>Header Files\Time</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Physics\Physics.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\Physics-inl.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\PhysicsObject.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\PhysicsObject-inl.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -208,6 +226,12 @@
     </ClCompile>
     <ClCompile Include="Source\Time\Private\Updater.cpp">
       <Filter>Source Files\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics\Private\Physics.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics\Private\PhysicsObject.cpp">
+      <Filter>Source Files\Physics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

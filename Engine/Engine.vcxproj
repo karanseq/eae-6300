@@ -177,6 +177,10 @@
     <ClInclude Include="Source\Memory\AllocatorOverrides.h" />
     <ClInclude Include="Source\Memory\FixedSizeAllocator-inl.h" />
     <ClInclude Include="Source\Memory\FixedSizeAllocator.h" />
+    <ClInclude Include="Source\Physics\Physics-inl.h" />
+    <ClInclude Include="Source\Physics\Physics.h" />
+    <ClInclude Include="Source\Physics\PhysicsObject-inl.h" />
+    <ClInclude Include="Source\Physics\PhysicsObject.h" />
     <ClInclude Include="Source\Time\InterfaceTickable.h" />
     <ClInclude Include="Source\Time\TimerUtil.h" />
     <ClInclude Include="Source\Time\Updater-inl.h" />
@@ -196,6 +200,8 @@
     <ClCompile Include="Source\Memory\Private\BlockAllocator.cpp" />
     <ClCompile Include="Source\Memory\Private\AllocatorOverrides.cpp" />
     <ClCompile Include="Source\Memory\Private\FixedSizeAllocator.cpp" />
+    <ClCompile Include="Source\Physics\Private\Physics.cpp" />
+    <ClCompile Include="Source\Physics\Private\PhysicsObject.cpp" />
     <ClCompile Include="Source\Time\Private\TimerUtil.cpp" />
     <ClCompile Include="Source\Time\Private\TimerUtil.win32.cpp" />
     <ClCompile Include="Source\Time\Private\Updater.cpp" />

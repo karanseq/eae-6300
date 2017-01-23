@@ -6,6 +6,7 @@
 
 // engine includes
 #include "Memory\AllocatorUtil.h"
+#include "Physics\Physics.h"
 #include "Time\TimerUtil.h"
 #include "Time\Updater.h"
 
@@ -19,6 +20,9 @@ bool StartUp()
 	// create updater
 	engine::time::Updater::Create();
 
+	// create physics
+	engine::physics::Physics::Create();
+
 	// give rand a new seed
 	// TODO: Resolve conflict with namespace time
 	//srand(static_cast<unsigned int>(time(0)));
@@ -30,18 +34,25 @@ bool StartUp()
 
 void Run()
 {
+	static engine::time::Updater* updater = engine::time::Updater::Get();
+	static engine::physics::Physics* physics = engine::physics::Physics::Get();
+
 	while (!quit_requested_)
 	{
 		// get delta
 		float dt = engine::time::TimerUtil::CalculateLastFrameTime_ms();
 
 		// update modules
-		engine::time::Updater::Get()->Run(dt);
+		updater->Run(dt);
+		physics->Run(dt);
 	}
 }
 
 void Shutdown()
 {
+	// delete physics
+	engine::physics::Physics::Destroy();
+
 	// delete updater
 	engine::time::Updater::Destroy();
 

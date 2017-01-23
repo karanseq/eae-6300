@@ -25,7 +25,6 @@ public:
 	// copy constructor
 	GameObject(const GameObject& i_copy) : transform_(i_copy.transform_)
 	{}
-
 	// copy assignment operator
 	inline GameObject& operator=(const GameObject& i_game_object);
 

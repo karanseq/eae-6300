@@ -10,6 +10,13 @@ namespace time {
 // forward declarations
 class InterfaceTickable;
 
+/*
+	Updater
+	- A singleton that receives ticks from the engine and broadcasts the same to all objects that implement InterfaceTickable
+	- Classes that wish to receive ticks must implement InterfaceTickable and add themselves to the Updater
+	- Classes that wish to no longer receive ticks must remove themselves from the Updater
+*/
+
 class Updater
 {
 private:
