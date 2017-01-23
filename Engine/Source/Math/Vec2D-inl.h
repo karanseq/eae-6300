@@ -82,7 +82,7 @@ namespace math {
 
 	inline bool Vec2D::operator==(const Vec2D& i_vec) const
 	{
-		return (FuzzyEqual(x_, i_vec.x()) && FuzzyEqual(y_, i_vec.y()));
+		return (FuzzyEquals(x_, i_vec.x()) && FuzzyEquals(y_, i_vec.y()));
 	}
 
 	inline bool Vec2D::operator!=(const Vec2D& i_vec) const

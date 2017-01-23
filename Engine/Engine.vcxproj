@@ -160,6 +160,10 @@
     <ClInclude Include="Source\GameObject\IdentityComponent.h" />
     <ClInclude Include="Source\Logger\Logger.h" />
     <ClInclude Include="Source\Math\MathUtil.h" />
+    <ClInclude Include="Source\Math\Rect-inl.h" />
+    <ClInclude Include="Source\Math\Rect.h" />
+    <ClInclude Include="Source\Math\Size-inl.h" />
+    <ClInclude Include="Source\Math\Size.h" />
     <ClInclude Include="Source\Math\Transform-inl.h" />
     <ClInclude Include="Source\Math\Transform.h" />
     <ClInclude Include="Source\Math\Vec2D-inl.h" />
@@ -179,6 +183,8 @@
     <ClCompile Include="Source\Data\Private\BitArray.cpp" />
     <ClCompile Include="Source\GameObject\Private\IdentityComponent.cpp" />
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp" />
+    <ClCompile Include="Source\Math\Private\Rect.cpp" />
+    <ClCompile Include="Source\Math\Private\Size.cpp" />
     <ClCompile Include="Source\Math\Private\Transform.cpp" />
     <ClCompile Include="Source\Math\Private\Vec2D.cpp" />
     <ClCompile Include="Source\Math\Private\Vec3D.cpp" />

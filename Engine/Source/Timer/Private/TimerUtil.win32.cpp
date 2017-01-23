@@ -41,7 +41,7 @@ double TimerUtil::GetFrequency()
 	{
 		LARGE_INTEGER li;
 		QueryPerformanceFrequency(&li);
-		pc_frequency_ = double(li.QuadPart);
+		pc_frequency_ = double(li.QuadPart) / 1000.0;
 	}
 	return pc_frequency_;
 }

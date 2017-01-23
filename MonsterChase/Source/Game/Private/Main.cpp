@@ -42,6 +42,11 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 			// TODO: Replace this with a blocking function
 			while (monster_chase->GetState() != monsterchase::GameStates::kGameStateQuit)
 			{
+				// calculate time to render previous frame
+				float frame_rate_ms = engine::TimerUtil::CalculateLastFrameTime_ms();
+				VERBOSE("Frame Rate MS:%f", frame_rate_ms);
+
+				// update & render the game
 				monster_chase->Update();
 			}
 		}

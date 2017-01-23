@@ -98,7 +98,7 @@ namespace math {
 
 	inline bool Vec3D::operator==(const Vec3D& i_vec) const
 	{
-		return (FuzzyEqual(x_, i_vec.x()) && FuzzyEqual(y_, i_vec.y()) && FuzzyEqual(z_, i_vec.z()));
+		return (FuzzyEquals(x_, i_vec.x()) && FuzzyEquals(y_, i_vec.y()) && FuzzyEquals(z_, i_vec.z()));
 	}
 
 	inline bool Vec3D::operator!=(const Vec3D& i_vec) const

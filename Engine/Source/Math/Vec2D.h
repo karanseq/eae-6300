@@ -14,7 +14,7 @@ namespace math {
 	{
 	public:
 		Vec2D(float i_x = 0.0f, float i_y = 0.0f);
-		Vec2D(const Vec2D& copy);
+		Vec2D(const Vec2D& i_copy);
 
 		~Vec2D()
 		{}

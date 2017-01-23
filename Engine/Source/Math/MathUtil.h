@@ -26,14 +26,14 @@ namespace math {
 		return (temp != number);
 	}
 
-	inline bool FuzzyEqual(float lhs, float rhs, float epsilon = MAX_EPSILON)
+	inline bool FuzzyEquals(float lhs, float rhs, float epsilon = MAX_EPSILON)
 	{
 		return fabs(rhs - lhs) < epsilon;
 	}
 
 	inline bool IsZero(float number)
 	{
-		return FuzzyEqual(number, MIN_EPSILON);
+		return FuzzyEquals(number, MIN_EPSILON);
 	}
 
 } // namespace math
