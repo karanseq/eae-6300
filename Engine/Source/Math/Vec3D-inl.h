@@ -87,6 +87,12 @@ namespace math {
 		return *this;
 	}
 
+	inline Vec3D Vec3D::operator*(float i_scale) const
+	{
+		ASSERT(!IsNaN(i_scale));
+		return Vec3D(x_ * i_scale, y_ * i_scale, z_ * i_scale);
+	}
+
 	inline Vec3D& Vec3D::operator*=(float i_scale)
 	{
 		ASSERT(!IsNaN(i_scale));

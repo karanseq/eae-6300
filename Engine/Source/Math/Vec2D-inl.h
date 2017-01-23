@@ -72,6 +72,12 @@ namespace math {
 		return *this;
 	}
 
+	inline Vec2D Vec2D::operator*(float i_scale) const
+	{
+		ASSERT(!IsNaN(i_scale));
+		return Vec2D(x_ * i_scale, y_ * i_scale);
+	}
+
 	inline Vec2D& Vec2D::operator*=(float i_scale)
 	{
 		ASSERT(!IsNaN(i_scale));

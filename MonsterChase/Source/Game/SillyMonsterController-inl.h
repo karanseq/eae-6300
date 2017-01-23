@@ -27,7 +27,7 @@ inline SillyMonsterController& SillyMonsterController::operator=(SillyMonsterCon
 	return *this;
 }
 
-inline engine::gameobject::GameObject* SillyMonsterController::GetGameObject()
+inline engine::gameobject::GameObject* SillyMonsterController::GetGameObject() const
 { 
 	return game_object_;
 }

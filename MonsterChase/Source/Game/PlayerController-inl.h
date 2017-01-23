@@ -29,7 +29,7 @@ inline PlayerController& PlayerController::operator=(PlayerController&& i_contro
 	return *this;
 }
 
-inline engine::gameobject::GameObject* PlayerController::GetGameObject()
+inline engine::gameobject::GameObject* PlayerController::GetGameObject() const
 {
 	return game_object_;
 }

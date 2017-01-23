@@ -31,8 +31,8 @@ public:
 
 	/* Implement InterfaceGameObjectController */
 	PlayerController* Clone() const override;
-	inline engine::gameobject::GameObject* GetGameObject();
-	inline void SetGameObject(engine::gameobject::GameObject* i_game_object);
+	inline engine::gameobject::GameObject* GetGameObject() const override;
+	inline void SetGameObject(engine::gameobject::GameObject* i_game_object) override;
 
 	void UpdateGameObject() override;
 

@@ -28,7 +28,7 @@ public:
 
 	/* Implement InterfaceGameObjectController */
 	SillyMonsterController* Clone() const override;
-	inline engine::gameobject::GameObject* GetGameObject() override;
+	inline engine::gameobject::GameObject* GetGameObject() const override;
 	inline void SetGameObject(engine::gameobject::GameObject* i_game_object) override;
 
 	void UpdateGameObject() override;

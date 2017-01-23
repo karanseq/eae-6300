@@ -18,7 +18,7 @@ public:
 
 	virtual InterfaceGameObjectController* Clone() const = 0;
 
-	virtual GameObject* GetGameObject() = 0;
+	virtual GameObject* GetGameObject() const = 0;
 	virtual void SetGameObject(GameObject* i_game_object) = 0;
 
 	virtual void UpdateGameObject() = 0;

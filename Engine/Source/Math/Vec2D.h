@@ -34,6 +34,7 @@ namespace math {
 		inline Vec2D& operator+=(const Vec2D& i_vec);
 		inline Vec2D operator-(const Vec2D& i_vec) const;
 		inline Vec2D& operator-=(const Vec2D& i_vec);
+		inline Vec2D operator*(float i_scale) const;
 		inline Vec2D& operator*=(float i_scale);
 
 		// relational

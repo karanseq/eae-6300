@@ -29,7 +29,7 @@ inline SmartMonsterController& SmartMonsterController::operator=(SmartMonsterCon
 	return *this;
 }
 
-inline engine::gameobject::GameObject* SmartMonsterController::GetGameObject()
+inline engine::gameobject::GameObject* SmartMonsterController::GetGameObject() const
 { 
 	return game_object_;
 }
