@@ -29,6 +29,11 @@ float TimerUtil::CalculateLastFrameTime_ms()
 	return last_frame_time_ms_;
 }
 
+void TimerUtil::CustomSleep(uint32_t i_milli_seconds)
+{
+	Sleep(DWORD(i_milli_seconds));
+}
+
 double TimerUtil::GetCounter()
 {
 	LARGE_INTEGER li;

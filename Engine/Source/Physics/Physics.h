@@ -1,8 +1,14 @@
 #ifndef PHYSICS_H_
 #define PHYSICS_H_
 
+// library includes
+#include <vector>
+
 namespace engine {
 namespace physics {
+
+// forward declarations
+class PhysicsObject;
 
 /*
 	Physics
@@ -25,6 +31,14 @@ public:
 	static inline Physics* Get();
 
 	void Run(float dt);
+
+	// add/remove physics objects
+	inline void AddPhysicsObject(engine::physics::PhysicsObject* i_physics_object);
+	inline void RemovePhysicsObject(engine::physics::PhysicsObject* i_physics_object);
+
+private:
+	size_t											num_physics_objects_;
+	std::vector<PhysicsObject*>						physics_objects_;
 };
 
 } // namespace physics

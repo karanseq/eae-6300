@@ -10,13 +10,20 @@
 // game includes
 #include "Game\GameTypes.h"
 
+// forward declarations
+namespace engine {
+	namespace physics {
+		class PhysicsObject;
+	}
+}
+
 namespace monsterchase {
 
 class PlayerController : public engine::gameobject::InterfaceGameObjectController
 {
 public:
 	PlayerController();
-	PlayerController(engine::gameobject::GameObject* i_game_object);
+	PlayerController(engine::gameobject::GameObject* i_game_object, engine::physics::PhysicsObject* i_physics_object);
 	virtual ~PlayerController();
 
 	// copy constructor
@@ -36,12 +43,16 @@ public:
 
 	void UpdateGameObject() override;
 
+	inline engine::physics::PhysicsObject* GetPhysicsObject() const;
+	inline void SetPhysicsObject(engine::physics::PhysicsObject* i_physics_object);
+
 	inline MoveDirections GetMoveDirection() const;
 	inline void SetMoveDirection(MoveDirections i_move_direction);
 
 private:
-	engine::gameobject::GameObject*					game_object_;
-	MoveDirections									move_direction_;
+	engine::gameobject::GameObject*							game_object_;
+	engine::physics::PhysicsObject*							physics_object_;
+	MoveDirections											move_direction_;
 
 }; // class PlayerController
 

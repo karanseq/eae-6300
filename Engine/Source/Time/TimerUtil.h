@@ -1,6 +1,9 @@
 #ifndef TIMER_UTIL_H_
 #define TIMER_UTIL_H_
 
+// library includes
+#include <stdint.h>
+
 namespace engine {
 namespace time {
 
@@ -16,6 +19,8 @@ private:
 public:
 	static float GetLastFrameTime_ms();
 	static float CalculateLastFrameTime_ms();
+
+	static void CustomSleep(uint32_t i_milli_seconds);
 
 	static const float					DESIRED_FPS;
 	static const float					DESIRED_FRAMETIME_MS;

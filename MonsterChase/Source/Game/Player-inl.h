@@ -63,4 +63,9 @@ inline void Player::SetIdentity(engine::gameobject::IdentityComponent* i_identit
 	identity_ = i_identity;
 }
 
+inline GLib::Sprites::Sprite* Player::GetSprite() const
+{
+	return sprite_;
+}
+
 } // namespace monsterchase

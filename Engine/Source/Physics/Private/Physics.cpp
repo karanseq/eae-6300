@@ -3,6 +3,7 @@
 // engine includes
 #include "Common\HelperMacros.h"
 #include "Logger\Logger.h"
+#include "Physics\PhysicsObject.h"
 
 namespace engine {
 namespace physics {
@@ -10,7 +11,7 @@ namespace physics {
 // static member initialization
 Physics* Physics::instance_ = nullptr;
 
-Physics::Physics()
+Physics::Physics() : num_physics_objects_(0)
 {}
 
 Physics::~Physics()
@@ -32,7 +33,10 @@ void Physics::Destroy()
 
 void Physics::Run(float dt)
 {
-	VERBOSE("%s DT:%f", __FUNCTION__, dt);
+	for (size_t i = 0; i < num_physics_objects_; ++i)
+	{
+		physics_objects_[i]->Update(dt);
+	}
 }
 
 } // namespace physics

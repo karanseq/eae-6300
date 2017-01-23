@@ -4,6 +4,7 @@
 #include "GLib.h"
 #include "Logger\Logger.h"
 #include "Memory\AllocatorOverrides.h"
+#include "Physics\PhysicsObject.h"
 
 // game includes
 #include "Game\GameUtils.h"
@@ -14,7 +15,9 @@ namespace monsterchase {
 Player::Player(const char* i_name) : controller_(new (MonsterChase::GetAllocator()) PlayerController()),
 	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, i_name)),
 	sprite_(GameUtils::CreateSprite(GameData::PLAYER_TEXTURE_NAME))
-{}
+{
+	((PlayerController*)controller_)->GetPhysicsObject()->SetMass(5.0f);
+}
 
 Player::~Player()
 {
@@ -49,7 +52,7 @@ void Player::Render()
 {
 	if (sprite_)
 	{
-		GLib::Point2D offset = { controller_->GetGameObject()->GetPosition().x() * MonsterChase::TILE_SIZE, controller_->GetGameObject()->GetPosition().y() * MonsterChase::TILE_SIZE };
+		GLib::Point2D offset = { controller_->GetGameObject()->GetPosition().x(), controller_->GetGameObject()->GetPosition().y() };
 		GLib::Sprites::RenderSprite(*sprite_, offset, 0.0f);
 	}
 }

@@ -83,7 +83,9 @@ void MonsterChase::Destroy()
 }
 
 MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
-	player_(nullptr)
+	player_(nullptr),
+	num_monsters_(0),
+	ascii_index_(0)
 {
 	// allocate memory for the game objects
 	void* aligned_memory = engine::memory::BlockAllocator::GetDefaultAllocator()->Alloc(MEMORY_SIZE);
@@ -103,7 +105,7 @@ MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
 	engine::memory::BlockAllocator::AddBlockAllocator(MonsterChase::game_allocator_);
 
 	// reserve memory for the monster pointers
-	monsters_.reserve(MAX_MONSTERS);
+	//monsters_.reserve(MAX_MONSTERS);
 }
 
 MonsterChase::~MonsterChase()
@@ -148,12 +150,12 @@ bool MonsterChase::Init()
 	LOG("Created the player...");
 
 	// create the monsters
-	const uint8_t num_monsters = (MAX_MONSTERS / 2) + rand() % (MAX_MONSTERS / 2);
+	/*const uint8_t num_monsters = (MAX_MONSTERS / 2) + rand() % (MAX_MONSTERS / 2);
 	for (uint8_t i = 0; i < num_monsters; ++i)
 	{
 		CreateMonster();
 	}
-	LOG("Created %d monsters...",  num_monsters_);
+	LOG("Created %d monsters...",  num_monsters_);*/
 
 	// tell the engine we want to be ticked
 	engine::time::Updater::Get()->AddTickable(this);

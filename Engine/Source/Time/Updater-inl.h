@@ -5,7 +5,6 @@
 
 // engine includes
 #include "Assert\Assert.h"
-#include "Common\HelperMacros.h"
 #include "Logger\Logger.h"
 
 namespace engine {
@@ -18,6 +17,7 @@ inline Updater* Updater::Get()
 
 inline void Updater::AddTickable(InterfaceTickable* i_tickable)
 {
+	// validate input
 	ASSERT(i_tickable);
 
 	// check if this object already exists
@@ -33,7 +33,9 @@ inline void Updater::AddTickable(InterfaceTickable* i_tickable)
 
 inline void Updater::RemoveTickable(InterfaceTickable* i_tickable)
 {
+	// validate input
 	ASSERT(i_tickable);
+	// can't remove an object if there are none
 	ASSERT(num_tickables_ > 0);
 
 	// check if this object exists

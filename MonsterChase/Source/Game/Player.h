@@ -47,6 +47,8 @@ public:
 	inline engine::gameobject::IdentityComponent* GetIdentity() const;
 	inline void SetIdentity(engine::gameobject::IdentityComponent* i_identity);
 
+	inline GLib::Sprites::Sprite* GetSprite() const;
+
 private:
 	engine::gameobject::InterfaceGameObjectController*					controller_;
 	engine::gameobject::IdentityComponent*								identity_;
