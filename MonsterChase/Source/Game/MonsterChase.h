@@ -4,6 +4,9 @@
 // library includes
 #include <vector>
 
+// engine includes
+#include "Time\InterfaceTickable.h"
+
 // game includes
 #include "Game\GameTypes.h"
 
@@ -26,7 +29,7 @@ bool StartUp();
 
 void Shutdown();
 
-class MonsterChase
+class MonsterChase : public engine::time::InterfaceTickable
 {
 private:
 	MonsterChase();
@@ -41,8 +44,8 @@ public:
 	// game initialization
 	bool Init();
 	// the main game loop
-	// called every tick from main
-	void Update();
+	// called every tick by the engine
+	virtual void Update(float dt) override;
 	// the rendering loop
 	// called every tick from Update
 	void Render();

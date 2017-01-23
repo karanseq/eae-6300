@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClInclude Include="Source\Assert\Assert.h" />
     <ClInclude Include="Source\Common\Engine.h" />
+    <ClInclude Include="Source\Common\HelperMacros.h" />
     <ClInclude Include="Source\Data\BitArray-inl.h" />
     <ClInclude Include="Source\Data\BitArray.h" />
     <ClInclude Include="Source\GameObject\GameObject-inl.h" />
@@ -176,7 +177,10 @@
     <ClInclude Include="Source\Memory\AllocatorOverrides.h" />
     <ClInclude Include="Source\Memory\FixedSizeAllocator-inl.h" />
     <ClInclude Include="Source\Memory\FixedSizeAllocator.h" />
-    <ClInclude Include="Source\Timer\TimerUtil.h" />
+    <ClInclude Include="Source\Time\InterfaceTickable.h" />
+    <ClInclude Include="Source\Time\TimerUtil.h" />
+    <ClInclude Include="Source\Time\Updater-inl.h" />
+    <ClInclude Include="Source\Time\Updater.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Common\Private\Engine.cpp" />
@@ -192,8 +196,9 @@
     <ClCompile Include="Source\Memory\Private\BlockAllocator.cpp" />
     <ClCompile Include="Source\Memory\Private\AllocatorOverrides.cpp" />
     <ClCompile Include="Source\Memory\Private\FixedSizeAllocator.cpp" />
-    <ClCompile Include="Source\Timer\Private\TimerUtil.cpp" />
-    <ClCompile Include="Source\Timer\Private\TimerUtil.win32.cpp" />
+    <ClCompile Include="Source\Time\Private\TimerUtil.cpp" />
+    <ClCompile Include="Source\Time\Private\TimerUtil.win32.cpp" />
+    <ClCompile Include="Source\Time\Private\Updater.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

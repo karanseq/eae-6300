@@ -2,6 +2,7 @@
 
 // engine includes
 #include "Math\Vec3D.h"
+#include "Common\HelperMacros.h"
 #include "Memory\AllocatorOverrides.h"
 
 // game includes

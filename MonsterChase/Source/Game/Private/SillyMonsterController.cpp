@@ -1,6 +1,7 @@
 #include "Game\SillyMonsterController.h"
 
 // engine includes
+#include "Common\HelperMacros.h"
 #include "Memory\AllocatorOverrides.h"
 
 // game includes

@@ -6,7 +6,7 @@
 
 // engine includes
 #include "Assert\Assert.h"
-#include "Memory\AllocatorUtil.h"
+#include "Common\HelperMacros.h"
 
 namespace engine {
 namespace gameobject {

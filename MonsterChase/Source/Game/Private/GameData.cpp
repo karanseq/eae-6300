@@ -3,7 +3,7 @@
 // library includes
 
 // engine includes
-#include "Memory\AllocatorUtil.h"
+#include "Common\HelperMacros.h"
 
 namespace monsterchase {
 

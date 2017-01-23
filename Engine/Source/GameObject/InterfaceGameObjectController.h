@@ -22,7 +22,7 @@ public:
 	virtual void SetGameObject(GameObject* i_game_object) = 0;
 
 	virtual void UpdateGameObject() = 0;
-};
+}; // class InterfaceGameObjectController
 
 } // namespace gameobject
 } // namespace engine

@@ -10,11 +10,6 @@
 #define DEAD_FILL								0xDD
 #define CLEAN_FILL								0xCD
 
-// TODO: These are used in a lot of places. Find a better place for them.
-#define SAFE_DELETE(ptr)						do { if (ptr) { delete (ptr); (ptr) = nullptr; } } while (0)
-#define SAFE_DELETE_ARRAY(ptr)					do { if (ptr) { delete[] (ptr); (ptr) = nullptr; } } while (0)
-#define SAFE_FREE(ptr)							do { if (ptr) { free((ptr)); (ptr) = nullptr; } } while (0)
-
 namespace engine {
 namespace memory {
 

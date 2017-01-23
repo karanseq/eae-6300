@@ -2,11 +2,13 @@
 
 // engine includes 
 #include "Assert\Assert.h"
+#include "Common\Engine.h"
 #include "GLib.h"
 #include "Logger\Logger.h"
 #include "Math\Vec2D.h"
 #include "Memory\AllocatorOverrides.h"
 #include "Memory\BlockAllocator.h"
+#include "Time\Updater.h"
 
 // game includes
 #include "Game\GameUtils.h"
@@ -106,6 +108,9 @@ MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
 
 MonsterChase::~MonsterChase()
 {
+	// tell the engine we no longer want to be ticked
+	engine::time::Updater::Get()->RemoveTickable(this);
+
 	// deallocate the player
 	SAFE_DELETE(player_);
 
@@ -150,14 +155,16 @@ bool MonsterChase::Init()
 	}
 	LOG("Created %d monsters...",  num_monsters_);
 
+	// tell the engine we want to be ticked
+	engine::time::Updater::Get()->AddTickable(this);
+
 	game_state_ = GameStates::kGameStateRunning;
 
 	return true;
 }
 
-void MonsterChase::Update()
+void MonsterChase::Update(float dt)
 {
-	// TODO: change this to a dynamic value
 	bool quit = false;
 	GLib::Service(quit);
 
@@ -165,9 +172,12 @@ void MonsterChase::Update()
 	{
 		Render();
 	}
-
-	// quit if GLib says we should quit
-	game_state_ = quit ? GameStates::kGameStateQuit : game_state_;
+	
+	// request the engine to quit if we need to
+	if (quit || game_state_ == GameStates::kGameStateQuit)
+	{
+		engine::RequestQuit();
+	}
 }
 
 void MonsterChase::Render()

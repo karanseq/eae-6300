@@ -1,6 +1,7 @@
-#include "Timer\TimerUtil.h"
+#include "Time\TimerUtil.h"
 
 namespace engine {
+namespace time {
 
 const float TimerUtil::DESIRED_FPS = 60.0f;
 const float TimerUtil::DESIRED_FRAMETIME_MS = 1000.0f / TimerUtil::DESIRED_FPS;
@@ -28,4 +29,5 @@ float TimerUtil::GetLastFrameTime_ms()
 #endif
 }
 
+} // namespace time
 } // namespace engine

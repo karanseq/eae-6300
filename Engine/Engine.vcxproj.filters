@@ -46,17 +46,17 @@
     <Filter Include="Header Files\Assert">
       <UniqueIdentifier>{736dea9f-f22e-4df4-87d1-1603858ca447}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Timer">
-      <UniqueIdentifier>{7bb64fa2-4cba-4de1-99c1-7d44adcaf43f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Timer">
-      <UniqueIdentifier>{2159208c-fe85-48fa-b150-c9307672e9d3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Common">
       <UniqueIdentifier>{caaa9181-16ff-473f-a98e-9ad9b862fa3d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Common">
       <UniqueIdentifier>{272385d7-9fe6-49ac-9876-17b235118cda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Time">
+      <UniqueIdentifier>{a6ca5f58-8212-4c46-ad4e-f3ebc09a8435}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Time">
+      <UniqueIdentifier>{ab236536-4803-40ad-9ef6-3eb441c3e26c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -129,9 +129,6 @@
     <ClInclude Include="Source\GameObject\GameObject-inl.h">
       <Filter>Header Files\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Timer\TimerUtil.h">
-      <Filter>Header Files\Timer</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Common\Engine.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
@@ -146,6 +143,21 @@
     </ClInclude>
     <ClInclude Include="Source\Math\Size-inl.h">
       <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Time\TimerUtil.h">
+      <Filter>Header Files\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Time\Updater.h">
+      <Filter>Header Files\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\HelperMacros.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Time\InterfaceTickable.h">
+      <Filter>Header Files\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Time\Updater-inl.h">
+      <Filter>Header Files\Time</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -179,12 +191,6 @@
     <ClCompile Include="Source\Memory\Private\AllocatorUtil.cpp">
       <Filter>Source Files\Memory</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Timer\Private\TimerUtil.cpp">
-      <Filter>Source Files\Timer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Timer\Private\TimerUtil.win32.cpp">
-      <Filter>Source Files\Timer</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Common\Private\Engine.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
@@ -193,6 +199,15 @@
     </ClCompile>
     <ClCompile Include="Source\Math\Private\Size.cpp">
       <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Time\Private\TimerUtil.cpp">
+      <Filter>Source Files\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Time\Private\TimerUtil.win32.cpp">
+      <Filter>Source Files\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Time\Private\Updater.cpp">
+      <Filter>Source Files\Time</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

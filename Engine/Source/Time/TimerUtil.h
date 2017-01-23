@@ -2,6 +2,7 @@
 #define TIMER_UTIL_H_
 
 namespace engine {
+namespace time {
 
 class TimerUtil
 {
@@ -31,6 +32,7 @@ private:
 
 }; // class TimerUtil
 
+} // namespace time
 } // namespace engine
 
 #endif // TIMER_UTIL_H_

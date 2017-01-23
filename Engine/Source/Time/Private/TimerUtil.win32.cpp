@@ -1,9 +1,10 @@
-#include "Timer\TimerUtil.h"
+#include "Time\TimerUtil.h"
 
 // library includes
 #include <Windows.h>
 
 namespace engine {
+namespace time {
 
 float TimerUtil::CalculateLastFrameTime_ms()
 {
@@ -46,4 +47,5 @@ double TimerUtil::GetFrequency()
 	return pc_frequency_;
 }
 
+} // namespace time
 } // namespace engine
