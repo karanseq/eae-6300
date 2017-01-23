@@ -18,8 +18,6 @@ inline PlayerController& PlayerController::operator=(const PlayerController& i_c
 
 		SAFE_DELETE(physics_object_);
 		physics_object_ = new (MonsterChase::GetAllocator()) engine::physics::PhysicsObject(*(i_controller.physics_object_));
-
-		move_direction_ = i_controller.move_direction_;
 	}
 	return *this;
 }
@@ -30,7 +28,6 @@ inline PlayerController& PlayerController::operator=(PlayerController&& i_contro
 	{
 		std::swap(game_object_, i_controller.game_object_);
 		std::swap(physics_object_, i_controller.physics_object_);
-		move_direction_ = i_controller.move_direction_;
 	}
 	return *this;
 }
@@ -57,16 +54,6 @@ inline void PlayerController::SetPhysicsObject(engine::physics::PhysicsObject* i
 	ASSERT(i_physics_object);
 	SAFE_DELETE(physics_object_);
 	physics_object_ = i_physics_object;
-}
-
-inline MoveDirections PlayerController::GetMoveDirection() const
-{
-	return move_direction_;
-}
-
-inline void PlayerController::SetMoveDirection(MoveDirections i_move_direction)
-{
-	move_direction_ = i_move_direction;
 }
 
 } // namespace monsterchase

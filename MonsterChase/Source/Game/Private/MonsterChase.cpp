@@ -28,9 +28,26 @@ void AcceptKey(unsigned int i_key_id, bool i_went_down)
 	LOG(buffer);
 #endif
 
-	if (i_went_down)
+	switch (static_cast<KeyboardKeys>(i_key_id))
 	{
-		MonsterChase::GetInstance()->ValidateInput(i_key_id);
+	case KeyboardKeys::kA:
+		MonsterChase::KEY_A_PRESSED = i_went_down;
+		break;
+	case KeyboardKeys::kD:
+		MonsterChase::KEY_D_PRESSED = i_went_down;
+		break;
+	case KeyboardKeys::kM:
+		MonsterChase::KEY_M_PRESSED = i_went_down;
+		break;
+	case KeyboardKeys::kQ:
+		MonsterChase::KEY_Q_PRESSED = i_went_down;
+		break;
+	case KeyboardKeys::kS:
+		MonsterChase::KEY_S_PRESSED = i_went_down;
+		break;
+	case KeyboardKeys::kW:
+		MonsterChase::KEY_W_PRESSED = i_went_down;
+		break;
 	}
 }
 
@@ -67,6 +84,13 @@ void Shutdown()
 // static member initialization
 MonsterChase* MonsterChase::instance_ = nullptr;
 engine::memory::BlockAllocator* MonsterChase::game_allocator_ = nullptr;
+
+bool MonsterChase::KEY_A_PRESSED = false;
+bool MonsterChase::KEY_D_PRESSED = false;
+bool MonsterChase::KEY_M_PRESSED = false;
+bool MonsterChase::KEY_Q_PRESSED = false;
+bool MonsterChase::KEY_S_PRESSED = false;
+bool MonsterChase::KEY_W_PRESSED = false;
 
 MonsterChase* MonsterChase::Create()
 {
@@ -170,16 +194,20 @@ void MonsterChase::Update(float dt)
 	bool quit = false;
 	GLib::Service(quit);
 
-	if (!quit)
-	{
-		Render();
-	}
+	CheckInput();
 	
 	// request the engine to quit if we need to
 	if (quit || game_state_ == GameStates::kGameStateQuit)
 	{
 		engine::RequestQuit();
 	}
+
+	// update elements
+	player_->Update();
+	UpdateMonsters();
+
+	// render elements
+	Render();
 }
 
 void MonsterChase::Render()
@@ -211,7 +239,7 @@ void MonsterChase::PrintGameInformation()
 	player_->Print();
 }
 
-void MonsterChase::ValidateInput(uint8_t i_input)
+void MonsterChase::CheckInput()
 {
 	// execute this function only in this state
 	if (game_state_ != GameStates::kGameStateRunning)
@@ -219,27 +247,17 @@ void MonsterChase::ValidateInput(uint8_t i_input)
 		return;
 	}
 
-	bool is_valid_input = false;
-	if (i_input == static_cast<uint8_t>(KeyboardKeys::kQ))
+	if (MonsterChase::KEY_Q_PRESSED)
 	{
+		KEY_Q_PRESSED = false;
 		game_state_ = GameStates::kGameStateQuit;
 		return;
 	}
 
-	if (i_input == static_cast<uint8_t>(KeyboardKeys::kM))
+	if (MonsterChase::KEY_M_PRESSED)
 	{
-		is_valid_input = true;
+		KEY_M_PRESSED = false;
 		CreateMonster();
-	}
-
-	is_valid_input = player_->HandleUserInput(static_cast<KeyboardKeys>(i_input));
-
-	if (is_valid_input)
-	{
-		player_->Update();
-		UpdateMonsters();
-
-		PrintGameInformation();
 	}
 }
 

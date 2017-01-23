@@ -37,7 +37,6 @@ public:
 
 	void Update();
 	void Render();
-	bool HandleUserInput(KeyboardKeys i_key);
 	void Print();
 
 	// accessors and mutators

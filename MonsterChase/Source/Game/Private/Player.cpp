@@ -16,7 +16,7 @@ Player::Player(const char* i_name) : controller_(new (MonsterChase::GetAllocator
 	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, i_name)),
 	sprite_(GameUtils::CreateSprite(GameData::PLAYER_TEXTURE_NAME))
 {
-	((PlayerController*)controller_)->GetPhysicsObject()->SetMass(5.0f);
+	(static_cast<PlayerController*>(controller_))->GetPhysicsObject()->SetMass(50.0f);
 }
 
 Player::~Player()
@@ -45,6 +45,24 @@ Player::Player(Player&& i_copy) : controller_(i_copy.controller_),
 
 void Player::Update()
 {
+	PlayerController* player_controller = static_cast<PlayerController*>(controller_);
+	if (MonsterChase::KEY_A_PRESSED)
+	{
+		player_controller->Move(MoveDirections::kMoveDirectionLeft);
+	}
+	if (MonsterChase::KEY_D_PRESSED)
+	{
+		player_controller->Move(MoveDirections::kMoveDirectionRight);
+	}
+	if (MonsterChase::KEY_W_PRESSED)
+	{
+		player_controller->Move(MoveDirections::kMoveDirectionUp);
+	}
+	if (MonsterChase::KEY_S_PRESSED)
+	{
+		player_controller->Move(MoveDirections::kMoveDirectionDown);
+	}
+
 	controller_->UpdateGameObject();
 }
 
@@ -54,28 +72,6 @@ void Player::Render()
 	{
 		GLib::Point2D offset = { controller_->GetGameObject()->GetPosition().x(), controller_->GetGameObject()->GetPosition().y() };
 		GLib::Sprites::RenderSprite(*sprite_, offset, 0.0f);
-	}
-}
-
-bool Player::HandleUserInput(KeyboardKeys i_key)
-{
-	switch (i_key)
-	{
-	case KeyboardKeys::kA:
-		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionLeft);
-		return true;
-	case KeyboardKeys::kD:
-		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionRight);
-		return true;
-	case KeyboardKeys::kW:
-		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionUp);
-		return true;
-	case KeyboardKeys::kS:
-		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionDown);
-		return true;
-	default:
-		reinterpret_cast<PlayerController*>(controller_)->SetMoveDirection(MoveDirections::kMoveDirectionNone);
-		return false;
 	}
 }
 

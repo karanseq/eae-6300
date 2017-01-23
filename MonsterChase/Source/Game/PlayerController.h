@@ -36,23 +36,24 @@ public:
 	// move assignment operator
 	inline PlayerController& operator=(PlayerController&& i_controller);
 
-	/* Implement InterfaceGameObjectController */
+	// Implement InterfaceGameObjectController
 	PlayerController* Clone() const override;
+	
 	inline engine::gameobject::GameObject* GetGameObject() const override;
 	inline void SetGameObject(engine::gameobject::GameObject* i_game_object) override;
 
 	void UpdateGameObject() override;
 
+	// functions
+	void Move(MoveDirections i_move_direction);
+
+	// accessors & mutators
 	inline engine::physics::PhysicsObject* GetPhysicsObject() const;
 	inline void SetPhysicsObject(engine::physics::PhysicsObject* i_physics_object);
-
-	inline MoveDirections GetMoveDirection() const;
-	inline void SetMoveDirection(MoveDirections i_move_direction);
 
 private:
 	engine::gameobject::GameObject*							game_object_;
 	engine::physics::PhysicsObject*							physics_object_;
-	MoveDirections											move_direction_;
 
 }; // class PlayerController
 

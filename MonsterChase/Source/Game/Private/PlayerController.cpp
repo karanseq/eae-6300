@@ -12,8 +12,7 @@
 namespace monsterchase {
 
 PlayerController::PlayerController() : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject()),
-	physics_object_(new (MonsterChase::GetAllocator()) engine::physics::PhysicsObject(game_object_)),
-	move_direction_(MoveDirections::kMoveDirectionNone)
+	physics_object_(new (MonsterChase::GetAllocator()) engine::physics::PhysicsObject(game_object_))
 {
 	// validate state
 	ASSERT(game_object_);
@@ -23,8 +22,7 @@ PlayerController::PlayerController() : game_object_(new (MonsterChase::GetAlloca
 }
 
 PlayerController::PlayerController(engine::gameobject::GameObject* i_game_object, engine::physics::PhysicsObject* i_physics_object) : game_object_(i_game_object),
-	physics_object_(i_physics_object),
-	move_direction_(MoveDirections::kMoveDirectionNone)
+	physics_object_(i_physics_object)
 {
 	// validate state
 	ASSERT(game_object_);
@@ -44,8 +42,7 @@ PlayerController::~PlayerController()
 }
 
 PlayerController::PlayerController(const PlayerController& i_copy) : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject(*(i_copy.game_object_))),
-	physics_object_(new (MonsterChase::GetAllocator()) engine::physics::PhysicsObject(*(i_copy.physics_object_))),
-	move_direction_(i_copy.move_direction_)
+	physics_object_(new (MonsterChase::GetAllocator()) engine::physics::PhysicsObject(*(i_copy.physics_object_)))
 {
 	// validate state
 	ASSERT(game_object_);
@@ -55,8 +52,7 @@ PlayerController::PlayerController(const PlayerController& i_copy) : game_object
 }
 
 PlayerController::PlayerController(PlayerController&& i_copy) : game_object_(i_copy.game_object_),
-	physics_object_(i_copy.physics_object_),
-	move_direction_(i_copy.move_direction_)
+	physics_object_(i_copy.physics_object_)
 {
 	i_copy.game_object_ = nullptr;
 	i_copy.physics_object_ = nullptr;
@@ -70,32 +66,33 @@ PlayerController* PlayerController::Clone() const
 
 	// now create a new controller with the cloned game object
 	PlayerController* controller = new (MonsterChase::GetAllocator()) PlayerController(game_object, physics_object);
-	controller->move_direction_ = move_direction_;
 	return controller;
 }
 
 void PlayerController::UpdateGameObject()
 {
+	
+	
+}
+
+void PlayerController::Move(MoveDirections i_move_direction)
+{
 	static const float impulse = 0.1f;
-	switch (move_direction_)
+	switch (i_move_direction)
 	{
 	case MoveDirections::kMoveDirectionLeft:
-		//game_object_->SetPosition(game_object_->GetPosition() - engine::math::Vec3D::UNIT_X);
 		physics_object_->ApplyImpulse(engine::math::Vec3D(-impulse, 0.0f, 0.0f));
 		break;
 
 	case MoveDirections::kMoveDirectionRight:
-		//game_object_->SetPosition(game_object_->GetPosition() + engine::math::Vec3D::UNIT_X);
 		physics_object_->ApplyImpulse(engine::math::Vec3D(impulse, 0.0f, 0.0f));
 		break;
 
 	case MoveDirections::kMoveDirectionUp:
-		//game_object_->SetPosition(game_object_->GetPosition() + engine::math::Vec3D::UNIT_Y);
 		physics_object_->ApplyImpulse(engine::math::Vec3D(0.0f, impulse, 0.0f));
 		break;
 
 	case MoveDirections::kMoveDirectionDown:
-		//game_object_->SetPosition(game_object_->GetPosition() - engine::math::Vec3D::UNIT_Y);
 		physics_object_->ApplyImpulse(engine::math::Vec3D(0.0f, -impulse, 0.0f));
 		break;
 

@@ -52,7 +52,7 @@ public:
 
 	// I/O functions
 	void PrintGameInformation();
-	void ValidateInput(uint8_t i_input);
+	void CheckInput();
 	bool LoadGameData();
 
 	// game logic
@@ -64,6 +64,13 @@ public:
 
 	inline GameStates GetState() const												{ return game_state_; }
 	static inline engine::memory::BlockAllocator* GetAllocator()					{ return MonsterChase::game_allocator_; }
+
+	static bool											KEY_A_PRESSED;
+	static bool											KEY_D_PRESSED;
+	static bool											KEY_M_PRESSED;
+	static bool											KEY_Q_PRESSED;
+	static bool											KEY_S_PRESSED;
+	static bool											KEY_W_PRESSED;
 
 	// game constants
 	static const size_t									MEMORY_SIZE = 1024 * 5;
