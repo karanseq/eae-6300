@@ -82,7 +82,8 @@ public:
 	static const uint8_t								MAX_MONSTERS = 10;
 	static const uint8_t								MAX_MONSTER_TTL = 25;
 	static const uint8_t								MAX_NAME_LENGTH = 10;
-	static const uint8_t								TILE_SIZE = 20;
+	static const uint16_t								SCREEN_WIDTH = 1280;
+	static const uint16_t								SCREEN_HEIGHT = 800;
 
 private:
 	// disable default copy constructor

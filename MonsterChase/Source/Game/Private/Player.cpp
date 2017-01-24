@@ -16,7 +16,9 @@ Player::Player(const char* i_name) : controller_(new (MonsterChase::GetAllocator
 	identity_(new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(0, 0, i_name)),
 	sprite_(GameUtils::CreateSprite(GameData::PLAYER_TEXTURE_NAME))
 {
-	(static_cast<PlayerController*>(controller_))->GetPhysicsObject()->SetMass(50.0f);
+	engine::physics::PhysicsObject* physics_object = static_cast<PlayerController*>(controller_)->GetPhysicsObject();
+	physics_object->SetMass(50.0f);
+	physics_object->SetMaxVelocity(engine::math::Vec3D(0.5f, 0.5f, 0.5f));
 }
 
 Player::~Player()

@@ -25,7 +25,7 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 	{
 		// TODO: Is this the right place to do this?
 		// initialize GLib
-		bool success = GLib::Initialize(i_h_instance, i_n_cmd_show, "MonsterChase", -1, 1280, 800);
+		bool success = GLib::Initialize(i_h_instance, i_n_cmd_show, "MonsterChase", -1, monsterchase::MonsterChase::SCREEN_WIDTH, monsterchase::MonsterChase::SCREEN_HEIGHT);
 		ASSERT(success);
 
 #ifdef ENABLE_TESTS

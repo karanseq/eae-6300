@@ -15,8 +15,10 @@ namespace physics {
 			mass_ = i_copy.mass_;
 			inverse_mass_ = i_copy.inverse_mass_;
 			coeff_drag_ = i_copy.coeff_drag_;
-			acceleration_ = i_copy.acceleration_;
-			prev_position_ = i_copy.prev_position_;
+			force_ = i_copy.force_;
+			prev_velocity_ = i_copy.prev_velocity_;
+			curr_velocity_ = i_copy.curr_velocity_;
+			max_velocity_ = i_copy.max_velocity_;
 		}
 
 		return *this;
@@ -67,24 +69,35 @@ namespace physics {
 		coeff_drag_ = i_drag;
 	}
 
-	inline const engine::math::Vec3D& PhysicsObject::GetAcceleration() const
+	inline const engine::math::Vec3D& PhysicsObject::GetForce() const
 	{
-		return acceleration_;
+		return force_;
 	}
 
-	inline void PhysicsObject::SetAcceleration(const engine::math::Vec3D& i_acceleration)
+	inline void PhysicsObject::SetForce(const engine::math::Vec3D& i_force)
 	{
-		acceleration_ = i_acceleration;
+		force_ = i_force;
 	}
 
-	inline const engine::math::Vec3D& PhysicsObject::GetPreviousPosition() const
+	inline const engine::math::Vec3D& PhysicsObject::GetVelocity() const
 	{
-		return prev_position_;
+		return curr_velocity_;
 	}
 
-	inline void PhysicsObject::SetPreviousPosition(const engine::math::Vec3D& i_prev_position)
+	inline void PhysicsObject::SetVelocity(const engine::math::Vec3D& i_velocity)
 	{
-		prev_position_ = i_prev_position;
+		curr_velocity_ = i_velocity;
+	}
+
+	inline const engine::math::Vec3D& PhysicsObject::GetMaxVelocity() const
+	{
+		return max_velocity_;
+	}
+
+	inline void PhysicsObject::SetMaxVelocity(const engine::math::Vec3D& i_max_velocity)
+	{
+		max_velocity_ = i_max_velocity;
+		max_velocity_length_squared_ = max_velocity_.LengthSquared();
 	}
 
 } // namespace physics

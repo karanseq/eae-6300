@@ -71,8 +71,11 @@ PlayerController* PlayerController::Clone() const
 
 void PlayerController::UpdateGameObject()
 {
-	
-	
+	// wrap around the screen
+	/*engine::math::Vec3D position = game_object_->GetPosition();
+	position.x((position.x() < -MonsterChase::SCREEN_WIDTH / 2) ? MonsterChase::SCREEN_WIDTH / 2 : (position.x() > MonsterChase::SCREEN_WIDTH / 2 ? -MonsterChase::SCREEN_WIDTH : position.x()));
+	position.y((position.y() < -MonsterChase::SCREEN_HEIGHT / 2) ? MonsterChase::SCREEN_HEIGHT / 2 : (position.y() > MonsterChase::SCREEN_HEIGHT / 2 ? -MonsterChase::SCREEN_HEIGHT : position.y()));
+	game_object_->SetPosition(position);*/
 }
 
 void PlayerController::Move(MoveDirections i_move_direction)
