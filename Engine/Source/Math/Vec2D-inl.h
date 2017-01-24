@@ -101,5 +101,20 @@ namespace math {
 		return Vec2D(-x(), -y());
 	}
 
+	inline bool Vec2D::IsZero() const
+	{
+		return (FuzzyEquals(x_, 0.0f) && FuzzyEquals(y_, 0.0f));
+	}
+
+	inline bool Vec2D::IsOne() const
+	{
+		return (FuzzyEquals(x_, 1.0f) && FuzzyEquals(y_, 1.0f));
+	}
+
+	inline float Vec2D::LengthSquared() const
+	{
+		return (x_ * x_ + y_ * y_);
+	}
+
 } // namespace math
 } // namespace engine

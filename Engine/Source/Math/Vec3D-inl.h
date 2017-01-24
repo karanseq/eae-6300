@@ -116,6 +116,21 @@ namespace math {
 	{
 		return Vec3D(-x(), -y(), -z());
 	}
+	
+	inline bool Vec3D::IsZero() const
+	{
+		return (FuzzyEquals(x_, 0.0f) && FuzzyEquals(y_, 0.0f) && FuzzyEquals(z_, 0.0f));
+	}
+
+	inline bool Vec3D::IsOne() const
+	{
+		return (FuzzyEquals(x_, 1.0f) && FuzzyEquals(y_, 1.0f) && FuzzyEquals(z_, 1.0f));
+	}
+
+	inline float Vec3D::LengthSquared() const
+	{
+		return (x_ * x_ + y_ * y_ + z_ * z_);
+	}
 
 } // namespace math
 } // namespace engine

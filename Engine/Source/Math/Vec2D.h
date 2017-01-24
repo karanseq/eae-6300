@@ -44,6 +44,14 @@ namespace math {
 		// unary
 		inline Vec2D operator-() const;
 
+		// functions
+		inline bool IsZero() const;
+		inline bool IsOne() const;
+		inline float LengthSquared() const;
+		float Length() const;
+		void Normalize();
+		Vec2D Normalize() const;
+
 		// constants
 		static const Vec2D ZERO;
 		static const Vec2D UNIT;

@@ -1,5 +1,8 @@
 #include "Math\Vec3D.h"
 
+// library includes
+#include <cmath>
+
 namespace engine {
 namespace math {
 
@@ -18,6 +21,36 @@ namespace math {
 		y_(i_copy.y_),
 		z_(i_copy.z_)
 	{}
+
+	float Vec3D::Length() const
+	{
+		return std::sqrtf(LengthSquared());
+	}
+
+	void Vec3D::Normalize()
+	{
+		float length_squared = x_ * x_ + y_ * y_ + z_ * z_;
+
+		// return if already normalized
+		if (FuzzyEquals(length_squared, 1.0f))
+		{
+			return;
+		}
+
+		float length = std::sqrtf(length_squared);
+		length = 1.0f / length;
+
+		x_ *= length;
+		y_ *= length;
+		z_ *= length;
+	}
+
+	Vec3D Vec3D::Normalize() const
+	{
+		Vec3D v(*this);
+		v.Normalize();
+		return v;
+	}
 
 } // namespace math
 } // namespace engine

@@ -46,6 +46,14 @@ namespace math {
 		// unary
 		inline Vec3D operator-() const;
 
+		// functions
+		inline bool IsZero() const;
+		inline bool IsOne() const;
+		inline float LengthSquared() const;
+		float Length() const;
+		void Normalize();
+		Vec3D Normalize() const;
+
 		// constants
 		static const Vec3D ZERO;
 		static const Vec3D UNIT;
