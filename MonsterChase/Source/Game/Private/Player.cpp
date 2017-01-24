@@ -18,7 +18,6 @@ Player::Player(const char* i_name) : controller_(new (MonsterChase::GetAllocator
 {
 	engine::physics::PhysicsObject* physics_object = static_cast<PlayerController*>(controller_)->GetPhysicsObject();
 	physics_object->SetMass(50.0f);
-	physics_object->SetMaxVelocity(engine::math::Vec3D(0.5f, 0.5f, 0.5f));
 }
 
 Player::~Player()
