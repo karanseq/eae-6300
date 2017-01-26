@@ -59,7 +59,6 @@ private:
 	float														mass_;
 	float														inverse_mass_;
 	float														coeff_drag_;
-	engine::math::Vec3D											prev_velocity_;
 	engine::math::Vec3D											curr_velocity_;
 }; // class PhysicsObject
 

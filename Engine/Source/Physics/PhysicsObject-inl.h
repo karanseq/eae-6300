@@ -15,7 +15,6 @@ namespace physics {
 			mass_ = i_copy.mass_;
 			inverse_mass_ = i_copy.inverse_mass_;
 			coeff_drag_ = i_copy.coeff_drag_;
-			prev_velocity_ = i_copy.prev_velocity_;
 			curr_velocity_ = i_copy.curr_velocity_;
 		}
 

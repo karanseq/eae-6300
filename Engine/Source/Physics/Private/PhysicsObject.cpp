@@ -20,7 +20,6 @@ PhysicsObject::PhysicsObject(engine::gameobject::GameObject* i_game_object, floa
 	mass_(i_mass),
 	inverse_mass_(0.0f),
 	coeff_drag_(i_drag),
-	prev_velocity_(engine::math::Vec3D::ZERO),
 	curr_velocity_(engine::math::Vec3D::ZERO)
 {
 	// validate inputs
@@ -41,7 +40,6 @@ PhysicsObject::PhysicsObject(const PhysicsObject& i_copy) : is_awake_(i_copy.is_
 	mass_(i_copy.mass_),
 	inverse_mass_(i_copy.inverse_mass_),
 	coeff_drag_(i_copy.coeff_drag_),
-	prev_velocity_(i_copy.prev_velocity_),
 	curr_velocity_(i_copy.curr_velocity_)
 {}
 
@@ -53,6 +51,9 @@ void PhysicsObject::Update(float dt)
 		return;
 	}
 
+	// save previous velocity
+	engine::math::Vec3D prev_velocity = curr_velocity_;
+
 	// apply drag to velocity when no force is acting
 	curr_velocity_ += (curr_velocity_ * -coeff_drag_);
 
@@ -61,17 +62,14 @@ void PhysicsObject::Update(float dt)
 	{
 		// bring the object to a stop
 		curr_velocity_ = engine::math::Vec3D::ZERO;
-		prev_velocity_ = engine::math::Vec3D::ZERO;
+		prev_velocity = engine::math::Vec3D::ZERO;
 
 		// prevent further simulation
 		is_awake_ = false;
 	}
 
 	// use midpoint numerical integration to calculate new position
-	engine::math::Vec3D new_position = game_object_->GetPosition() + ((prev_velocity_ + curr_velocity_) * 0.5f) * dt;
-
-	// save current velocity
-	prev_velocity_ = curr_velocity_;
+	engine::math::Vec3D new_position = game_object_->GetPosition() + ((prev_velocity + curr_velocity_) * 0.5f) * dt;
 
 	// update game object
 	game_object_->SetPosition(new_position);
