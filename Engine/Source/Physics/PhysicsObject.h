@@ -49,6 +49,7 @@ public:
 	// constants
 	static const float											DEFAULT_MASS;
 	static const float											DEFAULT_COEFF_DRAG;
+	static const float											MAX_COEFF_DRAG;
 	static const float											MIN_VELOCITY_LENGTH_SQUARED;
 	static const float											MAX_VELOCITY_LENGTH_SQUARED;
 

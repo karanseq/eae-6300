@@ -63,7 +63,7 @@ namespace physics {
 
 	inline void PhysicsObject::SetDrag(float i_drag)
 	{
-		ASSERT(!engine::math::IsNaN(i_drag));
+		ASSERT(!engine::math::IsNaN(i_drag) && i_drag < MAX_COEFF_DRAG);
 		coeff_drag_ = i_drag;
 	}
 

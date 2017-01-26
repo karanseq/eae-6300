@@ -11,6 +11,7 @@ namespace physics {
 // static member initialization
 const float PhysicsObject::DEFAULT_MASS = 2.0f;
 const float PhysicsObject::DEFAULT_COEFF_DRAG = 0.025f;
+const float PhysicsObject::MAX_COEFF_DRAG = 0.9f;
 const float PhysicsObject::MIN_VELOCITY_LENGTH_SQUARED = 0.000075f;
 const float PhysicsObject::MAX_VELOCITY_LENGTH_SQUARED = 6.00f;
 
