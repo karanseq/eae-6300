@@ -177,6 +177,11 @@
     <ClInclude Include="Source\Memory\AllocatorOverrides.h" />
     <ClInclude Include="Source\Memory\FixedSizeAllocator-inl.h" />
     <ClInclude Include="Source\Memory\FixedSizeAllocator.h" />
+    <ClInclude Include="Source\Memory\RefCounter.h" />
+    <ClInclude Include="Source\Memory\StrongPointer-inl.h" />
+    <ClInclude Include="Source\Memory\StrongPointer.h" />
+    <ClInclude Include="Source\Memory\WeakPointer-inl.h" />
+    <ClInclude Include="Source\Memory\WeakPointer.h" />
     <ClInclude Include="Source\Physics\Physics-inl.h" />
     <ClInclude Include="Source\Physics\Physics.h" />
     <ClInclude Include="Source\Physics\PhysicsObject-inl.h" />

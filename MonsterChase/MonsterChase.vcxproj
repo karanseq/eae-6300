@@ -184,6 +184,7 @@
     <ClCompile Include="Source\Tests\Private\FloatValidityTest.cpp" />
     <ClCompile Include="Source\Tests\Private\HeapManager_UnitTest.cpp" />
     <ClCompile Include="Source\Tests\Private\MoveSemanticsTest.cpp" />
+    <ClCompile Include="Source\Tests\Private\StrongPointerTest.cpp" />
     <ClCompile Include="Source\Tests\Private\Tests.cpp" />
     <ClCompile Include="Source\Tests\Private\VectorConstnessTest.cpp" />
   </ItemGroup>
