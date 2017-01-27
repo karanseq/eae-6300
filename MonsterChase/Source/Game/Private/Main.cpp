@@ -9,7 +9,6 @@
 #include "Common\Engine.h"
 #include "GLib.h"
 #include "Logger\Logger.h"
-#include "Time\TimerUtil.h"
 
 // game includes
 #include "Game\MonsterChase.h"

@@ -15,8 +15,8 @@ void TestFixedSizeAllocator();
 /************************ ENABLE OTHER TESTS ************************/
 #define ENABLE_VECTOR_CONST_TEST
 #define ENABLE_FLOAT_VALIDITY_TEST
-#define ENABLE_MOVE_SEMANTICS_TEST
 #define ENABLE_BIT_ARRAY_TEST
+#define ENABLE_STRONG_POINTER_TEST
 
 #ifdef ENABLE_VECTOR_CONST_TEST
 void TestVectorConstness();
@@ -26,14 +26,13 @@ void TestVectorConstness();
 void TestFloatValidity();
 #endif // ENABLE_FLOAT_VALIDITY_TEST
 
-#ifdef ENABLE_MOVE_SEMANTICS_TEST
-void TestMoveSemantics();
-#endif // ENABLE_MOVE_SEMANTICS_TEST
-
 #ifdef ENABLE_BIT_ARRAY_TEST
 void RunBitArray_UnitTest();
 #endif // ENABLE_BIT_ARRAY_TEST
 
+#ifdef ENABLE_STRONG_POINTER_TEST
+void TestStrongPointer();
+#endif // ENABLE_STRONG_POINTER_TEST
 
 /************************ RUN TESTS ************************/
 void RunTests()
@@ -47,16 +46,16 @@ void RunTests()
 #ifdef ENABLE_FLOAT_VALIDITY_TEST
 	TestFloatValidity();
 #endif // ENABLE_FLOAT_VALIDITY_TEST
-
-	LOG("\n");
-#ifdef ENABLE_MOVE_SEMANTICS_TEST
-	TestMoveSemantics();
-#endif // ENABLE_MOVE_SEMANTICS_TEST
-
+	
 	LOG("\n");
 #ifdef ENABLE_BIT_ARRAY_TEST
 	RunBitArray_UnitTest();
 #endif // ENABLE_BIT_ARRAY_TEST
+
+	LOG("\n");
+#ifdef ENABLE_STRONG_POINTER_TEST
+	TestStrongPointer();
+#endif // ENABLE_STRONG_POINTER_TEST
 
 	LOG("\n");
 #ifdef ENABLE_ALLOCATOR_TEST

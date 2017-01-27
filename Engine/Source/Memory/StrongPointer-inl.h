@@ -77,36 +77,39 @@ inline bool StrongPointer<T>::operator!=(const StrongPointer& i_other) const
 template<class T>
 inline long StrongPointer<T>::GetStrongCount() const
 {
-	ASSERT(ref_counter_);
-	return ref_counter_->strong_count_;
+	return ref_counter_ ? ref_counter_->strong_count_ : 0;
 }
 
 template<class T>
 inline long StrongPointer<T>::GetWeakCount() const
 {
-	ASSERT(ref_counter_);
-	return ref_counter_->weak_count_;
+	return ref_counter_ ? ref_counter_->weak_count_ : 0;
 }
 #endif
 
 template<class T>
 inline void StrongPointer<T>::Acquire()
 {
-	ASSERT(ref_counter_);
-	++(ref_counter_->strong_count_);
+	if (ref_counter_)
+	{
+		++(ref_counter_->strong_count_);
+	}
 }
 
 template<class T>
 inline void StrongPointer<T>::Release()
 {
-	ASSERT(ref_counter_);
-	if (--(ref_counter_->strong_count_) <= 0)
+	if (ref_counter_)
 	{
-		SAFE_DELETE(object_);
-		if (ref_counter_->weak_count_ <= 0)
+		if (--(ref_counter_->strong_count_) <= 0)
 		{
-			SAFE_DELETE(ref_counter_);
+			SAFE_DELETE(object_);
+			if (ref_counter_->weak_count_ <= 0)
+			{
+				SAFE_DELETE(ref_counter_);
+			}
 		}
+		return;
 	}
 }
 

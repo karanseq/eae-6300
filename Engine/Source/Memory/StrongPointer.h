@@ -7,22 +7,26 @@
 namespace engine {
 namespace memory {
 
-// forward declarations
-struct RefCounter;
+// forward declaration
+template<class T>
+class WeakPointer;
 
 template<class T>
 class StrongPointer
 {
 public:
 	StrongPointer(T* i_object = nullptr) : object_(i_object),
-		ref_counter_(new RefCounter(object_ == nullptr ? 0 : 1))
-	{};
+		ref_counter_(nullptr)
+	{
+		if (object_)
+		{
+			ref_counter_ = new RefCounter(1);
+		}
+	};
 	~StrongPointer()
 	{
 		Release();
 	};
-
-	//StrongPointer(T* i_object, RefCounter* i_ref_counter);
 
 	StrongPointer(const StrongPointer& i_copy) : object_(i_copy.object_),
 		ref_counter_(i_copy.ref_counter_)
@@ -37,6 +41,12 @@ public:
 		i_copy.ref_counter_ = nullptr;
 	}
 
+	StrongPointer(const WeakPointer<T>& i_weak_pointer) : object_(i_weak_pointer.object_),
+		ref_counter_(i_weak_pointer.ref_counter_)
+	{
+		Acquire();
+	}
+	
 	inline StrongPointer& operator=(const StrongPointer& i_copy);
 	inline StrongPointer& operator=(StrongPointer&& i_copy);
 
@@ -61,6 +71,8 @@ private:
 	T*								object_;
 	RefCounter*						ref_counter_;
 
+	template<class T>
+	friend class WeakPointer;
 }; // class StrongPointer
 
 } // namespace memory
