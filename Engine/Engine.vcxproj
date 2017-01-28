@@ -180,6 +180,8 @@
     <ClInclude Include="Source\Memory\RefCounter.h" />
     <ClInclude Include="Source\Memory\SharedPointer-inl.h" />
     <ClInclude Include="Source\Memory\SharedPointer.h" />
+    <ClInclude Include="Source\Memory\UniquePointer-inl.h" />
+    <ClInclude Include="Source\Memory\UniquePointer.h" />
     <ClInclude Include="Source\Memory\WeakPointer-inl.h" />
     <ClInclude Include="Source\Memory\WeakPointer.h" />
     <ClInclude Include="Source\Physics\Physics-inl.h" />

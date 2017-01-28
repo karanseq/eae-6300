@@ -3,11 +3,12 @@
 #include "Logger\Logger.h"
 #include "Math\Vec3D.h"
 #include "Memory\SharedPointer.h"
+#include "Memory\UniquePointer.h"
 #include "Memory\WeakPointer.h"
 
 void TestSmartPointers()
 {
-	LOG("-------------------- Running StrongPointer Test --------------------");
+	LOG("-------------------- Running Smart Pointers Test --------------------");
 	
 	// block that tests the strong pointer constructors and assignment operators
 	{
@@ -209,6 +210,25 @@ void TestSmartPointers()
         LOG("StrongCount:%ld  WeakCount:%ld", strong_ptr2.GetStrongCount(), strong_ptr2.GetWeakCount());
 #endif
 	}
+
+	LOG("------------------------------");
 	
-	LOG("-------------------- Finished StrongPointer Test --------------------");
+    // block that tests unique pointer constructor & operators
+	engine::memory::UniquePointer<engine::gameobject::GameObject> unique_ptr1;
+    {
+		//engine::memory::UniquePointer<engine::gameobject::GameObject> unique_ptr2(unique_ptr1);	// copy not allowed
+
+		engine::memory::UniquePointer<engine::gameobject::GameObject> unique_ptr2(new engine::gameobject::GameObject());
+		LOG("UniquePointer standard constructor %s", (unique_ptr2) ? "OK!" : "NOT OK!");
+
+		engine::memory::UniquePointer<engine::gameobject::GameObject> unique_ptr3(std::move(unique_ptr2));
+		LOG("UniquePointer move constructor %s", (!unique_ptr2 && unique_ptr3) ? "OK!" : "NOT OK!");
+
+		unique_ptr1 = std::move(unique_ptr3);
+		LOG("UniquePointer move assignment operator %s", (!unique_ptr3 && unique_ptr1) ? "OK!" : "NOT OK!");
+
+		LOG("UniquePointer equality check %s", (unique_ptr2 == unique_ptr3 && unique_ptr1 != unique_ptr2) ? "OK!" : "NOT OK!");
+    }
+
+	LOG("-------------------- Finished Smart Pointers Test --------------------");
 }
