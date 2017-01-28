@@ -42,7 +42,7 @@ inline WeakPointer<T>& WeakPointer<T>::operator=(WeakPointer&& i_copy)
 }
 
 template<class T>
-inline WeakPointer<T>& WeakPointer<T>::operator=(const StrongPointer<T>& i_strong_pointer)
+inline WeakPointer<T>& WeakPointer<T>::operator=(const SharedPointer<T>& i_strong_pointer)
 {
 	// release previously observed object
 	Release();
@@ -78,9 +78,9 @@ inline bool WeakPointer<T>::HasExpired() const
 }
 
 template<class T>
-inline StrongPointer<T> WeakPointer<T>::Lock() const
+inline SharedPointer<T> WeakPointer<T>::Lock() const
 {
-    return HasExpired() ? StrongPointer<T>(nullptr) : StrongPointer<T>(*this);
+    return HasExpired() ? SharedPointer<T>(nullptr) : SharedPointer<T>(*this);
 }
 
 template<class T>

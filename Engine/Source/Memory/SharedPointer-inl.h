@@ -1,4 +1,4 @@
-#include "StrongPointer.h"
+#include "SharedPointer.h"
 
 // library includes
 #include <algorithm>
@@ -11,7 +11,7 @@ namespace engine {
 namespace memory {
 
 template<class T>
-inline StrongPointer<T>& StrongPointer<T>::operator=(const StrongPointer& i_copy)
+inline SharedPointer<T>& SharedPointer<T>::operator=(const SharedPointer& i_copy)
 {
 	// check for self assignment
 	if (this != &i_copy)
@@ -30,7 +30,7 @@ inline StrongPointer<T>& StrongPointer<T>::operator=(const StrongPointer& i_copy
 }
 
 template<class T>
-inline StrongPointer<T>& StrongPointer<T>::operator=(StrongPointer&& i_copy)
+inline SharedPointer<T>& SharedPointer<T>::operator=(SharedPointer&& i_copy)
 {
 	// check for self assignment
 	if (this != &i_copy)
@@ -43,52 +43,52 @@ inline StrongPointer<T>& StrongPointer<T>::operator=(StrongPointer&& i_copy)
 }
 
 template<class T>
-inline T* StrongPointer<T>::operator->() const
+inline T* SharedPointer<T>::operator->() const
 {
 	return object_;
 }
 
 template<class T>
-inline T& StrongPointer<T>::operator*() const
+inline T& SharedPointer<T>::operator*() const
 {
 	ASSERT(object_ != nullptr);
 	return *object_;
 }
 
 template<class T>
-inline StrongPointer<T>::operator bool() const
+inline SharedPointer<T>::operator bool() const
 {
 	return (object_ != nullptr);
 }
 
 template<class T>
-inline bool StrongPointer<T>::operator==(const StrongPointer& i_other) const
+inline bool SharedPointer<T>::operator==(const SharedPointer& i_other) const
 {
 	return (object_ == i_other.object_);
 }
 
 template<class T>
-inline bool StrongPointer<T>::operator!=(const StrongPointer& i_other) const
+inline bool SharedPointer<T>::operator!=(const SharedPointer& i_other) const
 {
 	return (object_ != i_other.object_);
 }
 
 #ifdef BUILD_DEBUG
 template<class T>
-inline long StrongPointer<T>::GetStrongCount() const
+inline long SharedPointer<T>::GetStrongCount() const
 {
 	return ref_counter_ ? ref_counter_->strong_count : 0;
 }
 
 template<class T>
-inline long StrongPointer<T>::GetWeakCount() const
+inline long SharedPointer<T>::GetWeakCount() const
 {
 	return ref_counter_ ? ref_counter_->weak_count : 0;
 }
 #endif
 
 template<class T>
-inline void StrongPointer<T>::Acquire()
+inline void SharedPointer<T>::Acquire()
 {
 	if (ref_counter_)
 	{
@@ -97,7 +97,7 @@ inline void StrongPointer<T>::Acquire()
 }
 
 template<class T>
-inline void StrongPointer<T>::Release()
+inline void SharedPointer<T>::Release()
 {
 	if (ref_counter_)
 	{

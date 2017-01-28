@@ -180,16 +180,16 @@
     <ClInclude Include="Source\Memory\RefCounter.h">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Memory\StrongPointer.h">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Memory\WeakPointer.h">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Memory\StrongPointer-inl.h">
+    <ClInclude Include="Source\Memory\WeakPointer-inl.h">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Memory\WeakPointer-inl.h">
+    <ClInclude Include="Source\Memory\SharedPointer.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Memory\SharedPointer-inl.h">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
   </ItemGroup>

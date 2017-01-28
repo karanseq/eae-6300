@@ -31,7 +31,7 @@ void RunBitArray_UnitTest();
 #endif // ENABLE_BIT_ARRAY_TEST
 
 #ifdef ENABLE_STRONG_POINTER_TEST
-void TestStrongPointer();
+void TestSmartPointers();
 #endif // ENABLE_STRONG_POINTER_TEST
 
 /************************ RUN TESTS ************************/
@@ -54,7 +54,7 @@ void RunTests()
 
 	LOG("\n");
 #ifdef ENABLE_STRONG_POINTER_TEST
-	TestStrongPointer();
+	TestSmartPointers();
 #endif // ENABLE_STRONG_POINTER_TEST
 
 	LOG("\n");

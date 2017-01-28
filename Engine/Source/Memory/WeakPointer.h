@@ -2,7 +2,7 @@
 #define WEAK_POINTER_H_
 
 // engine includes
-#include "Memory\StrongPointer.h"
+#include "Memory\SharedPointer.h"
 
 namespace engine {
 namespace memory {
@@ -32,7 +32,7 @@ public:
 		i_copy.ref_counter_ = nullptr;
 	}
 
-	WeakPointer(const StrongPointer<T>& i_strong_pointer) : object_(i_strong_pointer.object_),
+	WeakPointer(const SharedPointer<T>& i_strong_pointer) : object_(i_strong_pointer.object_),
 		ref_counter_(i_strong_pointer.ref_counter_)
 	{
 		Acquire();
@@ -40,7 +40,7 @@ public:
 
 	inline WeakPointer& operator=(const WeakPointer& i_copy);
 	inline WeakPointer& operator=(WeakPointer&& i_copy);
-	inline WeakPointer& operator=(const StrongPointer<T>& i_strong_pointer);
+	inline WeakPointer& operator=(const SharedPointer<T>& i_strong_pointer);
 
 #ifdef BUILD_DEBUG
 	inline long GetStrongCount() const;
@@ -48,7 +48,7 @@ public:
 #endif
 
     inline bool HasExpired() const;
-	inline StrongPointer<T> Lock() const;
+	inline SharedPointer<T> Lock() const;
 
 private:
 	inline void Acquire();
@@ -59,7 +59,7 @@ private:
 	RefCounter*						ref_counter_;
 
 	template<class T>
-	friend class StrongPointer;
+	friend class SharedPointer;
 
 }; // class WeakPointer
 
