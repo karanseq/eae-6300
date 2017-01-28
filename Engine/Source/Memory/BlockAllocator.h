@@ -100,6 +100,7 @@ public:
 
 #ifdef BUILD_DEBUG
 	inline unsigned int GetID() const;
+    void DumpStatistics() const;
 	void PrintAllDescriptors() const;
 	void PrintFreeDescriptors() const;
 	void PrintUsedDescriptors() const;
@@ -118,6 +119,7 @@ private:
 	uint32_t										descriptor_counter_;									// a counter to keep track of all the descriptors (resets to 0 after reaching uint32_t's max value)
 	uint8_t											id_;													// an id to keep track of this allocator in debug mode
 	static uint8_t									counter_;												// a counter that will be used while setting ids for allocators
+    AllocatorStatistics                             stats_;                                                 // a struct that keeps track of various statistics to help diagnose memory usage
 #endif
 
 	static BlockAllocator*							available_allocators_[MAX_BLOCK_ALLOCATORS];			// an array of pointers to all registered block allocators

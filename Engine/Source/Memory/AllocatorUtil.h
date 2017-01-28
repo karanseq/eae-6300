@@ -1,6 +1,9 @@
 #ifndef ENGINE_ALLOCATOR_UTIL_H_
 #define ENGINE_ALLOCATOR_UTIL_H_
 
+#include <stdint.h>
+
+// global defines used across allocators
 #define DEFAULT_BLOCK_SIZE						1024 * 1024
 #define DEFAULT_GUARDBAND_SIZE					4
 #define DEFAULT_BYTE_ALIGNMENT					4
@@ -13,8 +16,22 @@
 namespace engine {
 namespace memory {
 
-	void CreateAllocators();
-	void DestroyAllocators();
+struct AllocatorStatistics
+{
+    AllocatorStatistics() : total_allocated(0),
+        total_freed(0),
+        total_outstanding(0),
+        max_outstanding(0)
+    {}
+
+    size_t                  total_allocated;
+    size_t                  total_freed;
+    size_t                  total_outstanding;
+    size_t                  max_outstanding;
+};
+
+void CreateAllocators();
+void DestroyAllocators();
 
 } // namespace memory
 } // namespace engine

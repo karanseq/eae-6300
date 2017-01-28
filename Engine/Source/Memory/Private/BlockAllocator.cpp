@@ -73,6 +73,9 @@ void BlockAllocator::Destroy(BlockAllocator* i_allocator)
 		LOG_ERROR("WARNING! Found %zu unfreed allocations in BlockAllocator-%d", i_allocator->GetNumOustandingBlocks(), i_allocator->id_);
 	}
 
+    // dump statistics
+    i_allocator->DumpStatistics();
+
 	VERBOSE("BlockAllocator-%d destroyed", i_allocator->id_);
 #endif
 }
@@ -421,6 +424,13 @@ void* BlockAllocator::Alloc(const size_t i_size, const size_t i_alignment)
 	// add the descriptor to the user list
 	AddToList(&user_list_head_, &new_bd, false);
 
+#ifdef BUILD_DEBUG
+    // save diagnostic information
+    ++stats_.total_allocated;
+    ++stats_.total_outstanding;
+    stats_.max_outstanding = stats_.max_outstanding < stats_.total_outstanding ? stats_.total_outstanding : stats_.max_outstanding;
+#endif
+
 	return (new_bd->block_pointer + guardband_size);
 }
 
@@ -461,6 +471,12 @@ bool BlockAllocator::Free(void* i_pointer)
 
 	// add the descriptor to the free list
 	AddToList(&free_list_head_, &bd, true);
+
+#ifdef BUILD_DEBUG
+    // save diagnostic information
+    ++stats_.total_freed;
+    --stats_.total_outstanding;
+#endif
 
 	return true;
 }
@@ -569,6 +585,16 @@ const size_t BlockAllocator::GetLargestFreeBlockSize(const size_t i_alignment) c
 }
 
 #ifdef BUILD_DEBUG
+void BlockAllocator::DumpStatistics() const
+{
+    VERBOSE("---------- %s ----------", __FUNCTION__);
+    VERBOSE("Dumping usage statistics for BlockAllocator-%d:", id_);
+    VERBOSE("Total allocations:%zu", stats_.total_allocated);
+    VERBOSE("Total frees:%zu", stats_.total_freed);
+    VERBOSE("Highwater mark:%zu", stats_.max_outstanding);
+    VERBOSE("---------- END ----------");
+}
+
 void BlockAllocator::PrintAllDescriptors() const
 {
 	PrintFreeDescriptors();

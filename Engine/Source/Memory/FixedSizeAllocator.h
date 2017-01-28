@@ -27,9 +27,9 @@ class BlockAllocator;
 	- A simple fixed size allocator that users can use to request for memory of a fixed size
 	- Users need to provide the size of each fixed size block, the total number of blocks
 	  and a block allocator to allocate necessary memory from (usually the default block allocator)
-	- No more than 5 (MAX_FIXED_SIZE_ALLOCATORS) instances of this class must be created & no two instances can have the same block size
+	- No more than 15 (MAX_FIXED_SIZE_ALLOCATORS) instances of this class must be created & no two instances can have the same block size
 	- In order to be within overridden versions of new, delete, malloc & free, an instance must be "registered" using
-	  the static AddBlockAllocator function
+	  the static AddFixedSizeAllocator function
 */
 class FixedSizeAllocator
 {
@@ -78,6 +78,7 @@ public:
 
 #ifdef BUILD_DEBUG
 	inline unsigned int GetID() const;
+    void DumpStatistics() const;
 #endif
 
 private:
@@ -91,6 +92,7 @@ private:
 #ifdef BUILD_DEBUG
 	uint8_t											id_;													// an id to keep track of this allocator in debug mode
 	static uint8_t									counter_;												// a counter that will be used while setting ids for allocators
+    AllocatorStatistics                             stats_;                                                 // a struct that keeps track of various statistics to help diagnose memory usage
 #endif
 
 	struct FSASort

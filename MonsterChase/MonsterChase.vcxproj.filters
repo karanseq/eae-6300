@@ -62,9 +62,6 @@
     <ClCompile Include="Source\Tests\Private\FloatValidityTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Tests\Private\MoveSemanticsTest.cpp">
-      <Filter>Source Files\Tests</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Tests\Private\BlockAllocatorTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>

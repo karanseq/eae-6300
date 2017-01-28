@@ -91,12 +91,14 @@ void FixedSizeAllocator::Destroy(FixedSizeAllocator* i_allocator)
 	BlockAllocator* block_allocator = i_allocator->block_allocator_;
 
 #ifdef BUILD_DEBUG
-	// TODO: print *more* diagnostics
 	size_t first_set_bit = -1;
 	if (i_allocator->block_state_->GetFirstSetBit(first_set_bit))
 	{
 		LOG_ERROR("WARNING! Found %zu unfreed allocations in FixedSizeAllocator-%d with fixed_block_size:%zu", i_allocator->GetNumOustandingBlocks(), i_allocator->id_, i_allocator->fixed_block_size_);
 	}
+
+    // dump statistics
+    i_allocator->DumpStatistics();
 
 	uint8_t id = i_allocator->id_;
 	VERBOSE("FixedSizeAllocator-%d destroyed", id);
@@ -266,6 +268,11 @@ void* FixedSizeAllocator::Alloc(const size_t i_size)
 		*(block + size_type + i) = GUARDBAND_FILL;
 		*(block + size_type + guardband_size + i_size + i) = GUARDBAND_FILL;
 	}
+
+    // save diagnostic information
+    ++stats_.total_allocated;
+    ++stats_.total_outstanding;
+    stats_.max_outstanding = stats_.max_outstanding < stats_.total_outstanding ? stats_.total_outstanding : stats_.max_outstanding;
 #endif
 
 	return (block + size_type + guardband_size);
@@ -340,6 +347,12 @@ bool FixedSizeAllocator::Free(void* i_pointer)
 	// clear the bit at this index
 	block_state_->ClearBit(bit_index);
 
+#ifdef BUILD_DEBUG
+    // save diagnostic information
+    ++stats_.total_freed;
+    --stats_.total_outstanding;
+#endif
+
 	return true;
 }
 
@@ -388,6 +401,18 @@ bool FixedSizeAllocator::IsAllocated(const void* i_pointer) const
 
 	return true;
 }
+
+#ifdef BUILD_DEBUG
+void FixedSizeAllocator::DumpStatistics() const
+{
+    VERBOSE("---------- %s ----------", __FUNCTION__);
+    VERBOSE("Dumping usage statistics for FixedSizeAllocator-%d with fixed block size of %zu bytes:", id_, fixed_block_size_);
+    VERBOSE("Total allocations:%zu", stats_.total_allocated);
+    VERBOSE("Total frees:%zu", stats_.total_freed);
+    VERBOSE("Highwater mark:%zu", stats_.max_outstanding);
+    VERBOSE("---------- END ----------");
+}
+#endif
 
 } // namespace memory
 } // namespace engine

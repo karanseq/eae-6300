@@ -253,12 +253,6 @@ void MonsterChase::CheckInput()
 		game_state_ = GameStates::kGameStateQuit;
 		return;
 	}
-
-	if (MonsterChase::KEY_M_PRESSED)
-	{
-		KEY_M_PRESSED = false;
-		CreateMonster();
-	}
 }
 
 bool MonsterChase::LoadGameData()
