@@ -41,8 +41,8 @@ public:
 		i_copy.ref_counter_ = nullptr;
 	}
 
-	StrongPointer(const WeakPointer<T>& i_weak_pointer) : object_(i_weak_pointer.object_),
-		ref_counter_(i_weak_pointer.ref_counter_)
+	StrongPointer(const WeakPointer<T>& i_weak_pointer) : object_(i_weak_pointer.HasExpired() ? nullptr : i_weak_pointer.object_),
+		ref_counter_(i_weak_pointer.HasExpired() ? nullptr : i_weak_pointer.ref_counter_)
 	{
 		Acquire();
 	}

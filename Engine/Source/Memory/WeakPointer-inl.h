@@ -72,9 +72,15 @@ inline long WeakPointer<T>::GetWeakCount() const
 #endif
 
 template<class T>
+inline bool WeakPointer<T>::HasExpired() const
+{
+    return (ref_counter_ == nullptr || ref_counter_->strong_count <= 0);
+}
+
+template<class T>
 inline StrongPointer<T> WeakPointer<T>::Lock() const
 {
-	return StrongPointer<T>(*this);
+    return HasExpired() ? StrongPointer<T>(nullptr) : StrongPointer<T>(*this);
 }
 
 template<class T>

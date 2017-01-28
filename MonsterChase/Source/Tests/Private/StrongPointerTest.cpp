@@ -58,7 +58,7 @@ void TestStrongPointer()
 		// weak pointer (non-nullptr) constructor
 		engine::memory::WeakPointer<engine::gameobject::GameObject> weak_ptr1(strong_ptr6);
 		engine::memory::StrongPointer<engine::gameobject::GameObject> strong_ptr7(weak_ptr1);
-		LOG("StrongPointer weak pointer to non-nullptr constructor OK!");
+		LOG("StrongPointer from weak pointer to non-nullptr constructor OK!");
 #ifdef BUILD_DEBUG
 		LOG("StrongCount:%ld  WeakCount:%ld", strong_ptr7.GetStrongCount(), strong_ptr7.GetWeakCount());
 #endif
@@ -66,25 +66,37 @@ void TestStrongPointer()
 		// weak pointer (nullptr) constructor
 		engine::memory::WeakPointer<engine::gameobject::GameObject> weak_ptr2;
 		engine::memory::StrongPointer<engine::gameobject::GameObject> strong_ptr8(weak_ptr2);
-		LOG("StrongPointer weak pointer  to nullptr constructor OK!");
+		LOG("StrongPointer from weak pointer to nullptr constructor OK!");
 #ifdef BUILD_DEBUG
 		LOG("StrongCount:%ld  WeakCount:%ld", strong_ptr8.GetStrongCount(), strong_ptr8.GetWeakCount());
 #endif
 
+        // expired weak pointer constructor
+        engine::memory::WeakPointer<engine::gameobject::GameObject> weak_ptr3;
+        {
+            engine::memory::StrongPointer<engine::gameobject::GameObject> strong_ptr0(new engine::gameobject::GameObject());
+            weak_ptr3 = strong_ptr0;
+        }
+        engine::memory::StrongPointer<engine::gameobject::GameObject> strong_ptr9(weak_ptr3);
+        LOG("StrongPointer from expired weak pointer %s", (strong_ptr9) ? "NOT OK!" : "OK!");
+#ifdef BUILD_DEBUG
+        LOG("StrongCount:%ld  WeakCount:%ld", strong_ptr9.GetStrongCount(), strong_ptr9.GetWeakCount());
+#endif
+
 		// assignment to nullptr
-		engine::memory::StrongPointer<engine::gameobject::GameObject> strong_ptr9(new engine::gameobject::GameObject());
-		strong_ptr9 = nullptr;
+		engine::memory::StrongPointer<engine::gameobject::GameObject> strong_ptr10(new engine::gameobject::GameObject());
+        strong_ptr10 = nullptr;
 		LOG("StrongPointer assignment to nullptr OK!");
 #ifdef BUILD_DEBUG
-		LOG("StrongCount:%ld  WeakCount:%ld", strong_ptr9.GetStrongCount(), strong_ptr9.GetWeakCount());
+		LOG("StrongCount:%ld  WeakCount:%ld", strong_ptr10.GetStrongCount(), strong_ptr10.GetWeakCount());
 #endif
 
 		// assignment to a pointer
-		engine::memory::StrongPointer<engine::gameobject::GameObject> strong_ptr10(nullptr);
-		strong_ptr10 = new engine::gameobject::GameObject();
+		engine::memory::StrongPointer<engine::gameobject::GameObject> strong_ptr11(nullptr);
+        strong_ptr11 = new engine::gameobject::GameObject();
 		LOG("StrongPointer assignment to game object OK!");
 #ifdef BUILD_DEBUG
-		LOG("StrongCount:%ld  WeakCount:%ld", strong_ptr10.GetStrongCount(), strong_ptr10.GetWeakCount());
+		LOG("StrongCount:%ld  WeakCount:%ld", strong_ptr11.GetStrongCount(), strong_ptr11.GetWeakCount());
 #endif
 	}
 
@@ -178,11 +190,23 @@ void TestStrongPointer()
 		LOG("StrongCount:%ld  WeakCount:%ld", weak_ptr6.GetStrongCount(), weak_ptr6.GetWeakCount());
 #endif
 
-		// weak pointer lock function
+		// non-expired weak pointer lock function
 		engine::memory::StrongPointer<engine::gameobject::GameObject> strong_ptr1 = weak_ptr6.Lock();
-		LOG("WeakPointer Lock function OK!");
+		LOG("WeakPointer non-expired Lock function OK!");
 #ifdef BUILD_DEBUG
 		LOG("StrongCount:%ld  WeakCount:%ld", strong_ptr1.GetStrongCount(), strong_ptr1.GetWeakCount());
+#endif
+
+        // expired weak pointer lock function
+        engine::memory::WeakPointer<engine::gameobject::GameObject> weak_ptr7;
+        {
+            engine::memory::StrongPointer<engine::gameobject::GameObject> strong_ptr2(new engine::gameobject::GameObject());
+            weak_ptr7 = strong_ptr2;
+        }
+        engine::memory::StrongPointer<engine::gameobject::GameObject> strong_ptr2 = weak_ptr7.Lock();
+        LOG("WeakPointer expired Lock function %s", (strong_ptr2) ? "NOT OK!" : "OK");
+#ifdef BUILD_DEBUG
+        LOG("StrongCount:%ld  WeakCount:%ld", strong_ptr2.GetStrongCount(), strong_ptr2.GetWeakCount());
 #endif
 	}
 	

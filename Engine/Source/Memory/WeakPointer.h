@@ -47,6 +47,7 @@ public:
 	inline long GetWeakCount() const;
 #endif
 
+    inline bool HasExpired() const;
 	inline StrongPointer<T> Lock() const;
 
 private:
