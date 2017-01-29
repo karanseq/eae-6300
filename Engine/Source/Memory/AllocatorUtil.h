@@ -18,7 +18,7 @@ namespace memory {
 
 struct AllocatorStatistics
 {
-    AllocatorStatistics() : total_allocated(0),
+	explicit AllocatorStatistics() : total_allocated(0),
         total_freed(0),
         total_outstanding(0),
         max_outstanding(0)

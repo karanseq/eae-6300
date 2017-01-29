@@ -13,7 +13,7 @@ namespace math {
 	class Vec3D
 	{
 	public:
-		Vec3D(float i_x = 0.0f, float i_y = 0.0f, float i_z = 0.0f);
+		explicit Vec3D(float i_x = 0.0f, float i_y = 0.0f, float i_z = 0.0f);
 		Vec3D(const Vec3D& i_copy);
 
 		~Vec3D()
@@ -55,16 +55,16 @@ namespace math {
 		Vec3D Normalize() const;
 
 		// constants
-		static const Vec3D ZERO;
-		static const Vec3D UNIT;
-		static const Vec3D UNIT_X;
-		static const Vec3D UNIT_Y;
-		static const Vec3D UNIT_Z;
+		static const Vec3D			ZERO;
+		static const Vec3D			UNIT;
+		static const Vec3D			UNIT_X;
+		static const Vec3D			UNIT_Y;
+		static const Vec3D			UNIT_Z;
 
 	protected:
-		float x_;
-		float y_;
-		float z_;
+		float						x_;
+		float						y_;
+		float						z_;
 	}; // class Vec3D
 
 } // namespace math

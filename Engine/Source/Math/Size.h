@@ -13,7 +13,7 @@ namespace math {
 	class Size
 	{
 	public:
-		Size(float width = 0.0f, float height = 0.0f);
+		explicit Size(float width = 0.0f, float height = 0.0f);
 		Size(const Size& i_copy);
 
 		~Size()
@@ -40,11 +40,11 @@ namespace math {
 		inline bool operator!=(const Size& i_size) const;
 
 		// constants
-		static const Size ZERO;
+		static const Size			ZERO;
 
 	protected:
-		float width_;
-		float height_;
+		float						width_;
+		float						height_;
 	}; // class Size
 
 } // namespace math

@@ -22,6 +22,10 @@ private:
 	~GameData();
 	static GameData* instance_;
 
+	// disable copy constructor & copy assignment operator
+	GameData(const GameData& i_copy) = delete;
+	GameData& operator=(const GameData& i_copy) = delete;
+
 	void AddFileToCache(const std::string& i_file_name, const size_t i_file_size, uint8_t* i_file_content);
 	void RemoveFileFromCache(const std::string& i_file_name);
 	void ClearFileCache();

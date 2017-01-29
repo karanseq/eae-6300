@@ -12,7 +12,6 @@
 
 // game includes
 #include "Game\GameUtils.h"
-#include "Game\Monster.h"
 #include "Game\Player.h"
 
 namespace monsterchase {
@@ -107,9 +106,7 @@ void MonsterChase::Destroy()
 }
 
 MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
-	player_(nullptr),
-	num_monsters_(0),
-	ascii_index_(0)
+	player_(nullptr)
 {
 	// allocate memory for the game objects
 	void* aligned_memory = engine::memory::BlockAllocator::GetDefaultAllocator()->Alloc(MEMORY_SIZE);
@@ -127,9 +124,6 @@ MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
 
 	// register the allocator
 	engine::memory::BlockAllocator::AddBlockAllocator(MonsterChase::game_allocator_);
-
-	// reserve memory for the monster pointers
-	//monsters_.reserve(MAX_MONSTERS);
 }
 
 MonsterChase::~MonsterChase()
@@ -139,13 +133,6 @@ MonsterChase::~MonsterChase()
 
 	// deallocate the player
 	SAFE_DELETE(player_);
-
-	// deallocate the monsters
-	for (uint8_t i = 0; i < num_monsters_; ++i)
-	{
-		SAFE_DELETE(monsters_[i]);
-	}
-	monsters_.clear();
 
 	// delete game data
 	GameData::Destroy();
@@ -170,16 +157,8 @@ bool MonsterChase::Init()
 	}
 
 	// create the player
-	CreatePlayer("player");
+	CreatePlayer("ClownFace");
 	LOG("Created the player...");
-
-	// create the monsters
-	/*const uint8_t num_monsters = (MAX_MONSTERS / 2) + rand() % (MAX_MONSTERS / 2);
-	for (uint8_t i = 0; i < num_monsters; ++i)
-	{
-		CreateMonster();
-	}
-	LOG("Created %d monsters...",  num_monsters_);*/
 
 	// tell the engine we want to be ticked
 	engine::time::Updater::Get()->AddTickable(this);
@@ -204,7 +183,6 @@ void MonsterChase::Update(float dt)
 
 	// update elements
 	player_->Update();
-	UpdateMonsters();
 
 	// render elements
 	Render();
@@ -218,10 +196,6 @@ void MonsterChase::Render()
 	GLib::Sprites::BeginRendering();
 
 	player_->Render();
-	for (uint8_t i = 0; i < num_monsters_; ++i)
-	{
-		monsters_[i]->Render();
-	}
 
 	// Tell GLib we're done rendering sprites
 	GLib::Sprites::EndRendering();
@@ -231,11 +205,6 @@ void MonsterChase::Render()
 
 void MonsterChase::PrintGameInformation()
 {
-	for (uint8_t i = 0; i < num_monsters_; ++i)
-	{
-		monsters_[i]->Print();
-	}
-
 	player_->Print();
 }
 
@@ -262,104 +231,6 @@ bool MonsterChase::LoadGameData()
 	GameUtils::LoadFile(GameData::SILLY_MONSTER_TEXTURE_NAME);
 	GameUtils::LoadFile(GameData::SMART_MONSTER_TEXTURE_NAME);
 	return true;
-}
-
-void MonsterChase::CreateMonster(const char* i_input_name)
-{
-	// limit number of monsters
-	if (num_monsters_ >= MAX_MONSTERS)
-	{
-		LOG("Already at max monsters!");
-		return;
-	}
-
-	char name[MAX_INPUT_SIZE] = { 0 };
-
-	// if no name was provided, generate one
-	if (i_input_name == nullptr)
-	{
-		GetNameForMonster(name);
-	}
-	else
-	{
-		sprintf_s(name, "%s", i_input_name);
-	}
-
-	// calculate random position for this monster
-	engine::math::Vec3D monster_position = GameUtils::GetRandomVec3D(MAX_COLS, MAX_ROWS);
-	monster_position *= (rand() % 10) > 5 ? 1.0f : -1.0f;
-
-	MonsterControllers controller_type = (rand() % 10) > 5 ? MonsterControllers::kSmartMonsterController : MonsterControllers::kSillyMonsterController;
-
-	// create a new monster at the back of the array
-	Monster* monster = new (MonsterChase::game_allocator_) Monster(controller_type, name);
-	monsters_.push_back(monster);
-	++num_monsters_;
-
-	// set this monster's attributes
-	monster->GetController()->GetGameObject()->SetPosition(monster_position);
-	monster->SetTimeToLive(MAX_MONSTER_TTL / 2 + rand() % MAX_MONSTER_TTL);
-
-	// handle smart monsters differently
-	if (controller_type == MonsterControllers::kSmartMonsterController)
-	{
-		reinterpret_cast<SmartMonsterController*>(monster->GetController())->SetTarget(player_->GetController()->GetGameObject());
-	}
-}
-
-void MonsterChase::DestroyMonster(uint8_t i_at_index)
-{
-	// validate inputs, bounds and data state
-	ASSERT(i_at_index >= 0);
-	ASSERT(i_at_index < num_monsters_);
-	ASSERT(num_monsters_ != 0);
-
-	// swap this monster with the last one
-	std::swap(monsters_[i_at_index], monsters_.back());
-
-	// delete this monster
-	SAFE_DELETE(monsters_.back());
-	// remove its pointer from the array
-	monsters_.pop_back();
-
-	// reduce number of monsters
-	--num_monsters_;
-}
-
-void MonsterChase::UpdateMonsters()
-{
-	// touch all monsters
-	for (uint8_t i = 0; i < num_monsters_; ++i)
-	{
-		monsters_[i]->Update();
-	}
-
-	// check if any monsters must be deleted
-	for (uint8_t i = 0; i < num_monsters_; ++i)
-	{
-		if (monsters_[i]->GetTimeToLive() <= 0)
-		{
-			// delete this monster
-			DestroyMonster(i);
-
-			// the function above swaps the monsters
-			// decrement the index to preocess the monster occupying this place after the swap
-			--i;
-		}
-	}
-}
-
-void MonsterChase::GetNameForMonster(char* o_name)
-{
-	// validate input
-	ASSERT(o_name != nullptr);
-
-	// generate a name based by appending an incrementing ASCII value
-	sprintf_s(o_name, MAX_INPUT_SIZE, "foo%c", (START_ASCII + ascii_index_++));
-	if (ascii_index_ > MAX_ASCII)
-	{
-		ascii_index_ = 0;
-	}
 }
 
 void MonsterChase::CreatePlayer(const char* i_name)

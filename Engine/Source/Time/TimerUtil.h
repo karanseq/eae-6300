@@ -10,11 +10,11 @@ namespace time {
 class TimerUtil
 {
 private:
-	TimerUtil();
-	~TimerUtil();
+	TimerUtil() = delete;
+	~TimerUtil() = delete;
 
-	TimerUtil(const TimerUtil& i_copy);
-	TimerUtil operator=(const TimerUtil& i_copy);
+	TimerUtil(const TimerUtil& i_copy) = delete;
+	TimerUtil operator=(const TimerUtil& i_copy) = delete;
 
 public:
 	static float GetLastFrameTime_ms();

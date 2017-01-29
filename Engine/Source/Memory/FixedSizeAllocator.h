@@ -34,10 +34,9 @@ class BlockAllocator;
 class FixedSizeAllocator
 {
 private:
-	// disable default constructor, copy constructor & assignment operator
-	FixedSizeAllocator() {}
-	FixedSizeAllocator(const FixedSizeAllocator& i_copy);
-	FixedSizeAllocator& operator=(const FixedSizeAllocator& i_fsa);
+	// disable copy constructor & assignment operator
+	FixedSizeAllocator(const FixedSizeAllocator& i_copy) = delete;
+	FixedSizeAllocator& operator=(const FixedSizeAllocator& i_fsa) = delete;
 
 	FixedSizeAllocator(void* i_memory, const size_t i_total_block_size, const size_t i_fixed_block_size, const size_t i_num_blocks, BlockAllocator* i_allocator);
 	~FixedSizeAllocator();

@@ -14,7 +14,7 @@ namespace math {
 	class Transform
 	{
 	public:
-		Transform(Vec3D i_position = Vec3D::ZERO, Vec3D i_rotation = Vec3D::ZERO, Vec3D i_scale = Vec3D::UNIT);
+		explicit Transform(Vec3D i_position = Vec3D::ZERO, Vec3D i_rotation = Vec3D::ZERO, Vec3D i_scale = Vec3D::UNIT);
 		Transform(const Transform& i_copy);
 
 		~Transform()

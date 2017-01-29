@@ -48,10 +48,9 @@ public:
 class BlockAllocator
 {
 private:
-	// disable default constructor, copy constructor & assignment operator
-	BlockAllocator() {}
-	BlockAllocator(const BlockAllocator& i_copy);
-	BlockAllocator& operator=(const BlockAllocator& i_ba);
+	// disable copy constructor & assignment operator
+	BlockAllocator(const BlockAllocator& i_copy) = delete;
+	BlockAllocator& operator=(const BlockAllocator& i_ba) = delete;
 
 	BlockAllocator(void* i_memory, size_t i_block_size);
 	~BlockAllocator() {}

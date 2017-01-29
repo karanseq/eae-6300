@@ -13,7 +13,7 @@ namespace math {
 	class Vec2D
 	{
 	public:
-		Vec2D(float i_x = 0.0f, float i_y = 0.0f);
+		explicit Vec2D(float i_x = 0.0f, float i_y = 0.0f);
 		Vec2D(const Vec2D& i_copy);
 
 		~Vec2D()
@@ -53,14 +53,14 @@ namespace math {
 		Vec2D Normalize() const;
 
 		// constants
-		static const Vec2D ZERO;
-		static const Vec2D UNIT;
-		static const Vec2D UNIT_X;
-		static const Vec2D UNIT_Y;
+		static const Vec2D			ZERO;
+		static const Vec2D			UNIT;
+		static const Vec2D			UNIT_X;
+		static const Vec2D			UNIT_Y;
 
 	protected:
-		float x_;
-		float y_;
+		float						x_;
+		float						y_;
 	}; // class Vec2D
 
 } // namespace math

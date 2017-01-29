@@ -12,9 +12,9 @@
 
 // forward declarations
 namespace engine {
-	namespace physics {
-		class PhysicsObject;
-	}
+namespace physics {
+	class PhysicsObject;
+}
 }
 
 namespace monsterchase {

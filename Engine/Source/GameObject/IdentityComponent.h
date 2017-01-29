@@ -15,7 +15,7 @@ namespace gameobject {
 	class IdentityComponent
 	{
 	public:
-		IdentityComponent(uint32_t i_id = 0, uint32_t i_tag = 0, const char* i_name = "");
+		explicit IdentityComponent(uint32_t i_id = 0, uint32_t i_tag = 0, const char* i_name = "");
 	
 		// standard copy constuctor
 		IdentityComponent(const IdentityComponent& i_copy);

@@ -22,8 +22,8 @@ private:
 	~Physics();
 	static Physics* instance_;
 
-	Physics(const Physics& i_copy);
-	Physics& operator=(const Physics& i_copy);
+	Physics(const Physics& i_copy) = delete;
+	Physics& operator=(const Physics& i_copy) = delete;
 
 public:
 	static Physics* Create();

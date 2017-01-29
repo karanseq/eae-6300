@@ -14,9 +14,9 @@ namespace gameobject {
 class GameObject
 {
 public:
-	GameObject() : transform_()
+	explicit GameObject() : transform_()
 	{}
-	GameObject(const engine::math::Transform& i_transform) : transform_(i_transform)
+	explicit GameObject(const engine::math::Transform& i_transform) : transform_(i_transform)
 	{}
 
 	virtual ~GameObject()

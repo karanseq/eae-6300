@@ -24,8 +24,8 @@ private:
 	~Updater();
 	static Updater* instance_;
 
-	Updater(const Updater& i_copy);
-	Updater& operator=(const Updater& i_copy);
+	Updater(const Updater& i_copy) = delete;
+	Updater& operator=(const Updater& i_copy) = delete;
 
 public:
 	static Updater* Create();

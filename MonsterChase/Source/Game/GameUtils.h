@@ -24,10 +24,10 @@ namespace monsterchase {
 class GameUtils
 {
 private:
-	GameUtils() {}
-	GameUtils(const GameUtils& i_copy);
-	GameUtils& operator=(const GameUtils& i_rhs);
-	~GameUtils() {}
+	GameUtils() = delete;
+	GameUtils(const GameUtils& i_copy) = delete;
+	GameUtils& operator=(const GameUtils& i_rhs) = delete;
+	~GameUtils() = delete;
 
 public:
 	inline static engine::math::Vec3D GetRandomVec3D(size_t i_max_x = 1, size_t i_max_y = 1, size_t i_max_z = 1) { return engine::math::Vec3D(static_cast<float>(rand() % i_max_x), static_cast<float>(rand() % i_max_y), static_cast<float>(rand() % i_max_z)); }

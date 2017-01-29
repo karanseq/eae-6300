@@ -48,6 +48,9 @@ FixedSizeAllocator::FixedSizeAllocator(void* i_memory, const size_t i_total_bloc
 #endif
 }
 
+FixedSizeAllocator::~FixedSizeAllocator()
+{}
+
 FixedSizeAllocator* FixedSizeAllocator::Create(const size_t i_block_size, const size_t i_num_blocks, BlockAllocator* i_allocator)
 {
 	// validate input

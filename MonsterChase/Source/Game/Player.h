@@ -22,7 +22,7 @@ namespace monsterchase {
 class Player
 {
 public:
-	Player(const char* i_name);
+	explicit Player(const char* i_name);
 	~Player();
 
 	// copy constructor

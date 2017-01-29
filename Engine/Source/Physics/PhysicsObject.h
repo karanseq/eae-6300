@@ -22,7 +22,7 @@ namespace physics {
 class PhysicsObject
 {
 public:
-	PhysicsObject(engine::gameobject::GameObject* i_game_object, float i_mass = DEFAULT_MASS, float i_drag = DEFAULT_COEFF_DRAG);
+	explicit PhysicsObject(engine::gameobject::GameObject* i_game_object, float i_mass = DEFAULT_MASS, float i_drag = DEFAULT_COEFF_DRAG);
 	~PhysicsObject();
 
 	// copy constructor

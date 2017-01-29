@@ -16,8 +16,8 @@ namespace math {
 	class Rect
 	{
 	public:
-		Rect(float x = 0.0f, float y = 0.0f, float width = 0.0f, float height = 0.0f);
-		Rect(const Vec2D& i_origin = Vec2D::ZERO, const Size& i_size = Size::ZERO);
+		explicit Rect(float x = 0.0f, float y = 0.0f, float width = 0.0f, float height = 0.0f);
+		explicit Rect(const Vec2D& i_origin = Vec2D::ZERO, const Size& i_size = Size::ZERO);
 		Rect(const Rect& i_copy);
 
 		~Rect()
@@ -43,11 +43,11 @@ namespace math {
 		inline bool IntersectsRect(const Rect& i_rect) const;
 
 		// constants
-		static const Rect ZERO;
+		static const Rect			ZERO;
 
 	protected:
-		Vec2D		origin_;
-		Size		size_;
+		Vec2D						origin_;
+		Size						size_;
 	}; // class Rect
 
 } // namespace math

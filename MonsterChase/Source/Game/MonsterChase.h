@@ -20,7 +20,6 @@ namespace memory {
 namespace monsterchase {
 // forward declarations
 class Player;
-class Monster;
 
 // TODO: Find a better place for this
 void AcceptKey(unsigned int i_key_id, bool i_went_down);
@@ -35,6 +34,10 @@ private:
 	MonsterChase();
 	~MonsterChase();
 	static MonsterChase* instance_;
+
+	// disable copy constructor & copy assignment operator
+	MonsterChase(const MonsterChase& i_copy) = delete;
+	MonsterChase& operator=(const MonsterChase& i_copy) = delete;
 
 public:
 	static MonsterChase* Create();
@@ -56,10 +59,6 @@ public:
 	bool LoadGameData();
 
 	// game logic
-	void CreateMonster(const char* i_input_name = nullptr);
-	void DestroyMonster(uint8_t i_at_index);
-	void UpdateMonsters();
-	void GetNameForMonster(char* o_name);
 	void CreatePlayer(const char* i_name);
 
 	inline GameStates GetState() const												{ return game_state_; }
@@ -86,12 +85,6 @@ public:
 	static const uint16_t								SCREEN_HEIGHT = 800;
 
 private:
-	// disable default copy constructor
-	MonsterChase(const MonsterChase& i_copy);
-	// disable default assignment operator
-	MonsterChase& operator=(const MonsterChase& i_monster);
-
-private:
 	// reference to an instance of an allocator specifically for game objects
 	static engine::memory::BlockAllocator*				game_allocator_;
 
@@ -100,11 +93,7 @@ private:
 
 	// game elements
 	Player*												player_;
-	std::vector<Monster*>								monsters_;
 
-	// game counters
-	uint8_t												num_monsters_;
-	uint8_t												ascii_index_;
 }; // class MonsterChase
 
 } // namespace monsterchase

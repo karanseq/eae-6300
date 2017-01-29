@@ -14,11 +14,11 @@ namespace data {
 	class BitArray
 	{
 	private:
-		BitArray(size_t i_num_bits, void* i_memory, bool i_start_set = false);
+		explicit BitArray(size_t i_num_bits, void* i_memory, bool i_start_set = false);
 
 		// disable copy constructor & copy assignment operator
-		BitArray(const BitArray& i_copy);
-		inline BitArray& operator=(const BitArray& i_bit_array);
+		BitArray(const BitArray& i_copy) = delete;
+		inline BitArray& operator=(const BitArray& i_bit_array) = delete;
 
 	public:
 		static BitArray* Create(size_t i_num_bits, void* i_memory, bool i_start_set = false);
