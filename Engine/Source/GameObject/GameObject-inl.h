@@ -3,6 +3,11 @@
 namespace engine {
 namespace gameobject {
 
+inline engine::memory::SharedPointer<GameObject> GameObject::Create(const engine::math::Transform& i_transform)
+{
+	return engine::memory::SharedPointer<GameObject>(new GameObject(i_transform));
+}
+
 inline GameObject& GameObject::operator=(const GameObject& i_game_object)
 {
 	if (this != &i_game_object)

@@ -2,10 +2,9 @@
 #define PLAYER_CONTROLLER_H_
 
 // engine includes
-#include "Assert\Assert.h"
-#include "GameObject\GameObject.h"
 #include "GameObject\InterfaceGameObjectController.h"
-#include "Memory\AllocatorUtil.h"
+#include "GameObject\GameObject.h"
+#include "Physics\PhysicsObject.h"
 
 // game includes
 #include "Game\GameTypes.h"
@@ -39,8 +38,8 @@ public:
 	// Implement InterfaceGameObjectController
 	PlayerController* Clone() const override;
 	
-	inline engine::gameobject::GameObject* GetGameObject() const override;
-	inline void SetGameObject(engine::gameobject::GameObject* i_game_object) override;
+	inline engine::memory::SharedPointer<engine::gameobject::GameObject> GetGameObject() const override;
+	inline void SetGameObject(const engine::memory::SharedPointer<engine::gameobject::GameObject>& i_game_object) override;
 
 	void UpdateGameObject() override;
 
@@ -48,12 +47,12 @@ public:
 	void Move(MoveDirections i_move_direction);
 
 	// accessors & mutators
-	inline engine::physics::PhysicsObject* GetPhysicsObject() const;
-	inline void SetPhysicsObject(engine::physics::PhysicsObject* i_physics_object);
+	inline engine::memory::SharedPointer<engine::physics::PhysicsObject> GetPhysicsObject() const;
+	inline void SetPhysicsObject(const engine::memory::SharedPointer<engine::physics::PhysicsObject>& i_physics_object);
 
 private:
-	engine::gameobject::GameObject*							game_object_;
-	engine::physics::PhysicsObject*							physics_object_;
+	engine::memory::SharedPointer<engine::gameobject::GameObject>						game_object_;
+	engine::memory::SharedPointer<engine::physics::PhysicsObject>						physics_object_;
 
 }; // class PlayerController
 

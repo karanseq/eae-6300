@@ -2,7 +2,7 @@
 #define MONSTER_CHASE_H_
 
 // library includes
-#include <vector>
+#include <stdint.h>
 
 // engine includes
 #include "Time\InterfaceTickable.h"
@@ -10,14 +10,8 @@
 // game includes
 #include "Game\GameTypes.h"
 
-// forward declarations
-namespace engine {
-namespace memory {
-	class BlockAllocator;
-}
-}
-
 namespace monsterchase {
+
 // forward declarations
 class Player;
 
@@ -62,7 +56,6 @@ public:
 	void CreatePlayer(const char* i_name);
 
 	inline GameStates GetState() const												{ return game_state_; }
-	static inline engine::memory::BlockAllocator* GetAllocator()					{ return MonsterChase::game_allocator_; }
 
 	static bool											KEY_A_PRESSED;
 	static bool											KEY_D_PRESSED;
@@ -85,9 +78,6 @@ public:
 	static const uint16_t								SCREEN_HEIGHT = 800;
 
 private:
-	// reference to an instance of an allocator specifically for game objects
-	static engine::memory::BlockAllocator*				game_allocator_;
-
 	// field to maintain the current state of the game
 	GameStates											game_state_;
 

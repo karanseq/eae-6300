@@ -57,6 +57,24 @@ inline WeakPointer<T>& WeakPointer<T>::operator=(const SharedPointer<T>& i_stron
 	return *this;
 }
 
+template<class T>
+inline WeakPointer<T>::operator bool() const
+{
+	return !HasExpired();
+}
+
+template<class T>
+inline bool WeakPointer<T>::operator==(const WeakPointer& i_other) const
+{
+	return (object_ == i_other.object_);
+}
+
+template<class T>
+inline bool WeakPointer<T>::operator!=(const WeakPointer& i_other) const
+{
+	return (object_ != i_other.object_);
+}
+
 #ifdef BUILD_DEBUG
 template<class T>
 inline long WeakPointer<T>::GetStrongCount() const

@@ -3,6 +3,7 @@
 
 // engine includes
 #include "Math\Transform.h"
+#include "Memory\SharedPointer.h"
 
 namespace engine {
 namespace gameobject {
@@ -14,10 +15,7 @@ namespace gameobject {
 class GameObject
 {
 public:
-	explicit GameObject() : transform_()
-	{}
-	explicit GameObject(const engine::math::Transform& i_transform) : transform_(i_transform)
-	{}
+	inline static engine::memory::SharedPointer<GameObject> Create(const engine::math::Transform& i_transform = engine::math::Transform::ZERO);
 
 	virtual ~GameObject()
 	{}
@@ -40,6 +38,10 @@ public:
 
 	inline const engine::math::Vec3D& GetScale() const;
 	inline void SetScale(const engine::math::Vec3D& i_scale);
+
+private:
+	explicit GameObject(const engine::math::Transform& i_transform = engine::math::Transform::ZERO) : transform_(i_transform)
+	{}
 
 private:
 	engine::math::Transform transform_;

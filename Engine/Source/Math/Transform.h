@@ -31,6 +31,9 @@ namespace math {
 		inline const Vec3D& GetScale() const;
 		inline void SetScale(const Vec3D& i_scale);
 
+		// constants
+		static const Transform			ZERO;
+
 	protected:
 		Vec3D position_;
 		Vec3D rotation_;

@@ -1,6 +1,7 @@
 #include "Player.h"
 
 // engine includes
+#include "GameObject\IdentityComponent.h"
 #include "GLib.h"
 
 // game includes
@@ -17,7 +18,7 @@ inline Player& Player::operator=(const Player& i_player)
 		controller_ = i_player.controller_->Clone();
 
 		SAFE_DELETE(identity_);
-		identity_ = new (MonsterChase::GetAllocator()) engine::gameobject::IdentityComponent(i_player.identity_->GetID(), i_player.identity_->GetTag(), i_player.identity_->GetName());
+		identity_ = new engine::gameobject::IdentityComponent(i_player.identity_->GetID(), i_player.identity_->GetTag(), i_player.identity_->GetName());
 
 		if (sprite_)
 		{

@@ -4,11 +4,12 @@
 // library includes
 #include <vector>
 
+// engine includes
+#include "Memory\SharedPointer.h"
+#include "Physics\PhysicsObject.h"
+
 namespace engine {
 namespace physics {
-
-// forward declarations
-class PhysicsObject;
 
 /*
 	Physics
@@ -33,12 +34,12 @@ public:
 	void Run(float dt);
 
 	// add/remove physics objects
-	inline void AddPhysicsObject(engine::physics::PhysicsObject* i_physics_object);
-	inline void RemovePhysicsObject(engine::physics::PhysicsObject* i_physics_object);
+	inline void AddPhysicsObject(const engine::memory::SharedPointer<PhysicsObject>& i_physics_object);
+	inline void RemovePhysicsObject(const engine::memory::SharedPointer<PhysicsObject>& i_physics_object);
 
 private:
-	size_t											num_physics_objects_;
-	std::vector<PhysicsObject*>						physics_objects_;
+	size_t																			num_physics_objects_;
+	std::vector<engine::memory::SharedPointer<PhysicsObject>>						physics_objects_;
 };
 
 } // namespace physics

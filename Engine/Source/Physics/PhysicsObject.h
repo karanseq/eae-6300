@@ -3,6 +3,8 @@
 
 // engine includes
 #include "Math\Vec3D.h"
+#include "Memory\SharedPointer.h"
+#include "Memory\WeakPointer.h"
 
 // forward declaration
 namespace engine {
@@ -22,7 +24,7 @@ namespace physics {
 class PhysicsObject
 {
 public:
-	explicit PhysicsObject(engine::gameobject::GameObject* i_game_object, float i_mass = DEFAULT_MASS, float i_drag = DEFAULT_COEFF_DRAG);
+	inline static engine::memory::SharedPointer<engine::physics::PhysicsObject> Create(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass = DEFAULT_MASS, float i_drag = DEFAULT_COEFF_DRAG);
 	~PhysicsObject();
 
 	// copy constructor
@@ -37,8 +39,8 @@ public:
 	// accessors and mutators
 	inline bool GetIsAwake() const;
 	inline void SetIsAwake(bool is_awake);
-	inline engine::gameobject::GameObject* GetGameObject() const;
-	inline void SetGameObject(engine::gameobject::GameObject* i_game_object);
+	inline engine::memory::WeakPointer<engine::gameobject::GameObject> GetGameObject() const;
+	inline void SetGameObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
 	inline float GetMass() const;
 	inline void SetMass(float i_mass);
 	inline float GetDrag() const;
@@ -46,20 +48,24 @@ public:
 	inline const engine::math::Vec3D& GetVelocity() const;
 	inline void SetVelocity(const engine::math::Vec3D& i_velocity);
 
+private:
+	explicit PhysicsObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass = DEFAULT_MASS, float i_drag = DEFAULT_COEFF_DRAG);
+
+public:
 	// constants
-	static const float											DEFAULT_MASS;
-	static const float											DEFAULT_COEFF_DRAG;
-	static const float											MAX_COEFF_DRAG;
-	static const float											MIN_VELOCITY_LENGTH_SQUARED;
-	static const float											MAX_VELOCITY_LENGTH_SQUARED;
+	static const float														DEFAULT_MASS;
+	static const float														DEFAULT_COEFF_DRAG;
+	static const float														MAX_COEFF_DRAG;
+	static const float														MIN_VELOCITY_LENGTH_SQUARED;
+	static const float														MAX_VELOCITY_LENGTH_SQUARED;
 
 private:
-	bool														is_awake_;
-	engine::gameobject::GameObject*								game_object_;
-	float														mass_;
-	float														inverse_mass_;
-	float														coeff_drag_;
-	engine::math::Vec3D											curr_velocity_;
+	bool																	is_awake_;
+	engine::memory::WeakPointer<engine::gameobject::GameObject>				game_object_;
+	float																	mass_;
+	float																	inverse_mass_;
+	float																	coeff_drag_;
+	engine::math::Vec3D														curr_velocity_;
 }; // class PhysicsObject
 
 } // namespace physics

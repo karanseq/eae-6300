@@ -6,12 +6,17 @@
 namespace engine {
 namespace physics {
 
+	inline engine::memory::SharedPointer<PhysicsObject> PhysicsObject::Create(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass, float i_drag)
+	{
+		return engine::memory::SharedPointer<PhysicsObject>(new PhysicsObject(i_game_object, i_mass, i_drag));
+	}
+
 	inline PhysicsObject& PhysicsObject::operator=(const PhysicsObject& i_copy)
 	{
 		// check for self assignment
 		if (this != &i_copy)
 		{
-			game_object_ = new engine::gameobject::GameObject(*(i_copy.game_object_));
+			game_object_ = i_copy.game_object_;
 			mass_ = i_copy.mass_;
 			inverse_mass_ = i_copy.inverse_mass_;
 			coeff_drag_ = i_copy.coeff_drag_;
@@ -31,12 +36,12 @@ namespace physics {
 		is_awake_ = is_awake;
 	}
 
-	inline engine::gameobject::GameObject* PhysicsObject::GetGameObject() const
+	inline engine::memory::WeakPointer<engine::gameobject::GameObject> PhysicsObject::GetGameObject() const
 	{
 		return game_object_;
 	}
 
-	inline void PhysicsObject::SetGameObject(engine::gameobject::GameObject* i_game_object)
+	inline void PhysicsObject::SetGameObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object)
 	{
 		ASSERT(i_game_object);
 		game_object_ = i_game_object;

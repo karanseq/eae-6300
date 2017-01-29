@@ -5,9 +5,6 @@
 #include "Common\Engine.h"
 #include "GLib.h"
 #include "Logger\Logger.h"
-#include "Math\Vec2D.h"
-#include "Memory\AllocatorOverrides.h"
-#include "Memory\BlockAllocator.h"
 #include "Time\Updater.h"
 
 // game includes
@@ -82,7 +79,6 @@ void Shutdown()
 
 // static member initialization
 MonsterChase* MonsterChase::instance_ = nullptr;
-engine::memory::BlockAllocator* MonsterChase::game_allocator_ = nullptr;
 
 bool MonsterChase::KEY_A_PRESSED = false;
 bool MonsterChase::KEY_D_PRESSED = false;
@@ -93,6 +89,7 @@ bool MonsterChase::KEY_W_PRESSED = false;
 
 MonsterChase* MonsterChase::Create()
 {
+	// create the singleton instance of MonsterChase
 	if (!MonsterChase::instance_)
 	{
 		MonsterChase::instance_ = new MonsterChase();
@@ -102,48 +99,30 @@ MonsterChase* MonsterChase::Create()
 
 void MonsterChase::Destroy()
 {
+	// destroy the singleton instance of MonsterChase
 	SAFE_DELETE(MonsterChase::instance_);
 }
 
 MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
 	player_(nullptr)
 {
-	// allocate memory for the game objects
-	void* aligned_memory = engine::memory::BlockAllocator::GetDefaultAllocator()->Alloc(MEMORY_SIZE);
-	ASSERT(aligned_memory);
-
-	// create an allocator to manage memory for the game objects
-	MonsterChase::game_allocator_ = engine::memory::BlockAllocator::Create(aligned_memory, MEMORY_SIZE);
-	ASSERT(MonsterChase::game_allocator_);
-
 	// init game data
 	GameData::Create();
 
 	// register the key callback
 	GLib::SetKeyStateChangeCallback(monsterchase::AcceptKey);
-
-	// register the allocator
-	engine::memory::BlockAllocator::AddBlockAllocator(MonsterChase::game_allocator_);
 }
 
 MonsterChase::~MonsterChase()
 {
+	// delete the player
+	SAFE_DELETE(player_);
+
 	// tell the engine we no longer want to be ticked
 	engine::time::Updater::Get()->RemoveTickable(this);
 
-	// deallocate the player
-	SAFE_DELETE(player_);
-
 	// delete game data
 	GameData::Destroy();
-
-	// deregister the allocator
-	engine::memory::BlockAllocator::RemoveBlockAllocator(MonsterChase::game_allocator_);
-
-	// deallocate the allocator
-	engine::memory::BlockAllocator::Destroy(MonsterChase::game_allocator_);
-	engine::memory::BlockAllocator::GetDefaultAllocator()->Free(MonsterChase::game_allocator_);
-	MonsterChase::game_allocator_ = nullptr;
 }
 
 bool MonsterChase::Init()
@@ -239,7 +218,7 @@ void MonsterChase::CreatePlayer(const char* i_name)
 	ASSERT(i_name != nullptr);
 
 	// create the player at the center of the grid
-	player_ = new (MonsterChase::game_allocator_) Player(i_name);
+	player_ = new Player(i_name);
 }
 
 } // namespace monsterchase

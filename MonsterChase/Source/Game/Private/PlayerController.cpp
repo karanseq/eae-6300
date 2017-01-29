@@ -1,9 +1,8 @@
 #include "Game\PlayerController.h"
 
 // engine includes
+#include "Assert\Assert.h"
 #include "Math\Vec3D.h"
-#include "Common\HelperMacros.h"
-#include "Memory\AllocatorOverrides.h"
 #include "Physics\Physics.h"
 
 // game includes
@@ -11,8 +10,8 @@
 
 namespace monsterchase {
 
-PlayerController::PlayerController() : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject()),
-	physics_object_(new (MonsterChase::GetAllocator()) engine::physics::PhysicsObject(game_object_))
+PlayerController::PlayerController() : game_object_(engine::gameobject::GameObject::Create()),
+	physics_object_(engine::physics::PhysicsObject::Create(game_object_))
 {
 	// validate state
 	ASSERT(game_object_);
@@ -33,16 +32,14 @@ PlayerController::PlayerController(engine::gameobject::GameObject* i_game_object
 
 PlayerController::~PlayerController()
 {
-	SAFE_DELETE(game_object_);
 	if (physics_object_)
 	{
 		engine::physics::Physics::Get()->RemovePhysicsObject(physics_object_);
 	}
-	SAFE_DELETE(physics_object_);
 }
 
-PlayerController::PlayerController(const PlayerController& i_copy) : game_object_(new (MonsterChase::GetAllocator()) engine::gameobject::GameObject(*(i_copy.game_object_))),
-	physics_object_(new (MonsterChase::GetAllocator()) engine::physics::PhysicsObject(*(i_copy.physics_object_)))
+PlayerController::PlayerController(const PlayerController& i_copy) : game_object_(new engine::gameobject::GameObject(*(i_copy.game_object_))),
+	physics_object_(new engine::physics::PhysicsObject(*(i_copy.physics_object_)))
 {
 	// validate state
 	ASSERT(game_object_);
@@ -61,11 +58,11 @@ PlayerController::PlayerController(PlayerController&& i_copy) : game_object_(i_c
 PlayerController* PlayerController::Clone() const
 {
 	// clone the objects this controller maintains
-	engine::gameobject::GameObject* game_object = new (MonsterChase::GetAllocator()) engine::gameobject::GameObject(*game_object_);
-	engine::physics::PhysicsObject* physics_object = new (MonsterChase::GetAllocator()) engine::physics::PhysicsObject(*physics_object_);
+	engine::gameobject::GameObject* game_object = new engine::gameobject::GameObject(*game_object_);
+	engine::physics::PhysicsObject* physics_object = new engine::physics::PhysicsObject(*physics_object_);
 
 	// now create a new controller with the cloned game object
-	PlayerController* controller = new (MonsterChase::GetAllocator()) PlayerController(game_object, physics_object);
+	PlayerController* controller = new PlayerController(game_object, physics_object);
 	return controller;
 }
 

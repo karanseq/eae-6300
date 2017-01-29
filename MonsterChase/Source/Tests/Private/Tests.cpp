@@ -1,11 +1,11 @@
 #ifdef ENABLE_TESTS
 
+// engine includes
+#include "Logger\Logger.h"
+
 /************************ MEMORY TESTS ************************/
 #ifdef ENABLE_ALLOCATOR_TEST
 #include "Tests\BlockAllocatorTest.h"
-
-// engine includes
-#include "Logger\Logger.h"
 
 bool HeapManager_UnitTest();
 
@@ -13,9 +13,9 @@ void TestFixedSizeAllocator();
 #endif // ENABLE_ALLOCATOR_TEST
 
 /************************ ENABLE OTHER TESTS ************************/
-#define ENABLE_VECTOR_CONST_TEST
-#define ENABLE_FLOAT_VALIDITY_TEST
-#define ENABLE_BIT_ARRAY_TEST
+//#define ENABLE_VECTOR_CONST_TEST
+//#define ENABLE_FLOAT_VALIDITY_TEST
+//#define ENABLE_BIT_ARRAY_TEST
 #define ENABLE_STRONG_POINTER_TEST
 
 #ifdef ENABLE_VECTOR_CONST_TEST
@@ -37,31 +37,31 @@ void TestSmartPointers();
 /************************ RUN TESTS ************************/
 void RunTests()
 {
-	LOG("\n");
 #ifdef ENABLE_VECTOR_CONST_TEST
+	LOG("\n");
 	TestVectorConstness();
 #endif // ENABLE_VECTOR_CONST_TEST
 
-	LOG("\n");
 #ifdef ENABLE_FLOAT_VALIDITY_TEST
+	LOG("\n");
 	TestFloatValidity();
 #endif // ENABLE_FLOAT_VALIDITY_TEST
 	
-	LOG("\n");
 #ifdef ENABLE_BIT_ARRAY_TEST
+	LOG("\n");
 	RunBitArray_UnitTest();
 #endif // ENABLE_BIT_ARRAY_TEST
 
-	LOG("\n");
 #ifdef ENABLE_STRONG_POINTER_TEST
+	LOG("\n");
 	TestSmartPointers();
 #endif // ENABLE_STRONG_POINTER_TEST
 
-	LOG("\n");
 #ifdef ENABLE_ALLOCATOR_TEST
-	TestFixedSizeAllocator();
 	LOG("\n");
+	TestFixedSizeAllocator();
 
+	LOG("\n");
 #ifdef BUILD_DEBUG
 		HeapManager_UnitTest();
 #else

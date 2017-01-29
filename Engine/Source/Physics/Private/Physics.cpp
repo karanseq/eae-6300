@@ -3,7 +3,6 @@
 // engine includes
 #include "Common\HelperMacros.h"
 #include "Logger\Logger.h"
-#include "Physics\PhysicsObject.h"
 
 namespace engine {
 namespace physics {

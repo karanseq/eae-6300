@@ -42,6 +42,11 @@ public:
 	inline WeakPointer& operator=(WeakPointer&& i_copy);
 	inline WeakPointer& operator=(const SharedPointer<T>& i_strong_pointer);
 
+	inline operator bool() const;
+
+	inline bool operator==(const WeakPointer& i_other) const;
+	inline bool operator!=(const WeakPointer& i_other) const;
+
 #ifdef BUILD_DEBUG
 	inline long GetStrongCount() const;
 	inline long GetWeakCount() const;

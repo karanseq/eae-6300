@@ -4,6 +4,7 @@
 #include "GameObject\GameObject.h"
 #include "Logger\Logger.h"
 #include "Math\MathUtil.h"
+#include "Memory\SharedPointer.h"
 
 namespace engine {
 namespace physics {
@@ -15,7 +16,7 @@ const float PhysicsObject::MAX_COEFF_DRAG = 0.9f;
 const float PhysicsObject::MIN_VELOCITY_LENGTH_SQUARED = 0.000075f;
 const float PhysicsObject::MAX_VELOCITY_LENGTH_SQUARED = 6.00f;
 
-PhysicsObject::PhysicsObject(engine::gameobject::GameObject* i_game_object, float i_mass, float i_drag) : is_awake_(false),
+PhysicsObject::PhysicsObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass, float i_drag) : is_awake_(false),
 	game_object_(i_game_object),
 	mass_(i_mass),
 	inverse_mass_(0.0f),
@@ -36,7 +37,7 @@ PhysicsObject::~PhysicsObject()
 {}
 
 PhysicsObject::PhysicsObject(const PhysicsObject& i_copy) : is_awake_(i_copy.is_awake_),
-	game_object_(new engine::gameobject::GameObject(*(i_copy.game_object_))),
+	game_object_(i_copy.game_object_),
 	mass_(i_copy.mass_),
 	inverse_mass_(i_copy.inverse_mass_),
 	coeff_drag_(i_copy.coeff_drag_),
@@ -68,11 +69,14 @@ void PhysicsObject::Update(float dt)
 		is_awake_ = false;
 	}
 
+	// get a shared pointer to operate on
+	engine::memory::SharedPointer<engine::gameobject::GameObject> game_object(game_object_);
+
 	// use midpoint numerical integration to calculate new position
-	engine::math::Vec3D new_position = game_object_->GetPosition() + ((prev_velocity + curr_velocity_) * 0.5f) * dt;
+	engine::math::Vec3D new_position = game_object->GetPosition() + ((prev_velocity + curr_velocity_) * 0.5f) * dt;
 
 	// update game object
-	game_object_->SetPosition(new_position);
+	game_object->SetPosition(new_position);
 }
 
 void PhysicsObject::ApplyImpulse(const engine::math::Vec3D& i_impulse)

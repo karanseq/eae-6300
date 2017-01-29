@@ -3,6 +3,8 @@
 namespace engine {
 namespace math {
 
+	const Transform Transform::ZERO;
+
 	Transform::Transform(Vec3D i_position, Vec3D i_rotation, Vec3D i_scale) : position_(i_position),
 		rotation_(i_rotation),
 		scale_(i_scale)

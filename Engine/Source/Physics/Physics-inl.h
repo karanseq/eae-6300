@@ -15,7 +15,7 @@ inline Physics* Physics::Get()
 	return Physics::instance_;
 }
 
-inline void Physics::AddPhysicsObject(PhysicsObject* i_physics_object)
+inline void Physics::AddPhysicsObject(const engine::memory::SharedPointer<PhysicsObject>& i_physics_object)
 {
 	// validate input
 	ASSERT(i_physics_object);
@@ -31,7 +31,7 @@ inline void Physics::AddPhysicsObject(PhysicsObject* i_physics_object)
 	++num_physics_objects_;
 }
 
-inline void Physics::RemovePhysicsObject(PhysicsObject* i_physics_object)
+inline void Physics::RemovePhysicsObject(const engine::memory::SharedPointer<PhysicsObject>& i_physics_object)
 {
 	// validate input
 	ASSERT(i_physics_object);

@@ -3,14 +3,15 @@
 
 // engine includes
 #include "Assert\Assert.h"
-#include "GameObject\IdentityComponent.h"
 #include "GameObject\InterfaceGameObjectController.h"
-#include "Memory\AllocatorUtil.h"
-
-// game includes
-#include "Game\PlayerController.h"
 
 // forward declarations
+namespace engine {
+namespace gameobject {
+	class IdentityComponent;
+}
+}
+	
 namespace GLib {
 namespace Sprites {
 	struct Sprite;
