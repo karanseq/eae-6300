@@ -31,9 +31,9 @@ namespace physics {
 		return is_awake_;
 	}
 
-	inline void PhysicsObject::SetIsAwake(bool is_awake)
+	inline void PhysicsObject::SetIsAwake(bool i_is_awake)
 	{
-		is_awake_ = is_awake;
+		is_awake_ = i_is_awake;
 	}
 
 	inline engine::memory::WeakPointer<engine::gameobject::GameObject> PhysicsObject::GetGameObject() const

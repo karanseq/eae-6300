@@ -7,9 +7,9 @@
 namespace engine {
 namespace math {
 
-	inline void Rect::SetRect(float x, float y, float width, float height)
+	inline void Rect::SetRect(float i_x, float i_y, float i_width, float i_height)
 	{
-		ASSERT(!IsNaN(x) && !IsNaN(y) && !IsNaN(width) && !IsNaN(height));
+		ASSERT(!IsNaN(i_x) && !IsNaN(i_y) && !IsNaN(i_width) && !IsNaN(i_height));
 	}
 
 	inline float Rect::GetMinX() const

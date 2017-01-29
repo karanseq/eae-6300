@@ -10,30 +10,30 @@
 namespace engine {
 namespace math {
 
-	inline float RadiansToDegrees(float radians)
+	inline float RadiansToDegrees(float i_radians)
 	{
-		return (radians * 180.0f / M_PI);
+		return (i_radians * 180.0f / M_PI);
 	}
 
-	inline float DegreesToRadians(float degrees)
+	inline float DegreesToRadians(float i_degrees)
 	{
-		return (degrees * M_PI / 180.0f);
+		return (i_degrees * M_PI / 180.0f);
 	}
 
-	inline bool IsNaN(float number)
+	inline bool IsNaN(float i_number)
 	{
-		volatile float temp = number;
-		return (temp != number);
+		volatile float temp = i_number;
+		return (temp != i_number);
 	}
 
-	inline bool FuzzyEquals(float lhs, float rhs, float epsilon = MAX_EPSILON)
+	inline bool FuzzyEquals(float i_lhs, float i_rhs, float i_epsilon = MAX_EPSILON)
 	{
-		return fabs(rhs - lhs) < epsilon;
+		return fabs(i_rhs - i_lhs) < i_epsilon;
 	}
 
-	inline bool IsZero(float number)
+	inline bool IsZero(float i_number)
 	{
-		return FuzzyEquals(number, MIN_EPSILON);
+		return FuzzyEquals(i_number, MIN_EPSILON);
 	}
 
 } // namespace math

@@ -38,7 +38,7 @@ public:
 
 	// accessors and mutators
 	inline bool GetIsAwake() const;
-	inline void SetIsAwake(bool is_awake);
+	inline void SetIsAwake(bool i_is_awake);
 	inline engine::memory::WeakPointer<engine::gameobject::GameObject> GetGameObject() const;
 	inline void SetGameObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
 	inline float GetMass() const;

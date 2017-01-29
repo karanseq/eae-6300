@@ -279,11 +279,13 @@ void TestSmartPointersWithVector()
 	}
 	LOG("Finished %zu iterations of random copy", iteration_count);
 
+#ifdef BUILD_DEBUG
 	LOG("Displaying the ref count of shared pointers in the first vector:");
 	for (auto i : vec1)
 	{
 		LOG("REF_COUNT:%ld", i.GetStrongCount());
 	}
+#endif
 }
 
 void TestSmartPointers()

@@ -13,7 +13,7 @@ namespace math {
 	class Size
 	{
 	public:
-		explicit Size(float width = 0.0f, float height = 0.0f);
+		explicit Size(float i_width = 0.0f, float i_height = 0.0f);
 		Size(const Size& i_copy);
 
 		~Size()

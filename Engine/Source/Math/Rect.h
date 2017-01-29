@@ -16,7 +16,7 @@ namespace math {
 	class Rect
 	{
 	public:
-		explicit Rect(float x = 0.0f, float y = 0.0f, float width = 0.0f, float height = 0.0f);
+		explicit Rect(float i_x = 0.0f, float i_y = 0.0f, float i_width = 0.0f, float i_height = 0.0f);
 		explicit Rect(const Vec2D& i_origin = Vec2D::ZERO, const Size& i_size = Size::ZERO);
 		Rect(const Rect& i_copy);
 
@@ -24,7 +24,7 @@ namespace math {
 		{}
 
 		// accessors and mutators
-		inline void SetRect(float x, float y, float width, float height);
+		inline void SetRect(float i_x, float i_y, float i_width, float i_height);
 		inline float GetMinX() const;
 		inline float GetMinY() const;
 		inline float GetMaxX() const;
