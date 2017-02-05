@@ -6,6 +6,7 @@
 #include "GLib.h"
 #include "Logger\Logger.h"
 #include "Time\Updater.h"
+#include "Util\FileUtils.h"
 
 // game includes
 #include "Game\GameUtils.h"
@@ -206,9 +207,9 @@ void MonsterChase::CheckInput()
 bool MonsterChase::LoadGameData()
 {
 	// load textures
-	GameUtils::LoadFile(GameData::PLAYER_TEXTURE_NAME);
-	GameUtils::LoadFile(GameData::SILLY_MONSTER_TEXTURE_NAME);
-	GameUtils::LoadFile(GameData::SMART_MONSTER_TEXTURE_NAME);
+	engine::util::FileUtils::Get()->ReadFile(GameData::PLAYER_TEXTURE_NAME);
+	engine::util::FileUtils::Get()->ReadFile(GameData::SILLY_MONSTER_TEXTURE_NAME);
+	engine::util::FileUtils::Get()->ReadFile(GameData::SMART_MONSTER_TEXTURE_NAME);
 	return true;
 }
 

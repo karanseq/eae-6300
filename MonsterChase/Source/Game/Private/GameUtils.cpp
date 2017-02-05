@@ -6,6 +6,8 @@
 // engine includes
 #include "Assert\Assert.h"
 #include "GLib.h"
+#include "Logger\Logger.h"
+#include "Util\FileUtils.h"
 
 // game includes
 #include "Game\GameData.h"
@@ -19,7 +21,8 @@ GLib::Sprites::Sprite* GameUtils::CreateSprite(const char* i_filename)
 	size_t texture_filesize = 0;
 
 	// Load the source file (texture data)
-	void * texture_file = LoadFile(i_filename, true, texture_filesize);
+	uint8_t* texture_file = engine::util::FileUtils::Get()->ReadFile(i_filename, texture_filesize);
+	ASSERT(texture_file);
 
 	// Ask GLib to create a texture out of the data (assuming it was loaded successfully)
 	GLib::Texture * texture = texture_file ? GLib::CreateTexture(texture_file, texture_filesize) : nullptr;
@@ -53,62 +56,6 @@ GLib::Sprites::Sprite* GameUtils::CreateSprite(const char* i_filename)
 	GLib::Sprites::SetTexture(*sprite, *texture);
 
 	return sprite;
-}
-
-uint8_t* GameUtils::LoadFile(const char* i_filename, bool i_cache_file, size_t& o_filesize)
-{
-	ASSERT(i_filename);
-	const std::string filename_str(i_filename);
-
-	// first check if the file is in the cache
-	GameData* game_data = GameData::GetInstance();
-	if (game_data->file_cache_.find(filename_str) != game_data->file_cache_.end())
-	{
-		const FileData& file_data = game_data->file_cache_[filename_str];
-		o_filesize = file_data.file_size;
-		return file_data.file_content;
-	}
-
-	FILE * file = nullptr;
-
-	errno_t fopen_error = fopen_s(&file, i_filename, "rb");
-	if (fopen_error != 0)
-		return nullptr;
-
-	ASSERT(file != nullptr);
-
-	int file_IOError = fseek(file, 0, SEEK_END);
-	ASSERT(file_IOError == 0);
-
-	long file_size = ftell(file);
-	ASSERT(file_size >= 0);
-
-	file_IOError = fseek(file, 0, SEEK_SET);
-	ASSERT(file_IOError == 0);
-
-	uint8_t * buffer = new uint8_t[file_size];
-	ASSERT(buffer);
-
-	size_t file_read = fread(buffer, 1, file_size, file);
-	ASSERT(file_read == file_size);
-
-	fclose(file);
-
-	o_filesize = file_size;
-
-	if (i_cache_file)
-	{
-		// add them to the cache
-		game_data->AddFileToCache(filename_str, o_filesize, buffer);
-	}
-
-	return buffer;
-}
-
-uint8_t* GameUtils::LoadFile(const char* i_filename, bool i_cache_file)
-{
-	size_t file_size = 0;
-	return GameUtils::LoadFile(i_filename, i_cache_file, file_size);
 }
 
 }

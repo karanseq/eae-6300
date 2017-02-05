@@ -36,9 +36,6 @@ public:
 
 	static GLib::Sprites::Sprite* CreateSprite(const char* i_filename);
 
-	static uint8_t* LoadFile(const char* i_filename, bool i_cache_file, size_t& o_filesize);
-	static uint8_t* LoadFile(const char* i_filename, bool i_cache_file = true);
-
 }; // class GameUtils
 
 } // namespace monsterchase

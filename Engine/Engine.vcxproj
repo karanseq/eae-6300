@@ -202,6 +202,8 @@
     <ClInclude Include="Source\Time\TimerUtil.h" />
     <ClInclude Include="Source\Time\Updater-inl.h" />
     <ClInclude Include="Source\Time\Updater.h" />
+    <ClInclude Include="Source\Util\FileUtils-inl.h" />
+    <ClInclude Include="Source\Util\FileUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Common\Private\Engine.cpp" />
@@ -226,6 +228,7 @@
     <ClCompile Include="Source\Time\Private\TimerUtil.cpp" />
     <ClCompile Include="Source\Time\Private\TimerUtil.win32.cpp" />
     <ClCompile Include="Source\Time\Private\Updater.cpp" />
+    <ClCompile Include="Source\Util\Private\FileUtils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

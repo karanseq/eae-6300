@@ -20,8 +20,9 @@ public:
 	inline bool operator==(const HashedString& i_copy) const;
 	inline unsigned int GetHash() const;
 
+	static inline unsigned int Hash(const char* i_string);
+
 private:
-	static unsigned int Hash(const char* i_string);
 	static unsigned int Hash(const void* i_bytes, unsigned int i_byte_count);
 
 	unsigned int hash_;

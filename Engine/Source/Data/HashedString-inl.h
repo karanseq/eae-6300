@@ -1,5 +1,11 @@
 #include "HashedString.h"
 
+// library includes
+#include <string.h>
+
+// engine includes
+#include "Assert\Assert.h"
+
 namespace engine {
 namespace data {
 
@@ -20,6 +26,12 @@ inline bool HashedString::operator==(const HashedString& i_copy) const
 inline unsigned int HashedString::GetHash() const
 {
 	return hash_;
+}
+
+inline unsigned int HashedString::Hash(const char* i_string)
+{
+	ASSERT(i_string);
+	return Hash(reinterpret_cast<const void*>(i_string), strlen(i_string));
 }
 
 } // namespace data

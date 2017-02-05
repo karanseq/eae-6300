@@ -11,6 +11,7 @@
 #include "Physics\Physics.h"
 #include "Time\TimerUtil.h"
 #include "Time\Updater.h"
+#include "Util\FileUtils.h"
 
 namespace engine {
 
@@ -21,6 +22,9 @@ bool StartUp()
 
 	// create string pools
 	engine::data::StringPool::Create();
+
+	// create file util
+	engine::util::FileUtils::Create();
 
 	// create updater
 	engine::time::Updater::Create();
@@ -68,6 +72,9 @@ void Shutdown()
 
 	// delete updater
 	engine::time::Updater::Destroy();
+
+	// delete file util
+	engine::util::FileUtils::Destroy();
 
 	// delete string pools
 	engine::data::StringPool::Destroy();

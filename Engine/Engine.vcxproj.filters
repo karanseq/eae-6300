@@ -70,6 +70,12 @@
     <Filter Include="Source Files\Renderer">
       <UniqueIdentifier>{78bd074a-6af7-479c-bcbb-6e8426653200}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Util">
+      <UniqueIdentifier>{19d8ed5c-40ac-42c1-9415-77e1605b4ff2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Util">
+      <UniqueIdentifier>{0e0a9f07-98a7-47ce-ac2d-69a0faaf3640}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -234,6 +240,12 @@
     <ClInclude Include="Source\Renderer\RenderableObject-inl.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Util\FileUtils.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Util\FileUtils-inl.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -301,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="Source\Renderer\Private\RenderableObject.cpp">
       <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Util\Private\FileUtils.cpp">
+      <Filter>Source Files\Util</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

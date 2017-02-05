@@ -1,11 +1,5 @@
 #include "Data\HashedString.h"
 
-// library includes
-#include <string.h>
-
-// engine includes
-#include "Assert\Assert.h"
-
 namespace engine {
 namespace data {
 
@@ -17,12 +11,6 @@ HashedString::HashedString(const HashedString& i_copy) : hash_(i_copy.hash_)
 
 HashedString::HashedString(const PooledString& i_string) : hash_(Hash(i_string.GetString()))
 {}
-
-unsigned int HashedString::Hash(const char* i_string)
-{
-	ASSERT(i_string);
-	return Hash(reinterpret_cast<const void*>(i_string), strlen(i_string));
-}
 
 unsigned int HashedString::Hash(const void* i_bytes, unsigned int i_byte_count)
 {
