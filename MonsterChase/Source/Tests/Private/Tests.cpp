@@ -16,7 +16,8 @@ void TestFixedSizeAllocator();
 //#define ENABLE_VECTOR_CONST_TEST
 //#define ENABLE_FLOAT_VALIDITY_TEST
 //#define ENABLE_BIT_ARRAY_TEST
-#define ENABLE_STRONG_POINTER_TEST
+//#define ENABLE_STRONG_POINTER_TEST
+#define ENABLE_STRING_POOL_TEST
 
 #ifdef ENABLE_VECTOR_CONST_TEST
 void TestVectorConstness();
@@ -33,6 +34,10 @@ void RunBitArray_UnitTest();
 #ifdef ENABLE_STRONG_POINTER_TEST
 void TestSmartPointers();
 #endif // ENABLE_STRONG_POINTER_TEST
+
+#ifdef ENABLE_STRING_POOL_TEST
+void TestStringPool();
+#endif // ENABLE_STRING_POOL_TEST
 
 /************************ RUN TESTS ************************/
 void RunTests()
@@ -56,6 +61,11 @@ void RunTests()
 	LOG("\n");
 	TestSmartPointers();
 #endif // ENABLE_STRONG_POINTER_TEST
+
+#ifdef ENABLE_STRING_POOL_TEST
+	LOG("\n");
+	TestStringPool();
+#endif // ENABLE_STRING_POOL_TEST
 
 #ifdef ENABLE_ALLOCATOR_TEST
 	LOG("\n");

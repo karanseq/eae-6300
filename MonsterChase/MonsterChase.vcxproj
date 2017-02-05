@@ -112,7 +112,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;BUILD_DEBUG;VERBOSITY_LEVEL=1;ENABLE_ALLOCATOR_TEST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;BUILD_DEBUG;VERBOSITY_LEVEL=1;ENABLE_TESTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)GLib\;$(SolutionDir)Engine\Source\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -181,6 +181,7 @@
     <ClCompile Include="Source\Tests\Private\FloatValidityTest.cpp" />
     <ClCompile Include="Source\Tests\Private\HeapManager_UnitTest.cpp" />
     <ClCompile Include="Source\Tests\Private\SmartPointersTest.cpp" />
+    <ClCompile Include="Source\Tests\Private\StringPoolTest.cpp" />
     <ClCompile Include="Source\Tests\Private\Tests.cpp" />
     <ClCompile Include="Source\Tests\Private\VectorConstnessTest.cpp" />
   </ItemGroup>

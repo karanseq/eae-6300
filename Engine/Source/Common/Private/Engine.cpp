@@ -6,6 +6,7 @@
 //#include <time.h>
 
 // engine includes
+#include "Data\StringPool.h"
 #include "Memory\AllocatorUtil.h"
 #include "Physics\Physics.h"
 #include "Time\TimerUtil.h"
@@ -17,6 +18,9 @@ bool StartUp()
 {
 	// create allocators
 	engine::memory::CreateAllocators();
+
+	// create string pools
+	engine::data::StringPool::Create();
 
 	// create updater
 	engine::time::Updater::Create();
@@ -64,6 +68,9 @@ void Shutdown()
 
 	// delete updater
 	engine::time::Updater::Destroy();
+
+	// delete string pools
+	engine::data::StringPool::Destroy();
 
 	// delete allocators
 	engine::memory::DestroyAllocators();

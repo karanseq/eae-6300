@@ -104,7 +104,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_LIB;BUILD_DEBUG;VERBOSITY_LEVEL=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;BUILD_DEBUG;VERBOSITY_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -154,6 +154,10 @@
     <ClInclude Include="Source\Common\HelperMacros.h" />
     <ClInclude Include="Source\Data\BitArray-inl.h" />
     <ClInclude Include="Source\Data\BitArray.h" />
+    <ClInclude Include="Source\Data\PooledString-inl.h" />
+    <ClInclude Include="Source\Data\PooledString.h" />
+    <ClInclude Include="Source\Data\StringPool-inl.h" />
+    <ClInclude Include="Source\Data\StringPool.h" />
     <ClInclude Include="Source\GameObject\GameObject-inl.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
     <ClInclude Include="Source\GameObject\IdentityComponent-inl.h" />
@@ -196,6 +200,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Common\Private\Engine.cpp" />
     <ClCompile Include="Source\Data\Private\BitArray.cpp" />
+    <ClCompile Include="Source\Data\Private\StringPool.cpp" />
     <ClCompile Include="Source\GameObject\Private\IdentityComponent.cpp" />
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp" />
     <ClCompile Include="Source\Math\Private\Rect.cpp" />

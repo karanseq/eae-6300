@@ -32,15 +32,15 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 		LOG("\n");
 #endif // ENABLE_TESTS
 
-		// init game
-		if (monsterchase::StartUp())
-		{
-			monsterchase::MonsterChase* monster_chase = monsterchase::MonsterChase::GetInstance();
-			engine::Run();
-		}
+		//// init game
+		//if (monsterchase::StartUp())
+		//{
+		//	monsterchase::MonsterChase* monster_chase = monsterchase::MonsterChase::GetInstance();
+		//	engine::Run();
+		//}
 
-		// cleanup game
-		monsterchase::Shutdown();
+		//// cleanup game
+		//monsterchase::Shutdown();
 
 		// TODO: Is this the right place to do this?
 		// cleanup GLib

@@ -408,12 +408,12 @@ bool FixedSizeAllocator::IsAllocated(const void* i_pointer) const
 #ifdef BUILD_DEBUG
 void FixedSizeAllocator::DumpStatistics() const
 {
-    VERBOSE("---------- %s ----------", __FUNCTION__);
-    VERBOSE("Dumping usage statistics for FixedSizeAllocator-%d with fixed block size of %zu bytes:", id_, fixed_block_size_);
-    VERBOSE("Total allocations:%zu", stats_.total_allocated);
-    VERBOSE("Total frees:%zu", stats_.total_freed);
-    VERBOSE("Highwater mark:%zu", stats_.max_outstanding);
-    VERBOSE("---------- END ----------");
+	LOG("---------- %s ----------", __FUNCTION__);
+	LOG("Dumping usage statistics for FixedSizeAllocator-%d with fixed block size of %zu bytes:", id_, fixed_block_size_);
+	LOG("Total allocations:%zu", stats_.total_allocated);
+	LOG("Total frees:%zu", stats_.total_freed);
+	LOG("Highwater mark:%zu", stats_.max_outstanding);
+	LOG("---------- END ----------");
 }
 #endif
 

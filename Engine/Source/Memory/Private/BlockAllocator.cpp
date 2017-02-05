@@ -44,7 +44,6 @@ BlockAllocator* BlockAllocator::Create(void* i_memory, size_t i_block_size)
 {
 	// validate input
 	ASSERT(i_memory);
-	ASSERT(i_block_size > 0);
 	ASSERT(i_block_size > (sizeof(BlockAllocator)));
 
 	// add the allocator to the start of the aligned memory block
@@ -587,12 +586,12 @@ const size_t BlockAllocator::GetLargestFreeBlockSize(const size_t i_alignment) c
 #ifdef BUILD_DEBUG
 void BlockAllocator::DumpStatistics() const
 {
-    VERBOSE("---------- %s ----------", __FUNCTION__);
-    VERBOSE("Dumping usage statistics for BlockAllocator-%d:", id_);
-    VERBOSE("Total allocations:%zu", stats_.total_allocated);
-    VERBOSE("Total frees:%zu", stats_.total_freed);
-    VERBOSE("Highwater mark:%zu", stats_.max_outstanding);
-    VERBOSE("---------- END ----------");
+    LOG("---------- %s ----------", __FUNCTION__);
+	LOG("Dumping usage statistics for BlockAllocator-%d:", id_);
+	LOG("Total allocations:%zu", stats_.total_allocated);
+	LOG("Total frees:%zu", stats_.total_freed);
+	LOG("Highwater mark:%zu", stats_.max_outstanding);
+	LOG("---------- END ----------");
 }
 
 void BlockAllocator::PrintAllDescriptors() const
