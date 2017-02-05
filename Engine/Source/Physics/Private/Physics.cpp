@@ -2,7 +2,6 @@
 
 // engine includes
 #include "Common\HelperMacros.h"
-#include "Logger\Logger.h"
 
 namespace engine {
 namespace physics {
@@ -30,11 +29,11 @@ void Physics::Destroy()
 	SAFE_DELETE(Physics::instance_);
 }
 
-void Physics::Run(float dt)
+void Physics::Run(float i_dt)
 {
 	for (size_t i = 0; i < num_physics_objects_; ++i)
 	{
-		physics_objects_[i]->Update(dt);
+		physics_objects_[i]->Update(i_dt);
 	}
 }
 

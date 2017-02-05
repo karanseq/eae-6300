@@ -23,6 +23,7 @@ private:
 	~Physics();
 	static Physics* instance_;
 
+	// disable copy constructor & copy assignment operator
 	Physics(const Physics& i_copy) = delete;
 	Physics& operator=(const Physics& i_copy) = delete;
 
@@ -31,7 +32,7 @@ public:
 	static void Destroy();
 	static inline Physics* Get();
 
-	void Run(float dt);
+	void Run(float i_dt);
 
 	// add/remove physics objects
 	inline void AddPhysicsObject(const engine::memory::SharedPointer<PhysicsObject>& i_physics_object);
