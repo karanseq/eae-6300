@@ -10,10 +10,9 @@
 #include "Logger\Logger.h"
 #include "Memory\BlockAllocator.h"
 
-namespace engine
-{
-namespace data
-{
+namespace engine {
+namespace data {
+
 // static member initialization
 StringPool* StringPool::instance_ = nullptr;
 const size_t StringPool::DEFAULT_POOL_SIZE = 256 * 1024;
@@ -102,14 +101,6 @@ const char* StringPool::Find(const char* i_string)
 {
 	ASSERT(i_string != nullptr);
 
-#ifndef BUILD_DEBUG
-	// check if the string exists in the pool
-	if (!Contains(i_string))
-	{
-		return nullptr;
-	}
-#endif
-
 	// get the size of the first string in the pool
 	size_t string_length = static_cast<size_t>(*pool_);
 
@@ -117,41 +108,19 @@ const char* StringPool::Find(const char* i_string)
 	uint8_t* pool_pointer = pool_;
 	while (string_length > 0)
 	{
-		// get a pointer string
-		char* string = reinterpret_cast<char*>(pool_pointer + sizeof(size_t));
-
-		// compare the input string's address
-		if (string == i_string)
-		{
-			return string;
-		}
-
-		// move to the next string
-		pool_pointer += (sizeof(size_t) + string_length);
-		string_length = static_cast<size_t>(*pool_pointer);
-	}
-
-	// in a debug build, go one step further and do a string comparison against the input
-#ifdef BUILD_DEBUG
-	string_length = static_cast<size_t>(*pool_);
-	pool_pointer = pool_;
-	while (string_length > 0)
-	{
-		// get a pointer string
+		// get a pointer to the string
 		char* string = reinterpret_cast<char*>(pool_pointer + sizeof(size_t));
 
 		// compare the string with the input
 		if (strcmp(i_string, string) == 0)
 		{
-			LOG_ERROR("WARNING! StringPool found a string with matching data, but the pointer provided does not exist in the pool!");
 			return string;
-		}		
+		}
 
 		// move to the next string
 		pool_pointer += string_length + sizeof(size_t);
 		string_length = static_cast<size_t>(*pool_pointer);
 	}
-#endif
 
 	return nullptr;
 }

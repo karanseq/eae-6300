@@ -210,6 +210,12 @@
     <ClInclude Include="Source\Data\PooledString-inl.h">
       <Filter>Header Files\Data</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Data\HashedString.h">
+      <Filter>Header Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Data\HashedString-inl.h">
+      <Filter>Header Files\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -267,6 +273,9 @@
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Data\Private\StringPool.cpp">
+      <Filter>Source Files\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Data\Private\HashedString.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
   </ItemGroup>

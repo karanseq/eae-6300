@@ -4,6 +4,8 @@
 
 // engine includes
 #include "Assert\Assert.h"
+#include "Data\HashedString.h"
+#include "Data\PooledString.h"
 #include "Data\StringPool.h"
 #include "Logger\Logger.h"
 #include "Memory\BlockAllocator.h"
@@ -26,6 +28,7 @@ void TestStringPool()
 {
 	LOG("-------------------- Running StringPool Test --------------------");
 
+	// test the pool
 	const char* search_string = "sentient";
 	const char* added_string = engine::data::StringPool::Get()->Add(search_string);
 	const char* found_string = engine::data::StringPool::Get()->Find(search_string);
@@ -36,6 +39,29 @@ void TestStringPool()
 	found_string = engine::data::StringPool::Get()->Find("transcendant");
 	found_string = engine::data::StringPool::Get()->Find(added_string);
 	ASSERT(found_string == added_string);
+
+	// test pooled string, its constructors & operators
+	// default constructor, new string
+	engine::data::PooledString ps0("thomas_was_alone");
+	// default constructor, existing string
+	engine::data::PooledString ps1("transcendant");
+	// copy constructor
+	engine::data::PooledString ps2(ps1);
+	// assignment operator
+	ps2 = ps0;
+	ASSERT(ps0 == ps2);
+
+	// test hashed string, its constructors and operators
+	// default constructor
+	engine::data::HashedString hs1("transcendant");
+	// copy constructor
+	engine::data::HashedString hs2(hs1);
+	// pooled string constructor
+	engine::data::HashedString hs3(ps1);
+	ASSERT(hs1 == hs3);
+	// assignment operator
+	hs1 = hs3;
+	ASSERT(hs1 == hs3);
 	
 	LOG("-------------------- Finished StringPool Test --------------------");
 }

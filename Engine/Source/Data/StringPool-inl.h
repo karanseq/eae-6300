@@ -1,9 +1,7 @@
 #include "StringPool.h"
 
-namespace engine
-{
-namespace data
-{
+namespace engine {
+namespace data {
 
 inline StringPool* StringPool::Get()
 {

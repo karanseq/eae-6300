@@ -154,6 +154,8 @@
     <ClInclude Include="Source\Common\HelperMacros.h" />
     <ClInclude Include="Source\Data\BitArray-inl.h" />
     <ClInclude Include="Source\Data\BitArray.h" />
+    <ClInclude Include="Source\Data\HashedString-inl.h" />
+    <ClInclude Include="Source\Data\HashedString.h" />
     <ClInclude Include="Source\Data\PooledString-inl.h" />
     <ClInclude Include="Source\Data\PooledString.h" />
     <ClInclude Include="Source\Data\StringPool-inl.h" />
@@ -200,6 +202,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Common\Private\Engine.cpp" />
     <ClCompile Include="Source\Data\Private\BitArray.cpp" />
+    <ClCompile Include="Source\Data\Private\HashedString.cpp" />
     <ClCompile Include="Source\Data\Private\StringPool.cpp" />
     <ClCompile Include="Source\GameObject\Private\IdentityComponent.cpp" />
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp" />
