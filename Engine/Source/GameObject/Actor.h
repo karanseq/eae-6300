@@ -10,19 +10,6 @@
 #include "Physics\PhysicsObject.h"
 #include "Renderer\RenderableObject.h"
 
-// forward declarations
-//namespace engine {
-//namespace gameobject {
-//	class GameObject;
-//}
-//namespace physics {
-//	class PhysicsObject;
-//}
-//namespace render {
-//	class RenderableObject;
-//}
-//}
-
 namespace engine {
 namespace gameobject {
 
@@ -34,6 +21,7 @@ public:
 	Actor(const engine::memory::SharedPointer<GameObject>& i_game_object);
 	Actor(const engine::memory::SharedPointer<GameObject>& i_game_object, const engine::memory::WeakPointer<engine::physics::PhysicsObject>& i_physics_object);
 	Actor(const engine::memory::SharedPointer<GameObject>& i_game_object, const engine::memory::WeakPointer<engine::render::RenderableObject>& i_renderable_object);
+	Actor(const engine::memory::SharedPointer<GameObject>& i_game_object, const engine::memory::WeakPointer<engine::physics::PhysicsObject>& i_physics_object, const engine::memory::WeakPointer<engine::render::RenderableObject>& i_renderable_object);
 	~Actor();
 
 	// disable copy & move constructors & assignment operators

@@ -43,17 +43,13 @@ public:
 	// the main game loop
 	// called every tick by the engine
 	virtual void Update(float dt) override;
-	// the rendering loop
-	// called every tick from Update
-	void Render();
 
 	// I/O functions
-	void PrintGameInformation();
 	void CheckInput();
 	bool LoadGameData();
 
 	// game logic
-	void CreatePlayer(const char* i_name);
+	void CreatePlayer();
 
 	inline GameStates GetState() const												{ return game_state_; }
 

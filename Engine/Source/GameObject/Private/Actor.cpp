@@ -38,6 +38,14 @@ Actor::Actor(const engine::memory::SharedPointer<GameObject>& i_game_object, con
 	renderable_object_(i_renderable_object)
 {}
 
+
+Actor::Actor(const engine::memory::SharedPointer<GameObject>& i_game_object, const engine::memory::WeakPointer<engine::physics::PhysicsObject>& i_physics_object, const engine::memory::WeakPointer<engine::render::RenderableObject>& i_renderable_object) : name_(),
+	type_(),
+	game_object_(i_game_object),
+	physics_object_(i_physics_object),
+	renderable_object_(i_renderable_object)
+{}
+
 Actor::~Actor()
 {}
 

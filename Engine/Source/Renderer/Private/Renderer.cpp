@@ -32,10 +32,20 @@ void Renderer::Destroy()
 
 void Renderer::Run(float i_dt)
 {
+	// Tell GLib that we want to start rendering
+	GLib::BeginRendering();
+	// Tell GLib that we want to render some sprites
+	GLib::Sprites::BeginRendering();
+
 	for (size_t i = 0; i < num_renderables_; ++i)
 	{
 		renderables_[i]->Render(i_dt);
 	}
+
+	// Tell GLib we're done rendering sprites
+	GLib::Sprites::EndRendering();
+	// Tell GLib we're done rendering
+	GLib::EndRendering();
 }
 
 GLib::Sprites::Sprite* Renderer::CreateSprite(const char* i_filename)

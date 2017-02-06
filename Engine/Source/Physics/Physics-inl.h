@@ -15,6 +15,21 @@ inline Physics* Physics::Get()
 	return Physics::instance_;
 }
 
+inline engine::memory::SharedPointer<PhysicsObject> Physics::CreatePhysicsObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass, float i_drag)
+{
+	// validate input
+	ASSERT(i_game_object);
+
+	// create a new physics object
+	engine::memory::SharedPointer<PhysicsObject> physics_object = PhysicsObject::Create(i_game_object, i_mass, i_drag);
+
+	// add it to the list
+	physics_objects_.push_back(physics_object);
+	++num_physics_objects_;
+
+	return physics_object;
+}
+
 inline void Physics::AddPhysicsObject(const engine::memory::SharedPointer<PhysicsObject>& i_physics_object)
 {
 	// validate input

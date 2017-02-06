@@ -4,7 +4,6 @@
 
 // engine includes
 #include "GameObject\GameObject.h"
-#include "GameObject\IdentityComponent.h"
 #include "Logger\Logger.h"
 #include "Math\Vec3D.h"
 #include "Memory\SharedPointer.h"
@@ -226,14 +225,14 @@ void TestWeakPointer()
 void TestUniquePointer()
 {
 	// block that tests unique pointer constructor & operators
-	engine::memory::UniquePointer<engine::gameobject::IdentityComponent> unique_ptr1;
+	engine::memory::UniquePointer<engine::math::Vec3D> unique_ptr1;
 	{
 		//engine::memory::UniquePointer<engine::gameobject::GameObject> unique_ptr2(unique_ptr1);	// copy not allowed
 
-		engine::memory::UniquePointer<engine::gameobject::IdentityComponent> unique_ptr2(new engine::gameobject::IdentityComponent());
+		engine::memory::UniquePointer<engine::math::Vec3D> unique_ptr2(new engine::math::Vec3D());
 		LOG("UniquePointer standard constructor %s", (unique_ptr2) ? "OK!" : "NOT OK!");
 
-		engine::memory::UniquePointer<engine::gameobject::IdentityComponent> unique_ptr3(std::move(unique_ptr2));
+		engine::memory::UniquePointer<engine::math::Vec3D> unique_ptr3(std::move(unique_ptr2));
 		LOG("UniquePointer move constructor %s", (!unique_ptr2 && unique_ptr3) ? "OK!" : "NOT OK!");
 
 		unique_ptr1 = std::move(unique_ptr3);

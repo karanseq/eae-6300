@@ -1,62 +1,35 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
-// engine includes
-#include "Assert\Assert.h"
-#include "GameObject\InterfaceGameObjectController.h"
-
 // forward declarations
 namespace engine {
 namespace gameobject {
-	class IdentityComponent;
-}
-}
-	
-namespace GLib {
-namespace Sprites {
-	struct Sprite;
+	class Actor;
 }
 }
 
 namespace monsterchase {
-
+	
 class Player
 {
 public:
-	explicit Player(const char* i_name);
+	Player();
 	~Player();
 
-	// copy constructor
-	Player(const Player& i_copy);
-	// move constructor
-	Player(Player&& i_copy);
+	// disable copy & move constructors & assignment operators
+	Player(const Player& i_copy) = delete;
+	Player& operator=(const Player& i_copy) = delete;
+	Player(Player&& i_copy) = delete;
+	Player& operator=(Player&& i_copy) = delete;
 
-	// copy assignment operator
-	inline Player& operator=(const Player& i_player);
-	// move assignment operator
-	inline Player& operator=(Player&& i_player);
-
-	void Update();
-	void Render();
-	void Print();
-
-	// accessors and mutators
-	inline engine::gameobject::InterfaceGameObjectController* GetController() const;
-	inline void SetController(engine::gameobject::InterfaceGameObjectController* i_controller);
-
-	inline engine::gameobject::IdentityComponent* GetIdentity() const;
-	inline void SetIdentity(engine::gameobject::IdentityComponent* i_identity);
-
-	inline GLib::Sprites::Sprite* GetSprite() const;
+	// constants
+	static const float							DEFAULT_MASS;
 
 private:
-	engine::gameobject::InterfaceGameObjectController*					controller_;
-	engine::gameobject::IdentityComponent*								identity_;
-	GLib::Sprites::Sprite*												sprite_;
+	engine::gameobject::Actor*					actor_;
+
 }; // class Player
 
 } // namespace monsterchase
-
-#include "Game\Player-inl.h"
 
 #endif // PLAYER_H_

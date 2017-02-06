@@ -34,7 +34,8 @@ public:
 
 	void Run(float i_dt);
 
-	// add/remove physics objects
+	// create, add & remove physics objects
+	inline engine::memory::SharedPointer<PhysicsObject> CreatePhysicsObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass = PhysicsObject::DEFAULT_MASS, float i_drag = PhysicsObject::DEFAULT_COEFF_DRAG);
 	inline void AddPhysicsObject(const engine::memory::SharedPointer<PhysicsObject>& i_physics_object);
 	inline void RemovePhysicsObject(const engine::memory::SharedPointer<PhysicsObject>& i_physics_object);
 

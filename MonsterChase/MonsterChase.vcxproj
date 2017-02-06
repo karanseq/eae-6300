@@ -170,11 +170,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\Private\GameData.cpp" />
-    <ClCompile Include="Source\Game\Private\GameUtils.cpp" />
     <ClCompile Include="Source\Game\Private\Main.cpp" />
     <ClCompile Include="Source\Game\Private\MonsterChase.cpp" />
     <ClCompile Include="Source\Game\Private\Player.cpp" />
-    <ClCompile Include="Source\Game\Private\PlayerController.cpp" />
     <ClCompile Include="Source\Tests\Private\BitArray_UnitTest.cpp" />
     <ClCompile Include="Source\Tests\Private\BlockAllocatorTest.cpp" />
     <ClCompile Include="Source\Tests\Private\FixedSizeAllocator_UnitTest.cpp" />
@@ -190,10 +188,7 @@
     <ClInclude Include="Source\Game\GameTypes.h" />
     <ClInclude Include="Source\Game\GameUtils.h" />
     <ClInclude Include="Source\Game\MonsterChase.h" />
-    <ClInclude Include="Source\Game\Player-inl.h" />
-    <ClInclude Include="Source\Game\PlayerController-inl.h" />
     <ClInclude Include="Source\Game\Player.h" />
-    <ClInclude Include="Source\Game\PlayerController.h" />
     <ClInclude Include="Source\resource.h" />
     <ClInclude Include="Source\Tests\BlockAllocatorTest.h" />
   </ItemGroup>

@@ -44,12 +44,6 @@
     <ClCompile Include="Source\Tests\Private\VectorConstnessTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Private\Player.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Private\PlayerController.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Tests\Private\FloatValidityTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
@@ -65,9 +59,6 @@
     <ClCompile Include="Source\Tests\Private\FixedSizeAllocator_UnitTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Private\GameUtils.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Private\GameData.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
@@ -77,6 +68,9 @@
     <ClCompile Include="Source\Tests\Private\StringPoolTest.cpp">
       <Filter>Source Files\Tests</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Private\Player.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\resource.h">
@@ -85,19 +79,7 @@
     <ClInclude Include="Source\Game\MonsterChase.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Player.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\PlayerController.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\GameUtils.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\PlayerController-inl.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\Player-inl.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="Source\Tests\BlockAllocatorTest.h">
@@ -107,6 +89,9 @@
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\GameData.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Player.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>

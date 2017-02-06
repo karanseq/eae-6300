@@ -3,12 +3,14 @@
 // engine includes 
 #include "Assert\Assert.h"
 #include "Common\Engine.h"
+#include "Common\HelperMacros.h"
 #include "GLib.h"
 #include "Logger\Logger.h"
 #include "Time\Updater.h"
 #include "Util\FileUtils.h"
 
 // game includes
+#include "Game\GameData.h"
 #include "Game\GameUtils.h"
 #include "Game\Player.h"
 
@@ -107,9 +109,6 @@ void MonsterChase::Destroy()
 MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
 	player_(nullptr)
 {
-	// init game data
-	GameData::Create();
-
 	// register the key callback
 	GLib::SetKeyStateChangeCallback(monsterchase::AcceptKey);
 }
@@ -121,9 +120,6 @@ MonsterChase::~MonsterChase()
 
 	// tell the engine we no longer want to be ticked
 	engine::time::Updater::Get()->RemoveTickable(this);
-
-	// delete game data
-	GameData::Destroy();
 }
 
 bool MonsterChase::Init()
@@ -137,7 +133,7 @@ bool MonsterChase::Init()
 	}
 
 	// create the player
-	CreatePlayer("ClownFace");
+	CreatePlayer();
 	LOG("Created the player...");
 
 	// tell the engine we want to be ticked
@@ -160,32 +156,6 @@ void MonsterChase::Update(float dt)
 	{
 		engine::RequestQuit();
 	}
-
-	// update elements
-	player_->Update();
-
-	// render elements
-	Render();
-}
-
-void MonsterChase::Render()
-{
-	// Tell GLib that we want to start rendering
-	GLib::BeginRendering();
-	// Tell GLib that we want to render some sprites
-	GLib::Sprites::BeginRendering();
-
-	player_->Render();
-
-	// Tell GLib we're done rendering sprites
-	GLib::Sprites::EndRendering();
-	// Tell GLib we're done rendering
-	GLib::EndRendering();
-}
-
-void MonsterChase::PrintGameInformation()
-{
-	player_->Print();
 }
 
 void MonsterChase::CheckInput()
@@ -213,13 +183,10 @@ bool MonsterChase::LoadGameData()
 	return true;
 }
 
-void MonsterChase::CreatePlayer(const char* i_name)
+void MonsterChase::CreatePlayer()
 {
-	// validate inputs
-	ASSERT(i_name != nullptr);
-
 	// create the player at the center of the grid
-	player_ = new Player(i_name);
+	player_ = new Player();
 }
 
 } // namespace monsterchase

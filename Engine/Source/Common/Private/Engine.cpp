@@ -9,6 +9,7 @@
 #include "Data\StringPool.h"
 #include "Memory\AllocatorUtil.h"
 #include "Physics\Physics.h"
+#include "Renderer\Renderer.h"
 #include "Time\TimerUtil.h"
 #include "Time\Updater.h"
 #include "Util\FileUtils.h"
@@ -32,6 +33,9 @@ bool StartUp()
 	// create physics
 	engine::physics::Physics::Create();
 
+	// create renderer
+	engine::render::Renderer::Create();
+
 	// give rand a new seed
 	// TODO: Resolve conflict with namespace time
 	//srand(static_cast<unsigned int>(time(0)));
@@ -49,6 +53,7 @@ void Run()
 	// save pointers to the modules that need ticking
 	static engine::time::Updater* updater = engine::time::Updater::Get();
 	static engine::physics::Physics* physics = engine::physics::Physics::Get();
+	static engine::render::Renderer* renderer = engine::render::Renderer::Get();
 
 	while (!quit_requested_)
 	{
@@ -58,6 +63,7 @@ void Run()
 		// update modules
 		physics->Run(dt);
 		updater->Run(dt);
+		renderer->Run(dt);
 
 		// ensure we have a steady 60 frames per second
 		const float diff_dt = ideal_dt - dt;
@@ -67,6 +73,9 @@ void Run()
 
 void Shutdown()
 {
+	// delete renderer
+	engine::render::Renderer::Destroy();
+
 	// delete physics
 	engine::physics::Physics::Destroy();
 

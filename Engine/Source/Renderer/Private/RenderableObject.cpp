@@ -3,11 +3,12 @@
 // engine includes
 #include "GameObject\GameObject.h"
 #include "GLib.h"
+#include "Renderer\Renderer.h"
 
 namespace engine {
 namespace render {
 
-RenderableObject::RenderableObject(GLib::Sprites::Sprite* i_sprite, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object) : sprite_(i_sprite),
+RenderableObject::RenderableObject(const char* i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object) : sprite_(Renderer::CreateSprite(i_file_name)),
 	game_object_(i_game_object)
 {
 	// validate inputs
@@ -16,7 +17,13 @@ RenderableObject::RenderableObject(GLib::Sprites::Sprite* i_sprite, const engine
 }
 
 RenderableObject::~RenderableObject()
-{}
+{
+	if (sprite_)
+	{
+		GLib::Sprites::Release(sprite_);
+		sprite_ = nullptr;
+	}
+}
 
 void RenderableObject::Render(float i_dt)
 {

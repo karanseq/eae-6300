@@ -15,6 +15,22 @@ inline Renderer* Renderer::Get()
 	return Renderer::instance_;
 }
 
+inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderableObject(const char* i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object)
+{
+	// validate input
+	ASSERT(i_file_name);
+	ASSERT(i_game_object);
+
+	// create a new renderable
+	engine::memory::SharedPointer<RenderableObject> renderable = RenderableObject::Create(i_file_name, i_game_object);
+
+	// add it to the list
+	renderables_.push_back(renderable);
+	++num_renderables_;
+
+	return renderable;
+}
+
 inline void Renderer::AddRenderableObject(const engine::memory::SharedPointer<RenderableObject>& i_renderable_object)
 {
 	// validate input
