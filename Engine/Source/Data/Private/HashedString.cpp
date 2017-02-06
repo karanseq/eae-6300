@@ -3,7 +3,13 @@
 namespace engine {
 namespace data {
 
+HashedString::HashedString() : hash_(0)
+{}
+
 HashedString::HashedString(const char* i_string) : hash_(Hash(i_string))
+{}
+
+HashedString::~HashedString()
 {}
 
 HashedString::HashedString(const HashedString& i_copy) : hash_(i_copy.hash_)

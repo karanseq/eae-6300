@@ -10,13 +10,11 @@ namespace data {
 class PooledString
 {
 public:
-	explicit PooledString(const char* i_string) : string_(StringPool::Get()->Add(i_string))
-	{}
-	~PooledString()
-	{}
+	PooledString();
+	explicit PooledString(const char* i_string);
+	~PooledString();
 
-	PooledString(const PooledString& i_copy) : string_(i_copy.string_)
-	{}
+	PooledString(const PooledString& i_copy);
 
 	inline PooledString& operator=(const PooledString& i_copy);
 	inline bool operator==(const PooledString& i_other) const;
@@ -24,7 +22,7 @@ public:
 	inline const char* GetString() const;
 
 private:
-	const char* string_;
+	const char*									string_;
 
 }; // class PooledString
 

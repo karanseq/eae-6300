@@ -8,6 +8,13 @@
 #include "Memory\SharedPointer.h"
 #include "RenderableObject.h"
 
+// forward declarations
+namespace GLib {
+namespace Sprites {
+	struct Sprite;
+}
+}
+
 namespace engine {
 namespace render {
 
@@ -32,6 +39,8 @@ public:
 	// add/remove renderer objects
 	inline void AddRenderableObject(const engine::memory::SharedPointer<RenderableObject>& i_renderable_object);
 	inline void RemoveRenderableObject(const engine::memory::SharedPointer<RenderableObject>& i_renderable_object);
+
+	static GLib::Sprites::Sprite* CreateSprite(const char* i_filename);
 
 private:
 	size_t																			num_renderables_;

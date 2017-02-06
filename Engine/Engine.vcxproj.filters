@@ -108,9 +108,6 @@
     <ClInclude Include="Source\Math\Vec3D-inl.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameObject\IdentityComponent.h">
-      <Filter>Header Files\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Assert\Assert.h">
       <Filter>Header Files\Assert</Filter>
     </ClInclude>
@@ -128,9 +125,6 @@
     </ClInclude>
     <ClInclude Include="Source\Math\MathUtil.h">
       <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameObject\IdentityComponent-inl.h">
-      <Filter>Header Files\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Source\Data\BitArray.h">
       <Filter>Header Files\Data</Filter>
@@ -246,6 +240,12 @@
     <ClInclude Include="Source\Util\FileUtils-inl.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GameObject\Actor.h">
+      <Filter>Header Files\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameObject\Actor-inl.h">
+      <Filter>Header Files\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -265,9 +265,6 @@
     </ClCompile>
     <ClCompile Include="Source\Math\Private\Transform.cpp">
       <Filter>Source Files\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameObject\Private\IdentityComponent.cpp">
-      <Filter>Source Files\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Source\Data\Private\BitArray.cpp">
       <Filter>Source Files\Data</Filter>
@@ -316,6 +313,12 @@
     </ClCompile>
     <ClCompile Include="Source\Util\Private\FileUtils.cpp">
       <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameObject\Private\Actor.cpp">
+      <Filter>Source Files\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Data\Private\PooledString.cpp">
+      <Filter>Source Files\Data</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

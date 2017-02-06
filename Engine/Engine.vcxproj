@@ -91,7 +91,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;BUILD_DEBUG;VERBOSITY_LEVEL=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;BUILD_DEBUG;VERBOSITY_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)GLib\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -160,11 +160,11 @@
     <ClInclude Include="Source\Data\PooledString.h" />
     <ClInclude Include="Source\Data\StringPool-inl.h" />
     <ClInclude Include="Source\Data\StringPool.h" />
+    <ClInclude Include="Source\GameObject\Actor-inl.h" />
+    <ClInclude Include="Source\GameObject\Actor.h" />
     <ClInclude Include="Source\GameObject\GameObject-inl.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
-    <ClInclude Include="Source\GameObject\IdentityComponent-inl.h" />
     <ClInclude Include="Source\GameObject\InterfaceGameObjectController.h" />
-    <ClInclude Include="Source\GameObject\IdentityComponent.h" />
     <ClInclude Include="Source\Logger\Logger.h" />
     <ClInclude Include="Source\Math\MathUtil.h" />
     <ClInclude Include="Source\Math\Rect-inl.h" />
@@ -209,8 +209,9 @@
     <ClCompile Include="Source\Common\Private\Engine.cpp" />
     <ClCompile Include="Source\Data\Private\BitArray.cpp" />
     <ClCompile Include="Source\Data\Private\HashedString.cpp" />
+    <ClCompile Include="Source\Data\Private\PooledString.cpp" />
     <ClCompile Include="Source\Data\Private\StringPool.cpp" />
-    <ClCompile Include="Source\GameObject\Private\IdentityComponent.cpp" />
+    <ClCompile Include="Source\GameObject\Private\Actor.cpp" />
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp" />
     <ClCompile Include="Source\Math\Private\Rect.cpp" />
     <ClCompile Include="Source\Math\Private\Size.cpp" />
