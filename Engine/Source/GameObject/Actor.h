@@ -16,12 +16,12 @@ namespace gameobject {
 class Actor
 {
 public:
-	Actor();
-	Actor(const engine::data::PooledString& i_name, const engine::data::HashedString& i_type);
-	Actor(const engine::memory::SharedPointer<GameObject>& i_game_object);
-	Actor(const engine::memory::SharedPointer<GameObject>& i_game_object, const engine::memory::WeakPointer<engine::physics::PhysicsObject>& i_physics_object);
-	Actor(const engine::memory::SharedPointer<GameObject>& i_game_object, const engine::memory::WeakPointer<engine::render::RenderableObject>& i_renderable_object);
-	Actor(const engine::memory::SharedPointer<GameObject>& i_game_object, const engine::memory::WeakPointer<engine::physics::PhysicsObject>& i_physics_object, const engine::memory::WeakPointer<engine::render::RenderableObject>& i_renderable_object);
+	inline static engine::memory::SharedPointer<Actor> Create();
+	inline static engine::memory::SharedPointer<Actor> Create(const engine::data::PooledString& i_name, const engine::data::HashedString& i_type);
+	inline static engine::memory::SharedPointer<Actor> Create(const engine::memory::SharedPointer<GameObject>& i_game_object);
+	inline static engine::memory::SharedPointer<Actor> Create(const engine::memory::SharedPointer<GameObject>& i_game_object, const engine::memory::WeakPointer<engine::physics::PhysicsObject>& i_physics_object);
+	inline static engine::memory::SharedPointer<Actor> Create(const engine::memory::SharedPointer<GameObject>& i_game_object, const engine::memory::WeakPointer<engine::render::RenderableObject>& i_renderable_object);
+	inline static engine::memory::SharedPointer<Actor> Create(const engine::memory::SharedPointer<GameObject>& i_game_object, const engine::memory::WeakPointer<engine::physics::PhysicsObject>& i_physics_object, const engine::memory::WeakPointer<engine::render::RenderableObject>& i_renderable_object);
 	~Actor();
 
 	// disable copy & move constructors & assignment operators
@@ -48,6 +48,14 @@ public:
 
 	inline void SetRenderableObject(const engine::memory::WeakPointer<engine::render::RenderableObject>& i_renderable_object);
 	inline const engine::memory::WeakPointer<engine::render::RenderableObject>& GetRenderableObject() const;
+
+protected:
+	Actor();
+	Actor(const engine::data::PooledString& i_name, const engine::data::HashedString& i_type);
+	Actor(const engine::memory::SharedPointer<GameObject>& i_game_object);
+	Actor(const engine::memory::SharedPointer<GameObject>& i_game_object, const engine::memory::WeakPointer<engine::physics::PhysicsObject>& i_physics_object);
+	Actor(const engine::memory::SharedPointer<GameObject>& i_game_object, const engine::memory::WeakPointer<engine::render::RenderableObject>& i_renderable_object);
+	Actor(const engine::memory::SharedPointer<GameObject>& i_game_object, const engine::memory::WeakPointer<engine::physics::PhysicsObject>& i_physics_object, const engine::memory::WeakPointer<engine::render::RenderableObject>& i_renderable_object);
 
 private:
 	uint32_t																	id_;

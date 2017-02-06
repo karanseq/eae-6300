@@ -1,5 +1,9 @@
 #include "GameObject\Actor.h"
 
+// engine includes
+#include "Physics\Physics.h"
+#include "Renderer\Renderer.h"
+
 namespace engine {
 namespace gameobject {
 
@@ -47,7 +51,10 @@ Actor::Actor(const engine::memory::SharedPointer<GameObject>& i_game_object, con
 {}
 
 Actor::~Actor()
-{}
+{
+	engine::physics::Physics::Get()->RemovePhysicsObject(physics_object_);
+	engine::render::Renderer::Get()->RemoveRenderableObject(renderable_object_);
+}
 
 } // namespace gameobject
 } // namespace engine

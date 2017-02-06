@@ -14,7 +14,10 @@ Renderer::Renderer() : num_renderables_(0)
 {}
 
 Renderer::~Renderer()
-{}
+{
+	renderables_.clear();
+	num_renderables_ = 0;
+}
 
 Renderer* Renderer::Create()
 {

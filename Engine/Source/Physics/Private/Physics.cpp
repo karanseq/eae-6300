@@ -13,7 +13,10 @@ Physics::Physics() : num_physics_objects_(0)
 {}
 
 Physics::~Physics()
-{}
+{
+	physics_objects_.clear();
+	num_physics_objects_ = 0;
+}
 
 Physics* Physics::Create()
 {

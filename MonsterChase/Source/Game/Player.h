@@ -1,6 +1,9 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
+// engine includes
+#include "Memory\SharedPointer.h"
+
 // forward declarations
 namespace engine {
 namespace gameobject {
@@ -23,10 +26,10 @@ public:
 	Player& operator=(Player&& i_copy) = delete;
 
 	// constants
-	static const float							DEFAULT_MASS;
+	static const float																DEFAULT_MASS;
 
 private:
-	engine::gameobject::Actor*					actor_;
+	engine::memory::SharedPointer<engine::gameobject::Actor>						actor_;
 
 }; // class Player
 
