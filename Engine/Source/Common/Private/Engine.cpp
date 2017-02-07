@@ -7,6 +7,7 @@
 
 // engine includes
 #include "Data\StringPool.h"
+#include "Input\Input.h"
 #include "Memory\AllocatorUtil.h"
 #include "Physics\Physics.h"
 #include "Renderer\Renderer.h"
@@ -26,6 +27,9 @@ bool StartUp()
 
 	// create file util
 	engine::util::FileUtils::Create();
+
+	// initialize input
+	engine::input::StartUp();
 
 	// create updater
 	engine::time::Updater::Create();
@@ -81,6 +85,9 @@ void Shutdown()
 
 	// delete updater
 	engine::time::Updater::Destroy();
+
+	// shutdown the input
+	engine::input::Shutdown();
 
 	// delete file util
 	engine::util::FileUtils::Destroy();

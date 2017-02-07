@@ -165,6 +165,11 @@
     <ClInclude Include="Source\GameObject\GameObject-inl.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
     <ClInclude Include="Source\GameObject\InterfaceGameObjectController.h" />
+    <ClInclude Include="Source\Input\Input.h" />
+    <ClInclude Include="Source\Input\KeyboardEvent-inl.h" />
+    <ClInclude Include="Source\Input\KeyboardEvent.h" />
+    <ClInclude Include="Source\Input\KeyboardEventDispatcher-inl.h" />
+    <ClInclude Include="Source\Input\KeyboardEventDispatcher.h" />
     <ClInclude Include="Source\Logger\Logger.h" />
     <ClInclude Include="Source\Math\MathUtil.h" />
     <ClInclude Include="Source\Math\Rect-inl.h" />
@@ -212,6 +217,9 @@
     <ClCompile Include="Source\Data\Private\PooledString.cpp" />
     <ClCompile Include="Source\Data\Private\StringPool.cpp" />
     <ClCompile Include="Source\GameObject\Private\Actor.cpp" />
+    <ClCompile Include="Source\Input\Private\Input.cpp" />
+    <ClCompile Include="Source\Input\Private\KeyboardEvent.cpp" />
+    <ClCompile Include="Source\Input\Private\KeyboardEventDispatcher.cpp" />
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp" />
     <ClCompile Include="Source\Math\Private\Rect.cpp" />
     <ClCompile Include="Source\Math\Private\Size.cpp" />
