@@ -21,8 +21,11 @@ inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderabl
 	ASSERT(i_file_name);
 	ASSERT(i_game_object);
 
+	// create a sprite for the renderable
+	auto sprite = CreateSprite(i_file_name);
+
 	// create a new renderable
-	engine::memory::SharedPointer<RenderableObject> renderable = RenderableObject::Create(i_file_name, i_game_object);
+	engine::memory::SharedPointer<RenderableObject> renderable = RenderableObject::Create(sprite, i_game_object);
 
 	// add it to the list
 	renderables_.push_back(renderable);

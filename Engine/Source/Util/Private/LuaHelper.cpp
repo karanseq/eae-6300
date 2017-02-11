@@ -14,11 +14,13 @@
 namespace engine {
 namespace util {
 
-char* LuaHelper::CreateCString(lua_State* i_lua_state, const char* i_key_name)
+bool LuaHelper::CreateCString(lua_State* i_lua_state, const char* i_key_name, size_t i_buffer_size, char* o_buffer)
 {
 	// validate inputs
 	ASSERT(i_lua_state);
 	ASSERT(i_key_name);
+	ASSERT(i_buffer_size > 0);
+	ASSERT(o_buffer);
 
 	int type = LUA_TNIL;
 
@@ -28,20 +30,28 @@ char* LuaHelper::CreateCString(lua_State* i_lua_state, const char* i_key_name)
 	// 2. Get the associated value
 	type = lua_gettable(i_lua_state, -2);
 	ASSERT(type == LUA_TSTRING);
+
 	const char* const_string = lua_tostring(i_lua_state, -1);
 	ASSERT(const_string != nullptr);
 
-	// duplicate the string for us to use
-	char* string = nullptr;
+	// copy the string into the output
+	bool success = false;
 	if (const_string)
 	{
-		string = _strdup(const_string);
+		success = true;
+		sprintf_s(o_buffer, i_buffer_size, "%s", const_string);
 	}
+#ifdef BUILD_DEBUG
+	else
+	{
+		LOG_ERROR("%s could not find a string for key %s", __FUNCTION__, i_key_name);
+	}
+#endif
 
 	// 3. Remove the value from the stack now that we're done with it
 	lua_pop(i_lua_state, 1);
 
-	return string;
+	return success;
 }
 
 engine::data::PooledString LuaHelper::CreatePooledString(lua_State* i_lua_state, const char* i_key_name)
@@ -53,7 +63,7 @@ engine::data::PooledString LuaHelper::CreatePooledString(lua_State* i_lua_state,
 	int type = LUA_TNIL;
 
 	// 1. Push the key string
-	lua_pushstring(i_lua_state, "name");
+	lua_pushstring(i_lua_state, i_key_name);
 
 	// 2. Get the associated value
 	type = lua_gettable(i_lua_state, -2);

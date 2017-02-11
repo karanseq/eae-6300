@@ -26,7 +26,7 @@ private:
 
 public:
 	// helpers that extract strings
-	static char* CreateCString(lua_State* i_lua_state, const char* i_key_name);
+	static bool CreateCString(lua_State* i_lua_state, const char* i_key_name, size_t i_buffer_size, char* o_buffer);
 	static engine::data::PooledString CreatePooledString(lua_State* i_lua_state, const char* i_key_name);
 
 	// helpers that extract numbers

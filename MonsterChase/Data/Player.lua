@@ -1,7 +1,7 @@
 Actor = 
 {
-	name = "Joe",
-	class = "Player",
+	name = "Clowny",
+	type = "Player",
 
 	bounding_box = { 0.0, 0.0, 32.0, 40.0 },
 	transform = 
@@ -14,17 +14,12 @@ Actor =
 
 	physics_settings = 
 	{
-		mass = 10.0,
+		mass = 50.0,
 		drag = 0.02
 	},
 
 	render_settings = 
 	{
-		sprite = { 
-			offset	= { 0.0, 0.0 },
-					-- left, top, right, bottom
-			extents	= { -1.0, -1.0, 1.0, 1.0 }
-		},
-		sprite_color = { 255, 255, 255, 255 }
+		sprite_name = "Data\\clown.dds"
 	}
 }

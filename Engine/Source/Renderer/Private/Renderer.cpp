@@ -53,6 +53,7 @@ void Renderer::Run(float i_dt)
 
 GLib::Sprites::Sprite* Renderer::CreateSprite(const char* i_filename)
 {
+	// validate input
 	ASSERT(i_filename);
 
 	size_t texture_filesize = 0;

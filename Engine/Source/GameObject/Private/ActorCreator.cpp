@@ -119,8 +119,10 @@ bool ActorCreator::CreatePhysicsObject(lua_State* i_lua_state, const engine::mem
 	if (type == LUA_TTABLE)
 	{
 		has_physics = true;
+
 		float mass = engine::util::LuaHelper::CreateFloat(i_lua_state, "mass");
 		float drag = engine::util::LuaHelper::CreateFloat(i_lua_state, "drag");
+
 		o_physics_object = engine::physics::Physics::Get()->CreatePhysicsObject(i_game_object, mass, drag);
 	}
 
@@ -148,6 +150,12 @@ bool ActorCreator::CreateRenderableObject(lua_State* i_lua_state, const engine::
 	if (type == LUA_TTABLE)
 	{
 		is_renderable = true;
+
+		const size_t file_name_length = 512;
+		char file_name_buffer[file_name_length];
+		engine::util::LuaHelper::CreateCString(i_lua_state, "sprite_name", file_name_length, file_name_buffer);
+
+		o_renderable_object = engine::render::Renderer::Get()->CreateRenderableObject(file_name_buffer, i_game_object);
 	}
 
 	// pop the render settings value

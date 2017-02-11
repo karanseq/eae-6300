@@ -10,8 +10,6 @@
 #include "GLib.h"
 #include "Logger\Logger.h"
 
-#include "GameObject\Actor.h"
-
 // game includes
 #include "Game\MonsterChase.h"
 

@@ -8,7 +8,7 @@
 namespace engine {
 namespace render {
 
-RenderableObject::RenderableObject(const char* i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object) : sprite_(Renderer::CreateSprite(i_file_name)),
+RenderableObject::RenderableObject(GLib::Sprites::Sprite* i_sprite, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object) : sprite_(i_sprite),
 	game_object_(i_game_object)
 {
 	// validate inputs

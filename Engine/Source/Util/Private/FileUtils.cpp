@@ -92,9 +92,9 @@ uint8_t* FileUtils::ReadFile(const char* i_file_name, size_t& o_file_size, bool 
 	if (i_cache_file)
 	{
 		file_cache_.insert(std::pair<unsigned int, FileData>(hash, { o_file_size, buffer }));
+		LOG("FileUtils added '%s' to the cache", i_file_name);
 	}
 
-	LOG("FileUtils added '%s' to the cache", i_file_name);
 	return buffer;
 }
 

@@ -23,8 +23,7 @@ namespace render {
 class RenderableObject
 {
 public:
-
-	inline static engine::memory::SharedPointer<RenderableObject> Create(const char* i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
+	inline static engine::memory::SharedPointer<RenderableObject> Create(GLib::Sprites::Sprite* i_sprite, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
 	~RenderableObject();
 
 	// disable copy constructor & copy assignment operator
@@ -41,7 +40,7 @@ public:
 	inline void SetGameObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
 
 private:
-	RenderableObject(const char* i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
+	RenderableObject(GLib::Sprites::Sprite* i_sprite, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
 
 private:
 	GLib::Sprites::Sprite*																sprite_;

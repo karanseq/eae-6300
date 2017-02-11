@@ -2,7 +2,7 @@
 
 // engine includes
 #include "Assert\Assert.h"
-#include "GameObject\GameObject.h"
+#include "GameObject\ActorCreator.h"
 #include "Input\KeyboardEventDispatcher.h"
 #include "Logger\Logger.h"
 #include "Physics\Physics.h"
@@ -27,13 +27,7 @@ Player::Player() : is_left_pressed_(false),
 	actor_(nullptr),
 	keyboard_event_(engine::input::KeyboardEvent::Create())
 {
-	auto game_object = engine::gameobject::GameObject::Create();
-	ASSERT(game_object);
-
-	actor_ = engine::gameobject::Actor::Create(game_object, 
-		engine::physics::Physics::Get()->CreatePhysicsObject(game_object, Player::DEFAULT_MASS), 
-		engine::render::Renderer::Get()->CreateRenderableObject(GameData::PLAYER_TEXTURE_NAME, game_object));
-	ASSERT(actor_);
+	engine::gameobject::ActorCreator::CreateActorFromFile(GameData::PLAYER_LUA_FILE_NAME, actor_);
 
 	// register for update events
 	engine::time::Updater::Get()->AddTickable(this);

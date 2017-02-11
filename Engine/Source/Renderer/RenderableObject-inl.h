@@ -7,9 +7,9 @@
 namespace engine {
 namespace render {
 
-inline engine::memory::SharedPointer<RenderableObject> RenderableObject::Create(const char* i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object)
+inline engine::memory::SharedPointer<RenderableObject> RenderableObject::Create(GLib::Sprites::Sprite* i_sprite, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object)
 {
-	return engine::memory::SharedPointer<RenderableObject>(new RenderableObject(i_file_name, i_game_object));
+	return engine::memory::SharedPointer<RenderableObject>(new RenderableObject(i_sprite, i_game_object));
 }
 
 inline GLib::Sprites::Sprite* RenderableObject::GetSprite() const
