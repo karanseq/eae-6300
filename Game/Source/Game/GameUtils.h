@@ -12,7 +12,7 @@
 // game includes
 #include "Game\GameTypes.h"
 
-namespace monsterchase {
+namespace game {
 
 class GameUtils
 {

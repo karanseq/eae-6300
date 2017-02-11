@@ -27,15 +27,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MonsterChase.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Source\Game\Private\Main.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Private\MonsterChase.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="Source\Tests\Private\HeapManager_UnitTest.cpp">
@@ -71,13 +63,13 @@
     <ClCompile Include="Source\Game\Private\Player.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Private\Game.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\resource.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\MonsterChase.h">
-      <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\GameUtils.h">
       <Filter>Header Files\Game</Filter>
@@ -94,5 +86,13 @@
     <ClInclude Include="Source\Game\Player.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\Game.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Game.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

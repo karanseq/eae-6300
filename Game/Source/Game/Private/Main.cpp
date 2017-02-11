@@ -11,7 +11,7 @@
 #include "Logger\Logger.h"
 
 // game includes
-#include "Game\MonsterChase.h"
+#include "Game\Game.h"
 
 #ifdef ENABLE_TESTS
 void RunTests();
@@ -24,7 +24,7 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 	{
 		// TODO: Is this the right place to do this?
 		// initialize GLib
-		bool success = GLib::Initialize(i_h_instance, i_n_cmd_show, "MonsterChase", -1, monsterchase::MonsterChase::SCREEN_WIDTH, monsterchase::MonsterChase::SCREEN_HEIGHT);
+		bool success = GLib::Initialize(i_h_instance, i_n_cmd_show, "MonsterChase", -1, game::Game::SCREEN_WIDTH, game::Game::SCREEN_HEIGHT);
 		ASSERT(success);
 
 #ifdef ENABLE_TESTS
@@ -33,14 +33,14 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 #endif // ENABLE_TESTS
 
 		// init game
-		if (monsterchase::StartUp())
+		if (game::StartUp())
 		{
-			monsterchase::MonsterChase* monster_chase = monsterchase::MonsterChase::GetInstance();
+			game::Game* monster_chase = game::Game::GetInstance();
 			engine::Run();
 		}
 
 		// cleanup game
-		monsterchase::Shutdown();
+		game::Shutdown();
 
 		// TODO: Is this the right place to do this?
 		// cleanup GLib

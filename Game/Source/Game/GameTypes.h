@@ -1,7 +1,7 @@
 #ifndef GAME_TYPES_H_
 #define GAME_TYPES_H_
 
-namespace monsterchase {
+namespace game {
 
 enum class GameStates
 {

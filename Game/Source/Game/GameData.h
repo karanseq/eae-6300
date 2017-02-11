@@ -8,7 +8,7 @@
 // engine includes
 #include "Assert\Assert.h"
 
-namespace monsterchase {
+namespace game {
 
 struct FileData {
 	size_t		file_size;

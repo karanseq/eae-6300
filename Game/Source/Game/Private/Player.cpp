@@ -10,10 +10,10 @@
 #include "Time\Updater.h"
 
 // game includes
+#include "Game\Game.h"
 #include "Game\GameData.h"
-#include "Game\MonsterChase.h"
 
-namespace monsterchase
+namespace game
 {
 
 // static member initialization
@@ -60,8 +60,8 @@ void Player::Update(float i_dt)
 
 	// wrap around the screen
 	auto position = actor_->GetGameObject()->GetPosition();
-	position.x((position.x() < -MonsterChase::SCREEN_WIDTH / 2) ? MonsterChase::SCREEN_WIDTH / 2 : (position.x() > MonsterChase::SCREEN_WIDTH / 2 ? -MonsterChase::SCREEN_WIDTH / 2 : position.x()));
-	position.y((position.y() < -MonsterChase::SCREEN_HEIGHT / 2) ? MonsterChase::SCREEN_HEIGHT / 2 : (position.y() > MonsterChase::SCREEN_HEIGHT / 2 ? -MonsterChase::SCREEN_HEIGHT / 2 : position.y()));
+	position.x((position.x() < -Game::SCREEN_WIDTH / 2) ? Game::SCREEN_WIDTH / 2 : (position.x() > Game::SCREEN_WIDTH / 2 ? -Game::SCREEN_WIDTH / 2 : position.x()));
+	position.y((position.y() < -Game::SCREEN_HEIGHT / 2) ? Game::SCREEN_HEIGHT / 2 : (position.y() > Game::SCREEN_HEIGHT / 2 ? -Game::SCREEN_HEIGHT / 2 : position.y()));
 	actor_->GetGameObject()->SetPosition(position);
 }
 

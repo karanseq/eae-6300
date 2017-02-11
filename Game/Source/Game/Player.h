@@ -7,7 +7,7 @@
 #include "Memory\SharedPointer.h"
 #include "Time\InterfaceTickable.h"
 
-namespace monsterchase {
+namespace game {
 	
 class Player : public engine::time::InterfaceTickable
 {

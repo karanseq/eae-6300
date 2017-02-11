@@ -23,6 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>MonsterChase</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>Game</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -166,12 +167,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ResourceCompile Include="MonsterChase.rc" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Source\Game\Private\GameData.cpp" />
     <ClCompile Include="Source\Game\Private\Main.cpp" />
-    <ClCompile Include="Source\Game\Private\MonsterChase.cpp" />
+    <ClCompile Include="Source\Game\Private\Game.cpp" />
     <ClCompile Include="Source\Game\Private\Player.cpp" />
     <ClCompile Include="Source\Tests\Private\BitArray_UnitTest.cpp" />
     <ClCompile Include="Source\Tests\Private\BlockAllocatorTest.cpp" />
@@ -187,7 +185,7 @@
     <ClInclude Include="Source\Game\GameData.h" />
     <ClInclude Include="Source\Game\GameTypes.h" />
     <ClInclude Include="Source\Game\GameUtils.h" />
-    <ClInclude Include="Source\Game\MonsterChase.h" />
+    <ClInclude Include="Source\Game\Game.h" />
     <ClInclude Include="Source\Game\Player.h" />
     <ClInclude Include="Source\resource.h" />
     <ClInclude Include="Source\Tests\BlockAllocatorTest.h" />
@@ -196,6 +194,9 @@
     <ProjectReference Include="..\Engine\Engine.vcxproj">
       <Project>{21128bfc-fae6-4bf5-b2f5-77fe1a60b117}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Game.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

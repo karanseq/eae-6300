@@ -1,6 +1,6 @@
 #include "Game\GameData.h"
 
-namespace monsterchase {
+namespace game {
 
 const char* GameData::PLAYER_TEXTURE_NAME = "Data\\clown.dds";
 const char* GameData::SILLY_MONSTER_TEXTURE_NAME = "Data\\enemy_01.dds";

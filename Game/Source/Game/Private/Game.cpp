@@ -1,4 +1,4 @@
-#include "Game\MonsterChase.h"
+#include "Game\Game.h"
 
 // engine includes 
 #include "Assert\Assert.h"
@@ -15,12 +15,12 @@
 #include "Game\GameUtils.h"
 #include "Game\Player.h"
 
-namespace monsterchase {
+namespace game {
 
 bool StartUp()
 {
 	// create an instance of the game
-	MonsterChase* mc_instance = MonsterChase::Create();
+	Game* mc_instance = Game::Create();
 	if (mc_instance == nullptr)
 	{
 		LOG_ERROR("Could not create an instance of MonsterChase!");
@@ -43,37 +43,37 @@ bool StartUp()
 
 void Shutdown()
 {
-	MonsterChase::Destroy();
+	Game::Destroy();
 	LOG("-------------------- MonsterChase Shutdown --------------------");
 }
 
 // static member initialization
-MonsterChase* MonsterChase::instance_ = nullptr;
+Game* Game::instance_ = nullptr;
 
-MonsterChase* MonsterChase::Create()
+Game* Game::Create()
 {
 	// create the singleton instance of MonsterChase
-	if (!MonsterChase::instance_)
+	if (!Game::instance_)
 	{
-		MonsterChase::instance_ = new MonsterChase();
+		Game::instance_ = new Game();
 	}
-	return MonsterChase::instance_;
+	return Game::instance_;
 }
 
-void MonsterChase::Destroy()
+void Game::Destroy()
 {
 	// destroy the singleton instance of MonsterChase
-	SAFE_DELETE(MonsterChase::instance_);
+	SAFE_DELETE(Game::instance_);
 }
 
-MonsterChase::MonsterChase() : game_state_(GameStates::kGameStateBegin),
+Game::Game() : game_state_(GameStates::kGameStateBegin),
 	player_(nullptr),
 	keyboard_event_(engine::input::KeyboardEvent::Create())
 {
 	ASSERT(keyboard_event_);
 }
 
-MonsterChase::~MonsterChase()
+Game::~Game()
 {
 	// delete the player
 	SAFE_DELETE(player_);
@@ -87,7 +87,7 @@ MonsterChase::~MonsterChase()
 	engine::input::KeyboardEventDispatcher::Get()->RemoveListener(keyboard_event_);
 }
 
-bool MonsterChase::Init()
+bool Game::Init()
 {
 	ASSERT(game_state_ == GameStates::kGameStateBegin);
 
@@ -108,7 +108,7 @@ bool MonsterChase::Init()
 	engine::time::Updater::Get()->AddTickable(this);
 
 	// register for key events
-	keyboard_event_->SetOnKeyPressed(std::bind(&MonsterChase::OnKeyPressed, this, std::placeholders::_1));
+	keyboard_event_->SetOnKeyPressed(std::bind(&Game::OnKeyPressed, this, std::placeholders::_1));
 	engine::input::KeyboardEventDispatcher::Get()->AddListener(keyboard_event_);
 
 	game_state_ = GameStates::kGameStateRunning;
@@ -116,7 +116,7 @@ bool MonsterChase::Init()
 	return true;
 }
 
-bool MonsterChase::LoadGameData()
+bool Game::LoadGameData()
 {
 	// load textures
 	engine::util::FileUtils::Get()->ReadFile(GameData::PLAYER_TEXTURE_NAME);
@@ -125,7 +125,7 @@ bool MonsterChase::LoadGameData()
 	return true;
 }
 
-void MonsterChase::Update(float dt)
+void Game::Update(float dt)
 {
 	bool quit = false;
 	GLib::Service(quit);
@@ -137,12 +137,12 @@ void MonsterChase::Update(float dt)
 	}
 }
 
-void MonsterChase::OnKeyPressed(unsigned int i_key_id)
+void Game::OnKeyPressed(unsigned int i_key_id)
 {
 	game_state_ = i_key_id == 'Q' ? GameStates::kGameStateQuit : game_state_;
 }
 
-void MonsterChase::CreatePlayer()
+void Game::CreatePlayer()
 {
 	// create the player at the center of the grid
 	player_ = new Player();

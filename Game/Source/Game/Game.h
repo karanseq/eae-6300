@@ -14,7 +14,7 @@
 // game includes
 #include "Game\GameTypes.h"
 
-namespace monsterchase {
+namespace game {
 
 // forward declarations
 class Player;
@@ -23,20 +23,20 @@ bool StartUp();
 
 void Shutdown();
 
-class MonsterChase : public engine::time::InterfaceTickable
+class Game : public engine::time::InterfaceTickable
 {
 private:
-	MonsterChase();
-	~MonsterChase();
-	static MonsterChase* instance_;
+	Game();
+	~Game();
+	static Game* instance_;
 
 	// disable copy constructor & copy assignment operator
-	MonsterChase(const MonsterChase& i_copy) = delete;
-	MonsterChase& operator=(const MonsterChase& i_copy) = delete;
+	Game(const Game& i_copy) = delete;
+	Game& operator=(const Game& i_copy) = delete;
 
 public:
-	static MonsterChase* Create();
-	static inline MonsterChase* GetInstance()										{ return instance_; }
+	static Game* Create();
+	static inline Game* GetInstance()										{ return instance_; }
 	static void Destroy();
 
 	// game initialization
