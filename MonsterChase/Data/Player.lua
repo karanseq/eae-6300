@@ -6,7 +6,7 @@ Actor =
 	bounding_box = { 0.0, 0.0, 32.0, 40.0 },
 	transform = 
 	{
-		position = { 1.0, 2.0, 3.0 },
+		position = { 0.0, 0.0, 0.0 },
 		rotation = { 0.0, 0.0, 0.0 },
 		scale = { 1.0, 1.0, 1.0 },
 	},

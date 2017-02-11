@@ -4,6 +4,7 @@
 #include "Assert\Assert.h"
 #include "Common\Engine.h"
 #include "Common\HelperMacros.h"
+#include "GameObject\ActorCreator.h"
 #include "Input\KeyboardEventDispatcher.h"
 #include "Logger\Logger.h"
 #include "Time\Updater.h"
@@ -77,6 +78,9 @@ MonsterChase::~MonsterChase()
 	// delete the player
 	SAFE_DELETE(player_);
 
+	// delete the monsters
+	monsters_.clear();
+
 	// tell the engine we no longer want to be ticked
 	engine::time::Updater::Get()->RemoveTickable(this);
 
@@ -96,6 +100,9 @@ bool MonsterChase::Init()
 	// create the player
 	CreatePlayer();
 	LOG("Created the player...");
+
+	// create the monsters
+	engine::gameobject::ActorCreator::CreateActorsFromFile(GameData::MONSTERS_LUA_FILE_NAME, monsters_);
 
 	// register for update events
 	engine::time::Updater::Get()->AddTickable(this);

@@ -2,26 +2,62 @@ ActorList =
 {
 	{
 		name = "Inky",
-		class = "Monster",
-		controller = "Wander",
-		initial_position = { -20.0, -20.0, 0.0 },
-	} ,
+		type = "Monster",
+
+		bounding_box = { 0.0, 0.0, 44.0, 40.0 },
+		transform = 
+		{
+			position = { -100.0, -100.0, 0.0 },
+		},
+
+		render_settings = 
+		{
+			sprite_name = "Data\\enemy_01.dds"
+		}
+	},
 	{
 		name = "Binky",
-		class = "Monster",
-		controller = "Wander",
-		initial_position = {  20.0, -20.0, 0.0 },
-	} ,
+		type = "Monster",
+
+		bounding_box = { 0.0, 0.0, 44.0, 40.0 },
+		transform = 
+		{
+			position = { -100.0, 100.0, 0.0 },
+		},
+
+		render_settings = 
+		{
+			sprite_name = "Data\\enemy_01.dds"
+		}
+	},
 	{
 		name = "Pinky",
-		class = "Monster",
-		controller = "Wander",
-		initial_position = {  20.0,  20.0, 0.0 },
-	} ,
+		type = "Monster",
+
+		bounding_box = { 0.0, 0.0, 44.0, 40.0 },
+		transform = 
+		{
+			position = { 100.0, -100.0, 0.0 },
+		},
+
+		render_settings = 
+		{
+			sprite_name = "Data\\enemy_01.dds"
+		}
+	},
 	{
 		name = "Clyde",
-		class = "Monster",
-		controller = "Wander",
-		initial_position = {  20.0, -20.0, 0.0 },
+		type = "Monster",
+
+		bounding_box = { 0.0, 0.0, 44.0, 40.0 },
+		transform = 
+		{
+			position = { 100.0, 100.0, 0.0 },
+		},
+
+		render_settings = 
+		{
+			sprite_name = "Data\\enemy_01.dds"
+		}
 	}
 }

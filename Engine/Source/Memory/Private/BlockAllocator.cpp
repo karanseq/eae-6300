@@ -90,7 +90,7 @@ BlockAllocator* BlockAllocator::GetDefaultAllocator()
 
 void BlockAllocator::CreateDefaultAllocator()
 {
-	size_t default_block_size = 1024 * 1024;
+	size_t default_block_size = 2 * 1024 * 1024;
 
 	// allocate aligned memory for the default allocator
 	void* default_allocator_memory = _aligned_malloc(default_block_size, 4);

@@ -31,7 +31,7 @@ inline unsigned int HashedString::GetHash() const
 inline unsigned int HashedString::Hash(const char* i_string)
 {
 	ASSERT(i_string);
-	return Hash(reinterpret_cast<const void*>(i_string), strlen(i_string));
+	return Hash(reinterpret_cast<const void*>(i_string), static_cast<unsigned int>(strlen(i_string)));
 }
 
 } // namespace data

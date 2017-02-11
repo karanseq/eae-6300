@@ -58,6 +58,78 @@ bool ActorCreator::CreateActorFromFile(const char* i_file_name, engine::memory::
 	return success;
 }
 
+bool ActorCreator::CreateActorsFromFile(const char* i_file_name, std::vector<engine::memory::SharedPointer<Actor>>& o_actors)
+{
+	// validate input
+	ASSERT(i_file_name);
+
+	// initialize lua state
+	lua_State* lua_state = luaL_newstate();
+	ASSERT(lua_state);
+
+	luaL_openlibs(lua_state);
+
+	// read the lua file
+	size_t file_size = 0;
+	uint8_t* file_contents = engine::util::FileUtils::Get()->ReadFile(i_file_name, file_size, false);
+	ASSERT(file_contents && file_size);
+
+	// do initial buffer parsing
+	int result = 0;
+	result = luaL_loadbuffer(lua_state, reinterpret_cast<char*>(file_contents), file_size, nullptr);
+	ASSERT(result == 0);
+	lua_pcall(lua_state, 0, 0, 0);
+	ASSERT(result == 0);
+
+	int type = LUA_TNIL;
+
+	// find the global variable named "ActorList" & push it onto stack
+	// if not found, it pushes nil value instead
+	result = lua_getglobal(lua_state, "ActorList");
+	ASSERT(result == LUA_TTABLE);
+
+	size_t index = 0;
+
+	lua_pushnil(lua_state);
+
+	while (lua_next(lua_state, -2) != 0)
+	{
+		if (lua_type(lua_state, -1) == LUA_TTABLE)
+		{
+			engine::memory::SharedPointer<Actor> actor;
+			if (CreateActor(lua_state, actor))
+			{
+				o_actors.push_back(actor);
+			}
+			else
+			{
+				LOG_ERROR("%s could not create an Actor at index %d", __FUNCTION__, index);
+			}
+		}
+		else
+		{
+			LOG_ERROR("%s expected a table at index %d", __FUNCTION__, index);
+		}
+
+		// remove value
+		lua_pop(lua_state, 1);
+		++index;
+	}
+
+	// pop "ActorList" table
+	lua_pop(lua_state, 1);
+
+	// validate that the stack is clean
+	int stack_items = lua_gettop(lua_state);
+	ASSERT(stack_items == 0);
+
+	delete[] file_contents;
+
+	lua_close(lua_state);
+
+	return true;
+}
+
 bool ActorCreator::CreateActor(lua_State* i_lua_state, engine::memory::SharedPointer<Actor>& o_actor)
 {
 	// validate input
@@ -93,11 +165,6 @@ bool ActorCreator::CreateActor(lua_State* i_lua_state, engine::memory::SharedPoi
 	o_actor->SetRenderableObject(renderable_object);
 
 	return true;
-}
-
-bool ActorCreator::CreateActorsFromFile(const char* i_file_name, std::vector<engine::memory::SharedPointer<Actor>>& o_actors)
-{
-	return false;
 }
 
 bool ActorCreator::CreatePhysicsObject(lua_State* i_lua_state, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, engine::memory::WeakPointer<engine::physics::PhysicsObject>& o_physics_object)

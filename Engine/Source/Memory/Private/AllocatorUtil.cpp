@@ -12,19 +12,19 @@ namespace memory {
 		BlockAllocator* default_allocator = BlockAllocator::GetDefaultAllocator();
 
 		// initialize the fixed size allocators
-		FixedSizeAllocator* fsa = FixedSizeAllocator::Create(8, 32, default_allocator);
+		FixedSizeAllocator* fsa = FixedSizeAllocator::Create(8, 64, default_allocator);
 		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
-		fsa = FixedSizeAllocator::Create(16, 56, default_allocator);
+		fsa = FixedSizeAllocator::Create(16, 32, default_allocator);
 		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
-		fsa = FixedSizeAllocator::Create(36, 24, default_allocator);
+		fsa = FixedSizeAllocator::Create(36, 36, default_allocator);
 		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
 		fsa = FixedSizeAllocator::Create(76, 20, default_allocator);
 		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
-		fsa = FixedSizeAllocator::Create(252, 20, default_allocator);
+		fsa = FixedSizeAllocator::Create(252, 10, default_allocator);
 		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 	}
 

@@ -3,8 +3,10 @@
 
 // library includes
 #include <stdint.h>
+#include <vector>
 
 // engine includes
+#include "GameObject\Actor.h"
 #include "Memory\SharedPointer.h"
 #include "Input\KeyboardEvent.h"
 #include "Time\InterfaceTickable.h"
@@ -61,6 +63,7 @@ private:
 
 	// game elements
 	Player*																			player_;
+	std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>			monsters_;
 	engine::memory::SharedPointer<engine::input::KeyboardEvent>						keyboard_event_;
 
 }; // class MonsterChase

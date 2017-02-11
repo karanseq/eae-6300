@@ -127,7 +127,7 @@ float LuaHelper::CreateFloat(lua_State* i_lua_state, const char* i_key_name)
 
 	lua_pushstring(i_lua_state, i_key_name);
 	type = lua_gettable(i_lua_state, -2);
-	ASSERT(type == LUA_TNUMBER);
+	ASSERT(type == LUA_TNIL || type == LUA_TNUMBER);
 
 	float return_float = float(lua_tonumber(i_lua_state, -1));
 
@@ -146,7 +146,7 @@ int LuaHelper::CreateInt(lua_State* i_lua_state, const char* i_key_name)
 
 	lua_pushstring(i_lua_state, i_key_name);
 	type = lua_gettable(i_lua_state, -2);
-	ASSERT(type == LUA_TNUMBER);
+	ASSERT(type == LUA_TNIL || type == LUA_TNUMBER);
 
 	int return_int = int(lua_tonumber(i_lua_state, -1));
 
@@ -168,15 +168,20 @@ engine::math::Vec3D LuaHelper::CreateVec3D(lua_State* i_lua_state, const char* i
 
 	// 2. Get the associated value
 	type = lua_gettable(i_lua_state, -2);
-	ASSERT(type == LUA_TTABLE);
+	ASSERT(type == LUA_TNIL || type == LUA_TTABLE);
 
-	float positions[3] = { 0.0f, 0.0f, 0.0f };
-	CreateFloatArray(i_lua_state, -1, positions, 3);
+	engine::math::Vec3D return_vec;
+	if (type == LUA_TTABLE)
+	{
+		float positions[3] = { 0.0f, 0.0f, 0.0f };
+		CreateFloatArray(i_lua_state, -1, positions, 3);
+		return_vec.set(positions[0], positions[1], positions[2]);
+	}
 
 	// 3. Remove the value from the stack now that we're done with it
 	lua_pop(i_lua_state, 1);
 
-	return engine::math::Vec3D(positions[0], positions[1], positions[2]);
+	return return_vec;
 }
 
 engine::math::Rect LuaHelper::CreateRect(lua_State* i_lua_state, const char* i_key_name)
