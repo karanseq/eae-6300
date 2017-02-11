@@ -92,7 +92,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;BUILD_DEBUG;VERBOSITY_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)GLib\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)External\GLib\;$(SolutionDir)External\Lua\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -105,7 +105,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_LIB;BUILD_DEBUG;VERBOSITY_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)GLib\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)External\GLib\;$(SolutionDir)External\Lua\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -120,7 +120,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;VERBOSITY_LEVEL=1;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)GLib\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)External\GLib\;$(SolutionDir)External\Lua\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -137,7 +137,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_LIB;VERBOSITY_LEVEL=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)GLib\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)External\GLib\;$(SolutionDir)External\Lua\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -162,6 +162,7 @@
     <ClInclude Include="Source\Data\StringPool.h" />
     <ClInclude Include="Source\GameObject\Actor-inl.h" />
     <ClInclude Include="Source\GameObject\Actor.h" />
+    <ClInclude Include="Source\GameObject\ActorCreator.h" />
     <ClInclude Include="Source\GameObject\GameObject-inl.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
     <ClInclude Include="Source\GameObject\InterfaceGameObjectController.h" />
@@ -209,6 +210,7 @@
     <ClInclude Include="Source\Time\Updater.h" />
     <ClInclude Include="Source\Util\FileUtils-inl.h" />
     <ClInclude Include="Source\Util\FileUtils.h" />
+    <ClInclude Include="Source\Util\LuaHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Common\Private\Engine.cpp" />
@@ -217,6 +219,7 @@
     <ClCompile Include="Source\Data\Private\PooledString.cpp" />
     <ClCompile Include="Source\Data\Private\StringPool.cpp" />
     <ClCompile Include="Source\GameObject\Private\Actor.cpp" />
+    <ClCompile Include="Source\GameObject\Private\ActorCreator.cpp" />
     <ClCompile Include="Source\Input\Private\Input.cpp" />
     <ClCompile Include="Source\Input\Private\KeyboardEvent.cpp" />
     <ClCompile Include="Source\Input\Private\KeyboardEventDispatcher.cpp" />
@@ -238,6 +241,7 @@
     <ClCompile Include="Source\Time\Private\TimerUtil.win32.cpp" />
     <ClCompile Include="Source\Time\Private\Updater.cpp" />
     <ClCompile Include="Source\Util\Private\FileUtils.cpp" />
+    <ClCompile Include="Source\Util\Private\LuaHelper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

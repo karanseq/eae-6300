@@ -168,9 +168,6 @@
     <ClInclude Include="Source\Time\Updater.h">
       <Filter>Header Files\Time</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Common\HelperMacros.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Time\InterfaceTickable.h">
       <Filter>Header Files\Time</Filter>
     </ClInclude>
@@ -267,6 +264,15 @@
     <ClInclude Include="Source\Input\KeyboardEventDispatcher-inl.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GameObject\ActorCreator.h">
+      <Filter>Header Files\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Util\LuaHelper.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\HelperMacros.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -349,6 +355,12 @@
     </ClCompile>
     <ClCompile Include="Source\Input\Private\KeyboardEvent.cpp">
       <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameObject\Private\ActorCreator.cpp">
+      <Filter>Source Files\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Util\Private\LuaHelper.cpp">
+      <Filter>Source Files\Util</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

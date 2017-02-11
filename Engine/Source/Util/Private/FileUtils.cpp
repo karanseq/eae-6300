@@ -34,13 +34,13 @@ void FileUtils::Destroy()
 	SAFE_DELETE(FileUtils::instance_);
 }
 
-uint8_t* FileUtils::ReadFile(const char* i_file_name)
+uint8_t* FileUtils::ReadFile(const char* i_file_name, bool i_cache_file)
 {
 	size_t file_size = 0;
-	return ReadFile(i_file_name, file_size);
+	return ReadFile(i_file_name, file_size, i_cache_file);
 }
 
-uint8_t* FileUtils::ReadFile(const char* i_file_name, size_t& o_file_size)
+uint8_t* FileUtils::ReadFile(const char* i_file_name, size_t& o_file_size, bool i_cache_file)
 {
 	// validate inputs
 	ASSERT(i_file_name);
@@ -89,7 +89,10 @@ uint8_t* FileUtils::ReadFile(const char* i_file_name, size_t& o_file_size)
 	o_file_size = file_size;
 
 	// add the file to the cache
-	file_cache_.insert(std::pair<unsigned int, FileData>(hash, { o_file_size, buffer }));
+	if (i_cache_file)
+	{
+		file_cache_.insert(std::pair<unsigned int, FileData>(hash, { o_file_size, buffer }));
+	}
 
 	LOG("FileUtils added '%s' to the cache", i_file_name);
 	return buffer;

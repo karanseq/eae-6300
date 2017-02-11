@@ -4,7 +4,6 @@
 #include "Assert\Assert.h"
 #include "Common\Engine.h"
 #include "Common\HelperMacros.h"
-#include "GLib.h"
 #include "Input\KeyboardEventDispatcher.h"
 #include "Logger\Logger.h"
 #include "Time\Updater.h"

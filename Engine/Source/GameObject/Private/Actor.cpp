@@ -52,8 +52,15 @@ Actor::Actor(const engine::memory::SharedPointer<GameObject>& i_game_object, con
 
 Actor::~Actor()
 {
-	engine::physics::Physics::Get()->RemovePhysicsObject(physics_object_);
-	engine::render::Renderer::Get()->RemoveRenderableObject(renderable_object_);
+	if (physics_object_)
+	{
+		engine::physics::Physics::Get()->RemovePhysicsObject(physics_object_);
+	}
+
+	if (renderable_object_)
+	{
+		engine::render::Renderer::Get()->RemoveRenderableObject(renderable_object_);
+	}
 }
 
 } // namespace gameobject
