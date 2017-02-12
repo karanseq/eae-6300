@@ -78,6 +78,7 @@ public:
 #ifdef BUILD_DEBUG
 	inline unsigned int GetID() const;
     void DumpStatistics() const;
+	inline const AllocatorStatistics& GetStatistics() const;
 #endif
 
 private:

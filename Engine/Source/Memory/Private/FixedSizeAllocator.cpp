@@ -45,6 +45,9 @@ FixedSizeAllocator::FixedSizeAllocator(void* i_memory, const size_t i_total_bloc
 	id_ = FixedSizeAllocator::counter_++;
 	memset(block_, CLEAN_FILL, total_block_size_);
 	VERBOSE("FixedSizeAllocator-%d created with %zu blocks of size:%zu", id_, num_blocks_, fixed_block_size_);
+
+	// initialize diagnostic information
+	stats_.available_memory_size = total_block_size_;
 #endif
 }
 
@@ -272,10 +275,13 @@ void* FixedSizeAllocator::Alloc(const size_t i_size)
 		*(block + size_type + guardband_size + i_size + i) = GUARDBAND_FILL;
 	}
 
-    // save diagnostic information
-    ++stats_.total_allocated;
-    ++stats_.total_outstanding;
-    stats_.max_outstanding = stats_.max_outstanding < stats_.total_outstanding ? stats_.total_outstanding : stats_.max_outstanding;
+    // update diagnostic information
+    ++stats_.num_allocated;
+    ++stats_.num_outstanding;
+    stats_.max_num_outstanding = stats_.max_num_outstanding < stats_.num_outstanding ? stats_.num_outstanding : stats_.max_num_outstanding;
+	stats_.allocated_memory_size += (guardband_size * 2 + size_type + fixed_block_size_);
+	stats_.available_memory_size -= (guardband_size * 2 + size_type + fixed_block_size_);
+	stats_.max_allocated_memory_size = stats_.max_allocated_memory_size < stats_.allocated_memory_size ? stats_.allocated_memory_size : stats_.max_allocated_memory_size;
 #endif
 
 	return (block + size_type + guardband_size);
@@ -351,9 +357,11 @@ bool FixedSizeAllocator::Free(void* i_pointer)
 	block_state_->ClearBit(bit_index);
 
 #ifdef BUILD_DEBUG
-    // save diagnostic information
-    ++stats_.total_freed;
-    --stats_.total_outstanding;
+    // update diagnostic information
+    ++stats_.num_freed;
+    --stats_.num_outstanding;
+	stats_.allocated_memory_size -= (guardband_size * 2 + size_type + fixed_block_size_);
+	stats_.available_memory_size += (guardband_size * 2 + size_type + fixed_block_size_);
 #endif
 
 	return true;
@@ -410,9 +418,9 @@ void FixedSizeAllocator::DumpStatistics() const
 {
 	LOG("---------- %s ----------", __FUNCTION__);
 	LOG("Dumping usage statistics for FixedSizeAllocator-%d with fixed block size of %zu bytes:", id_, fixed_block_size_);
-	LOG("Total allocations:%zu", stats_.total_allocated);
-	LOG("Total frees:%zu", stats_.total_freed);
-	LOG("Highwater mark:%zu", stats_.max_outstanding);
+	LOG("Total allocations:%zu", stats_.num_allocated);
+	LOG("Total frees:%zu", stats_.num_freed);
+	LOG("Highwater mark:%zu allocations and %zu bytes", stats_.max_num_outstanding, stats_.max_allocated_memory_size);
 	LOG("---------- END ----------");
 }
 #endif

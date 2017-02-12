@@ -103,7 +103,11 @@ public:
 	void PrintAllDescriptors() const;
 	void PrintFreeDescriptors() const;
 	void PrintUsedDescriptors() const;
+	inline const AllocatorStatistics& GetStatistics() const;
 #endif
+
+	// constants
+	static const size_t								DEFAULT_ALLOCATOR_SIZE;									// size of the default allocator
 
 private:
 	uint8_t*										block_;													// actual block of memory

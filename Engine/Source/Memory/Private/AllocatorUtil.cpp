@@ -15,13 +15,13 @@ namespace memory {
 		FixedSizeAllocator* fsa = FixedSizeAllocator::Create(8, 64, default_allocator);
 		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
-		fsa = FixedSizeAllocator::Create(16, 32, default_allocator);
+		fsa = FixedSizeAllocator::Create(16, 36, default_allocator);
 		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
 		fsa = FixedSizeAllocator::Create(36, 36, default_allocator);
 		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
-		fsa = FixedSizeAllocator::Create(76, 20, default_allocator);
+		fsa = FixedSizeAllocator::Create(76, 36, default_allocator);
 		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
 		fsa = FixedSizeAllocator::Create(252, 10, default_allocator);
