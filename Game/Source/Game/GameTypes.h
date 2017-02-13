@@ -8,6 +8,7 @@ enum class GameStates
 	kGameStateNone = 0,
 	kGameStateBegin,
 	kGameStateRunning,
+	kGameStateRestart,
 	kGameStateQuit
 };
 

@@ -19,8 +19,9 @@ namespace game {
 // forward declarations
 class Player;
 
+// global life-cycle functions
 bool StartUp();
-
+bool Restart();
 void Shutdown();
 
 class Game : public engine::time::InterfaceTickable

@@ -41,6 +41,12 @@ bool StartUp()
 	return success;
 }
 
+bool Restart()
+{
+	game::Shutdown();
+	return game::StartUp();
+}
+
 void Shutdown()
 {
 	Game::Destroy();
@@ -139,7 +145,15 @@ void Game::Update(float dt)
 
 void Game::OnKeyPressed(unsigned int i_key_id)
 {
-	game_state_ = i_key_id == 'Q' ? GameStates::kGameStateQuit : game_state_;
+	switch (i_key_id)
+	{
+	case 'Q':
+		game_state_ = GameStates::kGameStateQuit;
+		break;
+	case 'R':
+		game_state_ = GameStates::kGameStateRestart;
+		break;
+	}
 }
 
 void Game::CreatePlayer()

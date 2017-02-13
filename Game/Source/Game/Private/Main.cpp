@@ -35,7 +35,7 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 		// init game
 		if (game::StartUp())
 		{
-			game::Game* monster_chase = game::Game::GetInstance();
+			game::Game* game = game::Game::GetInstance();
 			engine::Run();
 		}
 
