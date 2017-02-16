@@ -54,12 +54,12 @@ Actor::~Actor()
 {
 	if (physics_object_)
 	{
-		engine::physics::Physics::Get()->RemovePhysicsObject(physics_object_);
+		engine::physics::Physics::Get()->RemovePhysicsObject(physics_object_.Lock());
 	}
 
 	if (renderable_object_)
 	{
-		engine::render::Renderer::Get()->RemoveRenderableObject(renderable_object_);
+		engine::render::Renderer::Get()->RemoveRenderableObject(renderable_object_.Lock());
 	}
 }
 

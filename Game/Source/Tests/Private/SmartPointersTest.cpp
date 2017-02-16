@@ -15,8 +15,15 @@ void TestSharedPointerConstructorsAndAssignment()
 	// block that tests the strong pointer constructors and assignment operators
 	{
 		// standard constructor...strong pointer to nullptr
-		engine::memory::SharedPointer<engine::gameobject::GameObject> strong_ptr1;
-		LOG("StrongPointer standard constructor object = nullptr OK!");
+		engine::memory::SharedPointer<engine::gameobject::GameObject> strong_ptr0;
+		LOG("StrongPointer default constructor OK!");
+#ifdef BUILD_DEBUG
+		LOG("StrongCount:%ld  WeakCount:%ld", strong_ptr0.GetStrongCount(), strong_ptr0.GetWeakCount());
+#endif
+
+		// standard 'nullptr' constructor
+		engine::memory::SharedPointer<engine::math::Vec3D> strong_ptr1 = nullptr;
+		LOG("StrongPointer nullptr constructor OK");
 #ifdef BUILD_DEBUG
 		LOG("StrongCount:%ld  WeakCount:%ld", strong_ptr1.GetStrongCount(), strong_ptr1.GetWeakCount());
 #endif
