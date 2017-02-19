@@ -15,10 +15,10 @@ inline Renderer* Renderer::Get()
 	return Renderer::instance_;
 }
 
-inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderableObject(const char* i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object)
+inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderableObject(const engine::data::PooledString& i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object)
 {
 	// validate input
-	ASSERT(i_file_name);
+	//ASSERT(i_file_name);
 	ASSERT(i_game_object);
 
 	// create a sprite for the renderable

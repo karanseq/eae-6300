@@ -18,6 +18,16 @@ inline bool PooledString::operator==(const PooledString& i_other) const
 	return string_ == i_other.string_;
 }
 
+inline bool PooledString::operator!=(const PooledString& i_other) const
+{
+	return string_ != i_other.string_;
+}
+
+inline PooledString::operator bool() const
+{
+	return string_ != nullptr;
+}
+
 inline const char* PooledString::GetString() const
 {
 	return string_;

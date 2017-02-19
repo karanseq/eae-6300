@@ -11,13 +11,15 @@ class PooledString
 {
 public:
 	PooledString();
-	explicit PooledString(const char* i_string);
+	PooledString(const char* i_string);
 	~PooledString();
 
 	PooledString(const PooledString& i_copy);
 
 	inline PooledString& operator=(const PooledString& i_copy);
 	inline bool operator==(const PooledString& i_other) const;
+	inline bool operator!=(const PooledString& i_other) const;
+	inline operator bool() const;
 	
 	inline const char* GetString() const;
 

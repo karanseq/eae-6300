@@ -14,6 +14,11 @@ namespace Sprites {
 	struct Sprite;
 }
 }
+namespace engine {
+namespace data {
+	class PooledString;
+}
+}
 
 namespace engine {
 namespace render {
@@ -37,11 +42,11 @@ public:
 	void Run(float i_dt);
 
 	// create, add & remove renderer objects
-	inline engine::memory::SharedPointer<RenderableObject> CreateRenderableObject(const char* i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
+	inline engine::memory::SharedPointer<RenderableObject> CreateRenderableObject(const engine::data::PooledString& i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
 	inline void AddRenderableObject(const engine::memory::SharedPointer<RenderableObject>& i_renderable_object);
 	inline void RemoveRenderableObject(const engine::memory::SharedPointer<RenderableObject>& i_renderable_object);
 
-	static GLib::Sprites::Sprite* CreateSprite(const char* i_filename);
+	static GLib::Sprites::Sprite* CreateSprite(const engine::data::PooledString& i_texture_file_name);
 
 private:
 	size_t																			num_renderables_;

@@ -2,7 +2,15 @@
 #define FILE_UTILS_H_
 
 // library includes
+#include <functional>
 #include <unordered_map>
+
+// forward declarations
+namespace engine {
+namespace data {
+	class PooledString;
+}
+}
 
 namespace engine {
 namespace util {
@@ -28,8 +36,9 @@ public:
 	static void Destroy();
 	static inline FileUtils* Get();
 
-	uint8_t* ReadFile(const char* i_file_name, bool i_cache_file = true);
-	uint8_t* ReadFile(const char* i_file_name, size_t& o_file_size, bool i_cache_file = true);
+	uint8_t* ReadFile(const engine::data::PooledString& i_file_name, bool i_cache_file = true);
+	uint8_t* ReadFile(const engine::data::PooledString& i_file_name, size_t& o_file_size, bool i_cache_file = true);
+	
 	bool WriteFile(const char* i_file_name, const char* i_file_contents) const;
 	void ClearFileCache();
 

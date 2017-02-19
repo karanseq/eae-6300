@@ -4,6 +4,7 @@
 #include "Assert\Assert.h"
 #include "Common\HelperMacros.h"
 #include "Data\HashedString.h"
+#include "Data\PooledString.h"
 #include "Logger\Logger.h"
 
 namespace engine {
@@ -34,17 +35,17 @@ void FileUtils::Destroy()
 	SAFE_DELETE(FileUtils::instance_);
 }
 
-uint8_t* FileUtils::ReadFile(const char* i_file_name, bool i_cache_file)
+uint8_t* FileUtils::ReadFile(const engine::data::PooledString& i_file_name, bool i_cache_file)
 {
 	size_t file_size = 0;
 	return ReadFile(i_file_name, file_size, i_cache_file);
 }
 
-uint8_t* FileUtils::ReadFile(const char* i_file_name, size_t& o_file_size, bool i_cache_file)
+uint8_t* FileUtils::ReadFile(const engine::data::PooledString& i_file_name, size_t& o_file_size, bool i_cache_file)
 {
 	// validate inputs
 	ASSERT(i_file_name);
-	ASSERT(strlen(i_file_name) > 0);
+	ASSERT(strlen(i_file_name.GetString()) > 0);
 
 	// get a hash for the file name
 	unsigned int hash = engine::data::HashedString::Hash(i_file_name);
@@ -59,7 +60,7 @@ uint8_t* FileUtils::ReadFile(const char* i_file_name, size_t& o_file_size, bool 
 	// read the file
 	FILE * file = nullptr;
 
-	errno_t fopen_error = fopen_s(&file, i_file_name, "rb");
+	errno_t fopen_error = fopen_s(&file, i_file_name.GetString(), "rb");
 	if (fopen_error != 0)
 	{
 		LOG_ERROR("Could not open %s...error code:%d", i_file_name, fopen_error);

@@ -2,6 +2,7 @@
 
 // engine includes
 #include "Common\HelperMacros.h"
+#include "Data\PooledString.h"
 #include "Util\FileUtils.h"
 
 namespace engine {
@@ -51,15 +52,15 @@ void Renderer::Run(float i_dt)
 	GLib::EndRendering();
 }
 
-GLib::Sprites::Sprite* Renderer::CreateSprite(const char* i_filename)
+GLib::Sprites::Sprite* Renderer::CreateSprite(const engine::data::PooledString& i_texture_file_name)
 {
 	// validate input
-	ASSERT(i_filename);
+	ASSERT(i_texture_file_name);
 
 	size_t texture_filesize = 0;
 
 	// Load the source file (texture data)
-	uint8_t* texture_file = engine::util::FileUtils::Get()->ReadFile(i_filename, texture_filesize);
+	uint8_t* texture_file = engine::util::FileUtils::Get()->ReadFile(i_texture_file_name, texture_filesize);
 	ASSERT(texture_file);
 
 	// Ask GLib to create a texture out of the data (assuming it was loaded successfully)
