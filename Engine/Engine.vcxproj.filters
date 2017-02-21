@@ -82,10 +82,10 @@
     <Filter Include="Source Files\Input">
       <UniqueIdentifier>{457b68bd-f4a1-4295-9b3b-abb9538982c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\JobSystem">
+    <Filter Include="Header Files\Jobs">
       <UniqueIdentifier>{259e1573-deb2-4118-8f4e-7bd3608eebcc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\JobSystem">
+    <Filter Include="Source Files\Jobs">
       <UniqueIdentifier>{aa7cbe11-ad85-4c74-adff-543e586e225d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -279,20 +279,23 @@
     <ClInclude Include="Source\Common\HelperMacros.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Source\JobSystem\InterfaceJob.h">
-      <Filter>Header Files\JobSystem</Filter>
+    <ClInclude Include="Source\Jobs\FileLoadJob.h">
+      <Filter>Header Files\Jobs</Filter>
     </ClInclude>
-    <ClInclude Include="Source\JobSystem\JobQueue.h">
-      <Filter>Header Files\JobSystem</Filter>
+    <ClInclude Include="Source\Jobs\InterfaceJob.h">
+      <Filter>Header Files\Jobs</Filter>
     </ClInclude>
-    <ClInclude Include="Source\JobSystem\JobQueue-inl.h">
-      <Filter>Header Files\JobSystem</Filter>
+    <ClInclude Include="Source\Jobs\JobQueue.h">
+      <Filter>Header Files\Jobs</Filter>
     </ClInclude>
-    <ClInclude Include="Source\JobSystem\JobSystem.h">
-      <Filter>Header Files\JobSystem</Filter>
+    <ClInclude Include="Source\Jobs\JobQueue-inl.h">
+      <Filter>Header Files\Jobs</Filter>
     </ClInclude>
-    <ClInclude Include="Source\JobSystem\Worker.h">
-      <Filter>Header Files\JobSystem</Filter>
+    <ClInclude Include="Source\Jobs\JobSystem.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Jobs\Worker.h">
+      <Filter>Header Files\Jobs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -383,14 +386,17 @@
     <ClCompile Include="Source\Util\Private\LuaHelper.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
-    <ClCompile Include="Source\JobSystem\Private\JobQueue.cpp">
-      <Filter>Source Files\JobSystem</Filter>
+    <ClCompile Include="Source\Jobs\Private\FileLoadJob.cpp">
+      <Filter>Source Files\Jobs</Filter>
     </ClCompile>
-    <ClCompile Include="Source\JobSystem\Private\JobSystem.cpp">
-      <Filter>Source Files\JobSystem</Filter>
+    <ClCompile Include="Source\Jobs\Private\JobQueue.cpp">
+      <Filter>Source Files\Jobs</Filter>
     </ClCompile>
-    <ClCompile Include="Source\JobSystem\Private\Worker.cpp">
-      <Filter>Source Files\JobSystem</Filter>
+    <ClCompile Include="Source\Jobs\Private\JobSystem.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Jobs\Private\Worker.cpp">
+      <Filter>Source Files\Jobs</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

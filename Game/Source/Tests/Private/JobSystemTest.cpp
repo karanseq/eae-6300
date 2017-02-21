@@ -2,9 +2,9 @@
 // engine includes
 #include "Data\HashedString.h"
 #include "Data\PooledString.h"
-#include "JobSystem\InterfaceJob.h"
-#include "JobSystem\JobSystem.h"
-#include "JobSystem\JobQueue.h"
+#include "Jobs\InterfaceJob.h"
+#include "Jobs\JobSystem.h"
+#include "Jobs\JobQueue.h"
 #include "Logger\Logger.h"
 
 class SimpleSleepJob : public engine::jobs::InterfaceJob

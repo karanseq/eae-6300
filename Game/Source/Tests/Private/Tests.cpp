@@ -18,7 +18,7 @@ void TestFixedSizeAllocator();
 //#define ENABLE_BIT_ARRAY_TEST
 //#define ENABLE_STRONG_POINTER_TEST
 //#define ENABLE_STRING_POOL_TEST
-#define ENABLE_JOB_SYSTEM_TEST
+//#define ENABLE_JOB_SYSTEM_TEST
 
 #ifdef ENABLE_VECTOR_CONST_TEST
 void TestVectorConstness();

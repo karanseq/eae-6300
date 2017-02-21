@@ -32,13 +32,13 @@ public:
 	static void Destroy();
 	static inline FileUtils* Get();
 
-	uint8_t* ReadFile(const engine::data::PooledString& i_file_name, bool i_cache_file = true);
-	uint8_t* ReadFile(const engine::data::PooledString& i_file_name, size_t& o_file_size, bool i_cache_file = true);
+	uint8_t* ReadFile(const engine::data::PooledString& i_file_name, bool i_cache_file);
+	uint8_t* ReadFile(const engine::data::PooledString& i_file_name, size_t& o_file_size, bool i_cache_file);
 	
-	bool WriteFile(const char* i_file_name, const char* i_file_contents) const;
+	bool WriteFile(const engine::data::PooledString& i_file_name, const char* i_file_contents) const;
 	void ClearFileCache();
 
-	inline bool IsFileCached(const char* i_file_name) const;
+	inline bool IsFileCached(const engine::data::PooledString& i_file_name) const;
 	inline bool IsFileCached(unsigned int i_hash) const;
 
 private:

@@ -98,7 +98,7 @@ uint8_t* FileUtils::ReadFile(const engine::data::PooledString& i_file_name, size
 	return buffer;
 }
 
-bool FileUtils::WriteFile(const char* i_file_name, const char* i_file_contents) const
+bool FileUtils::WriteFile(const engine::data::PooledString& i_file_name, const char* i_file_contents) const
 {
 	return false;
 }

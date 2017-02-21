@@ -1,9 +1,9 @@
-#include "JobSystem\Worker.h"
+#include "Jobs\Worker.h"
 
 // engine includes
 #include "Assert\Assert.h"
-#include "JobSystem\InterfaceJob.h"
-#include "JobSystem\JobQueue.h"
+#include "Jobs\InterfaceJob.h"
+#include "Jobs\JobQueue.h"
 #include "Logger\Logger.h"
 
 namespace engine {

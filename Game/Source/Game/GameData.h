@@ -31,6 +31,7 @@ public:
 	static const char*							SMART_MONSTER_TEXTURE_NAME;
 	static const char*							PLAYER_LUA_FILE_NAME;
 	static const char*							MONSTERS_LUA_FILE_NAME;
+	static const char*							MONSTER_LUA_FILE_NAME;
 
 }; // class GameData
 

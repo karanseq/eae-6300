@@ -1,10 +1,10 @@
-#include "JobSystem\JobSystem.h"
+#include "Jobs\JobSystem.h"
 
 // engine includes
 #include "Assert\Assert.h"
-#include "JobSystem\InterfaceJob.h"
-#include "JobSystem\JobQueue.h"
-#include "JobSystem\Worker.h"
+#include "Jobs\InterfaceJob.h"
+#include "Jobs\JobQueue.h"
+#include "Jobs\Worker.h"
 #include "Logger\Logger.h"
 
 namespace engine {

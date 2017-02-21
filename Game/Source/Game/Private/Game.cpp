@@ -20,15 +20,15 @@ namespace game {
 bool StartUp()
 {
 	// create an instance of the game
-	Game* mc_instance = Game::Create();
-	if (mc_instance == nullptr)
+	Game* game = Game::Create();
+	if (game == nullptr)
 	{
 		LOG_ERROR("Could not create an instance of MonsterChase!");
 		return false;
 	}
 
 	// initialize the game
-	bool success = mc_instance->Init();
+	bool success = game->Init();
 	if (success)
 	{
 		LOG("-------------------- MonsterChase StartUp --------------------");
@@ -125,9 +125,9 @@ bool Game::Init()
 bool Game::LoadGameData()
 {
 	// load textures
-	engine::util::FileUtils::Get()->ReadFile(GameData::PLAYER_TEXTURE_NAME);
-	engine::util::FileUtils::Get()->ReadFile(GameData::SILLY_MONSTER_TEXTURE_NAME);
-	engine::util::FileUtils::Get()->ReadFile(GameData::SMART_MONSTER_TEXTURE_NAME);
+	engine::util::FileUtils::Get()->ReadFile(GameData::PLAYER_TEXTURE_NAME, true);
+	engine::util::FileUtils::Get()->ReadFile(GameData::SILLY_MONSTER_TEXTURE_NAME, true);
+	engine::util::FileUtils::Get()->ReadFile(GameData::SMART_MONSTER_TEXTURE_NAME, true);
 	return true;
 }
 
@@ -147,12 +147,14 @@ void Game::OnKeyPressed(unsigned int i_key_id)
 {
 	switch (i_key_id)
 	{
+	case 'M':
+		break;
 	case 'Q':
 		game_state_ = GameStates::kGameStateQuit;
 		break;
-	case 'R':
+	/*case 'R':
 		game_state_ = GameStates::kGameStateRestart;
-		break;
+		break;*/
 	}
 }
 

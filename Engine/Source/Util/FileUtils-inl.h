@@ -11,7 +11,7 @@ inline FileUtils* FileUtils::Get()
 	return FileUtils::instance_;
 }
 
-inline bool FileUtils::IsFileCached(const char* i_file_name) const
+inline bool FileUtils::IsFileCached(const engine::data::PooledString& i_file_name) const
 {
 	return IsFileCached(engine::data::HashedString::Hash(i_file_name));
 }

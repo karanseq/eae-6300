@@ -60,7 +60,7 @@ GLib::Sprites::Sprite* Renderer::CreateSprite(const engine::data::PooledString& 
 	size_t texture_filesize = 0;
 
 	// Load the source file (texture data)
-	uint8_t* texture_file = engine::util::FileUtils::Get()->ReadFile(i_texture_file_name, texture_filesize);
+	uint8_t* texture_file = engine::util::FileUtils::Get()->ReadFile(i_texture_file_name, texture_filesize, true);
 	ASSERT(texture_file);
 
 	// Ask GLib to create a texture out of the data (assuming it was loaded successfully)

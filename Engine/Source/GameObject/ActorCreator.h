@@ -5,6 +5,7 @@
 #include <vector>
 
 // engine includes
+#include "Data\PooledString.h"
 #include "GameObject\Actor.h"
 #include "Memory\SharedPointer.h"
 #include "Memory\WeakPointer.h"
@@ -17,7 +18,7 @@ struct lua_State;
 namespace engine {
 namespace gameobject {
 
-class ActorCreator 
+class ActorCreator
 {
 private:
 	ActorCreator() = delete;
@@ -29,8 +30,11 @@ private:
 	ActorCreator& operator=(ActorCreator&& i_copy) = delete;
 
 public:
-	static bool CreateActorFromFile(const char* i_file_name, engine::memory::SharedPointer<Actor>& o_actor);
-	static bool CreateActorsFromFile(const char* i_file_name, std::vector<engine::memory::SharedPointer<Actor>>& o_actors);
+	static bool CreateActorFromFile(const engine::data::PooledString& i_file_name, engine::memory::SharedPointer<Actor>& o_actor);
+	static bool CreateActorsFromFile(const engine::data::PooledString& i_file_name, std::vector<engine::memory::SharedPointer<Actor>>& o_actors);
+
+	static bool CreateActorFromFileAsync(const engine::data::PooledString& i_file_name);
+	static bool CreateActorsFromFileAsync(const engine::data::PooledString& i_file_name);
 
 private:
 	static bool CreateActor(lua_State* i_lua_state, engine::memory::SharedPointer<Actor>& o_actor);
