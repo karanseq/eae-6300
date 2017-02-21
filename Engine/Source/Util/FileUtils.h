@@ -2,15 +2,10 @@
 #define FILE_UTILS_H_
 
 // library includes
-#include <functional>
 #include <unordered_map>
 
-// forward declarations
-namespace engine {
-namespace data {
-	class PooledString;
-}
-}
+// engine includes
+#include "Data\PooledString.h"
 
 namespace engine {
 namespace util {
@@ -18,8 +13,9 @@ namespace util {
 class FileUtils
 {
 	struct FileData {
-		size_t			file_size;
-		uint8_t*		file_contents;
+		const engine::data::PooledString		file_name;
+		uint8_t*								file_contents;
+		size_t									file_size;
 	}; // struct FileData
 
 private:

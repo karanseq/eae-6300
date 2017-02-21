@@ -4,7 +4,6 @@
 #include "Assert\Assert.h"
 #include "Common\HelperMacros.h"
 #include "Data\HashedString.h"
-#include "Data\PooledString.h"
 #include "Logger\Logger.h"
 
 namespace engine {
@@ -92,7 +91,7 @@ uint8_t* FileUtils::ReadFile(const engine::data::PooledString& i_file_name, size
 	// add the file to the cache
 	if (i_cache_file)
 	{
-		file_cache_.insert(std::pair<unsigned int, FileData>(hash, { o_file_size, buffer }));
+		file_cache_.insert(std::pair<unsigned int, FileData>(hash, { i_file_name, buffer, o_file_size }));
 		LOG("FileUtils added '%s' to the cache", i_file_name);
 	}
 
