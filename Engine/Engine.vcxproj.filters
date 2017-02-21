@@ -297,6 +297,15 @@
     <ClInclude Include="Source\Jobs\Worker.h">
       <Filter>Header Files\Jobs</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Jobs\FileLoadJob-inl.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Jobs\ActorCreatorJob.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Jobs\ActorCreatorJob-inl.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -396,6 +405,9 @@
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
     <ClCompile Include="Source\Jobs\Private\Worker.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Jobs\Private\ActorCreatorJob.cpp">
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
   </ItemGroup>

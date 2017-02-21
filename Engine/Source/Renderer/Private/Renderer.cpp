@@ -57,14 +57,12 @@ GLib::Sprites::Sprite* Renderer::CreateSprite(const engine::data::PooledString& 
 	// validate input
 	ASSERT(i_texture_file_name);
 
-	size_t texture_filesize = 0;
-
 	// Load the source file (texture data)
-	uint8_t* texture_file = engine::util::FileUtils::Get()->ReadFile(i_texture_file_name, texture_filesize, true);
-	ASSERT(texture_file);
+	engine::util::FileUtils::FileData texture_file_data = engine::util::FileUtils::Get()->ReadFile(i_texture_file_name, true);
+	ASSERT(texture_file_data.file_contents);
 
 	// Ask GLib to create a texture out of the data (assuming it was loaded successfully)
-	GLib::Texture * texture = texture_file ? GLib::CreateTexture(texture_file, texture_filesize) : nullptr;
+	GLib::Texture * texture = texture_file_data.file_contents ? GLib::CreateTexture(texture_file_data.file_contents, texture_file_data.file_size) : nullptr;
 
 	if (texture == nullptr)
 		return nullptr;

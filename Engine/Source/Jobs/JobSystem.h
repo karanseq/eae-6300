@@ -9,6 +9,9 @@
 #include "Data\HashedString.h"
 #include "Data\PooledString.h"
 
+// TODO: Figure out why winspool conflicts and handle this more gracefully
+#undef AddJob
+
 namespace engine {
 namespace jobs {
 
@@ -17,15 +20,15 @@ class InterfaceJob;
 class JobQueue;
 class Worker;
 
-struct Team
-{
-	JobQueue*							job_queue_;
-	engine::data::PooledString			name_;
-	std::vector<Worker*>				workers_;
-};
-
 class JobSystem
 {
+	struct Team
+	{
+		JobQueue*							job_queue_;
+		engine::data::PooledString			name_;
+		std::vector<Worker*>				workers_;
+	};
+
 public:
 	static JobSystem* Create();
 	static void Destroy();
@@ -47,6 +50,7 @@ private:
 	JobSystem& operator=(JobSystem&&) = delete;
 
 	std::map<engine::data::HashedString, Team*>								teams_;
+	bool																	shutdown_requested_;
 
 }; // class JobSystem
 

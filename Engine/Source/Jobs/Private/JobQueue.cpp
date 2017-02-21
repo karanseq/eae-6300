@@ -11,7 +11,7 @@ namespace jobs {
 JobQueue::JobQueue(const engine::data::PooledString& i_id) : id_(i_id),
 	shutdown_requested_(false)
 {
-	LOG("JobQueue-%s created.", id_.GetString());
+	VERBOSE("JobQueue-%s created.", id_.GetString());
 }
 
 JobQueue::~JobQueue()
@@ -32,7 +32,7 @@ JobQueue::~JobQueue()
 	{
 		LOG("JobQueue-%s deleted %zu unfinished jobs.", id_.GetString(), num_unfinished_jobs);
 	}
-	LOG("JobQueue-%s deleted.", id_.GetString());
+	VERBOSE("JobQueue-%s deleted.", id_.GetString());
 #endif
 }
 
@@ -49,7 +49,7 @@ bool JobQueue::AddJob(InterfaceJob* i_new_job)
 			std::lock_guard<std::mutex> lock(queue_mutex_);
 			job_queue_.push(i_new_job);
 #ifdef BUILD_DEBUG
-			LOG("\t\tJobQueue-%s added a new job:%s and now has a total of %zu jobs", id_.GetString(), i_new_job->GetName().GetString(), job_queue_.size());
+			VERBOSE("\t\tJobQueue-%s added a new job:%s and now has a total of %zu jobs", id_.GetString(), i_new_job->GetName().GetString(), job_queue_.size());
 #endif
 		}
 		result = true;
@@ -86,7 +86,7 @@ InterfaceJob* JobQueue::GetJob()
 		job = job_queue_.front();
 		job_queue_.pop();
 #ifdef BUILD_DEBUG
-		LOG("\t\tJobQueue-%s removed job-%s and now has %zu jobs remaining", id_.GetString(), job->GetName().GetString(), job_queue_.size());
+		VERBOSE("\t\tJobQueue-%s removed job-%s and now has %zu jobs remaining", id_.GetString(), job->GetName().GetString(), job_queue_.size());
 #endif
 	}
 

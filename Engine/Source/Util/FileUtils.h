@@ -12,10 +12,38 @@ namespace util {
 
 class FileUtils
 {
+public:
 	struct FileData {
-		const engine::data::PooledString		file_name;
+		engine::data::PooledString				file_name;
 		uint8_t*								file_contents;
 		size_t									file_size;
+
+		explicit FileData() : file_name(""),
+			file_contents(nullptr),
+			file_size(0)
+		{}
+
+		explicit FileData(const engine::data::PooledString& i_file_name, uint8_t* i_file_contents, size_t i_file_size) : file_name(i_file_name),
+			file_contents(i_file_contents),
+			file_size(i_file_size)
+		{}
+
+		FileData(const FileData& i_copy) : file_name(i_copy.file_name),
+			file_contents(i_copy.file_contents),
+			file_size(i_copy.file_size)
+		{}
+
+		FileData& operator=(const FileData& i_other)
+		{
+			if (this != &i_other)
+			{
+				file_name = i_other.file_name;
+				file_contents = i_other.file_contents;
+				file_size = i_other.file_size;
+			}
+			return *this;
+		}
+
 	}; // struct FileData
 
 private:
@@ -32,8 +60,7 @@ public:
 	static void Destroy();
 	static inline FileUtils* Get();
 
-	uint8_t* ReadFile(const engine::data::PooledString& i_file_name, bool i_cache_file);
-	uint8_t* ReadFile(const engine::data::PooledString& i_file_name, size_t& o_file_size, bool i_cache_file);
+	FileData ReadFile(const engine::data::PooledString& i_file_name, bool i_cache_file);
 	
 	bool WriteFile(const engine::data::PooledString& i_file_name, const char* i_file_contents) const;
 	void ClearFileCache();

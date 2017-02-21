@@ -34,13 +34,7 @@ void FileUtils::Destroy()
 	SAFE_DELETE(FileUtils::instance_);
 }
 
-uint8_t* FileUtils::ReadFile(const engine::data::PooledString& i_file_name, bool i_cache_file)
-{
-	size_t file_size = 0;
-	return ReadFile(i_file_name, file_size, i_cache_file);
-}
-
-uint8_t* FileUtils::ReadFile(const engine::data::PooledString& i_file_name, size_t& o_file_size, bool i_cache_file)
+FileUtils::FileData FileUtils::ReadFile(const engine::data::PooledString& i_file_name, bool i_cache_file)
 {
 	// validate inputs
 	ASSERT(i_file_name);
@@ -52,8 +46,7 @@ uint8_t* FileUtils::ReadFile(const engine::data::PooledString& i_file_name, size
 	// check if the file is in the cache
 	if (IsFileCached(hash))
 	{
-		o_file_size = file_cache_[hash].file_size;
-		return file_cache_[hash].file_contents;
+		return file_cache_[hash];
 	}
 
 	// read the file
@@ -63,7 +56,7 @@ uint8_t* FileUtils::ReadFile(const engine::data::PooledString& i_file_name, size
 	if (fopen_error != 0)
 	{
 		LOG_ERROR("Could not open %s...error code:%d", i_file_name, fopen_error);
-		return nullptr;
+		return FileData();
 	}
 
 	ASSERT(file != nullptr);
@@ -84,18 +77,18 @@ uint8_t* FileUtils::ReadFile(const engine::data::PooledString& i_file_name, size
 	ASSERT(file_read == file_size);
 
 	fclose(file);
-	
+
 	// prepare outputs
-	o_file_size = file_size;
+	FileData file_data(i_file_name, buffer, static_cast<size_t>(file_size));
 
 	// add the file to the cache
 	if (i_cache_file)
 	{
-		file_cache_.insert(std::pair<unsigned int, FileData>(hash, { i_file_name, buffer, o_file_size }));
+		file_cache_.insert(std::pair<unsigned int, FileData>(hash, file_data));
 		LOG("FileUtils added '%s' to the cache", i_file_name);
 	}
 
-	return buffer;
+	return file_data;
 }
 
 bool FileUtils::WriteFile(const engine::data::PooledString& i_file_name, const char* i_file_contents) const

@@ -13,14 +13,15 @@ namespace jobs {
 // static member initialization
 JobSystem* JobSystem::instance_ = nullptr;
 
-JobSystem::JobSystem()
+JobSystem::JobSystem() : shutdown_requested_(false)
 {
-	LOG("JobSystem created.");
+	VERBOSE("JobSystem created.");
 }
 
 JobSystem::~JobSystem()
 {
-	LOG("JobSystem deleted.");
+	Shutdown();
+	VERBOSE("JobSystem deleted.");
 }
 
 JobSystem* JobSystem::Create()
@@ -82,6 +83,12 @@ bool JobSystem::AddJob(InterfaceJob* i_job, const engine::data::PooledString& i_
 
 void JobSystem::Shutdown()
 {
+	if (shutdown_requested_)
+	{
+		return;
+	}
+	shutdown_requested_ = true;
+
 	for (std::map<engine::data::HashedString, Team*>::iterator it = teams_.begin(); it != teams_.end(); ++it)
 	{
 		// ask this team's queue to shutdown

@@ -8,6 +8,7 @@
 // engine includes
 #include "Data\StringPool.h"
 #include "Input\Input.h"
+#include "Jobs\JobSystem.h"
 #include "Memory\AllocatorUtil.h"
 #include "Physics\Physics.h"
 #include "Renderer\Renderer.h"
@@ -24,6 +25,10 @@ bool StartUp()
 
 	// create string pools
 	engine::data::StringPool::Create();
+
+	// create job system
+	engine::jobs::JobSystem* job_system = engine::jobs::JobSystem::Create();
+	job_system->CreateTeam(engine::data::PooledString("EngineJobs"), 5);
 
 	// create file util
 	engine::util::FileUtils::Create();
@@ -44,7 +49,7 @@ bool StartUp()
 	// TODO: Resolve conflict with namespace time
 	//srand(static_cast<unsigned int>(time(0)));
 
-	quit_requested_ = false;
+	shutdown_requested_ = false;
 
 	return true;
 }
@@ -59,7 +64,7 @@ void Run()
 	static engine::physics::Physics* physics = engine::physics::Physics::Get();
 	static engine::render::Renderer* renderer = engine::render::Renderer::Get();
 
-	while (!quit_requested_)
+	while (!shutdown_requested_)
 	{
 		// get delta
 		float dt = engine::time::TimerUtil::CalculateLastFrameTime_ms();
@@ -92,6 +97,9 @@ void Shutdown()
 	// delete file util
 	engine::util::FileUtils::Destroy();
 
+	// delete job system
+	engine::jobs::JobSystem::Destroy();
+
 	// delete string pools
 	engine::data::StringPool::Destroy();
 
@@ -99,9 +107,13 @@ void Shutdown()
 	engine::memory::DestroyAllocators();
 }
 
-void RequestQuit()
+void RequestShutdown()
 {
-	quit_requested_ = true;
+	if (shutdown_requested_)
+	{
+		return;
+	}
+	shutdown_requested_ = true;
 }
 
 } // namespace engine
