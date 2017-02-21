@@ -6,9 +6,11 @@
 #include "Common\HelperMacros.h"
 #include "GameObject\ActorCreator.h"
 #include "Input\KeyboardEventDispatcher.h"
+#include "Jobs\CreateActorDeleteFileDataJob.h"
+#include "Jobs\FileLoadJob.h"
+#include "Jobs\JobSystem.h"
 #include "Logger\Logger.h"
 #include "Time\Updater.h"
-#include "Util\FileUtils.h"
 
 // game includes
 #include "Game\GameData.h"
@@ -85,7 +87,7 @@ Game::~Game()
 	SAFE_DELETE(player_);
 
 	// delete the monsters
-	monsters_.clear();
+	actors_.clear();
 
 	// tell the engine we no longer want to be ticked
 	engine::time::Updater::Get()->RemoveTickable(this);
@@ -103,12 +105,14 @@ bool Game::Init()
 		return false;
 	}
 
+	srand(static_cast<unsigned int>(time(0)));
+
 	// create the player
 	CreatePlayer();
 	LOG("Created the player...");
 
 	// create the monsters
-	engine::gameobject::ActorCreator::CreateActorsFromFile(GameData::MONSTERS_LUA_FILE_NAME, monsters_);
+	engine::gameobject::ActorCreator::CreateActorsFromFile(GameData::MONSTERS_LUA_FILE_NAME, actors_);
 
 	// register for update events
 	engine::time::Updater::Get()->AddTickable(this);
@@ -139,7 +143,14 @@ void Game::Update(float dt)
 	// request the engine to quit if we need to
 	if (quit || game_state_ == GameStates::kGameStateQuit)
 	{
-		engine::RequestQuit();
+		engine::RequestShutdown();
+	}
+
+	if (!new_actors_.empty())
+	{
+		std::lock_guard<std::mutex> lock(new_actors_mutex_);
+		actors_.insert(actors_.end(), new_actors_.begin(), new_actors_.end());
+		new_actors_.clear();
 	}
 }
 
@@ -148,6 +159,7 @@ void Game::OnKeyPressed(unsigned int i_key_id)
 	switch (i_key_id)
 	{
 	case 'M':
+		CreateActor(engine::data::PooledString(GameData::MONSTER_LUA_FILE_NAME));
 		break;
 	case 'Q':
 		game_state_ = GameStates::kGameStateQuit;
@@ -162,6 +174,33 @@ void Game::CreatePlayer()
 {
 	// create the player at the center of the grid
 	player_ = new Player();
+}
+
+void Game::CreateActor(const engine::data::PooledString& i_file_name)
+{
+	// validate inputs
+	ASSERT(i_file_name);
+
+	engine::jobs::FileLoadJob* file_load_job = new engine::jobs::FileLoadJob(i_file_name, std::bind(&Game::OnFileLoaded, this, std::placeholders::_1));
+	engine::jobs::JobSystem::Get()->AddJob(file_load_job, engine::data::PooledString("EngineJobs"));
+}
+
+void Game::OnFileLoaded(engine::util::FileUtils::FileData i_file_data)
+{
+	// validate inputs
+	ASSERT(i_file_data.file_contents && i_file_data.file_size > 0);
+
+	engine::jobs::CreateActorDeleteFileDataJob* actor_creator_job = new engine::jobs::CreateActorDeleteFileDataJob(i_file_data, std::bind(&Game::OnActorCreated, this, std::placeholders::_1));
+	engine::jobs::JobSystem::Get()->AddJob(actor_creator_job, engine::data::PooledString("EngineJobs"));
+}
+
+void Game::OnActorCreated(engine::memory::SharedPointer<engine::gameobject::Actor> i_actor)
+{
+	// validate inputs
+	ASSERT(i_actor);
+
+	std::lock_guard<std::mutex> lock(new_actors_mutex_);
+	new_actors_.push_back(i_actor);
 }
 
 } // namespace monsterchase

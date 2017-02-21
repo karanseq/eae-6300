@@ -3,6 +3,7 @@
 
 // library includes
 #include <stdint.h>
+#include <mutex>
 #include <vector>
 
 // engine includes
@@ -10,6 +11,7 @@
 #include "Memory\SharedPointer.h"
 #include "Input\KeyboardEvent.h"
 #include "Time\InterfaceTickable.h"
+#include "Util\FileUtils.h"
 
 // game includes
 #include "Game\GameTypes.h"
@@ -26,15 +28,6 @@ void Shutdown();
 
 class Game : public engine::time::InterfaceTickable
 {
-private:
-	Game();
-	~Game();
-	static Game* instance_;
-
-	// disable copy constructor & copy assignment operator
-	Game(const Game& i_copy) = delete;
-	Game& operator=(const Game& i_copy) = delete;
-
 public:
 	static Game* Create();
 	static inline Game* GetInstance()										{ return instance_; }
@@ -51,6 +44,7 @@ public:
 	// gameplay
 	void OnKeyPressed(unsigned int i_key_id);
 	void CreatePlayer();
+	void CreateActor(const engine::data::PooledString& i_file_name);
 
 	inline GameStates GetState() const												{ return game_state_; }
 
@@ -59,13 +53,27 @@ public:
 	static const uint16_t															SCREEN_HEIGHT = 800;
 
 private:
+	Game();
+	~Game();
+	static Game* instance_;
+
+	// disable copy constructor & copy assignment operator
+	Game(const Game& i_copy) = delete;
+	Game& operator=(const Game& i_copy) = delete;
+
+	void OnFileLoaded(engine::util::FileUtils::FileData i_file_data);
+	void OnActorCreated(engine::memory::SharedPointer<engine::gameobject::Actor>);
+
 	// field to maintain the current state of the game
 	GameStates																		game_state_;
 
 	// game elements
 	Player*																			player_;
-	std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>			monsters_;
+	std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>			actors_;
 	engine::memory::SharedPointer<engine::input::KeyboardEvent>						keyboard_event_;
+
+	std::mutex																		new_actors_mutex_;
+	std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>			new_actors_;
 
 }; // class MonsterChase
 

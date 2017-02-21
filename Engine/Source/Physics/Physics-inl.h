@@ -35,6 +35,8 @@ inline void Physics::AddPhysicsObject(const engine::memory::SharedPointer<Physic
 	// validate input
 	ASSERT(i_physics_object);
 
+	std::lock_guard<std::mutex> lock(physics_mutex_);
+
 	// check if this object already exists
 	if (std::find(physics_objects_.begin(), physics_objects_.end(), i_physics_object) != physics_objects_.end())
 	{
@@ -52,6 +54,8 @@ inline void Physics::RemovePhysicsObject(const engine::memory::SharedPointer<Phy
 	ASSERT(i_physics_object);
 	// can't remove an object if there are none
 	ASSERT(num_physics_objects_ > 0);
+
+	std::lock_guard<std::mutex> lock(physics_mutex_);
 
 	// check if this object exists
 	auto it = std::find(physics_objects_.begin(), physics_objects_.end(), i_physics_object);

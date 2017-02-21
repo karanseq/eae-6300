@@ -39,6 +39,8 @@ inline void Renderer::AddRenderableObject(const engine::memory::SharedPointer<Re
 	// validate input
 	ASSERT(i_renderable_object);
 
+	std::lock_guard<std::mutex> lock(renderables_mutex_);
+
 	// check if this object already exists
 	if (std::find(renderables_.begin(), renderables_.end(), i_renderable_object) != renderables_.end())
 	{
@@ -56,6 +58,8 @@ inline void Renderer::RemoveRenderableObject(const engine::memory::SharedPointer
 	ASSERT(i_renderable_object);
 	// can't remove renderable if there are none
 	ASSERT(num_renderables_ > 0);
+
+	std::lock_guard<std::mutex> lock(renderables_mutex_);
 
 	// check if this object exists
 	auto it = std::find(renderables_.begin(), renderables_.end(), i_renderable_object);

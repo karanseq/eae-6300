@@ -2,6 +2,7 @@
 #define RENDERER_H_
 
 // library includes
+#include <mutex>
 #include <vector>
 
 // engine includes
@@ -51,6 +52,7 @@ public:
 private:
 	size_t																			num_renderables_;
 	std::vector<engine::memory::SharedPointer<RenderableObject>>					renderables_;
+	std::mutex																		renderables_mutex_;
 
 }; // class Renderer
 

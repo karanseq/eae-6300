@@ -6,6 +6,8 @@
 // engine includes
 #include "Assert\Assert.h"
 #include "Data\PooledString.h"
+#include "Jobs\FileLoadJob.h"
+#include "Jobs\JobSystem.h"
 #include "Util\FileUtils.h"
 #include "Util\LuaHelper.h"
 
@@ -17,20 +19,46 @@ bool ActorCreator::CreateActorFromFile(const engine::data::PooledString& i_file_
 	// validate input
 	ASSERT(i_file_name);
 
+	// read the lua file
+	engine::util::FileUtils::FileData file_data = engine::util::FileUtils::Get()->ReadFile(i_file_name, false);
+	ASSERT(file_data.file_contents && file_data.file_size > 0);
+
+	CreateActorFromFileData(file_data, o_actor);
+
+	delete[] file_data.file_contents;
+
+	return true;
+}
+
+bool ActorCreator::CreateActorsFromFile(const engine::data::PooledString& i_file_name, std::vector<engine::memory::SharedPointer<Actor>>& o_actors)
+{
+	// validate input
+	ASSERT(i_file_name);
+
+	// read the lua file
+	engine::util::FileUtils::FileData file_data = engine::util::FileUtils::Get()->ReadFile(i_file_name, false);
+	ASSERT(file_data.file_contents && file_data.file_size > 0);
+
+	CreateActorsFromFileData(file_data, o_actors);
+
+	delete[] file_data.file_contents;
+
+	return true;
+}
+
+bool ActorCreator::CreateActorFromFileData(const engine::util::FileUtils::FileData& i_file_data, engine::memory::SharedPointer<Actor>& o_actor)
+{
+	ASSERT(i_file_data.file_contents && i_file_data.file_size > 0);
+
 	// initialize lua state
 	lua_State* lua_state = luaL_newstate();
 	ASSERT(lua_state);
 
 	luaL_openlibs(lua_state);
 
-	// read the lua file
-	size_t file_size = 0;
-	uint8_t* file_contents = engine::util::FileUtils::Get()->ReadFile(i_file_name, file_size, false);
-	ASSERT(file_contents && file_size);
-
 	// do initial buffer parsing
 	int result = 0;
-	result = luaL_loadbuffer(lua_state, reinterpret_cast<char*>(file_contents), file_size, nullptr);
+	result = luaL_loadbuffer(lua_state, reinterpret_cast<char*>(i_file_data.file_contents), i_file_data.file_size, nullptr);
 	ASSERT(result == 0);
 	lua_pcall(lua_state, 0, 0, 0);
 	ASSERT(result == 0);
@@ -51,17 +79,14 @@ bool ActorCreator::CreateActorFromFile(const engine::data::PooledString& i_file_
 	int stack_items = lua_gettop(lua_state);
 	ASSERT(stack_items == 0);
 
-	delete[] file_contents;
-
 	lua_close(lua_state);
 
 	return success;
 }
 
-bool ActorCreator::CreateActorsFromFile(const engine::data::PooledString& i_file_name, std::vector<engine::memory::SharedPointer<Actor>>& o_actors)
+bool ActorCreator::CreateActorsFromFileData(const engine::util::FileUtils::FileData& i_file_data, std::vector<engine::memory::SharedPointer<Actor>>& o_actors)
 {
-	// validate input
-	ASSERT(i_file_name);
+	ASSERT(i_file_data.file_contents && i_file_data.file_size > 0);
 
 	// initialize lua state
 	lua_State* lua_state = luaL_newstate();
@@ -69,14 +94,9 @@ bool ActorCreator::CreateActorsFromFile(const engine::data::PooledString& i_file
 
 	luaL_openlibs(lua_state);
 
-	// read the lua file
-	size_t file_size = 0;
-	uint8_t* file_contents = engine::util::FileUtils::Get()->ReadFile(i_file_name, file_size, false);
-	ASSERT(file_contents && file_size);
-
 	// do initial buffer parsing
 	int result = 0;
-	result = luaL_loadbuffer(lua_state, reinterpret_cast<char*>(file_contents), file_size, nullptr);
+	result = luaL_loadbuffer(lua_state, reinterpret_cast<char*>(i_file_data.file_contents), i_file_data.file_size, nullptr);
 	ASSERT(result == 0);
 	lua_pcall(lua_state, 0, 0, 0);
 	ASSERT(result == 0);
@@ -123,20 +143,10 @@ bool ActorCreator::CreateActorsFromFile(const engine::data::PooledString& i_file
 	int stack_items = lua_gettop(lua_state);
 	ASSERT(stack_items == 0);
 
-	delete[] file_contents;
-
 	lua_close(lua_state);
 
 	return true;
 }
-
-bool ActorCreator::CreateActorFromFileAsync(const engine::data::PooledString& i_file_name)
-{
-
-}
-
-bool ActorCreator::CreateActorsFromFileAsync(const engine::data::PooledString& i_file_name)
-{}
 
 bool ActorCreator::CreateActor(lua_State* i_lua_state, engine::memory::SharedPointer<Actor>& o_actor)
 {

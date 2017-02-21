@@ -2,6 +2,7 @@
 #define PHYSICS_H_
 
 // library includes
+#include <mutex>
 #include <vector>
 
 // engine includes
@@ -42,6 +43,7 @@ public:
 private:
 	size_t																			num_physics_objects_;
 	std::vector<engine::memory::SharedPointer<PhysicsObject>>						physics_objects_;
+	std::mutex																		physics_mutex_;
 };
 
 } // namespace physics

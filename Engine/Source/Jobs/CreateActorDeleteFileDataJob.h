@@ -14,11 +14,11 @@
 namespace engine {
 namespace jobs {
 
-class ActorCreatorJob : public InterfaceJob
+class CreateActorDeleteFileDataJob : public InterfaceJob
 {
 public:
-	ActorCreatorJob(const engine::util::FileUtils::FileData& i_file_data, const std::function<void(engine::memory::SharedPointer<engine::gameobject::Actor>)>& i_callback);
-	~ActorCreatorJob();
+	CreateActorDeleteFileDataJob(const engine::util::FileUtils::FileData& i_file_data, const std::function<void(engine::memory::SharedPointer<engine::gameobject::Actor>)>& i_callback);
+	~CreateActorDeleteFileDataJob();
 
 	// implement InterfaceJob
 	void DoWork() override;
@@ -31,11 +31,11 @@ public:
 	inline void SetCallback(const std::function<void(engine::memory::SharedPointer<engine::gameobject::Actor>)>& i_callback);
 
 private:
-	ActorCreatorJob(const ActorCreatorJob&) = delete;
-	ActorCreatorJob(ActorCreatorJob&&) = delete;
+	CreateActorDeleteFileDataJob(const CreateActorDeleteFileDataJob&) = delete;
+	CreateActorDeleteFileDataJob(CreateActorDeleteFileDataJob&&) = delete;
 
-	ActorCreatorJob& operator=(const ActorCreatorJob&) = delete;
-	ActorCreatorJob& operator=(ActorCreatorJob&&) = delete;
+	CreateActorDeleteFileDataJob& operator=(const CreateActorDeleteFileDataJob&) = delete;
+	CreateActorDeleteFileDataJob& operator=(CreateActorDeleteFileDataJob&&) = delete;
 
 	engine::util::FileUtils::FileData																file_data_;
 	std::function<void(engine::memory::SharedPointer<engine::gameobject::Actor>)>					callback_;
@@ -45,6 +45,6 @@ private:
 } // namespace jobs
 } // namespace engine
 
-#include "ActorCreatorJob-inl.h"
+#include "CreateActorDeleteFileDataJob-inl.h"
 
 #endif // ACTOR_CREATOR_JOB_H_

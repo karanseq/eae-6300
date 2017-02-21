@@ -11,6 +11,7 @@
 #include "Memory\WeakPointer.h"
 #include "Physics\Physics.h"
 #include "Renderer\Renderer.h"
+#include "Util\FileUtils.h"
 
 // forward declarations
 struct lua_State;
@@ -33,8 +34,8 @@ public:
 	static bool CreateActorFromFile(const engine::data::PooledString& i_file_name, engine::memory::SharedPointer<Actor>& o_actor);
 	static bool CreateActorsFromFile(const engine::data::PooledString& i_file_name, std::vector<engine::memory::SharedPointer<Actor>>& o_actors);
 
-	static bool CreateActorFromFileAsync(const engine::data::PooledString& i_file_name);
-	static bool CreateActorsFromFileAsync(const engine::data::PooledString& i_file_name);
+	static bool CreateActorFromFileData(const engine::util::FileUtils::FileData& i_file_data, engine::memory::SharedPointer<Actor>& o_actor);
+	static bool CreateActorsFromFileData(const engine::util::FileUtils::FileData& i_file_data, std::vector<engine::memory::SharedPointer<Actor>>& o_actors);
 
 private:
 	static bool CreateActor(lua_State* i_lua_state, engine::memory::SharedPointer<Actor>& o_actor);

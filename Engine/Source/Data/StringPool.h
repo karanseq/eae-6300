@@ -2,6 +2,7 @@
 #define STRING_POOL_H_
 
 // library includes
+#include <mutex>
 #include <stdint.h>
 
 namespace engine {
@@ -37,6 +38,7 @@ public:
 private:
 	uint8_t*										pool_;
 	size_t											pool_size_;
+	mutable std::mutex								pool_mutex_;
 };
 
 } // namespace data

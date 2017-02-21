@@ -64,6 +64,8 @@ const char* StringPool::Add(const char* i_string)
 		return string;
 	}
 
+	std::lock_guard<std::mutex> lock(pool_mutex_);
+
 	// loop to the end of the pool
 	size_t string_length = static_cast<size_t>(*pool_);
 	uint8_t* pool_pointer = pool_;
@@ -100,6 +102,8 @@ const char* StringPool::Add(const char* i_string)
 const char* StringPool::Find(const char* i_string)
 {
 	ASSERT(i_string != nullptr);
+
+	std::lock_guard<std::mutex> lock(pool_mutex_);
 
 	// get the size of the first string in the pool
 	size_t string_length = static_cast<size_t>(*pool_);
