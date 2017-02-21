@@ -28,6 +28,16 @@ inline bool HashedString::operator!=(const HashedString& i_other) const
 	return (hash_ != i_other.hash_);
 }
 
+inline bool HashedString::operator<(const HashedString& i_other) const
+{
+	return (hash_ < i_other.hash_);
+}
+
+inline bool HashedString::operator>(const HashedString& i_other) const
+{
+	return (hash_ > i_other.hash_);
+}
+
 inline unsigned int HashedString::GetHash() const
 {
 	return hash_;

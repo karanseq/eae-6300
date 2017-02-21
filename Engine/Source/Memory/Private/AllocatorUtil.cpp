@@ -11,20 +11,23 @@ namespace memory {
 		// initialize the default allocator
 		BlockAllocator* default_allocator = BlockAllocator::GetDefaultAllocator();
 
+		const size_t base_size = sizeof(size_t);
+
 		// initialize the fixed size allocators
-		FixedSizeAllocator* fsa = FixedSizeAllocator::Create(8, 64, default_allocator);
+		// block size on 32-bit = 8 and on 64-bit = 16
+		FixedSizeAllocator* fsa = FixedSizeAllocator::Create(base_size * 2, 200, default_allocator);
 		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
-		fsa = FixedSizeAllocator::Create(16, 36, default_allocator);
+		// block size on 32-bit = 12 and on 64-bit = 24
+		fsa = FixedSizeAllocator::Create(base_size * 3, 500, default_allocator);
 		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
-		fsa = FixedSizeAllocator::Create(36, 36, default_allocator);
+		// block size on 32-bit = 16 and on 64-bit = 32
+		fsa = FixedSizeAllocator::Create(base_size * 4, 200, default_allocator);
 		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
-		fsa = FixedSizeAllocator::Create(76, 36, default_allocator);
-		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
-
-		fsa = FixedSizeAllocator::Create(252, 10, default_allocator);
+		// block size on 32-bit = 36 and on 64-bit = 72
+		fsa = FixedSizeAllocator::Create(base_size * 9, 30, default_allocator);
 		FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 	}
 

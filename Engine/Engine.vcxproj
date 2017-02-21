@@ -104,7 +104,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_LIB;BUILD_DEBUG;VERBOSITY_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;BUILD_DEBUG;VERBOSITY_LEVEL=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)External\GLib\;$(SolutionDir)External\Lua\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -171,6 +171,11 @@
     <ClInclude Include="Source\Input\KeyboardEvent.h" />
     <ClInclude Include="Source\Input\KeyboardEventDispatcher-inl.h" />
     <ClInclude Include="Source\Input\KeyboardEventDispatcher.h" />
+    <ClInclude Include="Source\JobSystem\InterfaceJob.h" />
+    <ClInclude Include="Source\JobSystem\JobQueue-inl.h" />
+    <ClInclude Include="Source\JobSystem\JobQueue.h" />
+    <ClInclude Include="Source\JobSystem\JobSystem.h" />
+    <ClInclude Include="Source\JobSystem\Worker.h" />
     <ClInclude Include="Source\Logger\Logger.h" />
     <ClInclude Include="Source\Math\MathUtil.h" />
     <ClInclude Include="Source\Math\Rect-inl.h" />
@@ -223,6 +228,9 @@
     <ClCompile Include="Source\Input\Private\Input.cpp" />
     <ClCompile Include="Source\Input\Private\KeyboardEvent.cpp" />
     <ClCompile Include="Source\Input\Private\KeyboardEventDispatcher.cpp" />
+    <ClCompile Include="Source\JobSystem\Private\JobQueue.cpp" />
+    <ClCompile Include="Source\JobSystem\Private\JobSystem.cpp" />
+    <ClCompile Include="Source\JobSystem\Private\Worker.cpp" />
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp" />
     <ClCompile Include="Source\Math\Private\Rect.cpp" />
     <ClCompile Include="Source\Math\Private\Size.cpp" />

@@ -18,6 +18,7 @@ void TestFixedSizeAllocator();
 //#define ENABLE_BIT_ARRAY_TEST
 //#define ENABLE_STRONG_POINTER_TEST
 //#define ENABLE_STRING_POOL_TEST
+#define ENABLE_JOB_SYSTEM_TEST
 
 #ifdef ENABLE_VECTOR_CONST_TEST
 void TestVectorConstness();
@@ -38,6 +39,10 @@ void TestSmartPointers();
 #ifdef ENABLE_STRING_POOL_TEST
 void TestStringPool();
 #endif // ENABLE_STRING_POOL_TEST
+
+#ifdef ENABLE_JOB_SYSTEM_TEST
+void TestJobSystem();
+#endif
 
 /************************ RUN TESTS ************************/
 void RunTests()
@@ -66,6 +71,11 @@ void RunTests()
 	LOG("\n");
 	TestStringPool();
 #endif // ENABLE_STRING_POOL_TEST
+
+#ifdef ENABLE_JOB_SYSTEM_TEST
+	LOG("\n");
+	TestJobSystem();
+#endif // ENABLE_JOB_SYSTEM_TEST
 
 #ifdef ENABLE_ALLOCATOR_TEST
 	LOG("\n");
