@@ -2,6 +2,7 @@
 #define ENGINE_BLOCK_ALLOCATOR_H_
 
 // library includes
+#include <mutex>
 #include <stdint.h>
 
 // engine includes
@@ -117,6 +118,8 @@ private:
 	
 	size_t											total_block_size_;										// total size of block
 	static size_t									size_of_BD_;											// size of a BlockDescriptor object
+
+	std::mutex										allocator_mutex_;										// makes this allocator thread safe
 
 #ifdef BUILD_DEBUG
 	uint32_t										descriptor_counter_;									// a counter to keep track of all the descriptors (resets to 0 after reaching uint32_t's max value)

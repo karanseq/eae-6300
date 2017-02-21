@@ -227,6 +227,8 @@ void* FixedSizeAllocator::Alloc()
 
 void* FixedSizeAllocator::Alloc(const size_t i_size)
 {
+	std::lock_guard<std::mutex> lock(allocator_mutex_);
+
 	// validate input
 	ASSERT(i_size <= fixed_block_size_);
 
@@ -289,6 +291,8 @@ void* FixedSizeAllocator::Alloc(const size_t i_size)
 
 bool FixedSizeAllocator::Free(void* i_pointer)
 {
+	std::lock_guard<std::mutex> lock(allocator_mutex_);
+
 	// validate input
 	ASSERT(i_pointer != nullptr);
 

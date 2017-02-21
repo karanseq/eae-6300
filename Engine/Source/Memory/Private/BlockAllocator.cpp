@@ -14,7 +14,7 @@ namespace engine {
 namespace memory {
 
 // initialize static members
-const size_t				BlockAllocator::DEFAULT_ALLOCATOR_SIZE = 2 * 1024 * 1024;
+const size_t				BlockAllocator::DEFAULT_ALLOCATOR_SIZE = 10 * 1024 * 1024;
 size_t						BlockAllocator::size_of_BD_ = sizeof(BD);
 BlockAllocator*				BlockAllocator::available_allocators_[MAX_BLOCK_ALLOCATORS] = { nullptr };
 
@@ -304,6 +304,8 @@ bool BlockAllocator::CheckMemoryOverwrite(BD* i_bd) const
 
 void* BlockAllocator::Alloc(const size_t i_size, const size_t i_alignment)
 {
+	std::lock_guard<std::mutex> lock(allocator_mutex_);
+
 	// size should be greater than zero!
 	ASSERT(i_size > 0);
 	// alignment should be power of two!
@@ -443,6 +445,8 @@ void* BlockAllocator::Alloc(const size_t i_size, const size_t i_alignment)
 // Deallocate a block of memory
 bool BlockAllocator::Free(void* i_pointer)
 {
+	std::lock_guard<std::mutex> lock(allocator_mutex_);
+
 	// validate input
 	ASSERT(i_pointer != nullptr);
 
