@@ -18,6 +18,7 @@ bool ActorCreator::CreateActorFromFile(const engine::data::PooledString& i_file_
 {
 	// validate input
 	ASSERT(i_file_name);
+	ASSERT(i_file_name.GetLength() > 0);
 
 	// read the lua file
 	engine::util::FileUtils::FileData file_data = engine::util::FileUtils::Get()->ReadFile(i_file_name, false);
@@ -34,6 +35,7 @@ bool ActorCreator::CreateActorsFromFile(const engine::data::PooledString& i_file
 {
 	// validate input
 	ASSERT(i_file_name);
+	ASSERT(i_file_name.GetLength() > 0);
 
 	// read the lua file
 	engine::util::FileUtils::FileData file_data = engine::util::FileUtils::Get()->ReadFile(i_file_name, false);

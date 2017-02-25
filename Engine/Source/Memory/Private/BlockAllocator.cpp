@@ -79,7 +79,7 @@ void BlockAllocator::Destroy(BlockAllocator* i_allocator)
     // dump statistics
     i_allocator->DumpStatistics();
 
-	VERBOSE("BlockAllocator-%d destroyed", i_allocator->id_);
+	LOG("BlockAllocator-%d destroyed", i_allocator->id_);
 #endif
 }
 

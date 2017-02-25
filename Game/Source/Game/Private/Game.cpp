@@ -180,6 +180,7 @@ void Game::CreateActor(const engine::data::PooledString& i_file_name)
 {
 	// validate inputs
 	ASSERT(i_file_name);
+	ASSERT(i_file_name.GetLength() > 0);
 
 	engine::jobs::FileLoadJob* file_load_job = new engine::jobs::FileLoadJob(i_file_name, std::bind(&Game::OnFileLoaded, this, std::placeholders::_1));
 	engine::jobs::JobSystem::Get()->AddJob(file_load_job, engine::data::PooledString("EngineJobs"));

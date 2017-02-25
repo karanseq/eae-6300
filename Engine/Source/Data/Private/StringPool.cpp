@@ -18,8 +18,10 @@ StringPool* StringPool::instance_ = nullptr;
 const size_t StringPool::DEFAULT_POOL_SIZE = 256 * 1024;
 
 StringPool::StringPool(uint8_t* i_pool, size_t i_pool_size) : pool_(i_pool),
+	pool_end_(i_pool),
 	pool_size_(i_pool_size)
 {
+	// validate inputs
 	ASSERT(pool_ != nullptr);
 	ASSERT(pool_size_ > 0);
 
@@ -28,7 +30,7 @@ StringPool::StringPool(uint8_t* i_pool, size_t i_pool_size) : pool_(i_pool),
 
 StringPool::~StringPool()
 {
-
+	LOG("StringPool destroyed");
 }
 
 StringPool* StringPool::Create(size_t i_bytes)
@@ -66,42 +68,35 @@ const char* StringPool::Add(const char* i_string)
 
 	std::lock_guard<std::mutex> lock(pool_mutex_);
 
-	// loop to the end of the pool
-	size_t string_length = static_cast<size_t>(*pool_);
-	uint8_t* pool_pointer = pool_;
-	while (string_length > 0)
-	{
-		pool_pointer += (sizeof(size_t) + string_length);
-		string_length = static_cast<size_t>(*pool_pointer);
-	}
-
 	// calculate remaining memory
-	const size_t remaining_memory = static_cast<size_t>(pool_ + pool_size_ - pool_pointer);
+	const size_t remaining_memory = static_cast<size_t>(pool_ + pool_size_ - pool_end_);
 
 	// check if we have enough memory for this string and another size_t 
 	const size_t input_string_length = strlen(i_string) + 1;
-	ASSERT(input_string_length + sizeof(size_t) * 2 <= remaining_memory);
+	ASSERT(input_string_length + sizeof(size_t) <= remaining_memory);
 
 	// save the size of this string
-	size_t* string_size = reinterpret_cast<size_t*>(pool_pointer);
+	size_t* string_size = reinterpret_cast<size_t*>(pool_end_);
 	*string_size = input_string_length;
 
 	// copy the string
-	memcpy_s((pool_pointer + sizeof(size_t)), remaining_memory - sizeof(size_t), i_string, input_string_length);
+	memcpy_s((pool_end_ + sizeof(size_t)), remaining_memory - sizeof(size_t), i_string, input_string_length);
 
 	// add null-termination
-	*(pool_pointer + sizeof(size_t) + input_string_length - 1) = '\0';
+	*(pool_end_ + sizeof(size_t) + input_string_length - 1) = '\0';
 
-	// add a size_t to the end of this string
-	size_t* next_string_size_t = reinterpret_cast<size_t*>(pool_pointer + sizeof(size_t) + input_string_length);
-	*next_string_size_t = 0;
+	// update pointer to the current end of the pool
+	pool_end_ += input_string_length + sizeof(size_t);
 
-	return reinterpret_cast<const char*>(pool_pointer + sizeof(size_t));
+	return reinterpret_cast<const char*>(pool_end_ - input_string_length);
 }
 
 const char* StringPool::Find(const char* i_string)
 {
 	ASSERT(i_string != nullptr);
+
+	// get the size of the input string
+	const size_t input_string_length = strlen(i_string);
 
 	std::lock_guard<std::mutex> lock(pool_mutex_);
 
@@ -110,15 +105,19 @@ const char* StringPool::Find(const char* i_string)
 
 	// loop the pool in search of the input string
 	uint8_t* pool_pointer = pool_;
-	while (string_length > 0)
+	while (pool_pointer < pool_end_)
 	{
-		// get a pointer to the string
-		char* string = reinterpret_cast<char*>(pool_pointer + sizeof(size_t));
-
-		// compare the string with the input
-		if (strcmp(i_string, string) == 0)
+		// compare lengths
+		if (input_string_length + 1 == string_length)
 		{
-			return string;
+			// get a pointer to the string
+			char* string = reinterpret_cast<char*>(pool_pointer + sizeof(size_t));
+
+			// compare the string with the input
+			if (strcmp(i_string, string) == 0)
+			{
+				return string;
+			}
 		}
 
 		// move to the next string

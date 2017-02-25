@@ -32,13 +32,14 @@ FileUtils* FileUtils::Create()
 void FileUtils::Destroy()
 {
 	SAFE_DELETE(FileUtils::instance_);
+	LOG("FileUtils destroyed");
 }
 
 FileUtils::FileData FileUtils::ReadFile(const engine::data::PooledString& i_file_name, bool i_cache_file)
 {
 	// validate inputs
 	ASSERT(i_file_name);
-	ASSERT(strlen(i_file_name.GetString()) > 0);
+	ASSERT(i_file_name.GetLength() > 0);
 
 	// get a hash for the file name
 	unsigned int hash = engine::data::HashedString::Hash(i_file_name);

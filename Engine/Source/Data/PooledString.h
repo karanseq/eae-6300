@@ -22,6 +22,7 @@ public:
 	inline operator bool() const;
 	
 	inline const char* GetString() const;
+	inline const size_t GetLength() const;
 
 private:
 	const char*									string_;

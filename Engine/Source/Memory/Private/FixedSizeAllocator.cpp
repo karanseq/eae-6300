@@ -107,7 +107,7 @@ void FixedSizeAllocator::Destroy(FixedSizeAllocator* i_allocator)
     i_allocator->DumpStatistics();
 
 	uint8_t id = i_allocator->id_;
-	VERBOSE("FixedSizeAllocator-%d destroyed", id);
+	LOG("FixedSizeAllocator-%d destroyed", id);
 #endif
 
 	block_allocator->Free(i_allocator);

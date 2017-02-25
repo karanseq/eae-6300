@@ -33,5 +33,10 @@ inline const char* PooledString::GetString() const
 	return string_;
 }
 
+inline const size_t PooledString::GetLength() const
+{
+	return *(reinterpret_cast<const size_t*>(string_ - sizeof(size_t))) - 1;
+}
+
 } // namespace data
 } // namesapce engine

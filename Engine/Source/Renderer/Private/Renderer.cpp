@@ -56,6 +56,7 @@ GLib::Sprites::Sprite* Renderer::CreateSprite(const engine::data::PooledString& 
 {
 	// validate input
 	ASSERT(i_texture_file_name);
+	ASSERT(i_texture_file_name.GetLength() > 0);
 
 	// Load the source file (texture data)
 	engine::util::FileUtils::FileData texture_file_data = engine::util::FileUtils::Get()->ReadFile(i_texture_file_name, true);
