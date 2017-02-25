@@ -13,7 +13,6 @@ inline const engine::data::PooledString& FileLoadJob::GetFileName() const
 
 inline void FileLoadJob::SetFileName(const engine::data::PooledString& i_file_name)
 {
-	ASSERT(i_file_name);
 	ASSERT(i_file_name.GetLength() > 0);
 
 	file_name_ = i_file_name;

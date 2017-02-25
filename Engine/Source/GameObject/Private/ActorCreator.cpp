@@ -17,7 +17,6 @@ namespace gameobject {
 bool ActorCreator::CreateActorFromFile(const engine::data::PooledString& i_file_name, engine::memory::SharedPointer<Actor>& o_actor)
 {
 	// validate input
-	ASSERT(i_file_name);
 	ASSERT(i_file_name.GetLength() > 0);
 
 	// read the lua file
@@ -34,7 +33,6 @@ bool ActorCreator::CreateActorFromFile(const engine::data::PooledString& i_file_
 bool ActorCreator::CreateActorsFromFile(const engine::data::PooledString& i_file_name, std::vector<engine::memory::SharedPointer<Actor>>& o_actors)
 {
 	// validate input
-	ASSERT(i_file_name);
 	ASSERT(i_file_name.GetLength() > 0);
 
 	// read the lua file

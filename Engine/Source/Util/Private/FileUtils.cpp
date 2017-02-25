@@ -38,7 +38,6 @@ void FileUtils::Destroy()
 FileUtils::FileData FileUtils::ReadFile(const engine::data::PooledString& i_file_name, bool i_cache_file)
 {
 	// validate inputs
-	ASSERT(i_file_name);
 	ASSERT(i_file_name.GetLength() > 0);
 
 	// get a hash for the file name

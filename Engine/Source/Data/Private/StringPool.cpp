@@ -15,7 +15,7 @@ namespace data {
 
 // static member initialization
 StringPool* StringPool::instance_ = nullptr;
-const size_t StringPool::DEFAULT_POOL_SIZE = 256 * 1024;
+const size_t StringPool::DEFAULT_POOL_SIZE = 16 * 1024;
 
 StringPool::StringPool(uint8_t* i_pool, size_t i_pool_size) : pool_(i_pool),
 	pool_end_(i_pool),
@@ -26,10 +26,18 @@ StringPool::StringPool(uint8_t* i_pool, size_t i_pool_size) : pool_(i_pool),
 	ASSERT(pool_size_ > 0);
 
 	*pool_ = static_cast<size_t>(0);
+
+#ifdef BUILD_DEBUG
+	memory_used_ = 0;
+	num_strings_ = 0;
+#endif
 }
 
 StringPool::~StringPool()
 {
+#ifdef BUILD_DEBUG
+	DumpStatistics();
+#endif
 	LOG("StringPool destroyed");
 }
 
@@ -88,6 +96,11 @@ const char* StringPool::Add(const char* i_string)
 	// update pointer to the current end of the pool
 	pool_end_ += input_string_length + sizeof(size_t);
 
+#ifdef BUILD_DEBUG
+	memory_used_ += input_string_length + sizeof(size_t);
+	++num_strings_;
+#endif
+
 	return reinterpret_cast<const char*>(pool_end_ - input_string_length);
 }
 
@@ -127,6 +140,17 @@ const char* StringPool::Find(const char* i_string)
 
 	return nullptr;
 }
+
+#ifdef BUILD_DEBUG
+void StringPool::DumpStatistics() const
+{
+	LOG("---------- %s ----------", __FUNCTION__);
+	LOG("Dumping usage statistice for StringPool:");
+	LOG("Total memory used:%zu/%zu", memory_used_, pool_size_);
+	LOG("Total number of strings:%zu", num_strings_);
+	LOG("---------- END ----------");
+}
+#endif // BUILD_DEBUG
 
 } // namespace data
 } // namespace engine

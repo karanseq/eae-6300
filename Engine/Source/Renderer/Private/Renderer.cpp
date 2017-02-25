@@ -55,7 +55,6 @@ void Renderer::Run(float i_dt)
 GLib::Sprites::Sprite* Renderer::CreateSprite(const engine::data::PooledString& i_texture_file_name)
 {
 	// validate input
-	ASSERT(i_texture_file_name);
 	ASSERT(i_texture_file_name.GetLength() > 0);
 
 	// Load the source file (texture data)

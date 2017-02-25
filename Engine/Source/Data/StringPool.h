@@ -32,11 +32,18 @@ private:
 	StringPool& operator=(const StringPool&) = delete;
 
 	inline bool Contains(const char* i_string) const;
+#ifdef BUILD_DEBUG
+	void DumpStatistics() const;
+#endif
 
 	uint8_t*										pool_;
 	uint8_t*										pool_end_;
 	size_t											pool_size_;
 	mutable std::mutex								pool_mutex_;
+#ifdef BUILD_DEBUG
+	size_t											memory_used_;
+	size_t											num_strings_;
+#endif
 };
 
 } // namespace data

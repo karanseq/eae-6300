@@ -5,6 +5,7 @@
 
 // engine includes
 #include "Assert\Assert.h"
+#include "Data\PooledString.h"
 #include "Logger\Logger.h"
 
 namespace engine {
@@ -18,7 +19,6 @@ inline Renderer* Renderer::Get()
 inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderableObject(const engine::data::PooledString& i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object)
 {
 	// validate input
-	ASSERT(i_file_name);
 	ASSERT(i_file_name.GetLength() > 0);
 	ASSERT(i_game_object);
 

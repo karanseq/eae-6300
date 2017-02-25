@@ -10,7 +10,6 @@ FileLoadJob::FileLoadJob(const engine::data::PooledString& i_file_name, const st
 	callback_(i_callback)
 {
 	// validate inputs
-	ASSERT(file_name_);
 	ASSERT(file_name_.GetLength() > 0);
 	ASSERT(callback_);
 }
