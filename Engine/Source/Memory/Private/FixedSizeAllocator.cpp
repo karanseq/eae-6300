@@ -4,6 +4,7 @@
 #include "Assert\Assert.h"
 #include "Data\BitArray.h"
 #include "Logger\Logger.h"
+#include "Memory\AllocationCounter.h"
 #include "Memory\AllocatorUtil.h"
 #include "Memory\BlockAllocator.h"
 
@@ -108,6 +109,8 @@ void FixedSizeAllocator::Destroy(FixedSizeAllocator* i_allocator)
 
 	uint8_t id = i_allocator->id_;
 	LOG("FixedSizeAllocator-%d destroyed", id);
+#else
+	LOG("FixedSizeAllocator with fixed_block_size:%zu destroyed", i_allocator->fixed_block_size_);
 #endif
 
 	block_allocator->Free(i_allocator);
@@ -284,6 +287,7 @@ void* FixedSizeAllocator::Alloc(const size_t i_size)
 	stats_.allocated_memory_size += (guardband_size * 2 + size_type + fixed_block_size_);
 	stats_.available_memory_size -= (guardband_size * 2 + size_type + fixed_block_size_);
 	stats_.max_allocated_memory_size = stats_.max_allocated_memory_size < stats_.allocated_memory_size ? stats_.allocated_memory_size : stats_.max_allocated_memory_size;
+	COUNT_ALLOC(i_size);
 #endif
 
 	return (block + size_type + guardband_size);

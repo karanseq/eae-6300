@@ -91,7 +91,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;BUILD_DEBUG;VERBOSITY_LEVEL=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;BUILD_DEBUG;VERBOSITY_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)External\GLib\;$(SolutionDir)External\Lua\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -194,6 +194,8 @@
     <ClInclude Include="Source\Math\Vec2D.h" />
     <ClInclude Include="Source\Math\Vec3D-inl.h" />
     <ClInclude Include="Source\Math\Vec3D.h" />
+    <ClInclude Include="Source\Memory\AllocationCounter-inl.h" />
+    <ClInclude Include="Source\Memory\AllocationCounter.h" />
     <ClInclude Include="Source\Memory\AllocatorUtil.h" />
     <ClInclude Include="Source\Memory\BlockAllocator-inl.h" />
     <ClInclude Include="Source\Memory\BlockAllocator.h" />
@@ -246,6 +248,7 @@
     <ClCompile Include="Source\Math\Private\Transform.cpp" />
     <ClCompile Include="Source\Math\Private\Vec2D.cpp" />
     <ClCompile Include="Source\Math\Private\Vec3D.cpp" />
+    <ClCompile Include="Source\Memory\Private\AllocationCounter.cpp" />
     <ClCompile Include="Source\Memory\Private\AllocatorUtil.cpp" />
     <ClCompile Include="Source\Memory\Private\BlockAllocator.cpp" />
     <ClCompile Include="Source\Memory\Private\AllocatorOverrides.cpp" />

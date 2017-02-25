@@ -8,6 +8,7 @@
 // engine includes
 #include "Assert\Assert.h"
 #include "Logger\Logger.h"
+#include "Memory\AllocationCounter.h"
 #include "Memory\AllocatorUtil.h"
 
 namespace engine {
@@ -80,6 +81,8 @@ void BlockAllocator::Destroy(BlockAllocator* i_allocator)
     i_allocator->DumpStatistics();
 
 	LOG("BlockAllocator-%d destroyed", i_allocator->id_);
+#else
+	LOG("BlockAllocator destroyed");
 #endif
 }
 
@@ -437,6 +440,7 @@ void* BlockAllocator::Alloc(const size_t i_size, const size_t i_alignment)
 	stats_.allocated_memory_size += (size_of_BD_ + new_bd->block_size);
 	stats_.available_memory_size -= (size_of_BD_ + new_bd->block_size);
 	stats_.max_allocated_memory_size = stats_.max_allocated_memory_size < stats_.allocated_memory_size ? stats_.allocated_memory_size : stats_.max_allocated_memory_size;
+	COUNT_ALLOC(i_size);
 #endif
 
 	return (new_bd->block_pointer + guardband_size);

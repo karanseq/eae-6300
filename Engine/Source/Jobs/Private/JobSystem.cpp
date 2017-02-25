@@ -14,14 +14,12 @@ namespace jobs {
 JobSystem* JobSystem::instance_ = nullptr;
 
 JobSystem::JobSystem() : shutdown_requested_(false)
-{
-	VERBOSE("JobSystem created.");
-}
+{}
 
 JobSystem::~JobSystem()
 {
 	Shutdown();
-	VERBOSE("JobSystem deleted.");
+	LOG("JobSystem destroyed");
 }
 
 JobSystem* JobSystem::Create()

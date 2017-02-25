@@ -16,6 +16,11 @@
 namespace engine {
 namespace memory {
 
+void CreateAllocators();
+void DestroyAllocators();
+
+#ifdef BUILD_DEBUG
+
 struct AllocatorStatistics
 {
 	explicit AllocatorStatistics() : num_allocated(0),
@@ -27,17 +32,16 @@ struct AllocatorStatistics
 		max_allocated_memory_size(0)
     {}
 
-    size_t                  num_allocated;
-    size_t                  num_freed;
-    size_t                  num_outstanding;
-    size_t                  max_num_outstanding;
-	size_t					allocated_memory_size;
-	size_t					available_memory_size;
-	size_t					max_allocated_memory_size;
+    size_t									num_allocated;
+    size_t									num_freed;
+    size_t                  				num_outstanding;
+    size_t                  				max_num_outstanding;
+	size_t									allocated_memory_size;
+	size_t									available_memory_size;
+	size_t									max_allocated_memory_size;
 };
 
-void CreateAllocators();
-void DestroyAllocators();
+#endif // BUILD_DEBUG
 
 } // namespace memory
 } // namespace engine
