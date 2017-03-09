@@ -183,6 +183,8 @@
     <ClInclude Include="Source\Jobs\JobSystem.h" />
     <ClInclude Include="Source\Jobs\Worker.h" />
     <ClInclude Include="Source\Logger\Logger.h" />
+    <ClInclude Include="Source\Math\Mat44-inl.h" />
+    <ClInclude Include="Source\Math\Mat44.h" />
     <ClInclude Include="Source\Math\MathUtil.h" />
     <ClInclude Include="Source\Math\Rect-inl.h" />
     <ClInclude Include="Source\Math\Rect.h" />
@@ -194,6 +196,8 @@
     <ClInclude Include="Source\Math\Vec2D.h" />
     <ClInclude Include="Source\Math\Vec3D-inl.h" />
     <ClInclude Include="Source\Math\Vec3D.h" />
+    <ClInclude Include="Source\Math\Vec4D-inl.h" />
+    <ClInclude Include="Source\Math\Vec4D.h" />
     <ClInclude Include="Source\Memory\AllocationCounter-inl.h" />
     <ClInclude Include="Source\Memory\AllocationCounter.h" />
     <ClInclude Include="Source\Memory\AllocatorUtil.h" />
@@ -243,11 +247,14 @@
     <ClCompile Include="Source\Jobs\Private\JobSystem.cpp" />
     <ClCompile Include="Source\Jobs\Private\Worker.cpp" />
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp" />
+    <ClCompile Include="Source\Math\Private\Mat44.cpp" />
+    <ClCompile Include="Source\Math\Private\MathUtil.cpp" />
     <ClCompile Include="Source\Math\Private\Rect.cpp" />
     <ClCompile Include="Source\Math\Private\Size.cpp" />
     <ClCompile Include="Source\Math\Private\Transform.cpp" />
     <ClCompile Include="Source\Math\Private\Vec2D.cpp" />
     <ClCompile Include="Source\Math\Private\Vec3D.cpp" />
+    <ClCompile Include="Source\Math\Private\Vec4D.cpp" />
     <ClCompile Include="Source\Memory\Private\AllocationCounter.cpp" />
     <ClCompile Include="Source\Memory\Private\AllocatorUtil.cpp" />
     <ClCompile Include="Source\Memory\Private\BlockAllocator.cpp" />
