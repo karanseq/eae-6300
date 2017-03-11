@@ -17,7 +17,9 @@ namespace math {
 		y_(i_y),
 		z_(i_z),
         w_(i_w)
-	{}
+	{
+        ASSERT(!IsNaN(x_) && !IsNaN(y_) && !IsNaN(z_) && !IsNaN(w_));
+    }
 
     Vec4D::Vec4D(const Vec3D& i_vec3, float i_w) : x_(i_vec3.x()),
         y_(i_vec3.y()),

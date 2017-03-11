@@ -19,6 +19,7 @@ void TestFixedSizeAllocator();
 //#define ENABLE_STRONG_POINTER_TEST
 //#define ENABLE_STRING_POOL_TEST
 //#define ENABLE_JOB_SYSTEM_TEST
+#define ENABLE_MAT44_TEST
 
 #ifdef ENABLE_VECTOR_CONST_TEST
 void TestVectorConstness();
@@ -42,6 +43,10 @@ void TestStringPool();
 
 #ifdef ENABLE_JOB_SYSTEM_TEST
 void TestJobSystem();
+#endif
+
+#ifdef ENABLE_MAT44_TEST
+void TestMat44();
 #endif
 
 /************************ RUN TESTS ************************/
@@ -76,6 +81,11 @@ void RunTests()
 	LOG("\n");
 	TestJobSystem();
 #endif // ENABLE_JOB_SYSTEM_TEST
+
+#ifdef ENABLE_MAT44_TEST
+    LOG("\n");
+    TestMat44();
+#endif // ENABLE_MAT44_TEST
 
 #ifdef ENABLE_ALLOCATOR_TEST
 	LOG("\n");

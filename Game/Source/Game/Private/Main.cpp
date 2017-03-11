@@ -24,7 +24,7 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 	{
 		// TODO: Is this the right place to do this?
 		// initialize GLib
-		bool success = GLib::Initialize(i_h_instance, i_n_cmd_show, "MonsterChase", -1, game::Game::SCREEN_WIDTH, game::Game::SCREEN_HEIGHT);
+		bool success = GLib::Initialize(i_h_instance, i_n_cmd_show, "Game", -1, game::Game::SCREEN_WIDTH, game::Game::SCREEN_HEIGHT);
 		ASSERT(success);
 
 #ifdef ENABLE_TESTS
@@ -33,14 +33,14 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 #endif // ENABLE_TESTS
 
 		// init game
-		if (game::StartUp())
+		/*if (game::StartUp())
 		{
 			game::Game* game = game::Game::GetInstance();
 			engine::Run();
 		}
 
 		// cleanup game
-		game::Shutdown();
+		game::Shutdown();*/
 
 		// TODO: Is this the right place to do this?
 		// cleanup GLib

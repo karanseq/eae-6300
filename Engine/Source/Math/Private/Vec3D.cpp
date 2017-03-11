@@ -15,7 +15,9 @@ namespace math {
 	Vec3D::Vec3D(float i_x, float i_y, float i_z) : x_(i_x),
 		y_(i_y),
 		z_(i_z)
-	{}
+	{
+        ASSERT(!IsNaN(x_) && !IsNaN(y_) && !IsNaN(z_));
+    }
 
 	Vec3D::Vec3D(const Vec3D& i_copy) : x_(i_copy.x_),
 		y_(i_copy.y_),
