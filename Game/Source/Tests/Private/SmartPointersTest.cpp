@@ -263,7 +263,7 @@ void TestSmartPointersWithVector()
 	{
 		engine::math::Transform transform;
 		transform.SetPosition(engine::math::Vec3D(i * 10.0f));
-		vec1.push_back(engine::gameobject::GameObject::Create(engine::math::Rect::ZERO, transform));
+		vec1.push_back(engine::gameobject::GameObject::Create(engine::math::AABB::ZERO, transform));
 	}
 	LOG("Created the first vector with %zu shared pointers", vec1.size());
 

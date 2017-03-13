@@ -21,6 +21,7 @@ namespace game {
 
 bool StartUp()
 {
+	LOG("-------------------- MonsterChase StartUp --------------------");
 	// create an instance of the game
 	Game* game = Game::Create();
 	if (game == nullptr)
@@ -31,11 +32,7 @@ bool StartUp()
 
 	// initialize the game
 	bool success = game->Init();
-	if (success)
-	{
-		LOG("-------------------- MonsterChase StartUp --------------------");
-	}
-	else
+	if (!success)
 	{
 		LOG_ERROR("Could not initialize MonsterChase!");
 	}

@@ -184,6 +184,30 @@ engine::math::Vec3D LuaHelper::CreateVec3D(lua_State* i_lua_state, const char* i
 	return return_vec;
 }
 
+engine::math::AABB LuaHelper::CreateAABB(lua_State* i_lua_state, const char* i_key_name)
+{
+    // validate inputs
+    ASSERT(i_lua_state);
+    ASSERT(i_key_name);
+
+    int type = LUA_TNIL;
+
+    // 1. Push the key
+    lua_pushstring(i_lua_state, i_key_name);
+
+    // 2. Get the associated value
+    type = lua_gettable(i_lua_state, -2);
+    ASSERT(type == LUA_TTABLE);
+
+    float floats[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+    CreateFloatArray(i_lua_state, -1, floats, 4);
+
+    // 3. Remove the value from the stack now that we're done with it
+    lua_pop(i_lua_state, 1);
+
+    return engine::math::AABB{ engine::math::Vec2D(floats[0], floats[1]), engine::math::Vec2D(floats[2], floats[3]) };
+}
+
 engine::math::Rect LuaHelper::CreateRect(lua_State* i_lua_state, const char* i_key_name)
 {
 	// validate inputs

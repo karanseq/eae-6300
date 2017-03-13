@@ -163,7 +163,7 @@ bool ActorCreator::CreateActor(lua_State* i_lua_state, engine::memory::SharedPoi
 	o_actor = engine::gameobject::Actor::Create(name, type);
 
 	// get the actor's bounding box
-	const auto aabb = engine::util::LuaHelper::CreateRect(i_lua_state, "bounding_box");
+	const auto aabb = engine::util::LuaHelper::CreateAABB(i_lua_state, "bounding_box");
 
 	// get the actor's transform
 	const auto transform = engine::util::LuaHelper::CreateTransform(i_lua_state, "transform");

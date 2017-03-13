@@ -330,6 +330,9 @@
     <ClInclude Include="Source\Math\Mat44-inl.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Math\AABB.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -447,6 +450,9 @@
       <Filter>Source Files\Math</Filter>
     </ClCompile>
     <ClCompile Include="Source\Math\Private\Mat44.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\Private\AABB.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
   </ItemGroup>

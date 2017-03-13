@@ -33,14 +33,14 @@ int WINAPI wWinMain( HINSTANCE i_h_instance, HINSTANCE i_h_prev_instance, LPWSTR
 #endif // ENABLE_TESTS
 
 		// init game
-		/*if (game::StartUp())
+		if (game::StartUp())
 		{
 			game::Game* game = game::Game::GetInstance();
 			engine::Run();
 		}
 
 		// cleanup game
-		game::Shutdown();*/
+		game::Shutdown();
 
 		// TODO: Is this the right place to do this?
 		// cleanup GLib

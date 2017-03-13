@@ -3,6 +3,7 @@
 
 // engine includes
 #include "Data\PooledString.h"
+#include "Math\AABB.h"
 #include "Math\Rect.h"
 #include "Math\Transform.h"
 #include "Math\Vec3D.h"
@@ -36,6 +37,7 @@ public:
 
 	// helpers that extract geometry
 	static engine::math::Vec3D CreateVec3D(lua_State* i_lua_state, const char* i_key_name);
+    static engine::math::AABB CreateAABB(lua_State* i_lua_state, const char* i_key_name);
 	static engine::math::Rect CreateRect(lua_State* i_lua_state, const char* i_key_name);
 	static engine::math::Transform CreateTransform(lua_State* i_lua_state, const char* i_key_name);
 

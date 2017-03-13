@@ -2,7 +2,7 @@
 #define ENGINE_GAME_OBJECT_H_
 
 // engine includes
-#include "Math\Rect.h"
+#include "Math\AABB.h"
 #include "Math\Transform.h"
 #include "Memory\SharedPointer.h"
 
@@ -16,7 +16,7 @@ namespace gameobject {
 class GameObject
 {
 public:
-	inline static engine::memory::SharedPointer<GameObject> Create(const engine::math::Rect& i_aabb = engine::math::Rect::ZERO, 
+	inline static engine::memory::SharedPointer<GameObject> Create(const engine::math::AABB& i_aabb = engine::math::AABB::ZERO,
 		const engine::math::Transform& i_transform = engine::math::Transform::ZERO);
 
 	virtual ~GameObject()
@@ -30,8 +30,8 @@ public:
 	inline GameObject& operator=(const GameObject& i_game_object);
 
 	// accessors and mutators
-	inline const engine::math::Rect& GetAABB() const;
-	inline void SetAABB(const engine::math::Rect& i_aabb);
+	inline const engine::math::AABB& GetAABB() const;
+	inline void SetAABB(const engine::math::AABB& i_aabb);
 
 	inline const engine::math::Transform& GetTransform() const;
 	inline void SetTransform(const engine::math::Transform& i_transform);
@@ -46,13 +46,13 @@ public:
 	inline void SetScale(const engine::math::Vec3D& i_scale);
 
 private:
-	explicit GameObject(const engine::math::Rect& i_aabb = engine::math::Rect::ZERO, 
+	explicit GameObject(const engine::math::AABB& i_aabb = engine::math::AABB::ZERO,
 		const engine::math::Transform& i_transform = engine::math::Transform::ZERO) : aabb_(i_aabb),
 		transform_(i_transform)
 	{}
 
 private:
-	engine::math::Rect						aabb_;
+	engine::math::AABB						aabb_;
 	engine::math::Transform					transform_;
 }; // class GameObject
 
