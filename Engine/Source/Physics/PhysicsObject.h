@@ -24,7 +24,7 @@ namespace physics {
 class PhysicsObject
 {
 public:
-	inline static engine::memory::SharedPointer<PhysicsObject> Create(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass = DEFAULT_MASS, float i_drag = DEFAULT_COEFF_DRAG);
+	inline static engine::memory::SharedPointer<PhysicsObject> Create(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass = DEFAULT_MASS, float i_drag = DEFAULT_COEFF_DRAG, bool i_is_collidable = false);
 	~PhysicsObject();
 
 	// copy constructor
@@ -39,17 +39,24 @@ public:
 	// accessors and mutators
 	inline bool GetIsAwake() const;
 	inline void SetIsAwake(bool i_is_awake);
-	inline engine::memory::WeakPointer<engine::gameobject::GameObject> GetGameObject() const;
+
+    inline bool GetIsCollidable() const;
+    inline void SetIsCollidable(bool i_is_collidable);
+	
+    inline engine::memory::WeakPointer<engine::gameobject::GameObject> GetGameObject() const;
 	inline void SetGameObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
-	inline float GetMass() const;
+	
+    inline float GetMass() const;
 	inline void SetMass(float i_mass);
-	inline float GetDrag() const;
+	
+    inline float GetDrag() const;
 	inline void SetDrag(float i_drag);
-	inline const engine::math::Vec3D& GetVelocity() const;
+	
+    inline const engine::math::Vec3D& GetVelocity() const;
 	inline void SetVelocity(const engine::math::Vec3D& i_velocity);
 
 private:
-	explicit PhysicsObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass = DEFAULT_MASS, float i_drag = DEFAULT_COEFF_DRAG);
+	explicit PhysicsObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass = DEFAULT_MASS, float i_drag = DEFAULT_COEFF_DRAG, bool i_is_collidable = false);
 
 public:
 	// constants
@@ -61,6 +68,7 @@ public:
 
 private:
 	bool																	is_awake_;
+    bool                                                                    is_collidable_;
 	engine::memory::WeakPointer<engine::gameobject::GameObject>				game_object_;
 	float																	mass_;
 	float																	inverse_mass_;

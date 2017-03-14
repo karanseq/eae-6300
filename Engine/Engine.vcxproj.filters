@@ -333,6 +333,12 @@
     <ClInclude Include="Source\Math\AABB.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Physics\Collider.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\Collider-inl.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -454,6 +460,9 @@
     </ClCompile>
     <ClCompile Include="Source\Math\Private\AABB.cpp">
       <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics\Private\Collider.cpp">
+      <Filter>Source Files\Physics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

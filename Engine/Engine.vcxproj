@@ -214,6 +214,8 @@
     <ClInclude Include="Source\Memory\UniquePointer.h" />
     <ClInclude Include="Source\Memory\WeakPointer-inl.h" />
     <ClInclude Include="Source\Memory\WeakPointer.h" />
+    <ClInclude Include="Source\Physics\Collider-inl.h" />
+    <ClInclude Include="Source\Physics\Collider.h" />
     <ClInclude Include="Source\Physics\Physics-inl.h" />
     <ClInclude Include="Source\Physics\Physics.h" />
     <ClInclude Include="Source\Physics\PhysicsObject-inl.h" />
@@ -262,6 +264,7 @@
     <ClCompile Include="Source\Memory\Private\BlockAllocator.cpp" />
     <ClCompile Include="Source\Memory\Private\AllocatorOverrides.cpp" />
     <ClCompile Include="Source\Memory\Private\FixedSizeAllocator.cpp" />
+    <ClCompile Include="Source\Physics\Private\Collider.cpp" />
     <ClCompile Include="Source\Physics\Private\Physics.cpp" />
     <ClCompile Include="Source\Physics\Private\PhysicsObject.cpp" />
     <ClCompile Include="Source\Renderer\Private\RenderableObject.cpp" />

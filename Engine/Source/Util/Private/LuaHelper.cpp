@@ -155,6 +155,25 @@ int LuaHelper::CreateInt(lua_State* i_lua_state, const char* i_key_name)
 	return return_int;
 }
 
+bool LuaHelper::CreateBool(lua_State* i_lua_state, const char* i_key_name)
+{
+    // validate inputs
+    ASSERT(i_lua_state);
+    ASSERT(i_key_name);
+
+    int type = LUA_TNIL;
+
+    lua_pushstring(i_lua_state, i_key_name);
+    type = lua_gettable(i_lua_state, -2);
+    ASSERT(type == LUA_TNIL || type == LUA_TBOOLEAN);
+
+    bool return_bool = lua_toboolean(i_lua_state, -1) == 1;
+
+    lua_pop(i_lua_state, 1);
+
+    return return_bool;
+}
+
 engine::math::Vec3D LuaHelper::CreateVec3D(lua_State* i_lua_state, const char* i_key_name)
 {
 	// validate inputs

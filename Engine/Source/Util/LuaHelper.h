@@ -34,6 +34,7 @@ public:
 	static size_t CreateFloatArray(lua_State* i_lua_state, int i_index, float* o_float_array, size_t i_num_floats);
 	static float CreateFloat(lua_State* i_lua_state, const char* i_key_name);
 	static int CreateInt(lua_State* i_lua_state, const char* i_key_name);
+    static bool CreateBool(lua_State* i_lua_state, const char* i_key_name);
 
 	// helpers that extract geometry
 	static engine::math::Vec3D CreateVec3D(lua_State* i_lua_state, const char* i_key_name);

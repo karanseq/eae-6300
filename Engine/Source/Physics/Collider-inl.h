@@ -1,4 +1,4 @@
-#include "Physics.h"
+#include "Collider.h"
 
 // library includes
 #include <algorithm>
@@ -10,9 +10,9 @@
 namespace engine {
 namespace physics {
 
-inline Physics* Physics::Get()
+inline Collider* Collider::Get()
 {
-	return Physics::instance_;
+    return Collider::instance_;
 }
 
 } // namespace physics

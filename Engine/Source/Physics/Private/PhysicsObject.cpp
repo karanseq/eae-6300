@@ -16,7 +16,8 @@ const float PhysicsObject::MAX_COEFF_DRAG = 0.9f;
 const float PhysicsObject::MIN_VELOCITY_LENGTH_SQUARED = 0.000075f;
 const float PhysicsObject::MAX_VELOCITY_LENGTH_SQUARED = 6.00f;
 
-PhysicsObject::PhysicsObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass, float i_drag) : is_awake_(false),
+PhysicsObject::PhysicsObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass, float i_drag, bool i_is_collidable) : is_awake_(false),
+    is_collidable_(i_is_collidable),
 	game_object_(i_game_object),
 	mass_(i_mass),
 	inverse_mass_(0.0f),

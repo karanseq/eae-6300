@@ -10,6 +10,7 @@
 #include "Input\Input.h"
 #include "Jobs\JobSystem.h"
 #include "Memory\AllocatorUtil.h"
+#include "Physics\Collider.h"
 #include "Physics\Physics.h"
 #include "Renderer\Renderer.h"
 #include "Time\TimerUtil.h"
@@ -39,6 +40,9 @@ bool StartUp()
 	// create updater
 	engine::time::Updater::Create();
 
+    // create collider
+    engine::physics::Collider::Create();
+
 	// create physics
 	engine::physics::Physics::Create();
 
@@ -61,6 +65,7 @@ void Run()
 
 	// save pointers to the modules that need ticking
 	static engine::time::Updater* updater = engine::time::Updater::Get();
+    static engine::physics::Collider* collider = engine::physics::Collider::Get();
 	static engine::physics::Physics* physics = engine::physics::Physics::Get();
 	static engine::render::Renderer* renderer = engine::render::Renderer::Get();
 
@@ -70,8 +75,9 @@ void Run()
 		float dt = engine::time::TimerUtil::CalculateLastFrameTime_ms();
 
 		// update modules
-		physics->Run(dt);
 		updater->Run(dt);
+        collider->Run(dt);
+		physics->Run(dt);
 		renderer->Run(dt);
 
 		// ensure we have a steady 60 frames per second
@@ -87,6 +93,9 @@ void Shutdown()
 
 	// delete physics
 	engine::physics::Physics::Destroy();
+
+    // delete collider
+    engine::physics::Collider::Destroy();
 
 	// delete updater
 	engine::time::Updater::Destroy();

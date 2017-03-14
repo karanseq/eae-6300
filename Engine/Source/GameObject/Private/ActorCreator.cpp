@@ -207,8 +207,9 @@ bool ActorCreator::CreatePhysicsObject(lua_State* i_lua_state, const engine::mem
 
 		float mass = engine::util::LuaHelper::CreateFloat(i_lua_state, "mass");
 		float drag = engine::util::LuaHelper::CreateFloat(i_lua_state, "drag");
+        bool is_collidable = engine::util::LuaHelper::CreateBool(i_lua_state, "collide");
 
-		o_physics_object = engine::physics::Physics::Get()->CreatePhysicsObject(i_game_object, mass, drag);
+		o_physics_object = engine::physics::Physics::Get()->CreatePhysicsObject(i_game_object, mass, drag, is_collidable);
 	}
 
 	// pop the physics settings value
