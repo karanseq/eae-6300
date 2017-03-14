@@ -146,17 +146,10 @@ void Mat44::Invert()
     float b5 = f33 * f44 - f34 * f43;
 
     float det = a0 * b5 + a5 * b0 + a3 * b2 + a2 * b3 - a1 * b4 - a4 * b1;
-    float inverse_det = 1.0f / det;
 
     if (FuzzyEquals(det, 0.0f))
     {
         LOG_ERROR("This matrix is not invertible!");
-        return;
-    }
-
-    if (FuzzyEquals(det, 1.0f))
-    {
-        Transpose();
         return;
     }
 
@@ -181,25 +174,31 @@ void Mat44::Invert()
     adjoin.f43 = -f41 * a3 + f42 * a1 - f43 * a0;
     adjoin.f44 =  f31 * a3 - f32 * a1 + f33 * a0;
 
-    adjoin.f11 *= inverse_det;
-    adjoin.f12 *= inverse_det;
-    adjoin.f13 *= inverse_det;
-    adjoin.f14 *= inverse_det;
+    // only divide by determinant if determinant is not 1
+    if (!FuzzyEquals(det, 1.0f))
+    {
+        float inverse_det = 1.0f / det;
 
-    adjoin.f21 *= inverse_det;
-    adjoin.f22 *= inverse_det;
-    adjoin.f23 *= inverse_det;
-    adjoin.f24 *= inverse_det;
+        adjoin.f11 *= inverse_det;
+        adjoin.f12 *= inverse_det;
+        adjoin.f13 *= inverse_det;
+        adjoin.f14 *= inverse_det;
 
-    adjoin.f31 *= inverse_det;
-    adjoin.f32 *= inverse_det;
-    adjoin.f33 *= inverse_det;
-    adjoin.f34 *= inverse_det;
+        adjoin.f21 *= inverse_det;
+        adjoin.f22 *= inverse_det;
+        adjoin.f23 *= inverse_det;
+        adjoin.f24 *= inverse_det;
 
-    adjoin.f41 *= inverse_det;
-    adjoin.f42 *= inverse_det;
-    adjoin.f43 *= inverse_det;
-    adjoin.f44 *= inverse_det;
+        adjoin.f31 *= inverse_det;
+        adjoin.f32 *= inverse_det;
+        adjoin.f33 *= inverse_det;
+        adjoin.f34 *= inverse_det;
+
+        adjoin.f41 *= inverse_det;
+        adjoin.f42 *= inverse_det;
+        adjoin.f43 *= inverse_det;
+        adjoin.f44 *= inverse_det;
+    }
 
     *this = adjoin;
 }

@@ -8,11 +8,19 @@
 // engine includes
 #include "Memory\WeakPointer.h"
 
+// forward declarations
+namespace engine {
+namespace math {
+    struct AABB;
+    class Transform;
+}
+namespace physics {
+    class PhysicsObject;
+}
+}
+
 namespace engine {
 namespace physics {
-
-// forward declarations
-class PhysicsObject;
 
 class Collider
 {
