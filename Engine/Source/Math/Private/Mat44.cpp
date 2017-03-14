@@ -328,7 +328,7 @@ Vec4D Mat44::MultiplyRight(const Vec4D& i_right_vec4) const
 #ifdef BUILD_DEBUG
 void Mat44::Print() const
 {
-    LOG("\n%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n",
+    LOG("\n%f, \t%f, \t%f, \t%f\n%f, \t%f, \t%f, \t%f\n%f, \t%f, \t%f, \t%f\n%f, \t%f, \t%f, \t%f",
         f11, f12, f13, f14,
         f21, f22, f23, f24,
         f31, f32, f33, f34,

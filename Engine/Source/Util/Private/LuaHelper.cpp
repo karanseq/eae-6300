@@ -224,7 +224,7 @@ engine::math::AABB LuaHelper::CreateAABB(lua_State* i_lua_state, const char* i_k
     // 3. Remove the value from the stack now that we're done with it
     lua_pop(i_lua_state, 1);
 
-    return engine::math::AABB{ engine::math::Vec2D(floats[0], floats[1]), engine::math::Vec2D(floats[2], floats[3]) };
+    return engine::math::AABB{ engine::math::Vec3D(floats[0], floats[1]), engine::math::Vec3D(floats[2], floats[3]) };
 }
 
 engine::math::Rect LuaHelper::CreateRect(lua_State* i_lua_state, const char* i_key_name)

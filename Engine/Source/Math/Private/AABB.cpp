@@ -3,7 +3,7 @@
 namespace engine {
 namespace math {
 
-const AABB AABB::ZERO{ Vec2D::ZERO, Vec2D::ZERO };
+const AABB AABB::ZERO{ Vec3D::ZERO, Vec3D::ZERO };
 
 } // namespace math
 } // namespace engine

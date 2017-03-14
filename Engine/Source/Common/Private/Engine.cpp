@@ -76,7 +76,7 @@ void Run()
 
 		// update modules
 		updater->Run(dt);
-        collider->Run(dt);
+        //collider->Run(dt);
 		physics->Run(dt);
 		renderer->Run(dt);
 

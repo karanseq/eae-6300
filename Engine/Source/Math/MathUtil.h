@@ -12,6 +12,9 @@ namespace engine {
 namespace math {
 
 // forward declarations
+struct AABB;
+class Mat44;
+class Transform;
 class Vec2D;
 class Vec3D;
 class Vec4D;
@@ -48,6 +51,11 @@ float DotProduct(const Vec3D& i_v1, const Vec3D& i_v2);
 
 // cross product
 Vec3D CrossProduct(const Vec3D& i_v1, const Vec3D& i_v2);
+
+// transforms
+// the transform matrix as a result of this function must be left multiplied
+// with the vector/point that will be transformed
+void GetObjectToWorldTransform(const engine::math::Transform& i_transform, engine::math::Mat44& o_trans_mat);
 
 } // namespace math
 } // namespace engine

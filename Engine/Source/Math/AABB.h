@@ -2,15 +2,15 @@
 #define AABB_H_
 
 // engine includes
-#include "Vec2D.h"
+#include "Vec3D.h"
 
 namespace engine {
 namespace math {
 
 struct AABB
 {
-    Vec2D                   center;
-    Vec2D                   extents;
+    Vec3D                   center;
+    Vec3D                   extents;
 
     static const AABB       ZERO;
 };
