@@ -4,6 +4,8 @@
 #include "Math\Mat44.h"
 #include "Math\Vec4D.h"
 
+#include "Math\Transform.h"
+
 void TestMat44()
 {
     // test default ctor
@@ -121,4 +123,25 @@ void TestMat44()
     engine::math::Mat44 mat_03_in_tr(mat_03.GetInverse().GetTranspose());
     ASSERT(mat_03_tr_in == mat_03_in_tr);
     /********** INVERSE TEST END **********/
+
+    /********** TRANSFORMATIONS TEST START **********/
+    const engine::math::Vec4D           some_point(1.0f, 0.0f, 0.0f, 1.0f);
+    const engine::math::Mat44           mat_rotate(engine::math::Mat44::GetRotationZ(M_PI / 2));
+    const engine::math::Mat44           mat_translate(engine::math::Mat44::GetTranslation(engine::math::Vec3D(0.0f, 10.0f, 0.0f)));
+    
+    const engine::math::Mat44           mat_transform(mat_translate * mat_rotate);
+    const engine::math::Mat44           mat_undo_transform(mat_transform.GetInverse());
+
+    const engine::math::Vec4D           rotated_point(mat_rotate * some_point);
+    ASSERT(rotated_point == engine::math::Vec4D(0.0f, 1.0f, 0.0f, 1.0f));
+
+    const engine::math::Vec4D           translated_point(mat_translate * some_point);
+    ASSERT(translated_point == engine::math::Vec4D(1.0f, 10.0f, 0.0f, 1.0f));
+
+    const engine::math::Vec4D           transformed_point(mat_transform * some_point);
+    ASSERT(transformed_point == engine::math::Vec4D(0.0f, 11.0f, 0.0f, 1.0f));
+
+    const engine::math::Vec4D           original_point(mat_undo_transform * transformed_point);
+    ASSERT(original_point == some_point);
+    /********** TRANSFORMATIONS TEST END **********/
 }

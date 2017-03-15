@@ -45,6 +45,20 @@ inline bool IsZero(float i_number)
 	return FuzzyEquals(i_number, MIN_EPSILON);
 }
 
+inline float GetMinOfFour(float i_first, float i_second, float i_third, float i_fourth)
+{
+    float first_two = i_first < i_second ? i_first : i_second;
+    float last_two = i_third < i_fourth ? i_third : i_fourth;
+    return first_two < last_two ? first_two : last_two;
+}
+
+inline float GetMaxOfFour(float i_first, float i_second, float i_third, float i_fourth)
+{
+    float first_two = i_first > i_second ? i_first : i_second;
+    float last_two = i_third > i_fourth ? i_third : i_fourth;
+    return first_two > last_two ? first_two : last_two;
+}
+
 // dot products
 float DotProduct(const Vec2D& i_v1, const Vec2D& i_v2);
 float DotProduct(const Vec3D& i_v1, const Vec3D& i_v2);

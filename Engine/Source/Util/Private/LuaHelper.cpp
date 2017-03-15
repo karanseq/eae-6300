@@ -266,9 +266,15 @@ engine::math::Transform LuaHelper::CreateTransform(lua_State* i_lua_state, const
 	type = lua_gettable(i_lua_state, -2);
 	ASSERT(type == LUA_TTABLE);
 
-	const auto position = CreateVec3D(i_lua_state, "position");
-	const auto rotation = CreateVec3D(i_lua_state, "rotation");
-	const auto scale = CreateVec3D(i_lua_state, "scale");
+	const engine::math::Vec3D position = CreateVec3D(i_lua_state, "position");
+
+    engine::math::Vec3D rotation = CreateVec3D(i_lua_state, "rotation");
+
+    rotation.x(engine::math::DegreesToRadians(rotation.x()));
+    rotation.y(engine::math::DegreesToRadians(rotation.y()));
+    rotation.z(engine::math::DegreesToRadians(rotation.z()));
+
+	const engine::math::Vec3D scale = CreateVec3D(i_lua_state, "scale");
 
 	// 3. Remove the value from the stack now that we're done with it
 	lua_pop(i_lua_state, 1);

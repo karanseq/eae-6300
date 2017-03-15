@@ -347,17 +347,17 @@ Mat44 Mat44::GetRotationX(const float i_radians)
 {
     ASSERT(!IsNaN(i_radians));
     return Mat44(1.0f, 0.0f, 0.0f, 0.0f,
-                 0.0f, cosf(i_radians), sinf(i_radians), 0.0f,
-                 0.0f, -sinf(i_radians), cosf(i_radians), 0.0f,
+                 0.0f, cosf(i_radians), -sinf(i_radians), 0.0f,
+                 0.0f, sinf(i_radians), cosf(i_radians), 0.0f,
                  0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 Mat44 Mat44::GetRotationY(const float i_radians)
 {
     ASSERT(!IsNaN(i_radians));
-    return Mat44(cosf(i_radians), 0, -sinf(i_radians), 0.0f,
+    return Mat44(cosf(i_radians), 0, sinf(i_radians), 0.0f,
                  0.0f, 1.0f, 0.0f, 0.0f,
-                 sinf(i_radians), 0.0f, cosf(i_radians), 0.0f,
+                 -sinf(i_radians), 0.0f, cosf(i_radians), 0.0f,
                  0.0f, 0.0f, 0.0f, 1.0f);
 }
 
@@ -365,9 +365,9 @@ Mat44 Mat44::GetRotationZ(const float i_radians)
 {
     ASSERT(!IsNaN(i_radians));
     return Mat44(cosf(i_radians), -sinf(i_radians), 0.0f, 0.0f,
-                -sinf(i_radians), cosf(i_radians), 0.0f, 0.0f,
-                0.0f, 0.0f, 1.0f, 0.0f,
-                0.0f, 0.0f, 0.0f, 1.0f);
+                 sinf(i_radians), cosf(i_radians), 0.0f, 0.0f,
+                 0.0f, 0.0f, 1.0f, 0.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 Mat44 Mat44::GetScale(const float i_scale)

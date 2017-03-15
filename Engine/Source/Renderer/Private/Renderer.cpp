@@ -77,9 +77,9 @@ GLib::Sprites::Sprite* Renderer::CreateSprite(const engine::data::PooledString& 
 	ASSERT((width > 0) && (height > 0));
 
 	// Define the sprite edges
-	GLib::Sprites::SpriteEdges	Edges = { -float(width / 2.0f), float(height), float(width / 2.0f), 0.0f };
-	GLib::Sprites::SpriteUVs	UVs = { { 0.0f, 0.0f },{ 1.0f, 0.0f },{ 0.0f, 1.0f },{ 1.0f, 1.0f } };
-	GLib::RGBA							Color = { 255, 255, 255, 255 };
+	GLib::Sprites::SpriteEdges      Edges = { -float(width / 2.0f), float(height / 2.0f), float(width / 2.0f), -float(height / 2.0f) };
+	GLib::Sprites::SpriteUVs        UVs = { { 0.0f, 0.0f },{ 1.0f, 0.0f },{ 0.0f, 1.0f },{ 1.0f, 1.0f } };
+	GLib::RGBA                      Color = { 255, 255, 255, 255 };
 
 	// Create the sprite
 	GLib::Sprites::Sprite * sprite = GLib::Sprites::CreateSprite(Edges, 0.1f, Color, UVs);

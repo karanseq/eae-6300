@@ -31,7 +31,7 @@ void RenderableObject::Render(float i_dt)
 	engine::memory::SharedPointer<engine::gameobject::GameObject> game_object(game_object_);
 
 	GLib::Point2D offset = { game_object->GetPosition().x(), game_object->GetPosition().y() };
-	GLib::Sprites::RenderSprite(*sprite_, offset, 0.0f);
+	GLib::Sprites::RenderSprite(*sprite_, offset, game_object->GetRotation().z());
 }
 
 } // namespace render
