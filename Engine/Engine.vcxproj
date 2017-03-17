@@ -91,7 +91,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;BUILD_DEBUG;VERBOSITY_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;BUILD_DEBUG;VERBOSITY_LEVEL=0;ENABLE_DEBUG_DRAW;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)External\GLib\;$(SolutionDir)External\Lua\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -216,6 +216,8 @@
     <ClInclude Include="Source\Memory\WeakPointer.h" />
     <ClInclude Include="Source\Physics\Collider-inl.h" />
     <ClInclude Include="Source\Physics\Collider.h" />
+    <ClInclude Include="Source\Physics\DebugDraw-inl.h" />
+    <ClInclude Include="Source\Physics\DebugDraw.h" />
     <ClInclude Include="Source\Physics\Physics-inl.h" />
     <ClInclude Include="Source\Physics\Physics.h" />
     <ClInclude Include="Source\Physics\PhysicsObject-inl.h" />
@@ -265,6 +267,7 @@
     <ClCompile Include="Source\Memory\Private\AllocatorOverrides.cpp" />
     <ClCompile Include="Source\Memory\Private\FixedSizeAllocator.cpp" />
     <ClCompile Include="Source\Physics\Private\Collider.cpp" />
+    <ClCompile Include="Source\Physics\Private\DebugDraw.cpp" />
     <ClCompile Include="Source\Physics\Private\Physics.cpp" />
     <ClCompile Include="Source\Physics\Private\PhysicsObject.cpp" />
     <ClCompile Include="Source\Renderer\Private\RenderableObject.cpp" />

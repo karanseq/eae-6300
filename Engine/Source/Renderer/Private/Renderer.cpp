@@ -57,45 +57,50 @@ void Renderer::Run(float i_dt)
 
 GLib::Sprites::Sprite* Renderer::CreateSprite(const engine::data::PooledString& i_texture_file_name)
 {
-	// validate input
-	ASSERT(i_texture_file_name.GetLength() > 0);
+    return Renderer::CreateSprite(i_texture_file_name, 255, 255, 255, 255);
+}
 
-	// Load the source file (texture data)
-	engine::util::FileUtils::FileData texture_file_data = engine::util::FileUtils::Get()->ReadFile(i_texture_file_name, true);
-	ASSERT(texture_file_data.file_contents);
+GLib::Sprites::Sprite* Renderer::CreateSprite(const engine::data::PooledString& i_texture_file_name, uint8_t i_r, uint8_t i_g, uint8_t i_b, uint8_t i_a)
+{
+    // validate input
+    ASSERT(i_texture_file_name.GetLength() > 0);
 
-	// Ask GLib to create a texture out of the data (assuming it was loaded successfully)
-	GLib::Texture * texture = texture_file_data.file_contents ? GLib::CreateTexture(texture_file_data.file_contents, texture_file_data.file_size) : nullptr;
+    // Load the source file (texture data)
+    engine::util::FileUtils::FileData texture_file_data = engine::util::FileUtils::Get()->ReadFile(i_texture_file_name, true);
+    ASSERT(texture_file_data.file_contents);
 
-	if (texture == nullptr)
-		return nullptr;
+    // Ask GLib to create a texture out of the data (assuming it was loaded successfully)
+    GLib::Texture * texture = texture_file_data.file_contents ? GLib::CreateTexture(texture_file_data.file_contents, texture_file_data.file_size) : nullptr;
 
-	unsigned int width = 0;
-	unsigned int height = 0;
-	unsigned int depth = 0;
+    if (texture == nullptr)
+        return nullptr;
 
-	// Get the dimensions of the texture. We'll use this to determine how big it is on screen
-	bool result = GLib::GetDimensions(texture, width, height, depth);
-	ASSERT(result == true);
-	ASSERT((width > 0) && (height > 0));
+    unsigned int width = 0;
+    unsigned int height = 0;
+    unsigned int depth = 0;
 
-	// Define the sprite edges
-	GLib::Sprites::SpriteEdges      Edges = { -float(width / 2.0f), float(height / 2.0f), float(width / 2.0f), -float(height / 2.0f) };
-	GLib::Sprites::SpriteUVs        UVs = { { 0.0f, 0.0f },{ 1.0f, 0.0f },{ 0.0f, 1.0f },{ 1.0f, 1.0f } };
-	GLib::RGBA                      Color = { 255, 255, 255, 255 };
+    // Get the dimensions of the texture. We'll use this to determine how big it is on screen
+    bool result = GLib::GetDimensions(texture, width, height, depth);
+    ASSERT(result == true);
+    ASSERT((width > 0) && (height > 0));
 
-	// Create the sprite
-	GLib::Sprites::Sprite * sprite = GLib::Sprites::CreateSprite(Edges, 0.1f, Color, UVs);
-	if (sprite == nullptr)
-	{
-		GLib::Release(texture);
-		return nullptr;
-	}
+    // Define the sprite edges
+    GLib::Sprites::SpriteEdges      Edges = { -float(width / 2.0f), float(height / 2.0f), float(width / 2.0f), -float(height / 2.0f) };
+    GLib::Sprites::SpriteUVs        UVs = { { 0.0f, 0.0f },{ 1.0f, 0.0f },{ 0.0f, 1.0f },{ 1.0f, 1.0f } };
+    GLib::RGBA                      Color = { i_r, i_g, i_b, i_a };
 
-	// Bind the texture to sprite
-	GLib::Sprites::SetTexture(*sprite, *texture);
+    // Create the sprite
+    GLib::Sprites::Sprite * sprite = GLib::Sprites::CreateSprite(Edges, 0.1f, Color, UVs);
+    if (sprite == nullptr)
+    {
+        GLib::Release(texture);
+        return nullptr;
+    }
 
-	return sprite;
+    // Bind the texture to sprite
+    GLib::Sprites::SetTexture(*sprite, *texture);
+
+    return sprite;
 }
 
 } // namespace render

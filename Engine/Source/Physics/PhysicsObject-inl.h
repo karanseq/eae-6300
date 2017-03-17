@@ -21,6 +21,9 @@ inline PhysicsObject& PhysicsObject::operator=(const PhysicsObject& i_copy)
 		inverse_mass_ = i_copy.inverse_mass_;
 		coeff_drag_ = i_copy.coeff_drag_;
 		curr_velocity_ = i_copy.curr_velocity_;
+#ifdef ENABLE_DEBUG_DRAW
+        debug_draw_data_ = nullptr;
+#endif
 	}
 
 	return *this;

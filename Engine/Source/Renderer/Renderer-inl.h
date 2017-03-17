@@ -3,6 +3,9 @@
 // libarary includes
 #include <algorithm>
 
+// external includes
+#include "GLib.h"
+
 // engine includes
 #include "Assert\Assert.h"
 #include "Data\PooledString.h"
@@ -23,9 +26,17 @@ inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderabl
 
     // create a sprite for the renderable
     GLib::Sprites::Sprite* sprite = CreateSprite(i_file_name);
-    
+
+    return Renderer::CreateRenderableObject(sprite);
+}
+
+inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderableObject(GLib::Sprites::Sprite* i_sprite)
+{
+    // validate input
+    ASSERT(i_sprite);
+
     // create a new renderable
-    engine::memory::SharedPointer<RenderableObject> renderable = RenderableObject::Create(sprite);
+    engine::memory::SharedPointer<RenderableObject> renderable = RenderableObject::Create(i_sprite);
 
     // add it to the list
     renderables_.push_back(renderable);
@@ -43,14 +54,23 @@ inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderabl
 	// create a sprite for the renderable
     GLib::Sprites::Sprite* sprite = CreateSprite(i_file_name);
 
-	// create a new renderable
-	engine::memory::SharedPointer<RenderableObject> renderable = RenderableObject::Create(sprite, i_game_object);
+    return Renderer::CreateRenderableObject(sprite, i_game_object);
+}
 
-	// add it to the list
-	renderables_.push_back(renderable);
-	++num_renderables_;
+inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderableObject(GLib::Sprites::Sprite* i_sprite, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object)
+{
+    // validate inputs
+    ASSERT(i_sprite);
+    ASSERT(i_game_object);
 
-	return renderable;
+    // create a new renderable
+    engine::memory::SharedPointer<RenderableObject> renderable = RenderableObject::Create(i_sprite, i_game_object);
+
+    // add it to the list
+    renderables_.push_back(renderable);
+    ++num_renderables_;
+
+    return renderable;
 }
 
 inline void Renderer::AddRenderableObject(const engine::memory::SharedPointer<RenderableObject>& i_renderable_object)

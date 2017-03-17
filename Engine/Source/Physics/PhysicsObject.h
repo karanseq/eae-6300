@@ -6,6 +6,10 @@
 #include "Memory\SharedPointer.h"
 #include "Memory\WeakPointer.h"
 
+#ifdef ENABLE_DEBUG_DRAW
+#include "Physics\DebugDraw.h"
+#endif
+
 // forward declaration
 namespace engine {
 namespace gameobject {
@@ -33,8 +37,14 @@ public:
 	inline PhysicsObject& operator=(const PhysicsObject& i_copy);
 
 	// functions
-	void Update(float dt);
+	void Update(float i_dt);
 	void ApplyImpulse(const engine::math::Vec3D& i_impulse);
+
+    // debug draw functions
+#ifdef ENABLE_DEBUG_DRAW
+    void InitDebugDraw(uint8_t i_r, uint8_t i_g, uint8_t i_b, uint8_t i_a);
+    void DrawDebugData(float i_dt);
+#endif
 
 	// accessors and mutators
 	inline bool GetIsAwake() const;
@@ -74,6 +84,11 @@ private:
 	float																	inverse_mass_;
 	float																	coeff_drag_;
 	engine::math::Vec3D														curr_velocity_;
+
+#ifdef ENABLE_DEBUG_DRAW
+    DebugDrawData*                                                          debug_draw_data_;
+#endif
+
 }; // class PhysicsObject
 
 } // namespace physics
