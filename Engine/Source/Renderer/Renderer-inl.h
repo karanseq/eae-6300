@@ -16,6 +16,24 @@ inline Renderer* Renderer::Get()
 	return Renderer::instance_;
 }
 
+inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderableObject(const engine::data::PooledString& i_file_name)
+{
+    // validate input
+    ASSERT(i_file_name.GetLength() > 0);
+
+    // create a sprite for the renderable
+    GLib::Sprites::Sprite* sprite = CreateSprite(i_file_name);
+    
+    // create a new renderable
+    engine::memory::SharedPointer<RenderableObject> renderable = RenderableObject::Create(sprite);
+
+    // add it to the list
+    renderables_.push_back(renderable);
+    ++num_renderables_;
+
+    return renderable;
+}
+
 inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderableObject(const engine::data::PooledString& i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object)
 {
 	// validate input
@@ -23,7 +41,7 @@ inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderabl
 	ASSERT(i_game_object);
 
 	// create a sprite for the renderable
-	auto sprite = CreateSprite(i_file_name);
+    GLib::Sprites::Sprite* sprite = CreateSprite(i_file_name);
 
 	// create a new renderable
 	engine::memory::SharedPointer<RenderableObject> renderable = RenderableObject::Create(sprite, i_game_object);
@@ -63,7 +81,7 @@ inline void Renderer::RemoveRenderableObject(const engine::memory::SharedPointer
 	std::lock_guard<std::mutex> lock(renderables_mutex_);
 
 	// check if this object exists
-	auto it = std::find(renderables_.begin(), renderables_.end(), i_renderable_object);
+	std::vector<engine::memory::SharedPointer<RenderableObject>>::iterator it = std::find(renderables_.begin(), renderables_.end(), i_renderable_object);
 	if (it == renderables_.end())
 	{
 		LOG_ERROR("Renderer could not find this renderable!");

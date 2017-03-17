@@ -1,5 +1,8 @@
 #include "Renderer\Renderer.h"
 
+// external includes
+#include "GLib.h"
+
 // engine includes
 #include "Common\HelperMacros.h"
 #include "Data\PooledString.h"

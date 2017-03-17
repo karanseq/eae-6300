@@ -42,8 +42,11 @@ public:
 
 	void Run(float i_dt);
 
-	// create, add & remove renderer objects
+	// create renderable objects
+    inline engine::memory::SharedPointer<RenderableObject> CreateRenderableObject(const engine::data::PooledString& i_file_name);
 	inline engine::memory::SharedPointer<RenderableObject> CreateRenderableObject(const engine::data::PooledString& i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
+
+    // add & remove renderer objects
 	inline void AddRenderableObject(const engine::memory::SharedPointer<RenderableObject>& i_renderable_object);
 	inline void RemoveRenderableObject(const engine::memory::SharedPointer<RenderableObject>& i_renderable_object);
 
