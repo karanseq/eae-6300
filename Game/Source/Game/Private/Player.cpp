@@ -18,7 +18,7 @@ namespace game
 
 // static member initialization
 const float Player::DEFAULT_MASS = 50.0f;
-const float Player::DEFAULT_FORCE = 0.5f;//2.5f;
+const float Player::DEFAULT_FORCE = 1.0f;
 
 Player::Player() : is_left_pressed_(false),
 	is_right_pressed_(false),
@@ -59,10 +59,19 @@ void Player::Update(float i_dt)
 	}
 
 	// wrap around the screen
-	auto position = actor_->GetGameObject()->GetPosition();
+	engine::math::Vec3D position = actor_->GetGameObject()->GetPosition();
 	position.x((position.x() < -Game::SCREEN_WIDTH / 2) ? Game::SCREEN_WIDTH / 2 : (position.x() > Game::SCREEN_WIDTH / 2 ? -Game::SCREEN_WIDTH / 2 : position.x()));
 	position.y((position.y() < -Game::SCREEN_HEIGHT / 2) ? Game::SCREEN_HEIGHT / 2 : (position.y() > Game::SCREEN_HEIGHT / 2 ? -Game::SCREEN_HEIGHT / 2 : position.y()));
 	actor_->GetGameObject()->SetPosition(position);
+
+    // rotation based on velocity
+    engine::math::Vec3D normalized_velocity = actor_->GetPhysicsObject().Lock()->GetVelocity().Normalize();
+    if (!normalized_velocity.IsZero())
+    {
+        engine::math::Vec3D rotation = actor_->GetGameObject()->GetRotation();
+        rotation.z(atan2f(normalized_velocity.y(), normalized_velocity.x()) - M_PI * 0.5f);
+        actor_->GetGameObject()->SetRotation(rotation);
+    }
 }
 
 void Player::OnKeyPressed(unsigned int i_key_id)

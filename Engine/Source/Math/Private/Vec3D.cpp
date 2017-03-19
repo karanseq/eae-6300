@@ -33,8 +33,8 @@ namespace math {
 	{
 		float length_squared = x_ * x_ + y_ * y_ + z_ * z_;
 
-		// return if already normalized
-		if (FuzzyEquals(length_squared, 1.0f))
+		// return if already normalized OR if length is zero
+		if (FuzzyEquals(length_squared, 1.0f) || FuzzyEquals(length_squared, 0.0f))
 		{
 			return;
 		}

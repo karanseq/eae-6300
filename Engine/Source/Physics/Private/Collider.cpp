@@ -265,7 +265,8 @@ void Collider::Run(float i_dt)
                 }
                 else
                 {
-                    LOG("Collision found!");
+                    VERBOSE("Collision found!");
+#ifdef BUILD_DEBUG
                     /*PrintDebugInformation(mat_WtoA,
                         mat_WtoB,
                         mat_AtoB,
@@ -275,9 +276,10 @@ void Collider::Run(float i_dt)
                         physics_object_a->GetVelocity(),
                         physics_object_b->GetVelocity(),
                         i_dt);*/
+#endif
 
-                    physics_object_a->SetVelocity(physics_object_a->GetVelocity() * -1.0f);
-                    physics_object_b->SetVelocity(physics_object_b->GetVelocity() * -1.0f);
+                    physics_object_a->ApplyImpulse(physics_object_a->GetVelocity() * -5.0f);
+                    physics_object_b->ApplyImpulse(physics_object_b->GetVelocity() * -5.0f);
                 }
             }
             else
@@ -291,6 +293,7 @@ void Collider::Run(float i_dt)
 
 }
 
+#ifdef BUILD_DEBUG
 void Collider::PrintDebugInformation(const engine::math::Mat44& i_mat_WtoA,
     const engine::math::Mat44& i_mat_WtoB, 
     const engine::math::Mat44& i_mat_AtoB,
@@ -354,6 +357,7 @@ void Collider::PrintDebugInformation(const engine::math::Mat44& i_mat_WtoA,
 
     LOG("******************************\n");
 }
+#endif // BUILD_DEBUG
 
 void Collider::AddPhysicsObject(const engine::memory::WeakPointer<PhysicsObject>& i_physics_object)
 {
