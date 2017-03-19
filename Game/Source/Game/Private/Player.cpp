@@ -76,18 +76,26 @@ void Player::Update(float i_dt)
 
 void Player::OnKeyPressed(unsigned int i_key_id)
 {
-	is_left_pressed_ = is_left_pressed_ || i_key_id == 'A';
-	is_right_pressed_ = is_right_pressed_ || i_key_id == 'D';
-	is_down_pressed_ = is_down_pressed_ || i_key_id == 'S';
-	is_up_pressed_ = is_up_pressed_ || i_key_id == 'W';
+	is_left_pressed_ = is_left_pressed_ || i_key_id == left_key_;
+	is_right_pressed_ = is_right_pressed_ || i_key_id == right_key_;
+	is_down_pressed_ = is_down_pressed_ || i_key_id == down_key_;
+	is_up_pressed_ = is_up_pressed_ || i_key_id == up_key_;
 }
 
 void Player::OnKeyReleased(unsigned int i_key_id)
 {
-	is_left_pressed_ = is_left_pressed_ ? !(i_key_id == 'A') : is_left_pressed_;
-	is_right_pressed_ = is_right_pressed_ ? !(i_key_id == 'D') : is_right_pressed_;
-	is_down_pressed_ = is_down_pressed_ ? !(i_key_id == 'S') : is_down_pressed_;
-	is_up_pressed_ = is_up_pressed_ ? !(i_key_id == 'W') : is_up_pressed_;
+	is_left_pressed_ = is_left_pressed_ ? !(i_key_id == left_key_) : is_left_pressed_;
+	is_right_pressed_ = is_right_pressed_ ? !(i_key_id == right_key_) : is_right_pressed_;
+	is_down_pressed_ = is_down_pressed_ ? !(i_key_id == down_key_) : is_down_pressed_;
+	is_up_pressed_ = is_up_pressed_ ? !(i_key_id == up_key_) : is_up_pressed_;
+}
+
+void Player::SetKeys(const char i_left, const char i_right, const char i_up, const char i_down)
+{
+    left_key_ = i_left;
+    right_key_ = i_right;
+    up_key_ = i_up;
+    down_key_ = i_down;
 }
 
 } // namespace monsterchase

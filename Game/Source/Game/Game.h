@@ -43,7 +43,8 @@ public:
 
 	// gameplay
 	void OnKeyPressed(unsigned int i_key_id);
-	void CreatePlayer();
+	void CreatePlayers();
+    void DestroyPlayers();
 	void CreateActor(const engine::data::PooledString& i_file_name);
 
 	inline GameStates GetState() const												{ return game_state_; }
@@ -51,6 +52,7 @@ public:
 	// game constants
 	static const uint16_t															SCREEN_WIDTH = 1280;
 	static const uint16_t															SCREEN_HEIGHT = 800;
+    static const uint8_t                                                            NUM_PLAYERS = 2;
 
 private:
 	Game();
@@ -68,7 +70,7 @@ private:
 	GameStates																		game_state_;
 
 	// game elements
-	Player*																			player_;
+	Player                                                                          *player_01_, *player_02_;
 	std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>			actors_;
 	engine::memory::SharedPointer<engine::input::KeyboardEvent>						keyboard_event_;
 

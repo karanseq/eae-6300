@@ -27,6 +27,7 @@ public:
 	// keyboard event handlers
 	void OnKeyPressed(unsigned int i_key_id);
 	void OnKeyReleased(unsigned int i_key_id);
+    void SetKeys(const char i_left, const char i_right, const char i_up, const char i_down);
 
     // accessor
     inline const engine::memory::WeakPointer<engine::gameobject::Actor> GetActor() { return actor_; }
@@ -36,9 +37,13 @@ public:
 	static const float																DEFAULT_FORCE;
 
 private:
+    char                                                                            left_key_;
 	bool																			is_left_pressed_;
+    char                                                                            right_key_;
 	bool																			is_right_pressed_;
+    char                                                                            up_key_;
 	bool																			is_up_pressed_;
+    char                                                                            down_key_;
 	bool																			is_down_pressed_;
 
 	engine::memory::SharedPointer<engine::gameobject::Actor>						actor_;

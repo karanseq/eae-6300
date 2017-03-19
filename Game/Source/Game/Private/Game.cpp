@@ -17,10 +17,6 @@
 #include "Game\GameUtils.h"
 #include "Game\Player.h"
 
-// REMOVE ME!
-#include "Physics\Collider.h"
-#include "Time\TimerUtil.h"
-
 namespace game {
 
 bool StartUp()
@@ -76,7 +72,8 @@ void Game::Destroy()
 }
 
 Game::Game() : game_state_(GameStates::kGameStateBegin),
-	player_(nullptr),
+	player_01_(nullptr),
+    player_02_(nullptr),
 	keyboard_event_(engine::input::KeyboardEvent::Create())
 {
 	ASSERT(keyboard_event_);
@@ -84,8 +81,7 @@ Game::Game() : game_state_(GameStates::kGameStateBegin),
 
 Game::~Game()
 {
-	// delete the player
-	SAFE_DELETE(player_);
+    DestroyPlayers();
 
 	// delete the monsters
 	actors_.clear();
@@ -109,7 +105,7 @@ bool Game::Init()
 	srand(static_cast<unsigned int>(time(0)));
 
 	// create the player
-	CreatePlayer();
+	CreatePlayers();
 
 	// create the monsters
 	engine::gameobject::ActorCreator::CreateActorsFromFile(GameData::MONSTERS_LUA_FILE_NAME, actors_);
@@ -153,6 +149,7 @@ void Game::Update(float dt)
 		new_actors_.clear();
 	}
 
+    // temporary code to continuously rotate an arbitrary actor
     engine::math::Vec3D rotation = actors_[0]->GetGameObject()->GetRotation();
     rotation.z(rotation.z() + M_PI * 0.001f);
     actors_[0]->GetGameObject()->SetRotation(rotation);
@@ -168,27 +165,26 @@ void Game::OnKeyPressed(unsigned int i_key_id)
 	case 'Q':
 		game_state_ = GameStates::kGameStateQuit;
 		break;
-    case 'C':
-        engine::physics::Collider::Get()->Run(engine::time::TimerUtil::GetLastFrameTime_ms());
-        LOG("\n\n\n\n");
-        break;
 	case 'R':
-        {
-		//game_state_ = GameStates::kGameStateRestart;
-        engine::memory::SharedPointer<engine::gameobject::GameObject> game_object = player_->GetActor().Lock()->GetGameObject();
-        engine::memory::SharedPointer<engine::physics::PhysicsObject> physics_object = player_->GetActor().Lock()->GetPhysicsObject().Lock();
-
-        game_object->SetPosition(engine::math::Vec3D(-250.0f, 100.0f, 0.0f));
-        physics_object->SetVelocity(engine::math::Vec3D::ZERO);
-        }
+        //game_state_ = GameStates::kGameStateRestart;
 		break;
 	}
 }
 
-void Game::CreatePlayer()
+void Game::CreatePlayers()
 {
-	// create the player at the center of the grid
-	player_ = new Player();
+    player_01_ = new Player();
+    player_01_->SetKeys('A', 'D', 'W', 'S');
+
+    player_02_ = new Player();
+    player_02_->SetKeys('J', 'L', 'I', 'K');    
+    player_02_->GetActor().Lock()->GetGameObject()->SetPosition(engine::math::Vec3D(250.0f, -100.0f, 0.0f));
+}
+
+void Game::DestroyPlayers()
+{
+    SAFE_DELETE(player_01_);
+    SAFE_DELETE(player_02_);
 }
 
 void Game::CreateActor(const engine::data::PooledString& i_file_name)
