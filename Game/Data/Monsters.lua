@@ -4,60 +4,25 @@ ActorList =
 		name = "Inky",
 		type = "Monster",
 
-		bounding_box = { 0.0, 0.0, 44.0, 40.0 },
+		bounding_box = { 0.0, 0.0, 192.0, 82.0 },
 		transform = 
 		{
-			position = { -100.0, -100.0, 0.0 },
+			position = { 0.0, 0.0, 0.0 },
+			rotation = { 0.0, 0.0, 30.0 },
+			scale = { 1.0, 1.0, 1.0 }
+		},
+	
+
+		physics_settings = 
+		{
+			mass = 50.0,
+			drag = 0.02,
+			collide = true
 		},
 
 		render_settings = 
 		{
-			sprite_name = "Data\\enemy_01.dds"
-		}
-	},
-	{
-		name = "Binky",
-		type = "Monster",
-
-		bounding_box = { 0.0, 0.0, 44.0, 40.0 },
-		transform = 
-		{
-			position = { -100.0, 100.0, 0.0 },
-		},
-
-		render_settings = 
-		{
-			sprite_name = "Data\\enemy_01.dds"
-		}
-	},
-	{
-		name = "Pinky",
-		type = "Monster",
-
-		bounding_box = { 0.0, 0.0, 44.0, 40.0 },
-		transform = 
-		{
-			position = { 100.0, -100.0, 0.0 },
-		},
-
-		render_settings = 
-		{
-			sprite_name = "Data\\enemy_01.dds"
-		}
-	},
-	{
-		name = "Clyde",
-		type = "Monster",
-
-		bounding_box = { 0.0, 0.0, 44.0, 40.0 },
-		transform = 
-		{
-			position = { 100.0, 100.0, 0.0 },
-		},
-
-		render_settings = 
-		{
-			sprite_name = "Data\\enemy_01.dds"
+			sprite_name = "Data\\cjtrapm01.dds"
 		}
 	}
 }

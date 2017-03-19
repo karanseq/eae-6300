@@ -18,7 +18,7 @@ namespace game
 
 // static member initialization
 const float Player::DEFAULT_MASS = 50.0f;
-const float Player::DEFAULT_FORCE = 2.5f;
+const float Player::DEFAULT_FORCE = 0.5f;//2.5f;
 
 Player::Player() : is_left_pressed_(false),
 	is_right_pressed_(false),

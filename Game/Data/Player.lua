@@ -3,10 +3,10 @@ Actor =
 	name = "Clowny",
 	type = "Player",
 
-	bounding_box = { 0.0, 0.0, 32.0, 40.0 },
+	bounding_box = { 0.0, 0.0, 16.0, 20.0 },
 	transform = 
 	{
-		position = { 0.0, 0.0, 0.0 },
+		position = { -250.0, 100.0, 0.0 },
 		rotation = { 0.0, 0.0, 0.0 },
 		scale = { 1.0, 1.0, 1.0 }
 	},

@@ -28,6 +28,9 @@ public:
 	void OnKeyPressed(unsigned int i_key_id);
 	void OnKeyReleased(unsigned int i_key_id);
 
+    // accessor
+    inline const engine::memory::WeakPointer<engine::gameobject::Actor> GetActor() { return actor_; }
+
 	// constants
 	static const float																DEFAULT_MASS;
 	static const float																DEFAULT_FORCE;

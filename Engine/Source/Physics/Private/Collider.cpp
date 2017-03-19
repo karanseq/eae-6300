@@ -101,18 +101,7 @@ void Collider::Run(float i_dt)
                 const engine::math::Vec4D A_center_in_B = mat_AtoB * engine::math::Vec4D(a_aabb.center, 1.0f);
                 const engine::math::Vec4D A_X_extent_in_B = mat_AtoB * engine::math::Vec4D(a_aabb.extents.x(), 0.0f, 0.0f, 0.0f);
                 const engine::math::Vec4D A_Y_extent_in_B = mat_AtoB * engine::math::Vec4D(0.0f, a_aabb.extents.y(), 0.0f, 0.0f);
-
-                LOG("******************************");
-                LOG("mat_AtoB:");
-                mat_AtoB.Print();
-                LOG("A_center_in_B:%f, %f", A_center_in_B.x(), A_center_in_B.y());
-                LOG("A_X_extent_in_B:%f", A_X_extent_in_B.x());
-                LOG("A_Y_extent_in_B:%f", A_Y_extent_in_B.y());
-                LOG("B_center_in_B:%f, %f", b_aabb.center.x(), b_aabb.center.y());
-                LOG("B_X_extent_in_B:%f", b_aabb.extents.x());
-                LOG("B_Y_extent_in_B:%f", b_aabb.extents.y());
-                LOG("relative_vel_WtoB:%f, %f", relative_vel_WtoB.x(), relative_vel_WtoB.y());
-                LOG("******************************\n");
+                const engine::math::Vec4D A_extents_in_B(fabs(A_X_extent_in_B.x()) + fabs(A_Y_extent_in_B.x()), fabs(A_X_extent_in_B.y()) + fabs(A_Y_extent_in_B.y()), 0.0f, 0.0f);
 
                 // for X- axis
                 {
@@ -120,13 +109,14 @@ void Collider::Run(float i_dt)
                     if (engine::math::FuzzyEquals(relative_vel_WtoB.x(), 0.0f))
                     {
                         // separation check without velocities
-                        is_X_separated_in_B = fabs(A_center_in_B.x() - b_aabb.center.x()) > A_X_extent_in_B.x() + b_aabb.extents.x();
+                        //is_X_separated_in_B = fabs(A_center_in_B.x() - b_aabb.center.x()) > A_X_extent_in_B.x() + b_aabb.extents.x();
+                        is_X_separated_in_B = fabs(A_center_in_B.x() - b_aabb.center.x()) > A_extents_in_B.x() + b_aabb.extents.x();
                     }
                     else
                     {
                         // calculate separation close and open times
-                        t_close_X_in_B = (b_aabb.center.x() - b_aabb.extents.x() - A_center_in_B.x() - A_X_extent_in_B.x()) / relative_vel_WtoB.x();
-                        t_open_X_in_B = (b_aabb.center.x() + b_aabb.extents.x() - A_center_in_B.x() + A_X_extent_in_B.x()) / relative_vel_WtoB.x();
+                        t_close_X_in_B = (b_aabb.center.x() - b_aabb.extents.x() - A_center_in_B.x() - A_extents_in_B.x()) / relative_vel_WtoB.x();
+                        t_open_X_in_B = (b_aabb.center.x() + b_aabb.extents.x() - A_center_in_B.x() + A_extents_in_B.x()) / relative_vel_WtoB.x();
 
                         // t_close must be less than t_open
                         // if not, swap them
@@ -136,10 +126,6 @@ void Collider::Run(float i_dt)
                             t_open_X_in_B = t_close_X_in_B;
                             t_close_X_in_B = t_swap;
                         }
-
-                        //// clamp the separation times
-                        //t_close_X_in_B = (t_close_X_in_B < 0) ? 0 : (t_close_X_in_B > i_dt) ? i_dt : t_close_X_in_B;
-                        //t_open_X_in_B = (t_open_X_in_B < 0) ? 0 : (t_open_X_in_B > i_dt) ? i_dt : t_open_X_in_B;
 
                         // if t_open < 0, the separation occurred in the past
                         // if t_close > i_dt, the separation will occur in the future
@@ -155,13 +141,13 @@ void Collider::Run(float i_dt)
                     if (engine::math::FuzzyEquals(relative_vel_WtoB.y(), 0.0f))
                     {
                         // separation check without velocities
-                        is_Y_separated_in_B = fabs(A_center_in_B.y() - b_aabb.center.y()) > A_Y_extent_in_B.y() + b_aabb.extents.y();
+                        is_Y_separated_in_B = fabs(A_center_in_B.y() - b_aabb.center.y()) > A_extents_in_B.y() + b_aabb.extents.y();
                     }
                     else
                     {
                         // calculate separation close and open times
-                        t_close_Y_in_B = (b_aabb.center.y() - b_aabb.extents.y() - A_center_in_B.y() - A_Y_extent_in_B.y()) / relative_vel_WtoB.y();
-                        t_open_Y_in_B = (b_aabb.center.y() + b_aabb.extents.y() - A_center_in_B.y() + A_Y_extent_in_B.y()) / relative_vel_WtoB.y();
+                        t_close_Y_in_B = (b_aabb.center.y() - b_aabb.extents.y() - A_center_in_B.y() - A_extents_in_B.y()) / relative_vel_WtoB.y();
+                        t_open_Y_in_B = (b_aabb.center.y() + b_aabb.extents.y() - A_center_in_B.y() + A_extents_in_B.y()) / relative_vel_WtoB.y();
 
                         // t_close must be less than t_open
                         // if not, swap them
@@ -171,10 +157,6 @@ void Collider::Run(float i_dt)
                             t_open_Y_in_B = t_close_Y_in_B;
                             t_close_Y_in_B = t_swap;
                         }
-
-                        //// clamp the separation times
-                        //t_close_Y_in_B = (t_close_Y_in_B < 0) ? 0 : (t_close_Y_in_B > i_dt) ? i_dt : t_close_Y_in_B;
-                        //t_open_Y_in_B = (t_open_Y_in_B < 0) ? 0 : (t_open_Y_in_B > i_dt) ? i_dt : t_open_Y_in_B;
 
                         // if t_open < 0, the separation occurred in the past
                         // if t_close > i_dt, the separation will occur in the future
@@ -205,18 +187,7 @@ void Collider::Run(float i_dt)
                 const engine::math::Vec4D B_center_in_A = mat_BtoA * engine::math::Vec4D(b_aabb.center, 1.0f);
                 const engine::math::Vec4D B_X_extent_in_A = mat_BtoA * engine::math::Vec4D(b_aabb.extents.x(), 0.0f, 0.0f, 0.0f);
                 const engine::math::Vec4D B_Y_extent_in_A = mat_BtoA * engine::math::Vec4D(0.0f, b_aabb.extents.y(), 0.0f, 0.0f);
-
-                LOG("******************************");
-                LOG("mat_BtoA:");
-                mat_BtoA.Print();
-                LOG("B_center_in_A:%f, %f", B_center_in_A.x(), B_center_in_A.y());
-                LOG("B_X_extent_in_A:%f", B_X_extent_in_A.x());
-                LOG("B_Y_extent_in_A:%f", B_Y_extent_in_A.y());
-                LOG("A_center_in_A:%f, %f", a_aabb.center.x(), a_aabb.center.y());
-                LOG("A_X_extent_in_A:%f", a_aabb.extents.x());
-                LOG("A_Y_extent_in_A:%f", a_aabb.extents.y());
-                LOG("relative_vel_WtoA:%f, %f", relative_vel_WtoA.x(), relative_vel_WtoA.y());
-                LOG("******************************\n");
+                const engine::math::Vec4D B_extents_in_A(fabs(B_X_extent_in_A.x()) + fabs(B_Y_extent_in_A.x()), fabs(B_X_extent_in_A.y()) + fabs(B_Y_extent_in_A.y()), 0.0f, 0.0f);
 
                 // for X-axis
                 {
@@ -224,13 +195,13 @@ void Collider::Run(float i_dt)
                     if (engine::math::FuzzyEquals(relative_vel_WtoA.x(), 0.0f))
                     {
                         // separation check without velocities
-                        is_X_separated_in_A = fabs(a_aabb.center.x() - B_center_in_A.x()) > a_aabb.extents.x() + B_X_extent_in_A.x();
+                        is_X_separated_in_A = fabs(a_aabb.center.x() - B_center_in_A.x()) > a_aabb.extents.x() + B_extents_in_A.x();
                     }
                     else
                     {
                         // calculate separation close and open times
-                        t_close_X_in_A = (a_aabb.center.x() - a_aabb.extents.x() - B_center_in_A.x() - B_X_extent_in_A.x()) / relative_vel_WtoA.x();
-                        t_open_X_in_A = (a_aabb.center.x() + a_aabb.extents.x() - B_center_in_A.x() + B_X_extent_in_A.x()) / relative_vel_WtoA.x();
+                        t_close_X_in_A = (a_aabb.center.x() - a_aabb.extents.x() - B_center_in_A.x() - B_extents_in_A.x()) / relative_vel_WtoA.x();
+                        t_open_X_in_A = (a_aabb.center.x() + a_aabb.extents.x() - B_center_in_A.x() + B_extents_in_A.x()) / relative_vel_WtoA.x();
 
                         // t_close must be less than t_open
                         // if not, swap them
@@ -240,10 +211,6 @@ void Collider::Run(float i_dt)
                             t_open_X_in_A = t_close_X_in_A;
                             t_close_X_in_A = t_swap;
                         }
-
-                        //// clamp the separation times
-                        //t_close_X_in_A = (t_close_X_in_A < 0) ? 0 : (t_close_X_in_A > i_dt) ? i_dt : t_close_X_in_A;
-                        //t_open_X_in_A = (t_open_X_in_A < 0) ? 0 : (t_open_X_in_A > i_dt) ? i_dt : t_open_X_in_A;
 
                         // if t_open < 0, the separation occurred in the past
                         // if t_close > i_dt, the separation will occur in the future
@@ -258,13 +225,13 @@ void Collider::Run(float i_dt)
                     if (engine::math::FuzzyEquals(relative_vel_WtoA.y(), 0.0f))
                     {
                         // separation check without velocities
-                        is_Y_separated_in_A = fabs(a_aabb.center.y() - B_center_in_A.y()) > a_aabb.extents.y() + B_Y_extent_in_A.y();
+                        is_Y_separated_in_A = fabs(a_aabb.center.y() - B_center_in_A.y()) > a_aabb.extents.y() + B_extents_in_A.y();
                     }
                     else
                     {
                         // calculate separation close and open times
-                        t_close_Y_in_A = (a_aabb.center.y() - a_aabb.extents.y() - B_center_in_A.y() - B_Y_extent_in_A.y()) / relative_vel_WtoA.y();
-                        t_open_Y_in_A = (a_aabb.center.y() + a_aabb.extents.y() - B_center_in_A.y() + B_Y_extent_in_A.y()) / relative_vel_WtoA.y();
+                        t_close_Y_in_A = (a_aabb.center.y() - a_aabb.extents.y() - B_center_in_A.y() - B_extents_in_A.y()) / relative_vel_WtoA.y();
+                        t_open_Y_in_A = (a_aabb.center.y() + a_aabb.extents.y() - B_center_in_A.y() + B_extents_in_A.y()) / relative_vel_WtoA.y();
 
                         // t_close must be less than t_open
                         // if not, swap them
@@ -274,10 +241,6 @@ void Collider::Run(float i_dt)
                             t_open_Y_in_A = t_close_Y_in_A;
                             t_close_Y_in_A = t_swap;
                         }
-
-                        //// clamp the separation times
-                        //t_close_Y_in_A = (t_close_Y_in_A < 0) ? 0 : (t_close_Y_in_A > i_dt) ? i_dt : t_close_Y_in_A;
-                        //t_open_Y_in_A = (t_open_Y_in_A < 0) ? 0 : (t_open_Y_in_A > i_dt) ? i_dt : t_open_Y_in_A;
 
                         // if t_open < 0, the separation occurred in the past
                         // if t_close > i_dt, the separation will occur in the future
@@ -302,9 +265,19 @@ void Collider::Run(float i_dt)
                 }
                 else
                 {
+                    LOG("Collision found!");
+                    /*PrintDebugInformation(mat_WtoA,
+                        mat_WtoB,
+                        mat_AtoB,
+                        mat_BtoA,
+                        game_object_a->GetAABB(),
+                        game_object_b->GetAABB(),
+                        physics_object_a->GetVelocity(),
+                        physics_object_b->GetVelocity(),
+                        i_dt);*/
+
                     physics_object_a->SetVelocity(physics_object_a->GetVelocity() * -1.0f);
                     physics_object_b->SetVelocity(physics_object_b->GetVelocity() * -1.0f);
-                    LOG("Collision found!");
                 }
             }
             else
@@ -313,7 +286,73 @@ void Collider::Run(float i_dt)
             }
 
         } // end of inner for loop
+
     } // end of outer for loop
+
+}
+
+void Collider::PrintDebugInformation(const engine::math::Mat44& i_mat_WtoA,
+    const engine::math::Mat44& i_mat_WtoB, 
+    const engine::math::Mat44& i_mat_AtoB,
+    const engine::math::Mat44& i_mat_BtoA, 
+    const engine::math::AABB& i_a_aabb, 
+    const engine::math::AABB& i_b_aabb, 
+    const engine::math::Vec3D& i_a_vel, 
+    const engine::math::Vec3D& i_b_vel,
+    float i_dt) const
+{
+    LOG("******************************");
+
+    const engine::math::Vec4D A_center_in_B = i_mat_AtoB * engine::math::Vec4D(i_a_aabb.center, 1.0f);
+    const engine::math::Vec4D A_X_extent_in_B = i_mat_AtoB * engine::math::Vec4D(i_a_aabb.extents.x(), 0.0f, 0.0f, 0.0f);
+    const engine::math::Vec4D A_Y_extent_in_B = i_mat_AtoB * engine::math::Vec4D(0.0f, i_a_aabb.extents.y(), 0.0f, 0.0f);
+    const engine::math::Vec4D A_extents_in_B = A_X_extent_in_B + A_Y_extent_in_B;
+
+    const engine::math::Vec4D B_center_in_A = i_mat_BtoA * engine::math::Vec4D(i_b_aabb.center, 1.0f);
+    const engine::math::Vec4D B_X_extent_in_A = i_mat_BtoA * engine::math::Vec4D(i_b_aabb.extents.x(), 0.0f, 0.0f, 0.0f);
+    const engine::math::Vec4D B_Y_extent_in_A = i_mat_BtoA * engine::math::Vec4D(0.0f, i_b_aabb.extents.y(), 0.0f, 0.0f);
+    const engine::math::Vec4D B_extents_in_A = B_X_extent_in_A + B_Y_extent_in_A;
+
+    const engine::math::Vec4D relative_vel_in_A = i_mat_WtoA * engine::math::Vec4D(i_a_vel - i_b_vel, 0.0f);
+    const engine::math::Vec4D relative_vel_in_B = i_mat_WtoB * engine::math::Vec4D(i_b_vel - i_a_vel, 0.0f);
+
+    LOG("A_to_B:");
+    i_mat_AtoB.Print();
+    LOG("B_to_A:");
+    i_mat_BtoA.Print();
+
+    LOG("A_center: %f, %f", i_a_aabb.center.x(), i_a_aabb.center.y());
+    LOG("A_center_in_B: %f, %f", A_center_in_B.x(), A_center_in_B.y());
+    LOG("A_extents: %f, %f", i_a_aabb.extents.x(), i_a_aabb.extents.y());
+    LOG("A_extents_in_B: %f, %f", A_extents_in_B.x(), A_extents_in_B.y());
+
+    LOG("B_center: %f, %f", i_b_aabb.center.x(), i_b_aabb.center.y());
+    LOG("B_center_in_A: %f, %f", B_center_in_A.x(), B_center_in_A.y());
+    LOG("B_extents: %f, %f", i_b_aabb.extents.x(), i_b_aabb.extents.y());
+    LOG("B_extents_in_A: %f, %f", B_extents_in_A.x(), B_extents_in_A.y());
+
+    //LOG("X_separation_in_A:%f", fabs(i_a_aabb.center.x() - i_a_aabb.extents.x() - B_center_in_A.x() - B_X_extent_in_A.x()));
+    //LOG("Y_separation_in_A:%f", fabs(i_a_aabb.center.y() - i_a_aabb.extents.y() - B_center_in_A.y() - B_Y_extent_in_A.y()));
+    //LOG("X_separation_in_B:%f", fabs(i_b_aabb.center.x() - i_b_aabb.extents.x() - A_center_in_B.x() - A_X_extent_in_B.x()));
+    //LOG("Y_separation_in_B:%f", fabs(i_b_aabb.center.y() - i_b_aabb.extents.y() - A_center_in_B.y() - A_Y_extent_in_B.y()));
+
+    //LOG("t_open_X_in_A: %f", (i_a_aabb.center.x() + i_a_aabb.extents.x() - B_center_in_A.x() + B_X_extent_in_A.x()) / relative_vel_in_A.x());
+    //LOG("t_close_X_in_A: %f", (i_a_aabb.center.x() - i_a_aabb.extents.x() - B_center_in_A.x() - B_X_extent_in_A.x()) / relative_vel_in_A.x());
+
+    //LOG("t_open_Y_in_A: %f", (i_a_aabb.center.y() + i_a_aabb.extents.y() - B_center_in_A.y() + B_Y_extent_in_A.y()) / relative_vel_in_A.y());
+    //LOG("t_close_Y_in_A: %f", (i_a_aabb.center.y() - i_a_aabb.extents.y() - B_center_in_A.y() - B_Y_extent_in_A.y()) / relative_vel_in_A.y());
+
+    //LOG("t_open_X_in_B: %f", (i_b_aabb.center.x() + i_b_aabb.extents.x() - A_center_in_B.x() + A_X_extent_in_B.x()) / relative_vel_in_B.x());
+    //LOG("t_close_X_in_B: %f", (i_b_aabb.center.x() - i_b_aabb.extents.x() - A_center_in_B.x() - A_X_extent_in_B.x()) / relative_vel_in_B.x());
+
+    //LOG("t_open_Y_in_B: %f", (i_b_aabb.center.y() + i_b_aabb.extents.y() - A_center_in_B.y() + A_Y_extent_in_B.y()) / relative_vel_in_B.y());
+    //LOG("t_close_Y_in_B: %f", (i_b_aabb.center.y() - i_b_aabb.extents.y() - A_center_in_B.y() - A_Y_extent_in_B.y()) / relative_vel_in_B.y());
+
+    //LOG("relative_velocity_in_A: %f, %f", relative_vel_in_A.x(), relative_vel_in_A.y());
+    //LOG("relative_velocity_in_B: %f, %f", relative_vel_in_B.x(), relative_vel_in_B.y());
+    //LOG("DT:%f", i_dt);
+
+    LOG("******************************\n");
 }
 
 void Collider::AddPhysicsObject(const engine::memory::WeakPointer<PhysicsObject>& i_physics_object)
