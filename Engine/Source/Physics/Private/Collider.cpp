@@ -37,6 +37,12 @@ void Collider::Destroy()
 
 void Collider::Run(float i_dt)
 {
+    DetectCollisions(i_dt);
+    RespondToCollisions(i_dt);
+}
+
+void Collider::DetectCollisions(float i_dt)
+{
     for (size_t i = 0; i < num_physics_objects_; ++i)
     {
         // get physics object A
@@ -104,10 +110,10 @@ void Collider::Run(float i_dt)
                 const engine::math::Vec4D A_extents_in_B(fabs(A_X_extent_in_B.x()) + fabs(A_Y_extent_in_B.x()), fabs(A_X_extent_in_B.y()) + fabs(A_Y_extent_in_B.y()), 0.0f, 0.0f);
 
                 // for X-axis
-                is_X_separated_in_B = CheckSeparationForAxis(true, relative_vel_WtoB.x(), b_aabb.center.x(), b_aabb.extents.x(), A_center_in_B.x(), A_extents_in_B.x(), i_dt, t_close_X_in_B, t_open_X_in_B);
+                is_X_separated_in_B = CheckSeparationForAxis(relative_vel_WtoB.x(), b_aabb.center.x(), b_aabb.extents.x(), A_center_in_B.x(), A_extents_in_B.x(), i_dt, t_close_X_in_B, t_open_X_in_B);
 
                 // for Y-axis
-                is_Y_separated_in_B = CheckSeparationForAxis(true, relative_vel_WtoB.y(), b_aabb.center.y(), b_aabb.extents.y(), A_center_in_B.y(), A_extents_in_B.y(), i_dt, t_close_Y_in_B, t_open_Y_in_B);
+                is_Y_separated_in_B = CheckSeparationForAxis(relative_vel_WtoB.y(), b_aabb.center.y(), b_aabb.extents.y(), A_center_in_B.y(), A_extents_in_B.y(), i_dt, t_close_Y_in_B, t_open_Y_in_B);
 
             } // check for A in B's coordinate system    
 
@@ -134,10 +140,10 @@ void Collider::Run(float i_dt)
                 const engine::math::Vec4D B_extents_in_A(fabs(B_X_extent_in_A.x()) + fabs(B_Y_extent_in_A.x()), fabs(B_X_extent_in_A.y()) + fabs(B_Y_extent_in_A.y()), 0.0f, 0.0f);
 
                 // for X-axis
-                is_X_separated_in_A = CheckSeparationForAxis(true, relative_vel_WtoA.x(), a_aabb.center.x(), a_aabb.extents.x(), B_center_in_A.x(), B_extents_in_A.x(), i_dt, t_close_X_in_A, t_open_X_in_A);
+                is_X_separated_in_A = CheckSeparationForAxis(relative_vel_WtoA.x(), a_aabb.center.x(), a_aabb.extents.x(), B_center_in_A.x(), B_extents_in_A.x(), i_dt, t_close_X_in_A, t_open_X_in_A);
 
                 // for Y-axis
-                is_Y_separated_in_A = CheckSeparationForAxis(true, relative_vel_WtoA.y(), a_aabb.center.y(), a_aabb.extents.y(), B_center_in_A.y(), B_extents_in_A.y(), i_dt, t_close_Y_in_A, t_open_Y_in_A);
+                is_Y_separated_in_A = CheckSeparationForAxis(relative_vel_WtoA.y(), a_aabb.center.y(), a_aabb.extents.y(), B_center_in_A.y(), B_extents_in_A.y(), i_dt, t_close_Y_in_A, t_open_Y_in_A);
 
             } // check for B in A's coordinate system
 
@@ -151,11 +157,11 @@ void Collider::Run(float i_dt)
                 // if the latest t_close was after the earliest t_open, there was continuity of separation
                 if (t_close_latest > t_open_earliest)
                 {
-                    VERBOSE("Collision not found!");
+                    //VERBOSE("Collision not found!");
                 }
                 else
                 {
-                    VERBOSE("Collision found!");
+                    //VERBOSE("Collision found!");
 #ifdef BUILD_DEBUG
                     /*PrintDebugInformation(mat_WtoA,
                         mat_WtoB,
@@ -168,13 +174,35 @@ void Collider::Run(float i_dt)
                         i_dt);*/
 #endif
 
-                    physics_object_a->ApplyImpulse(physics_object_a->GetVelocity() * -5.0f);
-                    physics_object_b->ApplyImpulse(physics_object_b->GetVelocity() * -5.0f);
+                    // calculate the normal to the surface that collided
+                    engine::math::Vec3D normal = engine::math::Vec3D::ZERO;
+                    if (engine::math::FuzzyEquals(t_close_latest, t_close_X_in_B))
+                    {
+                        const engine::math::Vec4D B_X_in_W = mat_BtoW * engine::math::Vec4D(1.0f, 0.0f, 0.0f, 0.0f);
+                        normal.set(B_X_in_W.x(), B_X_in_W.y(), B_X_in_W.z());
+                    }
+                    else if (engine::math::FuzzyEquals(t_close_latest, t_close_Y_in_B))
+                    {
+                        const engine::math::Vec4D B_Y_in_W = mat_BtoW * engine::math::Vec4D(0.0f, 1.0f, 0.0f, 0.0f);
+                        normal.set(B_Y_in_W.x(), B_Y_in_W.y(), B_Y_in_W.z());
+                    }
+                    else if (engine::math::FuzzyEquals(t_close_latest, t_close_X_in_A))
+                    {
+                        const engine::math::Vec4D A_X_in_W = mat_AtoW * engine::math::Vec4D(1.0f, 0.0f, 0.0f, 0.0f);
+                        normal.set(A_X_in_W.x(), A_X_in_W.y(), A_X_in_W.z());
+                    }
+                    else if (engine::math::FuzzyEquals(t_close_latest, t_close_Y_in_A))
+                    {
+                        const engine::math::Vec4D A_Y_in_W = mat_AtoW * engine::math::Vec4D(0.0f, 1.0f, 0.0f, 0.0f);
+                        normal.set(A_Y_in_W.x(), A_Y_in_W.y(), A_Y_in_W.z());
+                    }
+
+                    collided_objects_.push_back({t_close_latest, normal, physics_object_a, physics_object_b});
                 }
             }
             else
             {
-                VERBOSE("Collision not found!");
+                //VERBOSE("Collision not found!");
             }
 
         } // end of inner for loop
@@ -183,7 +211,7 @@ void Collider::Run(float i_dt)
 
 }
 
-bool Collider::CheckSeparationForAxis(bool i_x_axis, const float i_relative_vel_WtoA, const float i_a_aabb_center, const float i_a_aabb_extents, const float i_B_center_in_A, const float i_B_extents_in_a, const float i_dt, float &o_t_close, float &o_t_open)
+bool Collider::CheckSeparationForAxis(const float i_relative_vel_WtoA, const float i_a_aabb_center, const float i_a_aabb_extents, const float i_B_center_in_A, const float i_B_extents_in_a, const float i_dt, float &o_t_close, float &o_t_open)
 {
     // treat zero velocities differently
     if (engine::math::FuzzyEquals(i_relative_vel_WtoA, 0.0f))
@@ -210,6 +238,20 @@ bool Collider::CheckSeparationForAxis(bool i_x_axis, const float i_relative_vel_
         // if t_close > i_dt, the separation will occur in the future
         return (o_t_open < 0 || o_t_close > i_dt);
     }
+}
+
+void Collider::RespondToCollisions(float i_dt)
+{
+    const size_t num_collided_objects = collided_objects_.size();
+
+    for (size_t i = 0; i < num_collided_objects; ++i)
+    {
+        CollisionPair& collision_pair = collided_objects_[i];
+        collision_pair.object_a.Lock()->RespondToCollision(collision_pair.normal);
+        collision_pair.object_b.Lock()->RespondToCollision(collision_pair.normal);
+    }
+
+    collided_objects_.clear();
 }
 
 #ifdef BUILD_DEBUG

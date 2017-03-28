@@ -6,6 +6,7 @@
 #include <vector>
 
 // engine includes
+#include "Math\Vec3D.h"
 #include "Memory\WeakPointer.h"
 
 // forward declarations
@@ -14,7 +15,6 @@ namespace math {
     struct AABB;
     class Mat44;
     class Transform;
-    class Vec3D;
 }
 namespace physics {
     class PhysicsObject;
@@ -23,6 +23,14 @@ namespace physics {
 
 namespace engine {
 namespace physics {
+
+struct CollisionPair
+{
+    float                                                       time;
+    engine::math::Vec3D                                         normal;
+    engine::memory::WeakPointer<PhysicsObject>                  object_a;
+    engine::memory::WeakPointer<PhysicsObject>                  object_b;
+};
 
 class Collider
 {
@@ -41,8 +49,10 @@ public:
     static inline Collider* Get();
 
     void Run(float i_dt);
+    void DetectCollisions(float i_dt);
+    void RespondToCollisions(float i_dt);
 
-    bool CheckSeparationForAxis(bool i_x_axis, const float i_relative_vel_WtoA, const float i_a_aabb_center, const float i_a_aabb_extents, const float i_B_center_in_A, const float i_B_extents_in_a, const float i_dt, float &o_t_close, float &o_t_open);
+    bool CheckSeparationForAxis(const float i_relative_vel_WtoA, const float i_a_aabb_center, const float i_a_aabb_extents, const float i_B_center_in_A, const float i_B_extents_in_a, const float i_dt, float &o_t_close, float &o_t_open);
 
     // add and remove physics objects
     void AddPhysicsObject(const engine::memory::WeakPointer<engine::physics::PhysicsObject>& i_physics_object);
@@ -63,6 +73,7 @@ public:
 private:
     size_t                                                                          num_physics_objects_;
     std::vector<engine::memory::WeakPointer<PhysicsObject>>                         physics_objects_;
+    std::vector<CollisionPair>                                                      collided_objects_;
     std::mutex                                                                      collider_mutex_;
 
 }; // class Collider

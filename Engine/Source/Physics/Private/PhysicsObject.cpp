@@ -22,13 +22,14 @@ const float PhysicsObject::MAX_COEFF_DRAG = 0.9f;
 const float PhysicsObject::MIN_VELOCITY_LENGTH_SQUARED = 0.000075f;
 const float PhysicsObject::MAX_VELOCITY_LENGTH_SQUARED = 6.00f;
 
-PhysicsObject::PhysicsObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass, float i_drag, bool i_is_collidable) : is_awake_(false),
-    is_collidable_(i_is_collidable),
-	game_object_(i_game_object),
+PhysicsObject::PhysicsObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass, float i_drag, bool i_is_collidable) : game_object_(i_game_object),
+	curr_velocity_(engine::math::Vec3D::ZERO),
 	mass_(i_mass),
 	inverse_mass_(0.0f),
 	coeff_drag_(i_drag),
-	curr_velocity_(engine::math::Vec3D::ZERO)
+    is_awake_(false),
+    is_collidable_(i_is_collidable),
+    done_collision_response_(false)
 {
 	// validate inputs
 	ASSERT(game_object_);
@@ -51,12 +52,14 @@ PhysicsObject::~PhysicsObject()
 #endif
 }
 
-PhysicsObject::PhysicsObject(const PhysicsObject& i_copy) : is_awake_(i_copy.is_awake_),
-	game_object_(i_copy.game_object_),
+PhysicsObject::PhysicsObject(const PhysicsObject& i_copy) : game_object_(i_copy.game_object_),
+	curr_velocity_(i_copy.curr_velocity_),
 	mass_(i_copy.mass_),
 	inverse_mass_(i_copy.inverse_mass_),
 	coeff_drag_(i_copy.coeff_drag_),
-	curr_velocity_(i_copy.curr_velocity_)
+    is_awake_(i_copy.is_awake_),
+    is_collidable_(i_copy.is_collidable_),
+    done_collision_response_(i_copy.done_collision_response_)
 {
 #ifdef ENABLE_DEBUG_DRAW
     debug_draw_data_ = nullptr;
@@ -96,6 +99,8 @@ void PhysicsObject::Update(float i_dt)
 
 	// update game object
 	game_object->SetPosition(new_position);
+
+    done_collision_response_ = false;
 
 #ifdef ENABLE_DEBUG_DRAW
     DrawDebugData(i_dt);
@@ -144,6 +149,21 @@ void PhysicsObject::ApplyImpulse(const engine::math::Vec3D& i_impulse)
 	engine::math::Vec3D new_velocity = curr_velocity_ + (i_impulse * inverse_mass_);
 	// limit max velocity
 	curr_velocity_ = new_velocity.LengthSquared() > MAX_VELOCITY_LENGTH_SQUARED ? curr_velocity_ : new_velocity;
+}
+
+void PhysicsObject::RespondToCollision(const engine::math::Vec3D& collision_normal)
+{
+    if (done_collision_response_)
+    {
+        return;
+    }
+
+    done_collision_response_ = true;
+
+    // calculate reflection velocity
+    engine::math::Vec3D reflection_velocity = curr_velocity_ - (collision_normal * engine::math::DotProduct(curr_velocity_, collision_normal) * 2);
+
+    curr_velocity_ = reflection_velocity;
 }
 
 } // namespace physics

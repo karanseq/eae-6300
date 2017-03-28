@@ -39,6 +39,7 @@ public:
 	// functions
 	void Update(float i_dt);
 	void ApplyImpulse(const engine::math::Vec3D& i_impulse);
+    void RespondToCollision(const engine::math::Vec3D& collision_normal);
 
     // debug draw functions
 #ifdef ENABLE_DEBUG_DRAW
@@ -77,13 +78,14 @@ public:
 	static const float														MAX_VELOCITY_LENGTH_SQUARED;
 
 private:
-	bool																	is_awake_;
-    bool                                                                    is_collidable_;
 	engine::memory::WeakPointer<engine::gameobject::GameObject>				game_object_;
+	engine::math::Vec3D														curr_velocity_;
 	float																	mass_;
 	float																	inverse_mass_;
 	float																	coeff_drag_;
-	engine::math::Vec3D														curr_velocity_;
+	bool																	is_awake_;
+    bool                                                                    is_collidable_;
+    bool                                                                    done_collision_response_;
 
 #ifdef ENABLE_DEBUG_DRAW
     DebugDrawData*                                                          debug_draw_data_;

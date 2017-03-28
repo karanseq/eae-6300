@@ -17,10 +17,13 @@ inline PhysicsObject& PhysicsObject::operator=(const PhysicsObject& i_copy)
 	if (this != &i_copy)
 	{
 		game_object_ = i_copy.game_object_;
+		curr_velocity_ = i_copy.curr_velocity_;
 		mass_ = i_copy.mass_;
 		inverse_mass_ = i_copy.inverse_mass_;
 		coeff_drag_ = i_copy.coeff_drag_;
-		curr_velocity_ = i_copy.curr_velocity_;
+        is_awake_ = i_copy.is_awake_;
+        is_collidable_ = i_copy.is_collidable_;
+        done_collision_response_ = i_copy.done_collision_response_;
 #ifdef ENABLE_DEBUG_DRAW
         debug_draw_data_ = nullptr;
 #endif

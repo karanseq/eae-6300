@@ -65,13 +65,13 @@ void Player::Update(float i_dt)
 	actor_->GetGameObject()->SetPosition(position);
 
     // rotation based on velocity
-    engine::math::Vec3D normalized_velocity = actor_->GetPhysicsObject().Lock()->GetVelocity().Normalize();
+    /*engine::math::Vec3D normalized_velocity = actor_->GetPhysicsObject().Lock()->GetVelocity().Normalize();
     if (!normalized_velocity.IsZero())
     {
         engine::math::Vec3D rotation = actor_->GetGameObject()->GetRotation();
         rotation.z(atan2f(normalized_velocity.y(), normalized_velocity.x()) - M_PI * 0.5f);
         actor_->GetGameObject()->SetRotation(rotation);
-    }
+    }*/
 }
 
 void Player::OnKeyPressed(unsigned int i_key_id)
