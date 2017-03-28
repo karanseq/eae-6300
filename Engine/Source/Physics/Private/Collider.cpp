@@ -103,67 +103,11 @@ void Collider::Run(float i_dt)
                 const engine::math::Vec4D A_Y_extent_in_B = mat_AtoB * engine::math::Vec4D(0.0f, a_aabb.extents.y(), 0.0f, 0.0f);
                 const engine::math::Vec4D A_extents_in_B(fabs(A_X_extent_in_B.x()) + fabs(A_Y_extent_in_B.x()), fabs(A_X_extent_in_B.y()) + fabs(A_Y_extent_in_B.y()), 0.0f, 0.0f);
 
-                // for X- axis
-                {
-                    // treat zero velocities differently
-                    if (engine::math::FuzzyEquals(relative_vel_WtoB.x(), 0.0f))
-                    {
-                        // separation check without velocities
-                        //is_X_separated_in_B = fabs(A_center_in_B.x() - b_aabb.center.x()) > A_X_extent_in_B.x() + b_aabb.extents.x();
-                        is_X_separated_in_B = fabs(A_center_in_B.x() - b_aabb.center.x()) > A_extents_in_B.x() + b_aabb.extents.x();
-                    }
-                    else
-                    {
-                        // calculate separation close and open times
-                        t_close_X_in_B = (b_aabb.center.x() - b_aabb.extents.x() - A_center_in_B.x() - A_extents_in_B.x()) / relative_vel_WtoB.x();
-                        t_open_X_in_B = (b_aabb.center.x() + b_aabb.extents.x() - A_center_in_B.x() + A_extents_in_B.x()) / relative_vel_WtoB.x();
+                // for X-axis
+                is_X_separated_in_B = CheckSeparationForAxis(true, relative_vel_WtoB.x(), b_aabb.center.x(), b_aabb.extents.x(), A_center_in_B.x(), A_extents_in_B.x(), i_dt, t_close_X_in_B, t_open_X_in_B);
 
-                        // t_close must be less than t_open
-                        // if not, swap them
-                        if (t_open_X_in_B < t_close_X_in_B)
-                        {
-                            float t_swap = t_open_X_in_B;
-                            t_open_X_in_B = t_close_X_in_B;
-                            t_close_X_in_B = t_swap;
-                        }
-
-                        // if t_open < 0, the separation occurred in the past
-                        // if t_close > i_dt, the separation will occur in the future
-                        is_X_separated_in_B = t_open_X_in_B < 0 || t_close_X_in_B > i_dt;
-                    }
-
-                } // for X- axis
-
-                // for Y-axis...only if no separation was found on the X-axis
-                if (!is_X_separated_in_B)
-                {
-                    // treat zero velocities differently
-                    if (engine::math::FuzzyEquals(relative_vel_WtoB.y(), 0.0f))
-                    {
-                        // separation check without velocities
-                        is_Y_separated_in_B = fabs(A_center_in_B.y() - b_aabb.center.y()) > A_extents_in_B.y() + b_aabb.extents.y();
-                    }
-                    else
-                    {
-                        // calculate separation close and open times
-                        t_close_Y_in_B = (b_aabb.center.y() - b_aabb.extents.y() - A_center_in_B.y() - A_extents_in_B.y()) / relative_vel_WtoB.y();
-                        t_open_Y_in_B = (b_aabb.center.y() + b_aabb.extents.y() - A_center_in_B.y() + A_extents_in_B.y()) / relative_vel_WtoB.y();
-
-                        // t_close must be less than t_open
-                        // if not, swap them
-                        if (t_open_Y_in_B < t_close_Y_in_B)
-                        {
-                            float t_swap = t_open_Y_in_B;
-                            t_open_Y_in_B = t_close_Y_in_B;
-                            t_close_Y_in_B = t_swap;
-                        }
-
-                        // if t_open < 0, the separation occurred in the past
-                        // if t_close > i_dt, the separation will occur in the future
-                        is_Y_separated_in_B = t_open_Y_in_B < 0 || t_close_Y_in_B > i_dt;
-                    }
-
-                } // for Y-axis
+                // for Y-axis
+                is_Y_separated_in_B = CheckSeparationForAxis(true, relative_vel_WtoB.y(), b_aabb.center.y(), b_aabb.extents.y(), A_center_in_B.y(), A_extents_in_B.y(), i_dt, t_close_Y_in_B, t_open_Y_in_B);
 
             } // check for A in B's coordinate system    
 
@@ -190,64 +134,10 @@ void Collider::Run(float i_dt)
                 const engine::math::Vec4D B_extents_in_A(fabs(B_X_extent_in_A.x()) + fabs(B_Y_extent_in_A.x()), fabs(B_X_extent_in_A.y()) + fabs(B_Y_extent_in_A.y()), 0.0f, 0.0f);
 
                 // for X-axis
-                {
-                    // treat zero velocities differently
-                    if (engine::math::FuzzyEquals(relative_vel_WtoA.x(), 0.0f))
-                    {
-                        // separation check without velocities
-                        is_X_separated_in_A = fabs(a_aabb.center.x() - B_center_in_A.x()) > a_aabb.extents.x() + B_extents_in_A.x();
-                    }
-                    else
-                    {
-                        // calculate separation close and open times
-                        t_close_X_in_A = (a_aabb.center.x() - a_aabb.extents.x() - B_center_in_A.x() - B_extents_in_A.x()) / relative_vel_WtoA.x();
-                        t_open_X_in_A = (a_aabb.center.x() + a_aabb.extents.x() - B_center_in_A.x() + B_extents_in_A.x()) / relative_vel_WtoA.x();
+                is_X_separated_in_A = CheckSeparationForAxis(true, relative_vel_WtoA.x(), a_aabb.center.x(), a_aabb.extents.x(), B_center_in_A.x(), B_extents_in_A.x(), i_dt, t_close_X_in_A, t_open_X_in_A);
 
-                        // t_close must be less than t_open
-                        // if not, swap them
-                        if (t_open_X_in_A < t_close_X_in_A)
-                        {
-                            float t_swap = t_open_X_in_A;
-                            t_open_X_in_A = t_close_X_in_A;
-                            t_close_X_in_A = t_swap;
-                        }
-
-                        // if t_open < 0, the separation occurred in the past
-                        // if t_close > i_dt, the separation will occur in the future
-                        is_X_separated_in_A = t_open_X_in_A < 0 || t_close_X_in_A > i_dt;
-                    }
-                }
-
-                // for Y-axis...only if no separation was found on the X-axis
-                if (!is_X_separated_in_A)
-                {
-                    // treat zero velocities differently
-                    if (engine::math::FuzzyEquals(relative_vel_WtoA.y(), 0.0f))
-                    {
-                        // separation check without velocities
-                        is_Y_separated_in_A = fabs(a_aabb.center.y() - B_center_in_A.y()) > a_aabb.extents.y() + B_extents_in_A.y();
-                    }
-                    else
-                    {
-                        // calculate separation close and open times
-                        t_close_Y_in_A = (a_aabb.center.y() - a_aabb.extents.y() - B_center_in_A.y() - B_extents_in_A.y()) / relative_vel_WtoA.y();
-                        t_open_Y_in_A = (a_aabb.center.y() + a_aabb.extents.y() - B_center_in_A.y() + B_extents_in_A.y()) / relative_vel_WtoA.y();
-
-                        // t_close must be less than t_open
-                        // if not, swap them
-                        if (t_open_Y_in_A < t_close_Y_in_A)
-                        {
-                            float t_swap = t_open_Y_in_A;
-                            t_open_Y_in_A = t_close_Y_in_A;
-                            t_close_Y_in_A = t_swap;
-                        }
-
-                        // if t_open < 0, the separation occurred in the past
-                        // if t_close > i_dt, the separation will occur in the future
-                        is_Y_separated_in_A = t_open_Y_in_A < 0 || t_close_Y_in_A > i_dt;
-                    }
-
-                }
+                // for Y-axis
+                is_Y_separated_in_A = CheckSeparationForAxis(true, relative_vel_WtoA.y(), a_aabb.center.y(), a_aabb.extents.y(), B_center_in_A.y(), B_extents_in_A.y(), i_dt, t_close_Y_in_A, t_open_Y_in_A);
 
             } // check for B in A's coordinate system
 
@@ -291,6 +181,35 @@ void Collider::Run(float i_dt)
 
     } // end of outer for loop
 
+}
+
+bool Collider::CheckSeparationForAxis(bool i_x_axis, const float i_relative_vel_WtoA, const float i_a_aabb_center, const float i_a_aabb_extents, const float i_B_center_in_A, const float i_B_extents_in_a, const float i_dt, float &o_t_close, float &o_t_open)
+{
+    // treat zero velocities differently
+    if (engine::math::FuzzyEquals(i_relative_vel_WtoA, 0.0f))
+    {
+        // separation check without velocities
+        return (fabs(i_a_aabb_center - i_B_center_in_A) > i_a_aabb_extents + i_B_extents_in_a);
+    }
+    else
+    {
+        // calculate separation close and open times
+        o_t_close = (i_a_aabb_center - i_a_aabb_extents - i_B_center_in_A - i_B_extents_in_a) / i_relative_vel_WtoA;
+        o_t_open = (i_a_aabb_center + i_a_aabb_extents - i_B_center_in_A + i_B_extents_in_a) / i_relative_vel_WtoA;
+
+        // t_close must be less than t_open
+        // if not, swap them
+        if (o_t_open < o_t_close)
+        {
+            float t_swap = o_t_open;
+            o_t_open = o_t_close;
+            o_t_close = t_swap;
+        }
+
+        // if t_open < 0, the separation occurred in the past
+        // if t_close > i_dt, the separation will occur in the future
+        return (o_t_open < 0 || o_t_close > i_dt);
+    }
 }
 
 #ifdef BUILD_DEBUG

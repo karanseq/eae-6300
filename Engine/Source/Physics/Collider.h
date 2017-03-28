@@ -42,6 +42,8 @@ public:
 
     void Run(float i_dt);
 
+    bool CheckSeparationForAxis(bool i_x_axis, const float i_relative_vel_WtoA, const float i_a_aabb_center, const float i_a_aabb_extents, const float i_B_center_in_A, const float i_B_extents_in_a, const float i_dt, float &o_t_close, float &o_t_open);
+
     // add and remove physics objects
     void AddPhysicsObject(const engine::memory::WeakPointer<engine::physics::PhysicsObject>& i_physics_object);
     void RemovePhysicsObject(const engine::memory::WeakPointer<engine::physics::PhysicsObject>& i_physics_object);
