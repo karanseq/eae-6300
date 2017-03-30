@@ -5,16 +5,13 @@
 #include "GameObject\ActorCreator.h"
 #include "Input\KeyboardEventDispatcher.h"
 #include "Logger\Logger.h"
-#include "Physics\Physics.h"
-#include "Renderer\Renderer.h"
 #include "Time\Updater.h"
 
 // game includes
 #include "Game\Game.h"
 #include "Game\GameData.h"
 
-namespace game
-{
+namespace game {
 
 // static member initialization
 const float Player::DEFAULT_MASS = 50.0f;

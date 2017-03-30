@@ -1,33 +1,8 @@
 ActorList =
 {
 	{
-		name = "Ramp",
-		type = "Monster",
-
-		bounding_box = { 0.0, 0.0, 192.0, 82.0 },
-		transform = 
-		{
-			position = { 0.0, 0.0, 0.0 },
-			rotation = { 0.0, 0.0, 30.0 },
-			scale = { 1.0, 1.0, 1.0 }
-		},
-	
-
-		physics_settings = 
-		{
-			mass = 50.0,
-			drag = 0.02,
-			collide = true
-		},
-
-		render_settings = 
-		{
-			sprite_name = "Data\\cjtrapm01.dds"
-		}
-	},
-	{
-		name = "Inky",
-		type = "Monster",
+		name = "Asteroid_01",
+		type = "Asteroid",
 
 		bounding_box = { 0.0, 0.0, 22.0, 20.0 },
 		transform = 
@@ -39,7 +14,7 @@ ActorList =
 		physics_settings = 
 		{
 			mass = 50.0,
-			drag = 0.02,
+			drag = 0.025,
 			collide = true
 		},
 
@@ -49,8 +24,8 @@ ActorList =
 		}
 	},
 	{
-		name = "Binky",
-		type = "Monster",
+		name = "Asteroid_02",
+		type = "Asteroid",
 
 		bounding_box = { 0.0, 0.0, 22.0, 20.0 },
 		transform = 
@@ -62,7 +37,7 @@ ActorList =
 		physics_settings = 
 		{
 			mass = 50.0,
-			drag = 0.02,
+			drag = 0.03,
 			collide = true
 		},
 
@@ -72,8 +47,8 @@ ActorList =
 		}
 	},
 	{
-		name = "Pinky",
-		type = "Monster",
+		name = "Asteroid_03",
+		type = "Asteroid",
 
 		bounding_box = { 0.0, 0.0, 22.0, 20.0 },
 		transform = 
@@ -85,7 +60,7 @@ ActorList =
 		physics_settings = 
 		{
 			mass = 50.0,
-			drag = 0.02,
+			drag = 0.025,
 			collide = true
 		},
 
@@ -95,8 +70,8 @@ ActorList =
 		}
 	},
 	{
-		name = "Clyde",
-		type = "Monster",
+		name = "Asteroid_04",
+		type = "Asteroid",
 
 		bounding_box = { 0.0, 0.0, 22.0, 20.0 },
 		transform = 
@@ -108,7 +83,99 @@ ActorList =
 		physics_settings = 
 		{
 			mass = 50.0,
-			drag = 0.02,
+			drag = 0.03,
+			collide = true
+		},
+
+		render_settings = 
+		{
+			sprite_name = "Data\\enemy_01.dds"
+		}
+	},
+	{
+		name = "Asteroid_05",
+		type = "Asteroid",
+
+		bounding_box = { 0.0, 0.0, 22.0, 20.0 },
+		transform = 
+		{
+			position = { -300.0, -300.0, 0.0 },
+		},
+	
+
+		physics_settings = 
+		{
+			mass = 50.0,
+			drag = 0.03,
+			collide = true
+		},
+
+		render_settings = 
+		{
+			sprite_name = "Data\\enemy_01.dds"
+		}
+	},
+	{
+		name = "Asteroid_06",
+		type = "Asteroid",
+
+		bounding_box = { 0.0, 0.0, 22.0, 20.0 },
+		transform = 
+		{
+			position = { -300.0, 300.0, 0.0 },
+		},
+	
+
+		physics_settings = 
+		{
+			mass = 50.0,
+			drag = 0.03,
+			collide = true
+		},
+
+		render_settings = 
+		{
+			sprite_name = "Data\\enemy_01.dds"
+		}
+	},
+	{
+		name = "Asteroid_07",
+		type = "Asteroid",
+
+		bounding_box = { 0.0, 0.0, 22.0, 20.0 },
+		transform = 
+		{
+			position = { 300.0, -300.0, 0.0 },
+		},
+	
+
+		physics_settings = 
+		{
+			mass = 50.0,
+			drag = 0.03,
+			collide = true
+		},
+
+		render_settings = 
+		{
+			sprite_name = "Data\\enemy_01.dds"
+		}
+	},
+	{
+		name = "Asteroid_08",
+		type = "Asteroid",
+
+		bounding_box = { 0.0, 0.0, 22.0, 20.0 },
+		transform = 
+		{
+			position = { 300.0, 300.0, 0.0 },
+		},
+	
+
+		physics_settings = 
+		{
+			mass = 50.0,
+			drag = 0.03,
 			collide = true
 		},
 

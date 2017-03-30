@@ -13,6 +13,7 @@
 #include "Time\Updater.h"
 
 // game includes
+#include "Game\Asteroid.h"
 #include "Game\GameData.h"
 #include "Game\GameUtils.h"
 #include "Game\Player.h"
@@ -82,9 +83,7 @@ Game::Game() : game_state_(GameStates::kGameStateBegin),
 Game::~Game()
 {
     DestroyPlayers();
-
-	// delete the monsters
-	actors_.clear();
+    DestroyAsteroids();
 
 	// tell the engine we no longer want to be ticked
 	engine::time::Updater::Get()->RemoveTickable(this);
@@ -107,8 +106,14 @@ bool Game::Init()
 	// create the player
 	CreatePlayers();
 
-	// create the monsters
-	engine::gameobject::ActorCreator::CreateActorsFromFile(GameData::MONSTERS_LUA_FILE_NAME, actors_);
+	// create the asteroids
+    CreateAsteroids();
+
+    // create a dummy actor
+    engine::memory::SharedPointer<engine::gameobject::Actor> actor;
+    engine::gameobject::ActorCreator::CreateActorFromFile(engine::data::PooledString(GameData::BLOCK_LUA_FILE_NAME), actor);
+    ASSERT(actor);
+    actors_.push_back(actor);
 
 	// register for update events
 	engine::time::Updater::Get()->AddTickable(this);
@@ -150,9 +155,12 @@ void Game::Update(float dt)
 	}
 
     // temporary code to continuously rotate an arbitrary actor
-    engine::math::Vec3D rotation = actors_[0]->GetGameObject()->GetRotation();
-    rotation.z(rotation.z() + M_PI * 0.001f);
-    actors_[0]->GetGameObject()->SetRotation(rotation);
+    if (!actors_.empty())
+    {
+        engine::math::Vec3D rotation = actors_[0]->GetGameObject()->GetRotation();
+        rotation.z(rotation.z() + M_PI * 0.0005f);
+        actors_[0]->GetGameObject()->SetRotation(rotation);
+    }
 }
 
 void Game::OnKeyPressed(unsigned int i_key_id)
@@ -185,6 +193,26 @@ void Game::DestroyPlayers()
 {
     SAFE_DELETE(player_01_);
     SAFE_DELETE(player_02_);
+}
+
+void Game::CreateAsteroids()
+{
+    std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>> actors;
+    engine::gameobject::ActorCreator::CreateActorsFromFile(GameData::MONSTERS_LUA_FILE_NAME, actors);
+
+    for (const auto& actor : actors)
+    {
+        asteroids_.push_back(new Asteroid(actor));
+    }
+}
+
+void Game::DestroyAsteroids()
+{
+    for (auto& asteroid : asteroids_)
+    {
+        delete asteroid;
+    }
+    asteroids_.clear();
 }
 
 void Game::CreateActor(const engine::data::PooledString& i_file_name)

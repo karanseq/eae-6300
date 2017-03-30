@@ -51,6 +51,6 @@ private:
 
 }; // class Player
 
-} // namespace monsterchase
+} // namespace game
 
 #endif // PLAYER_H_
