@@ -88,6 +88,12 @@
     <Filter Include="Source Files\Jobs">
       <UniqueIdentifier>{aa7cbe11-ad85-4c74-adff-543e586e225d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Events">
+      <UniqueIdentifier>{d62967c4-c0b1-4816-b853-10e39d9deccf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Events">
+      <UniqueIdentifier>{a7d3e3c3-a386-45dc-9b2b-cc259edac437}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -258,18 +264,6 @@
     <ClInclude Include="Source\Input\Input.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Input\KeyboardEventDispatcher.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Input\KeyboardEvent.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Input\KeyboardEvent-inl.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Input\KeyboardEventDispatcher-inl.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameObject\ActorCreator.h">
       <Filter>Header Files\GameObject</Filter>
     </ClInclude>
@@ -344,6 +338,15 @@
     </ClInclude>
     <ClInclude Include="Source\Physics\DebugDraw-inl.h">
       <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Events\EventDispatcher.h">
+      <Filter>Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Events\KeyboardEvent.h">
+      <Filter>Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Events\KeyboardEvent-inl.h">
+      <Filter>Header Files\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -422,12 +425,6 @@
     <ClCompile Include="Source\Input\Private\Input.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Input\Private\KeyboardEventDispatcher.cpp">
-      <Filter>Source Files\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Input\Private\KeyboardEvent.cpp">
-      <Filter>Source Files\Input</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameObject\Private\ActorCreator.cpp">
       <Filter>Source Files\GameObject</Filter>
     </ClCompile>
@@ -472,6 +469,12 @@
     </ClCompile>
     <ClCompile Include="Source\Physics\Private\DebugDraw.cpp">
       <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Events\Private\EventDispatcher.cpp">
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Events\Private\KeyboardEvent.cpp">
+      <Filter>Source Files\Events</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

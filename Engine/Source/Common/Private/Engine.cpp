@@ -7,6 +7,7 @@
 
 // engine includes
 #include "Data\StringPool.h"
+#include "Events\EventDispatcher.h"
 #include "Input\Input.h"
 #include "Jobs\JobSystem.h"
 #include "Memory\AllocatorUtil.h"
@@ -36,6 +37,9 @@ bool StartUp()
 
 	// initialize input
 	engine::input::StartUp();
+
+    // create event dispatcher
+    engine::events::EventDispatcher::Create();
 
 	// create updater
 	engine::time::Updater::Create();
@@ -99,6 +103,9 @@ void Shutdown()
 
 	// delete updater
 	engine::time::Updater::Destroy();
+
+    // delete the event dispatcher
+    engine::events::EventDispatcher::Destroy();
 
 	// shutdown the input
 	engine::input::Shutdown();

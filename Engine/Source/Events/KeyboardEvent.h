@@ -8,7 +8,7 @@
 #include "Memory\SharedPointer.h"
 
 namespace engine {
-namespace input {
+namespace events {
 
 class KeyboardEvent
 {
@@ -31,11 +31,11 @@ private:
 	std::function<void(unsigned int)> on_key_pressed_;
 	std::function<void(unsigned int)> on_key_released_;
 
-	friend class KeyboardEventDispatcher;
+	friend class EventDispatcher;
 
 }; // class KeyboardEvent
 
-} // namespace input
+} // namespace events
 } // namespace engine
 
 #include "KeyboardEvent-inl.h"

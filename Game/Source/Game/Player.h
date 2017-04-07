@@ -3,7 +3,7 @@
 
 // engine includes
 #include "GameObject\Actor.h"
-#include "Input\KeyboardEvent.h"
+#include "Events\KeyboardEvent.h"
 #include "Memory\SharedPointer.h"
 #include "Time\InterfaceTickable.h"
 
@@ -47,7 +47,7 @@ private:
 	bool																			is_down_pressed_;
 
 	engine::memory::SharedPointer<engine::gameobject::Actor>						actor_;
-	engine::memory::SharedPointer<engine::input::KeyboardEvent>						keyboard_event_;
+	engine::memory::SharedPointer<engine::events::KeyboardEvent>					keyboard_event_;
 
 }; // class Player
 

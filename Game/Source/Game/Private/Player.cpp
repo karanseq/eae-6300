@@ -3,7 +3,7 @@
 // engine includes
 #include "Assert\Assert.h"
 #include "GameObject\ActorCreator.h"
-#include "Input\KeyboardEventDispatcher.h"
+#include "Events\EventDispatcher.h"
 #include "Logger\Logger.h"
 #include "Time\Updater.h"
 
@@ -22,7 +22,7 @@ Player::Player() : is_left_pressed_(false),
 	is_up_pressed_(false),
 	is_down_pressed_(false),
 	actor_(nullptr),
-	keyboard_event_(engine::input::KeyboardEvent::Create())
+	keyboard_event_(engine::events::KeyboardEvent::Create())
 {
 	engine::gameobject::ActorCreator::CreateActorFromFile(GameData::PLAYER_LUA_FILE_NAME, actor_);
 
@@ -33,12 +33,12 @@ Player::Player() : is_left_pressed_(false),
 	ASSERT(keyboard_event_);
 	keyboard_event_->SetOnKeyPressed(std::bind(&Player::OnKeyPressed, this, std::placeholders::_1));
 	keyboard_event_->SetOnKeyReleased(std::bind(&Player::OnKeyReleased, this, std::placeholders::_1));
-	engine::input::KeyboardEventDispatcher::Get()->AddListener(keyboard_event_);
+	engine::events::EventDispatcher::Get()->AddKeyboardEventListener(keyboard_event_);
 }
 
 Player::~Player()
 {
-	engine::input::KeyboardEventDispatcher::Get()->RemoveListener(keyboard_event_);
+    engine::events::EventDispatcher::Get()->RemoveKeyboardEventListener(keyboard_event_);
 	keyboard_event_ = nullptr;
 
 	engine::time::Updater::Get()->RemoveTickable(this);
@@ -62,13 +62,13 @@ void Player::Update(float i_dt)
 	actor_->GetGameObject()->SetPosition(position);
 
     // rotation based on velocity
-    /*engine::math::Vec3D normalized_velocity = actor_->GetPhysicsObject().Lock()->GetVelocity().Normalize();
+    engine::math::Vec3D normalized_velocity = actor_->GetPhysicsObject().Lock()->GetVelocity().Normalize();
     if (!normalized_velocity.IsZero())
     {
         engine::math::Vec3D rotation = actor_->GetGameObject()->GetRotation();
         rotation.z(atan2f(normalized_velocity.y(), normalized_velocity.x()) - M_PI * 0.5f);
         actor_->GetGameObject()->SetRotation(rotation);
-    }*/
+    }
 }
 
 void Player::OnKeyPressed(unsigned int i_key_id)

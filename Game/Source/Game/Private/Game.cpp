@@ -5,7 +5,7 @@
 #include "Common\Engine.h"
 #include "Common\HelperMacros.h"
 #include "GameObject\ActorCreator.h"
-#include "Input\KeyboardEventDispatcher.h"
+#include "Events\EventDispatcher.h"
 #include "Jobs\CreateActorDeleteFileDataJob.h"
 #include "Jobs\FileLoadJob.h"
 #include "Jobs\JobSystem.h"
@@ -75,20 +75,23 @@ void Game::Destroy()
 Game::Game() : game_state_(GameStates::kGameStateBegin),
 	player_01_(nullptr),
     player_02_(nullptr),
-	keyboard_event_(engine::input::KeyboardEvent::Create())
+	keyboard_event_(engine::events::KeyboardEvent::Create())
 {
 	ASSERT(keyboard_event_);
+
+    srand(static_cast<unsigned int>(time(0)));
 }
 
 Game::~Game()
 {
     DestroyPlayers();
     DestroyAsteroids();
+    actors_.clear();
 
 	// tell the engine we no longer want to be ticked
 	engine::time::Updater::Get()->RemoveTickable(this);
 
-	engine::input::KeyboardEventDispatcher::Get()->RemoveListener(keyboard_event_);
+    engine::events::EventDispatcher::Get()->RemoveKeyboardEventListener(keyboard_event_);
 }
 
 bool Game::Init()
@@ -109,18 +112,12 @@ bool Game::Init()
 	// create the asteroids
     CreateAsteroids();
 
-    // create a dummy actor
-    engine::memory::SharedPointer<engine::gameobject::Actor> actor;
-    engine::gameobject::ActorCreator::CreateActorFromFile(engine::data::PooledString(GameData::BLOCK_LUA_FILE_NAME), actor);
-    ASSERT(actor);
-    actors_.push_back(actor);
-
 	// register for update events
 	engine::time::Updater::Get()->AddTickable(this);
 
 	// register for key events
 	keyboard_event_->SetOnKeyPressed(std::bind(&Game::OnKeyPressed, this, std::placeholders::_1));
-	engine::input::KeyboardEventDispatcher::Get()->AddListener(keyboard_event_);
+    engine::events::EventDispatcher::Get()->AddKeyboardEventListener(keyboard_event_);
 
 	game_state_ = GameStates::kGameStateRunning;
 
@@ -153,14 +150,6 @@ void Game::Update(float dt)
 		actors_.insert(actors_.end(), new_actors_.begin(), new_actors_.end());
 		new_actors_.clear();
 	}
-
-    // temporary code to continuously rotate an arbitrary actor
-    if (!actors_.empty())
-    {
-        engine::math::Vec3D rotation = actors_[0]->GetGameObject()->GetRotation();
-        rotation.z(rotation.z() + M_PI * 0.0005f);
-        actors_[0]->GetGameObject()->SetRotation(rotation);
-    }
 }
 
 void Game::OnKeyPressed(unsigned int i_key_id)
@@ -237,6 +226,9 @@ void Game::OnActorCreated(engine::memory::SharedPointer<engine::gameobject::Acto
 {
 	// validate inputs
 	ASSERT(i_actor);
+
+    // give this actor a random position
+    i_actor->GetGameObject()->SetPosition(GameUtils::GetRandomVec3D(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT, 0));
 
 	std::lock_guard<std::mutex> lock(new_actors_mutex_);
 	new_actors_.push_back(i_actor);

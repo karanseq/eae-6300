@@ -9,7 +9,7 @@
 // engine includes
 #include "GameObject\Actor.h"
 #include "Memory\SharedPointer.h"
-#include "Input\KeyboardEvent.h"
+#include "Events\KeyboardEvent.h"
 #include "Time\InterfaceTickable.h"
 #include "Util\FileUtils.h"
 
@@ -76,7 +76,7 @@ private:
 	Player                                                                          *player_01_, *player_02_;
 	std::vector<Asteroid*>			                                                asteroids_;
     std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           actors_;
-	engine::memory::SharedPointer<engine::input::KeyboardEvent>						keyboard_event_;
+	engine::memory::SharedPointer<engine::events::KeyboardEvent>					keyboard_event_;
 
 	std::mutex																		new_actors_mutex_;
 	std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>			new_actors_;

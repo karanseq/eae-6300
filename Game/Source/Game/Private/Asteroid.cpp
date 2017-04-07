@@ -11,9 +11,9 @@ namespace game {
 Asteroid::Asteroid(const engine::memory::SharedPointer<engine::gameobject::Actor>& i_actor) : actor_(i_actor),
     force_(engine::math::Vec3D::ZERO)
 {
-    float foo = 0.25f + float(rand() % 75) * 0.01f;
+    float foo = 0.5f + float(rand() % 50) * 0.01f;
     force_.x(foo * (rand() % 10 > 5 ? 1.0f : -1.0f));
-    foo = 0.25f + float(rand() % 75) * 0.01f;
+    foo = 0.5f + float(rand() % 50) * 0.01f;
     force_.y(foo * (rand() % 10 > 5 ? 1.0f : -1.0f));
 
     // register for update events

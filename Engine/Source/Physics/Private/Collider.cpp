@@ -60,7 +60,7 @@ void Collider::DetectCollisions(float i_dt)
         // calculate transform to convert world to object A coordinates
         engine::math::Mat44 mat_WtoA(mat_AtoW.GetInverse());
 
-        for (size_t j = 0; j < num_physics_objects_; ++j)
+        for (size_t j = i; j < num_physics_objects_; ++j)
         {
             // don't compute collisions with self
             if (physics_objects_[i] == physics_objects_[j])

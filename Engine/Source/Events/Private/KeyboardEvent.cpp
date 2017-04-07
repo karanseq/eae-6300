@@ -1,7 +1,7 @@
-#include "Input\KeyboardEvent.h"
+#include "Events\KeyboardEvent.h"
 
 namespace engine {
-namespace input {
+namespace events {
 
 KeyboardEvent::KeyboardEvent() : on_key_pressed_(nullptr),
 	on_key_released_(nullptr)
@@ -18,5 +18,5 @@ KeyboardEvent::KeyboardEvent(const KeyboardEvent& i_copy) : on_key_pressed_(i_co
 	on_key_released_(i_copy.on_key_released_)
 {}
 
-} // namespace input
+} // namespace events
 } // namespace engine

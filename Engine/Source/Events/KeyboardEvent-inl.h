@@ -1,7 +1,7 @@
 #include "KeyboardEvent.h"
 
 namespace engine {
-namespace input {
+namespace events {
 
 inline engine::memory::SharedPointer<KeyboardEvent> KeyboardEvent::Create()
 {
@@ -34,5 +34,5 @@ inline void KeyboardEvent::SetOnKeyReleased(const std::function<void(unsigned in
 	on_key_released_ = i_on_key_released;
 }
 
-} // namespace input
+} // namespace events
 } // namespace engine
