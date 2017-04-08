@@ -31,7 +31,7 @@ void CreateAllocators()
 	FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
 	// block size on 32-bit = 36 and on 64-bit = 72
-	fsa = FixedSizeAllocator::Create(base_size * 9, 70, default_allocator);
+	fsa = FixedSizeAllocator::Create(base_size * 9, 100, default_allocator);
 	FixedSizeAllocator::AddFixedSizeAllocator(fsa);
 
 #ifdef BUILD_DEBUG

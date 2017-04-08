@@ -1,6 +1,7 @@
 #include "Game\Asteroid.h"
 
 // engine includes
+#include "Assert\Assert.h"
 #include "Time\Updater.h"
 
 // game includes
@@ -11,10 +12,15 @@ namespace game {
 Asteroid::Asteroid(const engine::memory::SharedPointer<engine::gameobject::Actor>& i_actor) : actor_(i_actor),
     force_(engine::math::Vec3D::ZERO)
 {
+    ASSERT(actor_);
+
     float foo = 0.5f + float(rand() % 50) * 0.01f;
     force_.x(foo * (rand() % 10 > 5 ? 1.0f : -1.0f));
     foo = 0.5f + float(rand() % 50) * 0.01f;
     force_.y(foo * (rand() % 10 > 5 ? 1.0f : -1.0f));
+
+    /*auto physics_object = actor_->GetPhysicsObject().Lock();
+    physics_object->SetDrag(physics_object->GetDrag() * 7.5f);*/
 
     // register for update events
     engine::time::Updater::Get()->AddTickable(this);

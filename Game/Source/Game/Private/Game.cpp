@@ -22,29 +22,40 @@ namespace game {
 
 bool StartUp()
 {
-	LOG("-------------------- MonsterChase StartUp --------------------");
-	// create an instance of the game
-	Game* game = Game::Create();
-	if (game == nullptr)
-	{
-		LOG_ERROR("Could not create an instance of MonsterChase!");
-		return false;
-	}
+    LOG("-------------------- MonsterChase StartUp --------------------");
+    // create an instance of the game
+    Game* game = Game::Create();
+    if (game == nullptr)
+    {
+	    LOG_ERROR("Could not create an instance of MonsterChase!");
+	    return false;
+    }
 
-	// initialize the game
-	bool success = game->Init();
-	if (!success)
-	{
-		LOG_ERROR("Could not initialize MonsterChase!");
-	}
+    // load game data
+    if (!LoadGameData())
+    {
+        return false;
+    }
 
-	return success;
+    srand(static_cast<unsigned int>(time(0)));
+
+    // initialize the game
+    bool success = game->Init();
+    if (!success)
+    {
+	    LOG_ERROR("Could not initialize MonsterChase!");
+    }
+
+    return success;
 }
 
-bool Restart()
+bool LoadGameData()
 {
-	game::Shutdown();
-	return game::StartUp();
+    // load textures
+    engine::util::FileUtils::Get()->ReadFile(GameData::PLAYER_TEXTURE_NAME, true);
+    engine::util::FileUtils::Get()->ReadFile(GameData::SILLY_MONSTER_TEXTURE_NAME, true);
+    engine::util::FileUtils::Get()->ReadFile(GameData::SMART_MONSTER_TEXTURE_NAME, true);
+    return true;
 }
 
 void Shutdown()
@@ -74,7 +85,6 @@ void Game::Destroy()
 
 Game::Game() : game_state_(GameStates::kGameStateBegin),
 	player_01_(nullptr),
-    player_02_(nullptr),
 	keyboard_event_(engine::events::KeyboardEvent::Create())
 {
 	ASSERT(keyboard_event_);
@@ -84,30 +94,15 @@ Game::Game() : game_state_(GameStates::kGameStateBegin),
 
 Game::~Game()
 {
-    DestroyPlayers();
-    DestroyAsteroids();
-    actors_.clear();
-
-	// tell the engine we no longer want to be ticked
-	engine::time::Updater::Get()->RemoveTickable(this);
-
-    engine::events::EventDispatcher::Get()->RemoveKeyboardEventListener(keyboard_event_);
+    Reset();
 }
 
 bool Game::Init()
 {
-	ASSERT(game_state_ == GameStates::kGameStateBegin);
-
-	// load game data
-	if (!LoadGameData())
-	{
-		return false;
-	}
-
-	srand(static_cast<unsigned int>(time(0)));
+	ASSERT(game_state_ == GameStates::kGameStateBegin || game_state_ == GameStates::kGameStateRestart);
 
 	// create the player
-	CreatePlayers();
+	CreatePlayer();
 
 	// create the asteroids
     CreateAsteroids();
@@ -124,64 +119,73 @@ bool Game::Init()
 	return true;
 }
 
-bool Game::LoadGameData()
+void Game::Reset()
 {
-	// load textures
-	engine::util::FileUtils::Get()->ReadFile(GameData::PLAYER_TEXTURE_NAME, true);
-	engine::util::FileUtils::Get()->ReadFile(GameData::SILLY_MONSTER_TEXTURE_NAME, true);
-	engine::util::FileUtils::Get()->ReadFile(GameData::SMART_MONSTER_TEXTURE_NAME, true);
-	return true;
+    ASSERT(game_state_ == GameStates::kGameStateQuit || game_state_ == GameStates::kGameStateRestart);
+
+    DestroyPlayer();
+    DestroyAsteroids();
+    actors_.clear();
+    new_actors_.clear();
+
+    // tell the engine we no longer want to be ticked
+    engine::time::Updater::Get()->RemoveTickable(this);
+
+    engine::events::EventDispatcher::Get()->RemoveKeyboardEventListener(keyboard_event_);
 }
 
 void Game::Update(float dt)
 {
-	bool quit = false;
-	GLib::Service(quit);
-	
-	// request the engine to quit if we need to
-	if (quit || game_state_ == GameStates::kGameStateQuit)
-	{
-		engine::RequestShutdown();
-	}
+    if (game_state_ == GameStates::kGameStateRestart)
+    {
+        Reset();
+        ASSERT(Init());
+        return;
+    }
 
-	if (!new_actors_.empty())
-	{
-		std::lock_guard<std::mutex> lock(new_actors_mutex_);
-		actors_.insert(actors_.end(), new_actors_.begin(), new_actors_.end());
-		new_actors_.clear();
-	}
+    if (!new_actors_.empty())
+    {
+        std::lock_guard<std::mutex> lock(new_actors_mutex_);
+        actors_.insert(actors_.end(), new_actors_.begin(), new_actors_.end());
+        new_actors_.clear();
+    }
 }
 
 void Game::OnKeyPressed(unsigned int i_key_id)
 {
-	switch (i_key_id)
-	{
-	case 'M':
-		CreateActor(engine::data::PooledString(GameData::MONSTER_LUA_FILE_NAME));
-		break;
-	case 'Q':
-		game_state_ = GameStates::kGameStateQuit;
-		break;
-	case 'R':
-        //game_state_ = GameStates::kGameStateRestart;
-		break;
-	}
+    if (i_key_id == 'P')
+    {
+        if (engine::IsPaused())
+        {
+            engine::Resume();
+            game_state_ = GameStates::kGameStateRunning;
+        }
+        else
+        {
+            engine::Pause();
+            game_state_ = GameStates::kGameStatePaused;
+        }
+    }
+    else if (i_key_id == 'R')
+    {
+        game_state_ = GameStates::kGameStateRestart;
+    }
+    else if (i_key_id == 'Q')
+    {
+        game_state_ = GameStates::kGameStateQuit;
+        engine::InitiateShutdown();
+    }
 }
 
-void Game::CreatePlayers()
+void Game::CreatePlayer()
 {
     player_01_ = new Player();
     player_01_->SetKeys('A', 'D', 'W', 'S');
-
-    player_02_ = new Player();
-    player_02_->SetKeys('J', 'L', 'I', 'K');    
-    player_02_->GetActor().Lock()->GetGameObject()->SetPosition(engine::math::Vec3D(250.0f, -100.0f, 0.0f));
 }
 
-void Game::DestroyPlayers()
+void Game::DestroyPlayer()
 {
     SAFE_DELETE(player_01_);
-    SAFE_DELETE(player_02_);
 }
 
 void Game::CreateAsteroids()
@@ -224,14 +228,14 @@ void Game::OnFileLoaded(engine::util::FileUtils::FileData i_file_data)
 
 void Game::OnActorCreated(engine::memory::SharedPointer<engine::gameobject::Actor> i_actor)
 {
-	// validate inputs
-	ASSERT(i_actor);
+    // validate inputs
+    ASSERT(i_actor);
 
     // give this actor a random position
     i_actor->GetGameObject()->SetPosition(GameUtils::GetRandomVec3D(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT, 0));
 
-	std::lock_guard<std::mutex> lock(new_actors_mutex_);
-	new_actors_.push_back(i_actor);
+    std::lock_guard<std::mutex> lock(new_actors_mutex_);
+    new_actors_.push_back(i_actor);
 }
 
 } // namespace monsterchase

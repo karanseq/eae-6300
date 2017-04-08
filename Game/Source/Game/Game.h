@@ -24,7 +24,7 @@ class Player;
 
 // global life-cycle functions
 bool StartUp();
-bool Restart();
+bool LoadGameData();
 void Shutdown();
 
 class Game : public engine::time::InterfaceTickable
@@ -36,7 +36,7 @@ public:
 
 	// game initialization
 	bool Init();
-	bool LoadGameData();
+    void Reset();
 
 	// the main game loop
 	// called every tick by the engine
@@ -44,8 +44,8 @@ public:
 
 	// gameplay
 	void OnKeyPressed(unsigned int i_key_id);
-	void CreatePlayers();
-    void DestroyPlayers();
+	void CreatePlayer();
+    void DestroyPlayer();
     void CreateAsteroids();
     void DestroyAsteroids();
 	void CreateActor(const engine::data::PooledString& i_file_name);
@@ -73,7 +73,7 @@ private:
 	GameStates																		game_state_;
 
 	// game elements
-	Player                                                                          *player_01_, *player_02_;
+	Player*                                                                         player_01_;
 	std::vector<Asteroid*>			                                                asteroids_;
     std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           actors_;
 	engine::memory::SharedPointer<engine::events::KeyboardEvent>					keyboard_event_;
