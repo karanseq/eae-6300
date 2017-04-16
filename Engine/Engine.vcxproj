@@ -195,8 +195,12 @@
     <ClInclude Include="Source\Math\Vec2D-inl.h" />
     <ClInclude Include="Source\Math\Vec2D.h" />
     <ClInclude Include="Source\Math\Vec3D-inl.h" />
+    <ClInclude Include="Source\Math\Vec3D-SSE-inl.h" />
+    <ClInclude Include="Source\Math\Vec3D-SSE.h" />
     <ClInclude Include="Source\Math\Vec3D.h" />
     <ClInclude Include="Source\Math\Vec4D-inl.h" />
+    <ClInclude Include="Source\Math\Vec4D-SSE-inl.h" />
+    <ClInclude Include="Source\Math\Vec4D-SSE.h" />
     <ClInclude Include="Source\Math\Vec4D.h" />
     <ClInclude Include="Source\Memory\AllocationCounter-inl.h" />
     <ClInclude Include="Source\Memory\AllocationCounter.h" />
@@ -258,7 +262,9 @@
     <ClCompile Include="Source\Math\Private\Size.cpp" />
     <ClCompile Include="Source\Math\Private\Transform.cpp" />
     <ClCompile Include="Source\Math\Private\Vec2D.cpp" />
+    <ClCompile Include="Source\Math\Private\Vec3D-SSE.cpp" />
     <ClCompile Include="Source\Math\Private\Vec3D.cpp" />
+    <ClCompile Include="Source\Math\Private\Vec4D-SSE.cpp" />
     <ClCompile Include="Source\Math\Private\Vec4D.cpp" />
     <ClCompile Include="Source\Memory\Private\AllocationCounter.cpp" />
     <ClCompile Include="Source\Memory\Private\AllocatorUtil.cpp" />

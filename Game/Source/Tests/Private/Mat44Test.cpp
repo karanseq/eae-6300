@@ -8,6 +8,8 @@
 
 void TestMat44()
 {
+    LOG("-------------------- Running 4x4 Matrix Test --------------------");
+
     // test default ctor
     engine::math::Mat44 invalid_mat;
     ASSERT(!invalid_mat.IsValid());
@@ -144,4 +146,6 @@ void TestMat44()
     const engine::math::Vec4D           original_point(mat_undo_transform * transformed_point);
     ASSERT(original_point == some_point);
     /********** TRANSFORMATIONS TEST END **********/
+
+    LOG("-------------------- Finished 4x4 Matrix Test --------------------");
 }

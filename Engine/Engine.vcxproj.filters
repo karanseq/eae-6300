@@ -348,6 +348,18 @@
     <ClInclude Include="Source\Events\KeyboardEvent-inl.h">
       <Filter>Header Files\Events</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Math\Vec3D-SSE.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Vec4D-SSE.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Vec3D-SSE-inl.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Vec4D-SSE-inl.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -475,6 +487,12 @@
     </ClCompile>
     <ClCompile Include="Source\Events\Private\KeyboardEvent.cpp">
       <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\Private\Vec3D-SSE.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\Private\Vec4D-SSE.cpp">
+      <Filter>Source Files\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

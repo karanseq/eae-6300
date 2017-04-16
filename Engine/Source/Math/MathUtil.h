@@ -19,6 +19,10 @@ class Vec2D;
 class Vec3D;
 class Vec4D;
 
+namespace optimized {
+class Vec3D;
+}
+
 inline float RadiansToDegrees(float i_radians)
 {
 	return (i_radians * 180.0f / M_PI);
@@ -62,9 +66,11 @@ inline float GetMaxOfFour(float i_first, float i_second, float i_third, float i_
 // dot products
 float DotProduct(const Vec2D& i_v1, const Vec2D& i_v2);
 float DotProduct(const Vec3D& i_v1, const Vec3D& i_v2);
+float DotProduct(const engine::math::optimized::Vec3D& i_v1, const engine::math::optimized::Vec3D& i_v2);
 
 // cross product
 Vec3D CrossProduct(const Vec3D& i_v1, const Vec3D& i_v2);
+engine::math::optimized::Vec3D CrossProduct(const engine::math::optimized::Vec3D& i_v1, const engine::math::optimized::Vec3D& i_v2);
 
 // transforms
 // the transform matrix as a result of this function must be left multiplied

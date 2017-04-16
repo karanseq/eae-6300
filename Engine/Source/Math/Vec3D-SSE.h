@@ -1,19 +1,28 @@
-#ifndef ENGINE_VEC3D_H_
-#define ENGINE_VEC3D_H_
+#ifndef ENGINE_VEC3D_SSE_H_
+#define ENGINE_VEC3D_SSE_H_
+
+// library includes
+#include <xmmintrin.h>
+#include <smmintrin.h>
+
+// engine includes
+#include "Math\MathUtil.h"
 
 namespace engine {
 namespace math {
+namespace optimized {
 
 /*
-Vec3D
+Vec3D (SSE)
 - A class that represents a 3D vector
 - Overloads basic arithmetic operators, validates against bad floats
+- Uses Intel's SSE via compiler intrinsics
 */
-
 class Vec3D
 {
 public:
     explicit Vec3D(float i_x = 0.0f, float i_y = 0.0f, float i_z = 0.0f);
+    Vec3D(const __m128 i_vec);
     Vec3D(const Vec3D& i_copy);
 
     ~Vec3D()
@@ -27,6 +36,7 @@ public:
     inline float z() const;
     inline void z(float i_z);
     inline void set(float i_x = 0.0f, float i_y = 0.0f, float i_z = 0.0f);
+    inline void set(const __m128 i_vec);
 
     // assignment
     inline Vec3D& operator=(const Vec3D& i_vec);
@@ -62,14 +72,26 @@ public:
     static const Vec3D          UNIT_Z;
 
 protected:
-    float                       x_;
-    float                       y_;
-    float                       z_;
+    union
+    {
+        struct
+        {
+            float       x_;
+            float       y_;
+            float       z_;
+        };
+        __m128          vec_;
+    };
+
+    friend float engine::math::DotProduct(const engine::math::optimized::Vec3D& i_v1, const engine::math::optimized::Vec3D& i_v2);
+    friend engine::math::optimized::Vec3D engine::math::CrossProduct(const engine::math::optimized::Vec3D& i_v1, const engine::math::optimized::Vec3D& i_v2);
+
 }; // class Vec3D
 
+} // namespace optimized
 } // namespace math
 } // namespace engine
 
-#include "Vec3D-inl.h"
+#include "Vec3D-SSE-inl.h"
 
-#endif // ENGINE_VEC3D_H_
+#endif // ENGINE_VEC3D_SSE_H_
