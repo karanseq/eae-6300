@@ -5,6 +5,7 @@
 #include "GameObject\GameObject.h"
 #include "Math\Mat44.h"
 #include "Physics\PhysicsObject.h"
+#include "Util\Profiler.h"
 
 namespace engine {
 namespace physics {
@@ -37,6 +38,8 @@ void Collider::Destroy()
 
 void Collider::Run(float i_dt)
 {
+    PROFILE_UNSCOPED("ColliderRun");
+
     DetectCollisions(i_dt);
     RespondToCollisions(i_dt);
 }

@@ -17,6 +17,7 @@
 #include "Time\TimerUtil.h"
 #include "Time\Updater.h"
 #include "Util\FileUtils.h"
+#include "Util\Profiler.h"
 
 namespace engine {
 
@@ -59,6 +60,11 @@ bool StartUp(HINSTANCE i_h_instance, int i_n_cmd_show, const char* i_window_name
 
     // create renderer
     engine::render::Renderer::Create();
+
+#if defined(ENABLE_PROFILING)
+    // create profiler
+    engine::util::Profiler::Create();
+#endif
 
     // give rand a new seed
     // TODO: Resolve conflict with namespace time
@@ -137,6 +143,11 @@ void InitiateShutdown()
 
 void Shutdown()
 {
+#if defined(ENABLE_PROFILING)
+    // create profiler
+    engine::util::Profiler::Destroy();
+#endif
+
     // delete renderer
     engine::render::Renderer::Destroy();
 

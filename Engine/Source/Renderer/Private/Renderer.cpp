@@ -7,6 +7,7 @@
 #include "Common\HelperMacros.h"
 #include "Data\PooledString.h"
 #include "Util\FileUtils.h"
+#include "Util\Profiler.h"
 
 namespace engine {
 namespace render {
@@ -39,20 +40,24 @@ void Renderer::Destroy()
 
 void Renderer::Run(float i_dt)
 {
-	// Tell GLib that we want to start rendering
-	GLib::BeginRendering();
-	// Tell GLib that we want to render some sprites
-	GLib::Sprites::BeginRendering();
+    PROFILE_UNSCOPED("RendererRun");
 
-	for (size_t i = 0; i < num_renderables_; ++i)
-	{
-		renderables_[i]->Render(i_dt);
-	}
+    // Tell GLib that we want to start rendering
+    GLib::BeginRendering();
+    // Tell GLib that we want to render some sprites
+    GLib::Sprites::BeginRendering();
 
-	// Tell GLib we're done rendering sprites
-	GLib::Sprites::EndRendering();
-	// Tell GLib we're done rendering
-	GLib::EndRendering();
+    for (size_t i = 0; i < num_renderables_; ++i)
+    {
+        PROFILE_SCOPE_BEGIN("RenderableCall")
+        renderables_[i]->Render(i_dt);
+        PROFILE_SCOPE_END
+    }
+
+    // Tell GLib we're done rendering sprites
+    GLib::Sprites::EndRendering();
+    // Tell GLib we're done rendering
+    GLib::EndRendering();
 }
 
 GLib::Sprites::Sprite* Renderer::CreateSprite(const engine::data::PooledString& i_texture_file_name)

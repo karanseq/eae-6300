@@ -360,6 +360,9 @@
     <ClInclude Include="Source\Math\Vec4D-SSE-inl.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Util\Profiler.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -493,6 +496,9 @@
     </ClCompile>
     <ClCompile Include="Source\Math\Private\Vec4D-SSE.cpp">
       <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Util\Private\Profiler.cpp">
+      <Filter>Source Files\Util</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
