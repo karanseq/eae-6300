@@ -10,19 +10,21 @@ void TestMat44()
 {
     LOG("-------------------- Running 4x4 Matrix Test --------------------");
 
+    using namespace engine::math;
+
     // test default ctor
-    engine::math::Mat44 invalid_mat;
+    Mat44 invalid_mat;
     ASSERT(!invalid_mat.IsValid());
 
     // test regular ctor
-    engine::math::Mat44 mat_01(1.0f, 0.0f, 0.0f, 0.0f,
+    Mat44 mat_01(1.0f, 0.0f, 0.0f, 0.0f,
                                0.0f, 1.0f, 0.0f, 0.0f,
                                0.0f, 0.0f, 1.0f, 0.0f,
                                0.0f, 0.0f, 0.0f, 1.0f);
     // test operator bool
     ASSERT(mat_01);
     // test equality operator
-    ASSERT(mat_01 == engine::math::Mat44::IDENTITY);
+    ASSERT(mat_01 == Mat44::IDENTITY);
 
     // test Set()
     mat_01.Set(1.0f, 2.0f, 3.0f, 4.0f,
@@ -33,31 +35,31 @@ void TestMat44()
     /********** DETERMINANT TEST START **********/
     // determinant test 1
     float determinant_01 = mat_01.GetDeterminant();
-    ASSERT(engine::math::FuzzyEquals(determinant_01, 0.0f));
+    ASSERT(FuzzyEquals(determinant_01, 0.0f));
 
-    engine::math::Mat44 mat_02(2.0f, 5.0f, 1.0f, 9.0f,
+    Mat44 mat_02(2.0f, 5.0f, 1.0f, 9.0f,
                                4.0f, 6.0f, 1.0f, 2.0f,
                                6.0f, 1.0f, 6.0f, 2.0f,
                                8.0f, 8.0f, 2.0f, 3.0f);
 
     // determinant test 2
     float determinant_02 = mat_02.GetDeterminant();
-    ASSERT(engine::math::FuzzyEquals(determinant_02, -532.0f));
+    ASSERT(FuzzyEquals(determinant_02, -532.0f));
     /********** DETERMINANT TEST END **********/
 
     /********** MULTIPLICATION TEST START **********/
     // AI = A
-    engine::math::Mat44 mat_01_I(mat_01 * engine::math::Mat44::IDENTITY);
+    Mat44 mat_01_I(mat_01 * Mat44::IDENTITY);
     ASSERT(mat_01 == mat_01_I);
 
     // AB != BA
-    engine::math::Mat44 mat_01_02(mat_01 * mat_02);
-    engine::math::Mat44 mat_02_01(mat_02 * mat_01);
+    Mat44 mat_01_02(mat_01 * mat_02);
+    Mat44 mat_02_01(mat_02 * mat_01);
     ASSERT(!(mat_01_02 == mat_02_01));
 
     // V = M * V
-    engine::math::Vec4D vec4(10.f, 30.f, 20.f, 0.0f);
-    engine::math::Mat44 mat_rot_z = engine::math::Mat44::GetRotationZ(M_PI);
+    Vec4D vec4(10.f, 30.f, 20.f, 0.0f);
+    Mat44 mat_rot_z = engine::math::Mat44::GetRotationZ(M_PI);
     engine::math::Vec4D vec_right = mat_rot_z * vec4;
     // V = V * M
     engine::math::Vec4D vec_left = vec4 * mat_rot_z;

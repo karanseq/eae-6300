@@ -86,6 +86,8 @@ protected:
         __m128          vec_;
     };
 
+    friend class Mat44;
+
 }; // class Vec4D
 
 } // namespace optimized

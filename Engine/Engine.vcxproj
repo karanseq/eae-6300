@@ -254,6 +254,8 @@
     <ClInclude Include="Source\Logger\Logger.h" />
     <ClInclude Include="Source\Math\AABB.h" />
     <ClInclude Include="Source\Math\Mat44-inl.h" />
+    <ClInclude Include="Source\Math\Mat44-SSE-inl.h" />
+    <ClInclude Include="Source\Math\Mat44-SSE.h" />
     <ClInclude Include="Source\Math\Mat44.h" />
     <ClInclude Include="Source\Math\MathUtil.h" />
     <ClInclude Include="Source\Math\Rect-inl.h" />
@@ -327,6 +329,7 @@
     <ClCompile Include="Source\Jobs\Private\Worker.cpp" />
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp" />
     <ClCompile Include="Source\Math\Private\AABB.cpp" />
+    <ClCompile Include="Source\Math\Private\Mat44-SSE.cpp" />
     <ClCompile Include="Source\Math\Private\Mat44.cpp" />
     <ClCompile Include="Source\Math\Private\MathUtil.cpp" />
     <ClCompile Include="Source\Math\Private\Rect.cpp" />

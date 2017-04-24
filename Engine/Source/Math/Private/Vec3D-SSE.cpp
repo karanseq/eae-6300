@@ -15,7 +15,7 @@ y_(i_y),
 z_(i_z),
 vec_(_mm_setr_ps(i_x, i_y, i_z, 0.0f))
 {
-    ASSERT(!IsNaN(i_x) && !IsNaN(i_y) && !IsNaN(i_z));
+    ASSERT(!(IsNaN(i_x) || IsNaN(i_y) || IsNaN(i_z)));
 }
 
 Vec3D::Vec3D(const __m128 i_vec) : vec_(i_vec)

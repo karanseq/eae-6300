@@ -20,7 +20,7 @@ void TestFixedSizeAllocator();
 //#define ENABLE_STRING_POOL_TEST
 //#define ENABLE_JOB_SYSTEM_TEST
 //#define ENABLE_MAT44_TEST
-#define ENABLE_FAST_MATH_TEST
+//#define ENABLE_FAST_MATH_TEST
 
 #ifdef ENABLE_VECTOR_CONST_TEST
 void TestVectorConstness();

@@ -363,6 +363,12 @@
     <ClInclude Include="Source\Util\Profiler.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Math\Mat44-SSE.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Mat44-SSE-inl.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -499,6 +505,9 @@
     </ClCompile>
     <ClCompile Include="Source\Util\Private\Profiler.cpp">
       <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\Private\Mat44-SSE.cpp">
+      <Filter>Source Files\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

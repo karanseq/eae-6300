@@ -5,6 +5,8 @@
 #include "Assert\Assert.h"
 #include "Logger\Logger.h"
 #include "Math\MathUtil.h"
+#include "Math\Mat44.h"
+#include "Math\Mat44-SSE.h"
 #include "Math\Vec3D.h"
 #include "Math\Vec4D.h"
 #include "Math\Vec3D-SSE.h"
@@ -49,6 +51,22 @@ void TestFastMath()
 
     optimized::Vec4D vec12(2.0f, 4.0f, 6.0f, 8.0f);
     ASSERT(vec11 == vec12);
+
+    //~==================================================================
+    // Mat44
+    optimized::Mat44 mat_01(1.0f, 2.0f, 3.0f, 4.0f,
+        1.0f, 2.0f, 3.0f, 4.0f,
+        1.0f, 2.0f, 3.0f, 4.0f,
+        1.0f, 2.0f, 3.0f, 4.0f);
+
+    optimized::Mat44 mat_02(11.0f, 12.0f, 13.0f, 14.0f,
+        21.0f, 22.0f, 23.0f, 24.0f,
+        31.0f, 32.0f, 33.0f, 34.0f,
+        41.0f, 42.0f, 43.0f, 44.0f);
+
+    //ASSERT(mat_01.GetTranspose() == mat_02);
+
+    optimized::Mat44 mat03 = mat_01.Multiply(mat_02);
 
     LOG("-------------------- Finished Fast Math Test --------------------");
 }

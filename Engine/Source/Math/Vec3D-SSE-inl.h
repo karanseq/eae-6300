@@ -42,7 +42,7 @@ inline void Vec3D::z(float i_z)
 
 inline void Vec3D::set(float i_x, float i_y, float i_z)
 {
-    ASSERT(!IsNaN(i_x) && !IsNaN(i_y) && !IsNaN(i_z));
+    ASSERT(!(IsNaN(i_x) || IsNaN(i_y) || IsNaN(i_z)));
     x_ = i_x;
     y_ = i_y;
     z_ = i_z;
