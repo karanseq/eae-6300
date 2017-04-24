@@ -1,5 +1,8 @@
 #include "Math\Vec4D-SSE.h"
 
+// engine includes
+#include "Math\Vec3D-SSE.h"
+
 namespace engine {
 namespace math {
 namespace optimized {
@@ -23,11 +26,12 @@ vec_(_mm_setr_ps(i_x, i_y, i_z, i_w))
 Vec4D::Vec4D(const __m128& i_vec) : vec_(i_vec)
 {}
 
-//Vec4D::Vec4D(const Vec3D& i_vec3, float i_w) : x_(i_vec3.x()),
-//y_(i_vec3.y()),
-//z_(i_vec3.z()),
-//w_(i_w)
-//{}
+Vec4D::Vec4D(const Vec3D& i_vec3, float i_w) : x_(i_vec3.x()),
+y_(i_vec3.y()),
+z_(i_vec3.z()),
+w_(i_w),
+vec_(_mm_setr_ps(i_vec3.x(), i_vec3.y(), i_vec3.z(), i_w))
+{}
 
 Vec4D::Vec4D(const Vec4D& i_copy) : x_(i_copy.x_),
 y_(i_copy.y_),

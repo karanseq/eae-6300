@@ -20,6 +20,7 @@ class Vec3D;
 class Vec4D;
 
 namespace optimized {
+class Mat44;
 class Vec3D;
 }
 
@@ -76,6 +77,7 @@ engine::math::optimized::Vec3D CrossProduct(const engine::math::optimized::Vec3D
 // the transform matrix as a result of this function must be left multiplied
 // with the vector/point that will be transformed
 void GetObjectToWorldTransform(const engine::math::Transform& i_transform, engine::math::Mat44& o_trans_mat);
+void GetObjectToWorldTransform(const engine::math::Transform& i_transform, engine::math::optimized::Mat44& o_trans_mat);
 
 } // namespace math
 } // namespace engine

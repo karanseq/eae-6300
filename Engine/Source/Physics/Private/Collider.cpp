@@ -4,6 +4,9 @@
 #include "Common\HelperMacros.h"
 #include "GameObject\GameObject.h"
 #include "Math\Mat44.h"
+#include "Math\Mat44-SSE.h"
+#include "Math\Vec3D-SSE.h"
+#include "Math\Vec4D-SSE.h"
 #include "Physics\PhysicsObject.h"
 #include "Util\Profiler.h"
 
@@ -40,12 +43,20 @@ void Collider::Run(float i_dt)
 {
     PROFILE_UNSCOPED("ColliderRun");
 
+    PROFILE_SCOPE_BEGIN("CollisionDetection")
     DetectCollisions(i_dt);
+    PROFILE_SCOPE_END
     RespondToCollisions(i_dt);
 }
 
 void Collider::DetectCollisions(float i_dt)
 {
+#ifdef ENABLE_FAST_MATH
+    using namespace engine::math::optimized;
+#else
+    using namespace engine::math;
+#endif
+
     for (size_t i = 0; i < num_physics_objects_; ++i)
     {
         // get physics object A
@@ -57,11 +68,11 @@ void Collider::DetectCollisions(float i_dt)
         const engine::math::AABB a_aabb = game_object_a->GetAABB();
 
         // calculate transform to convert from object A to world coordinates
-        engine::math::Mat44 mat_AtoW;
+        Mat44 mat_AtoW;
         engine::math::GetObjectToWorldTransform(game_object_a->GetTransform(), mat_AtoW);
 
         // calculate transform to convert world to object A coordinates
-        engine::math::Mat44 mat_WtoA(mat_AtoW.GetInverse());
+        Mat44 mat_WtoA(mat_AtoW.GetInverse());
 
         for (size_t j = i; j < num_physics_objects_; ++j)
         {
@@ -79,16 +90,16 @@ void Collider::DetectCollisions(float i_dt)
             const engine::math::AABB b_aabb = game_object_b->GetAABB();
 
             // calculate transform to convert object B to world coordinates
-            engine::math::Mat44 mat_BtoW;
+            Mat44 mat_BtoW;
             engine::math::GetObjectToWorldTransform(game_object_b->GetTransform(), mat_BtoW);
 
             // calculate transform to convert world to object B coordinates
-            engine::math::Mat44 mat_WtoB(mat_BtoW.GetInverse());
+            Mat44 mat_WtoB(mat_BtoW.GetInverse());
 
             // calculate transform to convert from A to B coordinates
-            engine::math::Mat44 mat_AtoB = mat_WtoB * mat_AtoW;
+            Mat44 mat_AtoB = mat_WtoB * mat_AtoW;
             // calculate transform to convert from B to A coordinates
-            engine::math::Mat44 mat_BtoA(mat_AtoB.GetInverse());
+            Mat44 mat_BtoA(mat_AtoB.GetInverse());
 
             bool is_X_separated_in_B = false;
             bool is_Y_separated_in_B = false;
@@ -101,16 +112,16 @@ void Collider::DetectCollisions(float i_dt)
             // check for A in B's coordinate system
             {
                 // calculate velocity of A relative to B
-                const engine::math::Vec3D relative_vel_AtoB = physics_object_a->GetVelocity() - physics_object_b->GetVelocity();
+                const Vec3D relative_vel_AtoB = physics_object_a->GetVelocity() - physics_object_b->GetVelocity();
 
                 // transform relative velocity (as a vector) to object B's coordinate system
-                const engine::math::Vec4D relative_vel_WtoB = mat_WtoB * engine::math::Vec4D(relative_vel_AtoB, 0.0f);
+                const Vec4D relative_vel_WtoB = mat_WtoB * Vec4D(relative_vel_AtoB, 0.0f);
 
                 // transform A's AABB to B's coordinate system
-                const engine::math::Vec4D A_center_in_B = mat_AtoB * engine::math::Vec4D(a_aabb.center, 1.0f);
-                const engine::math::Vec4D A_X_extent_in_B = mat_AtoB * engine::math::Vec4D(a_aabb.extents.x(), 0.0f, 0.0f, 0.0f);
-                const engine::math::Vec4D A_Y_extent_in_B = mat_AtoB * engine::math::Vec4D(0.0f, a_aabb.extents.y(), 0.0f, 0.0f);
-                const engine::math::Vec4D A_extents_in_B(fabs(A_X_extent_in_B.x()) + fabs(A_Y_extent_in_B.x()), fabs(A_X_extent_in_B.y()) + fabs(A_Y_extent_in_B.y()), 0.0f, 0.0f);
+                const Vec4D A_center_in_B = mat_AtoB * Vec4D(a_aabb.center, 1.0f);
+                const Vec4D A_X_extent_in_B = mat_AtoB * Vec4D(a_aabb.extents.x(), 0.0f, 0.0f, 0.0f);
+                const Vec4D A_Y_extent_in_B = mat_AtoB * Vec4D(0.0f, a_aabb.extents.y(), 0.0f, 0.0f);
+                const Vec4D A_extents_in_B(fabs(A_X_extent_in_B.x()) + fabs(A_Y_extent_in_B.x()), fabs(A_X_extent_in_B.y()) + fabs(A_Y_extent_in_B.y()), 0.0f, 0.0f);
 
                 // for X-axis
                 is_X_separated_in_B = CheckSeparationForAxis(relative_vel_WtoB.x(), b_aabb.center.x(), b_aabb.extents.x(), A_center_in_B.x(), A_extents_in_B.x(), i_dt, t_close_X_in_B, t_open_X_in_B);
@@ -131,16 +142,16 @@ void Collider::DetectCollisions(float i_dt)
             // check for B in A's coordinate system
             {
                 // calculate velocity of B relative to A
-                const engine::math::Vec3D relative_vel_BtoA = physics_object_b->GetVelocity() - physics_object_a->GetVelocity();
+                const Vec3D relative_vel_BtoA = physics_object_b->GetVelocity() - physics_object_a->GetVelocity();
 
                 // transform relative velocity (as a vector) to A's coordinate system
-                const engine::math::Vec4D relative_vel_WtoA = mat_WtoA * engine::math::Vec4D(relative_vel_BtoA, 0.0f);
+                const Vec4D relative_vel_WtoA = mat_WtoA * Vec4D(relative_vel_BtoA, 0.0f);
 
                 // transform B's AABB to A's coordinate system
-                const engine::math::Vec4D B_center_in_A = mat_BtoA * engine::math::Vec4D(b_aabb.center, 1.0f);
-                const engine::math::Vec4D B_X_extent_in_A = mat_BtoA * engine::math::Vec4D(b_aabb.extents.x(), 0.0f, 0.0f, 0.0f);
-                const engine::math::Vec4D B_Y_extent_in_A = mat_BtoA * engine::math::Vec4D(0.0f, b_aabb.extents.y(), 0.0f, 0.0f);
-                const engine::math::Vec4D B_extents_in_A(fabs(B_X_extent_in_A.x()) + fabs(B_Y_extent_in_A.x()), fabs(B_X_extent_in_A.y()) + fabs(B_Y_extent_in_A.y()), 0.0f, 0.0f);
+                const Vec4D B_center_in_A = mat_BtoA * Vec4D(b_aabb.center, 1.0f);
+                const Vec4D B_X_extent_in_A = mat_BtoA * Vec4D(b_aabb.extents.x(), 0.0f, 0.0f, 0.0f);
+                const Vec4D B_Y_extent_in_A = mat_BtoA * Vec4D(0.0f, b_aabb.extents.y(), 0.0f, 0.0f);
+                const Vec4D B_extents_in_A(fabs(B_X_extent_in_A.x()) + fabs(B_Y_extent_in_A.x()), fabs(B_X_extent_in_A.y()) + fabs(B_Y_extent_in_A.y()), 0.0f, 0.0f);
 
                 // for X-axis
                 is_X_separated_in_A = CheckSeparationForAxis(relative_vel_WtoA.x(), a_aabb.center.x(), a_aabb.extents.x(), B_center_in_A.x(), B_extents_in_A.x(), i_dt, t_close_X_in_A, t_open_X_in_A);
@@ -178,25 +189,25 @@ void Collider::DetectCollisions(float i_dt)
 #endif
 
                     // calculate the normal to the surface that collided
-                    engine::math::Vec3D normal = engine::math::Vec3D::ZERO;
+                    Vec3D normal = Vec3D::ZERO;
                     if (engine::math::FuzzyEquals(t_close_latest, t_close_X_in_B))
                     {
-                        const engine::math::Vec4D B_X_in_W = mat_BtoW * engine::math::Vec4D(1.0f, 0.0f, 0.0f, 0.0f);
+                        const Vec4D B_X_in_W = mat_BtoW * Vec4D(1.0f, 0.0f, 0.0f, 0.0f);
                         normal.set(B_X_in_W.x(), B_X_in_W.y(), B_X_in_W.z());
                     }
                     else if (engine::math::FuzzyEquals(t_close_latest, t_close_Y_in_B))
                     {
-                        const engine::math::Vec4D B_Y_in_W = mat_BtoW * engine::math::Vec4D(0.0f, 1.0f, 0.0f, 0.0f);
+                        const Vec4D B_Y_in_W = mat_BtoW * Vec4D(0.0f, 1.0f, 0.0f, 0.0f);
                         normal.set(B_Y_in_W.x(), B_Y_in_W.y(), B_Y_in_W.z());
                     }
                     else if (engine::math::FuzzyEquals(t_close_latest, t_close_X_in_A))
                     {
-                        const engine::math::Vec4D A_X_in_W = mat_AtoW * engine::math::Vec4D(1.0f, 0.0f, 0.0f, 0.0f);
+                        const Vec4D A_X_in_W = mat_AtoW * Vec4D(1.0f, 0.0f, 0.0f, 0.0f);
                         normal.set(A_X_in_W.x(), A_X_in_W.y(), A_X_in_W.z());
                     }
                     else if (engine::math::FuzzyEquals(t_close_latest, t_close_Y_in_A))
                     {
-                        const engine::math::Vec4D A_Y_in_W = mat_AtoW * engine::math::Vec4D(0.0f, 1.0f, 0.0f, 0.0f);
+                        const Vec4D A_Y_in_W = mat_AtoW * Vec4D(0.0f, 1.0f, 0.0f, 0.0f);
                         normal.set(A_Y_in_W.x(), A_Y_in_W.y(), A_Y_in_W.z());
                     }
 

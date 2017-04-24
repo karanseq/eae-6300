@@ -20,7 +20,7 @@ public:
         float i_21, float i_22, float i_23, float i_24,
         float i_31, float i_32, float i_33, float i_34,
         float i_41, float i_42, float i_43, float i_44);
-    Mat44(const __m128 i_row1, const __m128 i_row2, const __m128 i_row3, const __m128 i_row4);
+    Mat44(const __m128& i_row1, const __m128& i_row2, const __m128& i_row3, const __m128& i_row4);
 
     ~Mat44();
 
@@ -29,7 +29,7 @@ public:
         float i_31, float i_32, float i_33, float i_34,
         float i_41, float i_42, float i_43, float i_44);
 
-    void Set(const __m128 i_row1, const __m128 i_row2, const __m128 i_row3, const __m128 i_row4);
+    void Set(const __m128& i_row1, const __m128& i_row2, const __m128& i_row3, const __m128& i_row4);
 
     // copy constructor
     Mat44(const Mat44& i_copy);

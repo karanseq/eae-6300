@@ -54,7 +54,7 @@ Mat44::Mat44(float i_11, float i_12, float i_13, float i_14,
     ASSERT(!(IsNaN(i_41) || IsNaN(i_42) || IsNaN(i_43) || IsNaN(i_44)));
 }
 
-Mat44::Mat44(const __m128 i_row1, const __m128 i_row2, const __m128 i_row3, const __m128 i_row4) : row1(i_row1),
+Mat44::Mat44(const __m128& i_row1, const __m128& i_row2, const __m128& i_row3, const __m128& i_row4) : row1(i_row1),
     row2(i_row2),
     row3(i_row3),
     row4(i_row4)
@@ -96,7 +96,7 @@ void Mat44::Set(float i_11, float i_12, float i_13, float i_14,
     row4 = _mm_setr_ps(i_41, i_42, i_43, i_44);
 }
 
-void Mat44::Set(const __m128 i_row1, const __m128 i_row2, const __m128 i_row3, const __m128 i_row4)
+void Mat44::Set(const __m128& i_row1, const __m128& i_row2, const __m128& i_row3, const __m128& i_row4)
 {
     row1 = i_row1;
     row2 = i_row2;

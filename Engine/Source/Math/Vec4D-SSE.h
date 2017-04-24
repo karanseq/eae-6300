@@ -9,6 +9,9 @@ namespace engine {
 namespace math {
 namespace optimized {
 
+// forward declarations
+class Vec3D;
+
 /*
 Vec4D
 - A class that represents a 3D point
@@ -20,7 +23,7 @@ class Vec4D
 public:
     explicit Vec4D(float i_x = 0.0f, float i_y = 0.0f, float i_z = 0.0f, float i_w = 0.0f);
     explicit Vec4D(const __m128& i_vec);
-    //explicit Vec4D(const Vec3D& i_vec3, float i_w = 0.0f);
+    explicit Vec4D(const Vec3D& i_vec3, float i_w = 0.0f);
     Vec4D(const Vec4D& i_copy);
 
     ~Vec4D()

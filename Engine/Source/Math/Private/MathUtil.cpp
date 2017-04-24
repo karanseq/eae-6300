@@ -4,6 +4,7 @@
 #include "Assert\Assert.h"
 #include "Math\AABB.h"
 #include "Math\Mat44.h"
+#include "Math\Mat44-SSE.h"
 #include "Math\Transform.h"
 #include "Math\Vec2D.h"
 #include "Math\Vec3D.h"
@@ -52,6 +53,18 @@ void GetObjectToWorldTransform(const engine::math::Transform& i_transform, engin
 
     // get translation matrix
     const engine::math::Mat44 mat_trans = engine::math::Mat44::GetTranslation(i_transform.GetPosition());
+
+    // get transform matrix
+    o_trans_mat = mat_trans * mat_rot;
+}
+
+void GetObjectToWorldTransform(const engine::math::Transform& i_transform, engine::math::optimized::Mat44& o_trans_mat)
+{
+    // get rotation matrix
+    const engine::math::optimized::Mat44 mat_rot = engine::math::optimized::Mat44::GetRotationZ(i_transform.GetRotation().z());
+
+    // get translation matrix
+    const engine::math::optimized::Mat44 mat_trans = engine::math::optimized::Mat44::GetTranslation(i_transform.GetPosition());
 
     // get transform matrix
     o_trans_mat = mat_trans * mat_rot;
