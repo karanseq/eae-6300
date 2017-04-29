@@ -66,6 +66,7 @@ void Shutdown()
 
 // static member initialization
 Game* Game::instance_ = nullptr;
+static uint16_t wait_before_quit = 0;
 
 Game* Game::Create()
 {
@@ -148,6 +149,17 @@ void Game::Update(float dt)
         std::lock_guard<std::mutex> lock(new_actors_mutex_);
         actors_.insert(actors_.end(), new_actors_.begin(), new_actors_.end());
         new_actors_.clear();
+    }
+
+    ++wait_before_quit;
+    if (wait_before_quit >= 1000)
+    {
+        game_state_ = GameStates::kGameStateQuit;
+        engine::InitiateShutdown();
+    }
+    else if (wait_before_quit % 100 == 0)
+    {
+        LOG("COUNT:%d", wait_before_quit);
     }
 }
 

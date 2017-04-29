@@ -1,0 +1,26 @@
+MANUAL PROFILING
+---------- engine::util::Profiler::DumpStatistics SLOW ----------
+Dumping profiler statistics:
+RendererRun - min:0.01725526ms average:0.05295814ms max:3.19953393ms called:1000 times
+ColliderRun - min:0.01930249ms average:0.02449340ms max:0.04299191ms called:1000 times
+RenderableCall - min:0.00000000ms average:0.00037802ms max:0.12049433ms called:13000 times
+CollisionDetection - min:0.01901003ms average:0.02436325ms max:0.04299191ms called:1000 times
+---------- END ----------
+
+---------- engine::util::Profiler::DumpStatistics FAST ----------
+Dumping profiler statistics:
+RendererRun - min:0.02222711ms average:0.11000431ms max:2.63215771ms called:1000 times
+ColliderRun - min:0.01725526ms average:0.02783331ms max:0.05556777ms called:1000 times
+RenderableCall - min:0.00000000ms average:0.00032063ms max:0.10148430ms called:13000 times
+CollisionDetection - min:0.01725526ms average:0.02771925ms max:0.05527531ms called:1000 times
+---------- END ----------
+
+
+VISUAL STUDIO INSTRUMENTATION
+---------- SLOW ----------
+Function Name   Number of Calls Elapsed Inclusive Time %    Elapsed Exclusive Time %    Avg Elapsed Inclusive Time  Avg Elapsed Exclusive Time  Module Name
+ColliderRun     1,000           0.18                        0.09                        0.09                        0.05                        Game.exe
+
+---------- FAST ----------
+Function Name   Number of Calls Elapsed Inclusive Time %    Elapsed Exclusive Time %    Avg Elapsed Inclusive Time  Avg Elapsed Exclusive Time  Module Name
+ColliderRun     1,000           0.20                        0.08                        0.10                        0.04                        Game.exe
