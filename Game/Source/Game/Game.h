@@ -39,7 +39,7 @@ public:
 
 	// the main game loop
 	// called every tick by the engine
-	virtual void Update(float dt) override;
+	virtual void Tick(float dt) override;
 
 	// gameplay
 	void OnKeyPressed(unsigned int i_key_id);

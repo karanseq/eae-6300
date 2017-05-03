@@ -44,7 +44,7 @@ Player::~Player()
 	engine::time::Updater::Get()->RemoveTickable(this);
 }
 
-void Player::Update(float i_dt)
+void Player::Tick(float i_dt)
 {
 	// apply an appropriate force if any of the keys are pressed
 	if (is_left_pressed_ || is_right_pressed_ || is_up_pressed_ || is_down_pressed_)

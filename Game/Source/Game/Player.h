@@ -22,7 +22,7 @@ public:
 	Player& operator=(Player&& i_copy) = delete;
 
 	// implement interface tickable
-	void Update(float i_dt) override;
+	void Tick(float i_dt) override;
 
 	// keyboard event handlers
 	void OnKeyPressed(unsigned int i_key_id);

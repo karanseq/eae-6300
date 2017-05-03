@@ -34,7 +34,7 @@ void Updater::Run(float dt)
 {
 	for (size_t i = 0; i < num_tickables_; ++i)
 	{
-		tickables_[i]->Update(dt);
+		tickables_[i]->Tick(dt);
 	}
 }
 

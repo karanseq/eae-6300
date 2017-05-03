@@ -125,7 +125,7 @@ void Game::Reset()
     engine::events::EventDispatcher::Get()->RemoveKeyboardEventListener(keyboard_event_);
 }
 
-void Game::Update(float dt)
+void Game::Tick(float dt)
 {
     if (game_state_ == GameStates::kGameStateRestart)
     {
