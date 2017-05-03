@@ -5,12 +5,12 @@ namespace game {
 
 enum class GameStates
 {
-	kGameStateNone = 0,
-	kGameStateBegin,
-	kGameStateRunning,
+    kGameStateNone = 0,
+    kGameStateBegin,
+    kGameStateRunning,
     kGameStatePaused,
-	kGameStateRestart,
-	kGameStateQuit
+    kGameStateRestart,
+    kGameStateQuit
 };
 
 } // namespace monsterchase

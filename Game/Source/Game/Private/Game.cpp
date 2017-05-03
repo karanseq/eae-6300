@@ -13,7 +13,6 @@
 #include "Time\Updater.h"
 
 // game includes
-#include "Game\Asteroid.h"
 #include "Game\GameData.h"
 #include "Game\GameUtils.h"
 #include "Game\Player.h"
@@ -51,10 +50,6 @@ bool StartUp()
 
 bool LoadGameData()
 {
-    // load textures
-    engine::util::FileUtils::Get()->ReadFile(GameData::PLAYER_TEXTURE_NAME, true);
-    engine::util::FileUtils::Get()->ReadFile(GameData::SILLY_MONSTER_TEXTURE_NAME, true);
-    engine::util::FileUtils::Get()->ReadFile(GameData::SMART_MONSTER_TEXTURE_NAME, true);
     return true;
 }
 
@@ -66,7 +61,6 @@ void Shutdown()
 
 // static member initialization
 Game* Game::instance_ = nullptr;
-static uint16_t wait_before_quit = 0;
 
 Game* Game::Create()
 {
@@ -105,9 +99,6 @@ bool Game::Init()
 	// create the player
 	CreatePlayer();
 
-	// create the asteroids
-    CreateAsteroids();
-
 	// register for update events
 	engine::time::Updater::Get()->AddTickable(this);
 
@@ -125,7 +116,6 @@ void Game::Reset()
     ASSERT(game_state_ == GameStates::kGameStateQuit || game_state_ == GameStates::kGameStateRestart);
 
     DestroyPlayer();
-    DestroyAsteroids();
     actors_.clear();
     new_actors_.clear();
 
@@ -149,17 +139,6 @@ void Game::Update(float dt)
         std::lock_guard<std::mutex> lock(new_actors_mutex_);
         actors_.insert(actors_.end(), new_actors_.begin(), new_actors_.end());
         new_actors_.clear();
-    }
-
-    ++wait_before_quit;
-    if (wait_before_quit >= 1000)
-    {
-        game_state_ = GameStates::kGameStateQuit;
-        engine::InitiateShutdown();
-    }
-    else if (wait_before_quit % 100 == 0)
-    {
-        LOG("COUNT:%d", wait_before_quit);
     }
 }
 
@@ -198,26 +177,6 @@ void Game::CreatePlayer()
 void Game::DestroyPlayer()
 {
     SAFE_DELETE(player_01_);
-}
-
-void Game::CreateAsteroids()
-{
-    std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>> actors;
-    engine::gameobject::ActorCreator::CreateActorsFromFile(GameData::MONSTERS_LUA_FILE_NAME, actors);
-
-    for (const auto& actor : actors)
-    {
-        asteroids_.push_back(new Asteroid(actor));
-    }
-}
-
-void Game::DestroyAsteroids()
-{
-    for (auto& asteroid : asteroids_)
-    {
-        delete asteroid;
-    }
-    asteroids_.clear();
 }
 
 void Game::CreateActor(const engine::data::PooledString& i_file_name)

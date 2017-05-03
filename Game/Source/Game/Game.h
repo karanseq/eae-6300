@@ -19,7 +19,6 @@
 namespace game {
 
 // forward declarations
-class Asteroid;
 class Player;
 
 // global life-cycle functions
@@ -46,8 +45,6 @@ public:
 	void OnKeyPressed(unsigned int i_key_id);
 	void CreatePlayer();
     void DestroyPlayer();
-    void CreateAsteroids();
-    void DestroyAsteroids();
 	void CreateActor(const engine::data::PooledString& i_file_name);
 
 	inline GameStates GetState() const												{ return game_state_; }
@@ -74,7 +71,6 @@ private:
 
 	// game elements
 	Player*                                                                         player_01_;
-	std::vector<Asteroid*>			                                                asteroids_;
     std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           actors_;
 	engine::memory::SharedPointer<engine::events::KeyboardEvent>					keyboard_event_;
 

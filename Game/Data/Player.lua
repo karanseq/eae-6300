@@ -1,9 +1,9 @@
 Actor = 
 {
-	name = "Clowny",
+	name = "Ship",
 	type = "Player",
 
-	bounding_box = { 0.0, 0.0, 16.0, 20.0 },
+	bounding_box = { 0.0, 0.0, 44.0, 44.0 },
 	transform = 
 	{
 		position = { -250.0, 100.0, 0.0 },
@@ -20,6 +20,6 @@ Actor =
 
 	render_settings = 
 	{
-		sprite_name = "Data\\clown.dds"
+		sprite_name = "Data\\Ship.dds"
 	}
 }

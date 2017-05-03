@@ -26,13 +26,7 @@ private:
 	GameData& operator=(const GameData& i_copy) = delete;
 
 public:
-	static const char*							PLAYER_TEXTURE_NAME;
-	static const char*							SILLY_MONSTER_TEXTURE_NAME;
-	static const char*							SMART_MONSTER_TEXTURE_NAME;
 	static const char*							PLAYER_LUA_FILE_NAME;
-	static const char*							MONSTERS_LUA_FILE_NAME;
-	static const char*							MONSTER_LUA_FILE_NAME;
-    static const char*                          BLOCK_LUA_FILE_NAME;
 
 }; // class GameData
 
