@@ -369,6 +369,12 @@
     <ClInclude Include="Source\Math\Mat44-SSE-inl.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Events\TimerEvent.h">
+      <Filter>Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Events\TimerEvent-inl.h">
+      <Filter>Header Files\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -508,6 +514,9 @@
     </ClCompile>
     <ClCompile Include="Source\Math\Private\Mat44-SSE.cpp">
       <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Events\Private\TimerEvent.cpp">
+      <Filter>Source Files\Events</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

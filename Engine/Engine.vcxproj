@@ -233,6 +233,8 @@
     <ClInclude Include="Source\Events\EventDispatcher.h" />
     <ClInclude Include="Source\Events\KeyboardEvent-inl.h" />
     <ClInclude Include="Source\Events\KeyboardEvent.h" />
+    <ClInclude Include="Source\Events\TimerEvent-inl.h" />
+    <ClInclude Include="Source\Events\TimerEvent.h" />
     <ClInclude Include="Source\GameObject\Actor-inl.h" />
     <ClInclude Include="Source\GameObject\Actor.h" />
     <ClInclude Include="Source\GameObject\ActorCreator.h" />
@@ -318,6 +320,7 @@
     <ClCompile Include="Source\Data\Private\StringPool.cpp" />
     <ClCompile Include="Source\Events\Private\EventDispatcher.cpp" />
     <ClCompile Include="Source\Events\Private\KeyboardEvent.cpp" />
+    <ClCompile Include="Source\Events\Private\TimerEvent.cpp" />
     <ClCompile Include="Source\GameObject\Private\Actor.cpp" />
     <ClCompile Include="Source\GameObject\Private\ActorCreator.cpp" />
     <ClCompile Include="Source\Input\Private\Input.cpp" />

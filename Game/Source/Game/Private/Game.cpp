@@ -17,6 +17,8 @@
 #include "Game\GameUtils.h"
 #include "Game\Player.h"
 
+#include "Events\TimerEvent.h"
+
 namespace game {
 
 bool StartUp()
@@ -26,8 +28,8 @@ bool StartUp()
     Game* game = Game::Create();
     if (game == nullptr)
     {
-	    LOG_ERROR("Could not create an instance of MonsterChase!");
-	    return false;
+        LOG_ERROR("Could not create an instance of MonsterChase!");
+        return false;
     }
 
     // load game data
@@ -42,7 +44,7 @@ bool StartUp()
     bool success = game->Init();
     if (!success)
     {
-	    LOG_ERROR("Could not initialize MonsterChase!");
+        LOG_ERROR("Could not initialize MonsterChase!");
     }
 
     return success;
@@ -55,8 +57,8 @@ bool LoadGameData()
 
 void Shutdown()
 {
-	Game::Destroy();
-	LOG("-------------------- MonsterChase Shutdown --------------------");
+    Game::Destroy();
+    LOG("-------------------- MonsterChase Shutdown --------------------");
 }
 
 // static member initialization
@@ -64,25 +66,25 @@ Game* Game::instance_ = nullptr;
 
 Game* Game::Create()
 {
-	// create the singleton instance of MonsterChase
-	if (!Game::instance_)
-	{
-		Game::instance_ = new Game();
-	}
-	return Game::instance_;
+    // create the singleton instance of MonsterChase
+    if (!Game::instance_)
+    {
+        Game::instance_ = new Game();
+    }
+    return Game::instance_;
 }
 
 void Game::Destroy()
 {
-	// destroy the singleton instance of MonsterChase
-	SAFE_DELETE(Game::instance_);
+    // destroy the singleton instance of MonsterChase
+    SAFE_DELETE(Game::instance_);
 }
 
 Game::Game() : game_state_(GameStates::kGameStateBegin),
-	player_01_(nullptr),
-	keyboard_event_(engine::events::KeyboardEvent::Create())
+    player_(nullptr),
+    keyboard_event_(engine::events::KeyboardEvent::Create())
 {
-	ASSERT(keyboard_event_);
+    ASSERT(keyboard_event_);
 
     srand(static_cast<unsigned int>(time(0)));
 }
@@ -94,21 +96,25 @@ Game::~Game()
 
 bool Game::Init()
 {
-	ASSERT(game_state_ == GameStates::kGameStateBegin || game_state_ == GameStates::kGameStateRestart);
+    ASSERT(game_state_ == GameStates::kGameStateBegin || game_state_ == GameStates::kGameStateRestart);
 
-	// create the player
-	CreatePlayer();
+    // create the player
+    CreatePlayer();
 
-	// register for update events
-	engine::time::Updater::Get()->AddTickable(this);
+    // register for update events
+    engine::time::Updater::Get()->AddTickable(this);
 
-	// register for key events
-	keyboard_event_->SetOnKeyPressed(std::bind(&Game::OnKeyPressed, this, std::placeholders::_1));
+    // register for key events
+    keyboard_event_->SetOnKeyPressed(std::bind(&Game::OnKeyPressed, this, std::placeholders::_1));
     engine::events::EventDispatcher::Get()->AddKeyboardEventListener(keyboard_event_);
 
-	game_state_ = GameStates::kGameStateRunning;
+    game_state_ = GameStates::kGameStateRunning;
 
-	return true;
+    engine::time::Updater::Get()->AddTimerEvent(engine::events::TimerEvent::Create([]() {
+        LOG("DummyTimer!");
+    }, 1.0f, -1));
+
+    return true;
 }
 
 void Game::Reset()
@@ -118,6 +124,8 @@ void Game::Reset()
     DestroyPlayer();
     actors_.clear();
     new_actors_.clear();
+
+    engine::time::Updater::Get()->RemoveAllTimerEvents();
 
     // tell the engine we no longer want to be ticked
     engine::time::Updater::Get()->RemoveTickable(this);
@@ -170,31 +178,31 @@ void Game::OnKeyPressed(unsigned int i_key_id)
 
 void Game::CreatePlayer()
 {
-    player_01_ = new Player();
-    player_01_->SetKeys('A', 'D', 'W', 'S');
+    player_ = new Player();
+    player_->SetKeys('A', 'D', 'W', 'S');
 }
 
 void Game::DestroyPlayer()
 {
-    SAFE_DELETE(player_01_);
+    SAFE_DELETE(player_);
 }
 
 void Game::CreateActor(const engine::data::PooledString& i_file_name)
 {
-	// validate inputs
-	ASSERT(i_file_name.GetLength() > 0);
+    // validate inputs
+    ASSERT(i_file_name.GetLength() > 0);
 
-	engine::jobs::FileLoadJob* file_load_job = new engine::jobs::FileLoadJob(i_file_name, std::bind(&Game::OnFileLoaded, this, std::placeholders::_1));
-	engine::jobs::JobSystem::Get()->AddJob(file_load_job, engine::data::PooledString("EngineJobs"));
+    engine::jobs::FileLoadJob* file_load_job = new engine::jobs::FileLoadJob(i_file_name, std::bind(&Game::OnFileLoaded, this, std::placeholders::_1));
+    engine::jobs::JobSystem::Get()->AddJob(file_load_job, engine::data::PooledString("EngineJobs"));
 }
 
 void Game::OnFileLoaded(engine::util::FileUtils::FileData i_file_data)
 {
-	// validate inputs
-	ASSERT(i_file_data.file_contents && i_file_data.file_size > 0);
+    // validate inputs
+    ASSERT(i_file_data.file_contents && i_file_data.file_size > 0);
 
-	engine::jobs::CreateActorDeleteFileDataJob* actor_creator_job = new engine::jobs::CreateActorDeleteFileDataJob(i_file_data, std::bind(&Game::OnActorCreated, this, std::placeholders::_1));
-	engine::jobs::JobSystem::Get()->AddJob(actor_creator_job, engine::data::PooledString("EngineJobs"));
+    engine::jobs::CreateActorDeleteFileDataJob* actor_creator_job = new engine::jobs::CreateActorDeleteFileDataJob(i_file_data, std::bind(&Game::OnActorCreated, this, std::placeholders::_1));
+    engine::jobs::JobSystem::Get()->AddJob(actor_creator_job, engine::data::PooledString("EngineJobs"));
 }
 
 void Game::OnActorCreated(engine::memory::SharedPointer<engine::gameobject::Actor> i_actor)

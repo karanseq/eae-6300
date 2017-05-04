@@ -5,6 +5,7 @@
 
 // engine includes
 #include "Assert\Assert.h"
+#include "Events\TimerEvent.h"
 #include "Logger\Logger.h"
 
 namespace engine {
@@ -12,42 +13,83 @@ namespace time {
 
 inline Updater* Updater::Get()
 {
-	return Updater::instance_;
+    return Updater::instance_;
 }
 
 inline void Updater::AddTickable(InterfaceTickable* i_tickable)
 {
-	// validate input
-	ASSERT(i_tickable);
+    // validate input
+    ASSERT(i_tickable);
 
-	// check if this object already exists
-	if (std::find(tickables_.begin(), tickables_.end(), i_tickable) != tickables_.end())
-	{
-		LOG_ERROR("Updater is already tracking this tickable!");
-		return;
-	}
+    // check if this object already exists
+    if (std::find(tickables_.begin(), tickables_.end(), i_tickable) != tickables_.end())
+    {
+        LOG_ERROR("Updater is already tracking this tickable!");
+        return;
+    }
 
-	tickables_.push_back(i_tickable);
-	++num_tickables_;
+    tickables_.push_back(i_tickable);
+    ++num_tickables_;
 }
 
 inline void Updater::RemoveTickable(InterfaceTickable* i_tickable)
 {
-	// validate input
-	ASSERT(i_tickable);
-	// can't remove an object if there are none
-	ASSERT(num_tickables_ > 0);
+    // validate input
+    ASSERT(i_tickable);
+    // can't remove an object if there are none
+    ASSERT(num_tickables_ > 0);
 
-	// check if this object exists
-	auto it = std::find(tickables_.begin(), tickables_.end(), i_tickable);
-	if (it == tickables_.end())
-	{
-		LOG_ERROR("Updater could not find this tickable!");
-		return;
-	}
+    // check if this object exists
+    auto it = std::find(tickables_.begin(), tickables_.end(), i_tickable);
+    if (it == tickables_.end())
+    {
+        LOG_ERROR("Updater could not find this tickable!");
+        return;
+    }
 
-	tickables_.erase(it);
-	--num_tickables_;
+    tickables_.erase(it);
+    --num_tickables_;
+}
+
+inline void Updater::AddTimerEvent(const engine::memory::SharedPointer<engine::events::TimerEvent>& i_timer_event)
+{
+    // validate input
+    ASSERT(i_timer_event);
+
+    // check if this object already exists
+    if (std::find(timer_events_.begin(), timer_events_.end(), i_timer_event) != timer_events_.end())
+    {
+        LOG_ERROR("Updater is already tracking this timer event!");
+        return;
+    }
+
+    timer_events_.push_back(i_timer_event);
+    ++num_timer_events_;
+}
+
+inline void Updater::RemoveTimerEvent(const engine::memory::SharedPointer<engine::events::TimerEvent>& i_timer_event)
+{
+    // validate input
+    ASSERT(i_timer_event);
+    // can't remove an object if there are none
+    ASSERT(num_timer_events_ > 0);
+
+    // check if this object exists
+    auto it = std::find(timer_events_.begin(), timer_events_.end(), i_timer_event);
+    if (it == timer_events_.end())
+    {
+        LOG_ERROR("Updater could not find this timer event!");
+        return;
+    }
+
+    timer_events_.erase(it);
+    --num_timer_events_;
+}
+
+inline void Updater::RemoveAllTimerEvents()
+{
+    timer_events_.clear();
+    num_timer_events_ = 0;
 }
 
 } // namespace time

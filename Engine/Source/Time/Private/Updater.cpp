@@ -4,13 +4,16 @@
 #include "Common\HelperMacros.h"
 #include "Time\InterfaceTickable.h"
 
+#include "Logger\Logger.h"
+
 namespace engine {
 namespace time {
 
 // static member initialization
 Updater* Updater::instance_ = nullptr;
 
-Updater::Updater() : num_tickables_(0)
+Updater::Updater() : num_tickables_(0),
+    num_timer_events_(0)
 {}
 
 Updater::~Updater()
@@ -18,11 +21,11 @@ Updater::~Updater()
 
 Updater* Updater::Create()
 {
-	if (!Updater::instance_)
-	{
-		Updater::instance_ = new Updater();
-	}
-	return Updater::instance_;
+    if (!Updater::instance_)
+    {
+        Updater::instance_ = new Updater();
+    }
+    return Updater::instance_;
 }
 
 void Updater::Destroy()
@@ -32,10 +35,19 @@ void Updater::Destroy()
 
 void Updater::Run(float dt)
 {
-	for (size_t i = 0; i < num_tickables_; ++i)
-	{
-		tickables_[i]->Tick(dt);
-	}
+    for (size_t i = 0; i < num_tickables_; ++i)
+    {
+        tickables_[i]->Tick(dt);
+    }
+
+    for (size_t i = 0; i < num_timer_events_; ++i)
+    {
+        timer_events_[i]->Tick(dt);
+    }
+
+    auto logical_end = std::remove_if(timer_events_.begin(), timer_events_.end(), [](const engine::memory::SharedPointer<engine::events::TimerEvent>& i_timer_event) { return i_timer_event->complete_; });
+    auto it = timer_events_.erase(logical_end, timer_events_.end());
+    num_timer_events_ = it - timer_events_.begin();
 }
 
 } // namespace time
