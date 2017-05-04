@@ -8,9 +8,9 @@ inline engine::memory::SharedPointer<TimerEvent> TimerEvent::Create()
     return engine::memory::SharedPointer<TimerEvent>(new TimerEvent());
 }
 
-inline engine::memory::SharedPointer<TimerEvent> TimerEvent::Create(const std::function<void(void)>& i_on_timer_elapsed, float i_duration, int32_t i_repeat)
+inline engine::memory::SharedPointer<TimerEvent> TimerEvent::Create(const std::function<void(void)>& i_on_timer_elapsed, float i_duration_seconds, int32_t i_repeat)
 {
-    return engine::memory::SharedPointer<TimerEvent>(new TimerEvent(i_on_timer_elapsed, i_duration, i_repeat));
+    return engine::memory::SharedPointer<TimerEvent>(new TimerEvent(i_on_timer_elapsed, i_duration_seconds, i_repeat));
 }
 
 inline TimerEvent& TimerEvent::operator=(const TimerEvent& i_other)
@@ -19,7 +19,7 @@ inline TimerEvent& TimerEvent::operator=(const TimerEvent& i_other)
     if (this != &i_other)
     {
         on_timer_elapsed_ = i_other.on_timer_elapsed_;
-        duration_ = i_other.duration_;
+        duration_ms_ = i_other.duration_ms_;
         duration_elapsed_ = i_other.duration_elapsed_;
         repeat_ = i_other.repeat_;
         repeated_ = i_other.repeated_;
@@ -34,12 +34,12 @@ inline void TimerEvent::SetOnTimerElapsed(const std::function<void(void)>& i_on_
 
 inline float TimerEvent::GetDuration() const
 {
-    return duration_ * 0.001f;
+    return duration_ms_ * 0.001f;
 }
 
-inline void TimerEvent::SetDuration(float i_duration)
+inline void TimerEvent::SetDuration(float i_duration_seconds)
 {
-    duration_ = i_duration * 1000.0f;
+    duration_ms_ = i_duration_seconds * 1000.0f;
 }
 
 inline int32_t TimerEvent::GetRepeat() const

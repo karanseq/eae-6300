@@ -8,7 +8,7 @@ uint32_t TimerEvent::id_counter_ = 0;
 #endif
 
 TimerEvent::TimerEvent() : on_timer_elapsed_(nullptr),
-    duration_(0.0f),
+    duration_ms_(0.0f),
     duration_elapsed_(0.0f),
     repeat_(0),
     repeated_(0),
@@ -18,8 +18,8 @@ TimerEvent::TimerEvent() : on_timer_elapsed_(nullptr),
     complete_(false)
 {}
 
-TimerEvent::TimerEvent(const std::function<void(void)>& i_on_timer_elapsed, float i_duration, int32_t i_repeat) : on_timer_elapsed_(i_on_timer_elapsed),
-    duration_(i_duration * 1000.0f),
+TimerEvent::TimerEvent(const std::function<void(void)>& i_on_timer_elapsed, float i_duration_seconds, int32_t i_repeat) : on_timer_elapsed_(i_on_timer_elapsed),
+    duration_ms_(i_duration_seconds * 1000.0f),
     duration_elapsed_(0.0f),
     repeat_(i_repeat),
     repeated_(0),
@@ -30,7 +30,7 @@ TimerEvent::TimerEvent(const std::function<void(void)>& i_on_timer_elapsed, floa
 {}
 
 TimerEvent::TimerEvent(const TimerEvent& i_copy) : on_timer_elapsed_(i_copy.on_timer_elapsed_),
-    duration_(i_copy.duration_),
+    duration_ms_(i_copy.duration_ms_),
     duration_elapsed_(i_copy.duration_elapsed_),
     repeat_(i_copy.repeat_),
     repeated_(i_copy.repeated_),
@@ -48,7 +48,7 @@ void TimerEvent::Tick(float i_dt)
     }
 
     duration_elapsed_ += i_dt;
-    if (duration_elapsed_ >= duration_)
+    if (duration_elapsed_ >= duration_ms_)
     {
         on_timer_elapsed_();
 

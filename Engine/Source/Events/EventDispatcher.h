@@ -2,6 +2,7 @@
 #define EVENT_DISPATCHER_H_
 
 // library includes
+#include <mutex>
 #include <vector>
 
 // engine includes
@@ -35,6 +36,7 @@ public:
 
 private:
     std::vector<engine::memory::SharedPointer<engine::events::KeyboardEvent>>               keyboard_event_listeners_;
+    mutable std::mutex                                                                      keyboard_event_listeners_mutex_;
 
 }; // class EventDispatcher
 

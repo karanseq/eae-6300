@@ -37,6 +37,8 @@ void EventDispatcher::AddKeyboardEventListener(const engine::memory::SharedPoint
     // validate input
     ASSERT(i_listener);
 
+    std::lock_guard<std::mutex> lock(keyboard_event_listeners_mutex_);
+
     // check if listener is already registered
     if (std::find(keyboard_event_listeners_.begin(), keyboard_event_listeners_.end(), i_listener) != keyboard_event_listeners_.end())
     {
@@ -52,6 +54,8 @@ void EventDispatcher::RemoveKeyboardEventListener(const engine::memory::SharedPo
     // validate input
     ASSERT(i_listener);
 
+    std::lock_guard<std::mutex> lock(keyboard_event_listeners_mutex_);
+
     // check if this listener is registered
     const auto& it = std::find(keyboard_event_listeners_.begin(), keyboard_event_listeners_.end(), i_listener);
     if (it == keyboard_event_listeners_.end())
@@ -65,6 +69,8 @@ void EventDispatcher::RemoveKeyboardEventListener(const engine::memory::SharedPo
 
 void EventDispatcher::DispatchKeyboardEvent(unsigned int i_key_id, bool i_went_down) const
 {
+    std::lock_guard<std::mutex> lock(keyboard_event_listeners_mutex_);
+
     for (const auto& i : keyboard_event_listeners_)
     {
         // get the appropriate function

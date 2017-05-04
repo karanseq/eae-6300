@@ -2,6 +2,7 @@
 #define UPDATER_H_
 
 // library includes
+#include <mutex>
 #include <vector>
 
 // engine includes
@@ -55,9 +56,11 @@ public:
 private:
     size_t                                                                              num_tickables_;
     std::vector<InterfaceTickable*>                                                     tickables_;
+    std::mutex                                                                          tickables_mutex_;
 
     size_t                                                                              num_timer_events_;
     std::vector<engine::memory::SharedPointer<engine::events::TimerEvent>>              timer_events_;
+    std::mutex                                                                          timer_events_mutex_;
 
 }; // class Updater
 
