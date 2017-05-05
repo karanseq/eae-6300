@@ -35,32 +35,29 @@ void Physics::Destroy()
 
 void Physics::Run(float i_dt)
 {
+    // acquire a lock
+    std::lock_guard<std::mutex> lock(physics_mutex_);
+
 	for (size_t i = 0; i < num_physics_objects_; ++i)
 	{
 		physics_objects_[i]->Update(i_dt);
 	}
 }
 
-engine::memory::SharedPointer<PhysicsObject> Physics::CreatePhysicsObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, float i_mass, float i_drag, bool i_is_collidable)
+engine::memory::SharedPointer<PhysicsObject> Physics::CreatePhysicsObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, 
+    float i_mass, 
+    float i_drag, 
+    PhysicsObjectType i_type, 
+    uint16_t i_collision_filter,
+    bool i_is_collidable)
 {
     // validate input
     ASSERT(i_game_object);
 
     // create a new physics object
-    engine::memory::SharedPointer<PhysicsObject> physics_object = PhysicsObject::Create(i_game_object, i_mass, i_drag, i_is_collidable);
+    engine::memory::SharedPointer<PhysicsObject> physics_object = PhysicsObject::Create(i_game_object, i_mass, i_drag, i_type, i_collision_filter, i_is_collidable);
 
-    // add to the collider if it is collidable
-    if (i_is_collidable)
-    {
-        Collider::Get()->AddPhysicsObject(physics_object);
-    }
-
-    // acquire a lock
-    std::lock_guard<std::mutex> lock(physics_mutex_);
-
-    // add it to the list
-    physics_objects_.push_back(physics_object);
-    ++num_physics_objects_;
+    AddPhysicsObject(physics_object);
 
     return physics_object;
 }

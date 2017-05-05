@@ -16,13 +16,16 @@ namespace physics {
 // static member initialization
 Collider* Collider::instance_ = nullptr;
 
-Collider::Collider() : num_physics_objects_(0)
+Collider::Collider() : num_dynamic_objects_(0),
+    num_static_kynematic_objects_(0)
 {}
 
 Collider::~Collider()
 {
-    physics_objects_.clear();
-    num_physics_objects_ = 0;
+    dynamic_objects_.clear();
+    num_dynamic_objects_ = 0;
+    static_kynematic_objects_.clear();
+    num_static_kynematic_objects_ = 0;
 }
 
 Collider* Collider::Create()
@@ -57,10 +60,13 @@ void Collider::DetectCollisions(float i_dt)
     using namespace engine::math;
 #endif
 
-    for (size_t i = 0; i < num_physics_objects_; ++i)
+    // acquire a lock
+    std::lock_guard<std::mutex> lock(collider_mutex_);
+
+    for (size_t i = 0; i < num_dynamic_objects_; ++i)
     {
         // get physics object A
-        const engine::memory::SharedPointer<PhysicsObject> physics_object_a = physics_objects_[i].Lock();
+        const engine::memory::SharedPointer<PhysicsObject> physics_object_a = dynamic_objects_[i].Lock();
 
         // get game object A
         const engine::memory::SharedPointer<engine::gameobject::GameObject> game_object_a = physics_object_a->GetGameObject().Lock();
@@ -74,16 +80,16 @@ void Collider::DetectCollisions(float i_dt)
         // calculate transform to convert world to object A coordinates
         Mat44 mat_WtoA(mat_AtoW.GetInverse());
 
-        for (size_t j = i; j < num_physics_objects_; ++j)
+        for (size_t j = i; j < num_dynamic_objects_; ++j)
         {
             // don't compute collisions with self
-            if (physics_objects_[i] == physics_objects_[j])
+            if (dynamic_objects_[i] == dynamic_objects_[j])
             {
                 continue;
             }
 
             // get physics object B
-            engine::memory::SharedPointer<PhysicsObject> physics_object_b = physics_objects_[j].Lock();
+            engine::memory::SharedPointer<PhysicsObject> physics_object_b = dynamic_objects_[j].Lock();
             // get game object B
             const engine::memory::SharedPointer<engine::gameobject::GameObject> game_object_b = physics_object_b->GetGameObject().Lock();
             // get B's AABB
@@ -175,19 +181,6 @@ void Collider::DetectCollisions(float i_dt)
                 }
                 else
                 {
-                    //VERBOSE("Collision found!");
-#ifdef BUILD_DEBUG
-                    /*PrintDebugInformation(mat_WtoA,
-                        mat_WtoB,
-                        mat_AtoB,
-                        mat_BtoA,
-                        game_object_a->GetAABB(),
-                        game_object_b->GetAABB(),
-                        physics_object_a->GetVelocity(),
-                        physics_object_b->GetVelocity(),
-                        i_dt);*/
-#endif
-
                     // calculate the normal to the surface that collided
                     Vec3D normal = Vec3D::ZERO;
                     if (engine::math::FuzzyEquals(t_close_latest, t_close_X_in_B))
@@ -213,10 +206,6 @@ void Collider::DetectCollisions(float i_dt)
 
                     collided_objects_.push_back({t_close_latest, normal, physics_object_a, physics_object_b});
                 }
-            }
-            else
-            {
-                //VERBOSE("Collision not found!");
             }
 
         } // end of inner for loop
@@ -309,27 +298,6 @@ void Collider::PrintDebugInformation(const engine::math::Mat44& i_mat_WtoA,
     LOG("B_extents: %f, %f", i_b_aabb.extents.x(), i_b_aabb.extents.y());
     LOG("B_extents_in_A: %f, %f", B_extents_in_A.x(), B_extents_in_A.y());
 
-    //LOG("X_separation_in_A:%f", fabs(i_a_aabb.center.x() - i_a_aabb.extents.x() - B_center_in_A.x() - B_X_extent_in_A.x()));
-    //LOG("Y_separation_in_A:%f", fabs(i_a_aabb.center.y() - i_a_aabb.extents.y() - B_center_in_A.y() - B_Y_extent_in_A.y()));
-    //LOG("X_separation_in_B:%f", fabs(i_b_aabb.center.x() - i_b_aabb.extents.x() - A_center_in_B.x() - A_X_extent_in_B.x()));
-    //LOG("Y_separation_in_B:%f", fabs(i_b_aabb.center.y() - i_b_aabb.extents.y() - A_center_in_B.y() - A_Y_extent_in_B.y()));
-
-    //LOG("t_open_X_in_A: %f", (i_a_aabb.center.x() + i_a_aabb.extents.x() - B_center_in_A.x() + B_X_extent_in_A.x()) / relative_vel_in_A.x());
-    //LOG("t_close_X_in_A: %f", (i_a_aabb.center.x() - i_a_aabb.extents.x() - B_center_in_A.x() - B_X_extent_in_A.x()) / relative_vel_in_A.x());
-
-    //LOG("t_open_Y_in_A: %f", (i_a_aabb.center.y() + i_a_aabb.extents.y() - B_center_in_A.y() + B_Y_extent_in_A.y()) / relative_vel_in_A.y());
-    //LOG("t_close_Y_in_A: %f", (i_a_aabb.center.y() - i_a_aabb.extents.y() - B_center_in_A.y() - B_Y_extent_in_A.y()) / relative_vel_in_A.y());
-
-    //LOG("t_open_X_in_B: %f", (i_b_aabb.center.x() + i_b_aabb.extents.x() - A_center_in_B.x() + A_X_extent_in_B.x()) / relative_vel_in_B.x());
-    //LOG("t_close_X_in_B: %f", (i_b_aabb.center.x() - i_b_aabb.extents.x() - A_center_in_B.x() - A_X_extent_in_B.x()) / relative_vel_in_B.x());
-
-    //LOG("t_open_Y_in_B: %f", (i_b_aabb.center.y() + i_b_aabb.extents.y() - A_center_in_B.y() + A_Y_extent_in_B.y()) / relative_vel_in_B.y());
-    //LOG("t_close_Y_in_B: %f", (i_b_aabb.center.y() - i_b_aabb.extents.y() - A_center_in_B.y() - A_Y_extent_in_B.y()) / relative_vel_in_B.y());
-
-    //LOG("relative_velocity_in_A: %f, %f", relative_vel_in_A.x(), relative_vel_in_A.y());
-    //LOG("relative_velocity_in_B: %f, %f", relative_vel_in_B.x(), relative_vel_in_B.y());
-    //LOG("DT:%f", i_dt);
-
     LOG("******************************\n");
 }
 #endif // BUILD_DEBUG
@@ -343,15 +311,15 @@ void Collider::AddPhysicsObject(const engine::memory::WeakPointer<PhysicsObject>
     std::lock_guard<std::mutex> lock(collider_mutex_);
 
     // check if this object already exists
-    if (std::find(physics_objects_.begin(), physics_objects_.end(), i_physics_object) != physics_objects_.end())
+    if (std::find(dynamic_objects_.begin(), dynamic_objects_.end(), i_physics_object) != dynamic_objects_.end())
     {
         LOG_ERROR("Collider is already tracking this physics object!");
         return;
     }
     
     // add it to the list
-    physics_objects_.push_back(i_physics_object);
-    ++num_physics_objects_;
+    dynamic_objects_.push_back(i_physics_object);
+    ++num_dynamic_objects_;
 }
 
 void Collider::RemovePhysicsObject(const engine::memory::WeakPointer<PhysicsObject>& i_physics_object)
@@ -359,22 +327,22 @@ void Collider::RemovePhysicsObject(const engine::memory::WeakPointer<PhysicsObje
     // validate input
     ASSERT(i_physics_object);
     // can't remove an object if there are none
-    ASSERT(num_physics_objects_ > 0);
+    ASSERT(num_dynamic_objects_ > 0);
 
     // acquire a lock
     std::lock_guard<std::mutex> lock(collider_mutex_);
 
     // check if this object exists
-    auto it = std::find(physics_objects_.begin(), physics_objects_.end(), i_physics_object);
-    if (it == physics_objects_.end())
+    auto it = std::find(dynamic_objects_.begin(), dynamic_objects_.end(), i_physics_object);
+    if (it == dynamic_objects_.end())
     {
         LOG_ERROR("Physics could not find this physics object!");
         return;
     }
 
     // remove it from the list
-    physics_objects_.erase(it);
-    --num_physics_objects_;
+    dynamic_objects_.erase(it);
+    --num_dynamic_objects_;
 }
 
 } // namespace physics

@@ -66,9 +66,7 @@ inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderabl
     // create a new renderable
     engine::memory::SharedPointer<RenderableObject> renderable = RenderableObject::Create(i_sprite, i_game_object);
 
-    // add it to the list
-    renderables_.push_back(renderable);
-    ++num_renderables_;
+    AddRenderableObject(renderable);
 
     return renderable;
 }

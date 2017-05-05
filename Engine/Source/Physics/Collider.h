@@ -71,8 +71,10 @@ public:
 #endif
 
 private:
-    size_t                                                                          num_physics_objects_;
-    std::vector<engine::memory::WeakPointer<PhysicsObject>>                         physics_objects_;
+    size_t                                                                          num_dynamic_objects_;
+    std::vector<engine::memory::WeakPointer<PhysicsObject>>                         dynamic_objects_;
+    size_t                                                                          num_static_kynematic_objects_;
+    std::vector<engine::memory::WeakPointer<PhysicsObject>>                         static_kynematic_objects_;
     std::vector<CollisionPair>                                                      collided_objects_;
     std::mutex                                                                      collider_mutex_;
 

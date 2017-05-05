@@ -47,6 +47,8 @@ void Renderer::Run(float i_dt)
     // Tell GLib that we want to render some sprites
     GLib::Sprites::BeginRendering();
 
+    std::lock_guard<std::mutex> lock(renderables_mutex_);
+
     for (size_t i = 0; i < num_renderables_; ++i)
     {
         PROFILE_SCOPE_BEGIN("RenderableCall")

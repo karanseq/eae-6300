@@ -38,7 +38,7 @@ bool StartUp(HINSTANCE i_h_instance, int i_n_cmd_show, const char* i_window_name
 
     // create job system
     engine::jobs::JobSystem* job_system = engine::jobs::JobSystem::Create();
-    job_system->CreateTeam(engine::data::PooledString("EngineJobs"), 5);
+    job_system->CreateTeam(engine::data::PooledString("EngineTeam"), 5);
 
     // create file util
     engine::util::FileUtils::Create();

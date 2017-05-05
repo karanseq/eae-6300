@@ -1,5 +1,7 @@
 #include "Jobs\CreateActorDeleteFileDataJob.h"
 
+#include "Logger\Logger.h"
+
 namespace engine {
 namespace jobs {
 
@@ -10,6 +12,8 @@ CreateActorDeleteFileDataJob::CreateActorDeleteFileDataJob(const engine::util::F
     ASSERT(i_file_data.file_contents);
     ASSERT(i_file_data.file_size > 0);
     ASSERT(i_callback);
+
+    SetName("CreateActorDeleteFileDataJob");
 }
 
 CreateActorDeleteFileDataJob::~CreateActorDeleteFileDataJob()

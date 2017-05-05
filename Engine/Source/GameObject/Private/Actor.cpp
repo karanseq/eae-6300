@@ -14,7 +14,8 @@ Actor::Actor() : name_(""),
 	renderable_object_(nullptr)
 {}
 
-Actor::Actor(const engine::data::PooledString& i_name, const engine::data::HashedString& i_type) : name_(i_name),
+Actor::Actor(uint32_t i_id, const engine::data::PooledString& i_name, const engine::data::HashedString& i_type) : id_(i_id),
+    name_(i_name),
 	type_(i_type),
 	game_object_(nullptr),
 	physics_object_(nullptr),

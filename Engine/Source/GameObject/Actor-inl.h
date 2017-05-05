@@ -8,9 +8,9 @@ inline engine::memory::SharedPointer<Actor> Actor::Create()
 	return engine::memory::SharedPointer<Actor>(new Actor());
 }
 
-inline engine::memory::SharedPointer<Actor> Actor::Create(const engine::data::PooledString& i_name, const engine::data::HashedString& i_type)
+inline engine::memory::SharedPointer<Actor> Actor::Create(uint32_t i_id, const engine::data::PooledString& i_name, const engine::data::HashedString& i_type)
 {
-	return engine::memory::SharedPointer<Actor>(new Actor(i_name, i_type));
+	return engine::memory::SharedPointer<Actor>(new Actor(i_id, i_name, i_type));
 }
 
 inline engine::memory::SharedPointer<Actor> Actor::Create(const engine::memory::SharedPointer<GameObject>& i_game_object)
@@ -33,7 +33,7 @@ inline engine::memory::SharedPointer<Actor> Actor::Create(const engine::memory::
 	return engine::memory::SharedPointer<Actor>(new Actor(i_game_object, i_physics_object, i_renderable_object));
 }
 
-inline void Actor::SetID(uint16_t i_id)
+inline void Actor::SetID(uint32_t i_id)
 {
 	id_ = i_id;
 }

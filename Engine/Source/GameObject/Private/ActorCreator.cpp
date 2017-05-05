@@ -14,6 +14,10 @@
 namespace engine {
 namespace gameobject {
 
+// static member initialization
+std::mutex ActorCreator::actor_count_mutex_;
+uint32_t ActorCreator::actor_count_ = 0;
+
 bool ActorCreator::CreateActorFromFile(const engine::data::PooledString& i_file_name, engine::memory::SharedPointer<Actor>& o_actor)
 {
 	// validate input
@@ -153,6 +157,9 @@ bool ActorCreator::CreateActor(lua_State* i_lua_state, engine::memory::SharedPoi
 	// validate input
 	ASSERT(i_lua_state);
 
+    // get the actor's id
+    const uint32_t id = GetNewActorID();
+
 	// get the actor's name
 	const auto name = engine::util::LuaHelper::CreatePooledString(i_lua_state, "name");
 
@@ -160,7 +167,7 @@ bool ActorCreator::CreateActor(lua_State* i_lua_state, engine::memory::SharedPoi
 	const auto type = engine::data::HashedString(engine::util::LuaHelper::CreatePooledString(i_lua_state, "type"));
 
 	// create the actor
-	o_actor = engine::gameobject::Actor::Create(name, type);
+	o_actor = engine::gameobject::Actor::Create(id, name, type);
 
 	// get the actor's bounding box
 	const auto aabb = engine::util::LuaHelper::CreateAABB(i_lua_state, "bounding_box");
@@ -187,35 +194,41 @@ bool ActorCreator::CreateActor(lua_State* i_lua_state, engine::memory::SharedPoi
 
 bool ActorCreator::CreatePhysicsObject(lua_State* i_lua_state, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, engine::memory::WeakPointer<engine::physics::PhysicsObject>& o_physics_object)
 {
-	// validate inputs
-	ASSERT(i_lua_state);
-	ASSERT(i_game_object);
+    // validate inputs
+    ASSERT(i_lua_state);
+    ASSERT(i_game_object);
 
-	int type = LUA_TNIL;
+    int type = LUA_TNIL;
 
-	// check if this actor has physics settings
-	lua_pushstring(i_lua_state, "physics_settings");
-	type = lua_gettable(i_lua_state, -2);
-	ASSERT(type == LUA_TNIL || type == LUA_TTABLE);
+    // check if this actor has physics settings
+    lua_pushstring(i_lua_state, "physics_settings");
+    type = lua_gettable(i_lua_state, -2);
+    ASSERT(type == LUA_TNIL || type == LUA_TTABLE);
 
-	bool has_physics = false;
-	float physics_mass = 0.0f, physics_drag = 0.0f;
+    bool has_physics = false;
+    float physics_mass = 0.0f, physics_drag = 0.0f;
+    static engine::data::HashedString types[3] = { "static", "kinematic", "dynamic" };
 
-	if (type == LUA_TTABLE)
-	{
-		has_physics = true;
+    if (type == LUA_TTABLE)
+    {
+        has_physics = true;
 
-		float mass = engine::util::LuaHelper::CreateFloat(i_lua_state, "mass");
-		float drag = engine::util::LuaHelper::CreateFloat(i_lua_state, "drag");
+        const engine::data::HashedString type_string = engine::data::HashedString(engine::util::LuaHelper::CreatePooledString(i_lua_state, "type"));
+        engine::physics::PhysicsObjectType type = static_cast<engine::physics::PhysicsObjectType>(type_string == types[0] ? 0 : (type_string == types[1] ? 1 : (type_string == types[2] ? 2 : 0)));
+
+        float mass = engine::util::LuaHelper::CreateFloat(i_lua_state, "mass");
+        float drag = engine::util::LuaHelper::CreateFloat(i_lua_state, "drag");
+
         bool is_collidable = engine::util::LuaHelper::CreateBool(i_lua_state, "collide");
+        uint16_t collision_filter = 1 << (engine::util::LuaHelper::CreateInt(i_lua_state, "collision_filter") % 16);
 
-		o_physics_object = engine::physics::Physics::Get()->CreatePhysicsObject(i_game_object, mass, drag, is_collidable);
-	}
+        o_physics_object = engine::physics::Physics::Get()->CreatePhysicsObject(i_game_object, mass, drag, type, collision_filter, is_collidable);
+    }
 
-	// pop the physics settings value
-	lua_pop(i_lua_state, 1);
+    // pop the physics settings value
+    lua_pop(i_lua_state, 1);
 
-	return has_physics;
+    return has_physics;
 }
 
 bool ActorCreator::CreateRenderableObject(lua_State* i_lua_state, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, engine::memory::WeakPointer<engine::render::RenderableObject>& o_renderable_object)
