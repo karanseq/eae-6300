@@ -38,10 +38,13 @@ void Physics::Run(float i_dt)
     // acquire a lock
     std::lock_guard<std::mutex> lock(physics_mutex_);
 
-	for (size_t i = 0; i < num_physics_objects_; ++i)
-	{
-		physics_objects_[i]->Update(i_dt);
-	}
+    for (size_t i = 0; i < num_physics_objects_; ++i)
+    {
+        if (physics_objects_[i]->GetType() != PhysicsObjectType::kPhysicsObjectStatic)
+        {
+            physics_objects_[i]->Update(i_dt);
+        }
+    }
 }
 
 engine::memory::SharedPointer<PhysicsObject> Physics::CreatePhysicsObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, 

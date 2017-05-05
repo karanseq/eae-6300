@@ -15,5 +15,10 @@ inline Collider* Collider::Get()
     return Collider::instance_;
 }
 
+inline void Collider::SetCollisionListener(InterfaceCollisionListener* i_collision_listener)
+{
+    collision_listener_ = i_collision_listener;
+}
+
 } // namespace physics
 } // namespace engine

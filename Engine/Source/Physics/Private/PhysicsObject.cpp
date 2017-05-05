@@ -27,7 +27,7 @@ PhysicsObject::PhysicsObject(const engine::memory::WeakPointer<engine::gameobjec
     PhysicsObjectType i_type,
     uint16_t i_collision_filter,
     bool i_is_collidable) : curr_velocity_(engine::math::Vec3D::ZERO),
-        collision_data_( { i_collision_filter, i_is_collidable, false, false } ),
+        collision_data_( { i_collision_filter, i_is_collidable, false, true } ),
         game_object_(i_game_object),
         mass_(i_mass),
         inverse_mass_(0.0f),
@@ -73,7 +73,7 @@ PhysicsObject::PhysicsObject(const PhysicsObject& i_copy) : curr_velocity_(i_cop
 void PhysicsObject::Update(float i_dt)
 {
     // don't process if not awake
-    if (!is_awake_)
+    if (is_awake_ == false)
     {
         return;
     }

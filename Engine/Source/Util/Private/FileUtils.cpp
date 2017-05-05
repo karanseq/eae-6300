@@ -49,6 +49,8 @@ FileUtils::FileData FileUtils::ReadFile(const engine::data::PooledString& i_file
 		return file_cache_[hash];
 	}
 
+    std::lock_guard<std::mutex> lock(file_cache_mutex_);
+
 	// read the file
 	FILE * file = nullptr;
 
@@ -98,6 +100,8 @@ bool FileUtils::WriteFile(const engine::data::PooledString& i_file_name, const c
 
 void FileUtils::ClearFileCache()
 {
+    std::lock_guard<std::mutex> lock(file_cache_mutex_);
+
 	for (auto i : file_cache_)
 	{
 		delete i.second.file_contents;

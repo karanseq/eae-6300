@@ -32,6 +32,12 @@ struct CollisionPair
     engine::memory::WeakPointer<PhysicsObject>                  object_b;
 };
 
+class InterfaceCollisionListener
+{
+public:
+    virtual void OnCollision(const CollisionPair& i_collision_pair) = 0;
+};
+
 class Collider
 {
 private:
@@ -58,6 +64,8 @@ public:
     void AddPhysicsObject(const engine::memory::WeakPointer<engine::physics::PhysicsObject>& i_physics_object);
     void RemovePhysicsObject(const engine::memory::WeakPointer<engine::physics::PhysicsObject>& i_physics_object);
 
+    inline void SetCollisionListener(InterfaceCollisionListener* i_collision_listener);
+
 #ifdef BUILD_DEBUG
     void PrintDebugInformation(const engine::math::Mat44& i_mat_WtoA,
         const engine::math::Mat44& i_mat_WtoB,
@@ -71,12 +79,15 @@ public:
 #endif
 
 private:
-    size_t                                                                          num_dynamic_objects_;
     std::vector<engine::memory::WeakPointer<PhysicsObject>>                         dynamic_objects_;
-    size_t                                                                          num_static_kynematic_objects_;
     std::vector<engine::memory::WeakPointer<PhysicsObject>>                         static_kynematic_objects_;
     std::vector<CollisionPair>                                                      collided_objects_;
+
+    size_t                                                                          num_dynamic_objects_;
+    size_t                                                                          num_static_kynematic_objects_;
     std::mutex                                                                      collider_mutex_;
+
+    InterfaceCollisionListener*                                                     collision_listener_;
 
 }; // class Collider
 

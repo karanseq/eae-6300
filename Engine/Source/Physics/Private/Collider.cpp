@@ -17,7 +17,8 @@ namespace physics {
 Collider* Collider::instance_ = nullptr;
 
 Collider::Collider() : num_dynamic_objects_(0),
-    num_static_kynematic_objects_(0)
+    num_static_kynematic_objects_(0),
+    collision_listener_(nullptr)
 {}
 
 Collider::~Collider()
@@ -68,6 +69,9 @@ void Collider::DetectCollisions(float i_dt)
         // get physics object A
         const engine::memory::SharedPointer<PhysicsObject> physics_object_a = dynamic_objects_[i].Lock();
 
+        // get physics object A's collision filter
+        uint16_t collision_filter_a = physics_object_a->GetCollisionFilter();
+
         // get game object A
         const engine::memory::SharedPointer<engine::gameobject::GameObject> game_object_a = physics_object_a->GetGameObject().Lock();
         // get A's AABB
@@ -80,16 +84,19 @@ void Collider::DetectCollisions(float i_dt)
         // calculate transform to convert world to object A coordinates
         Mat44 mat_WtoA(mat_AtoW.GetInverse());
 
-        for (size_t j = i; j < num_dynamic_objects_; ++j)
+        for (size_t j = i + 1, k = 0; j < num_dynamic_objects_ || k < num_static_kynematic_objects_; k += j < num_dynamic_objects_ ? 0 : 1, j += j < num_dynamic_objects_ ? 1 : 0)
         {
-            // don't compute collisions with self
-            if (dynamic_objects_[i] == dynamic_objects_[j])
+            // get physics object B
+            engine::memory::SharedPointer<PhysicsObject> physics_object_b = j < num_dynamic_objects_ ? dynamic_objects_[j].Lock() : static_kynematic_objects_[k].Lock();
+
+            // get physics object B's collision filter
+            uint16_t collision_filter_b = physics_object_b->GetCollisionFilter();
+
+            if (collision_filter_a != collision_filter_b)
             {
                 continue;
             }
 
-            // get physics object B
-            engine::memory::SharedPointer<PhysicsObject> physics_object_b = dynamic_objects_[j].Lock();
             // get game object B
             const engine::memory::SharedPointer<engine::gameobject::GameObject> game_object_b = physics_object_b->GetGameObject().Lock();
             // get B's AABB
@@ -252,6 +259,11 @@ void Collider::RespondToCollisions(float i_dt)
         CollisionPair& collision_pair = collided_objects_[i];
         collision_pair.object_a.Lock()->RespondToCollision(collision_pair.normal);
         collision_pair.object_b.Lock()->RespondToCollision(collision_pair.normal);
+
+        if (collision_listener_)
+        {
+            collision_listener_->OnCollision(collision_pair);
+        }
     }
 
     collided_objects_.clear();
@@ -310,16 +322,32 @@ void Collider::AddPhysicsObject(const engine::memory::WeakPointer<PhysicsObject>
     // acquire a lock
     std::lock_guard<std::mutex> lock(collider_mutex_);
 
-    // check if this object already exists
-    if (std::find(dynamic_objects_.begin(), dynamic_objects_.end(), i_physics_object) != dynamic_objects_.end())
+    if (i_physics_object.Lock()->GetType() == PhysicsObjectType::kPhysicsObjectDynamic)
     {
-        LOG_ERROR("Collider is already tracking this physics object!");
-        return;
-    }
+        // check if this object already exists
+        if (std::find(dynamic_objects_.begin(), dynamic_objects_.end(), i_physics_object) != dynamic_objects_.end())
+        {
+            LOG_ERROR("Collider is already tracking this physics object!");
+            return;
+        }
     
-    // add it to the list
-    dynamic_objects_.push_back(i_physics_object);
-    ++num_dynamic_objects_;
+        // add it to the list
+        dynamic_objects_.push_back(i_physics_object);
+        ++num_dynamic_objects_;
+    }
+    else
+    {
+        // check if this object already exists
+        if (std::find(static_kynematic_objects_.begin(), static_kynematic_objects_.end(), i_physics_object) != static_kynematic_objects_.end())
+        {
+            LOG_ERROR("Collider is already tracking this physics object!");
+            return;
+        }
+
+        // add it to the list
+        static_kynematic_objects_.push_back(i_physics_object);
+        ++num_static_kynematic_objects_;
+    }
 }
 
 void Collider::RemovePhysicsObject(const engine::memory::WeakPointer<PhysicsObject>& i_physics_object)
@@ -327,22 +355,39 @@ void Collider::RemovePhysicsObject(const engine::memory::WeakPointer<PhysicsObje
     // validate input
     ASSERT(i_physics_object);
     // can't remove an object if there are none
-    ASSERT(num_dynamic_objects_ > 0);
+    ASSERT(num_dynamic_objects_ > 0 || num_static_kynematic_objects_ > 0);
 
     // acquire a lock
     std::lock_guard<std::mutex> lock(collider_mutex_);
 
-    // check if this object exists
-    auto it = std::find(dynamic_objects_.begin(), dynamic_objects_.end(), i_physics_object);
-    if (it == dynamic_objects_.end())
+    if (i_physics_object.Lock()->GetType() == PhysicsObjectType::kPhysicsObjectDynamic)
     {
-        LOG_ERROR("Physics could not find this physics object!");
-        return;
-    }
+        // check if this object exists
+        auto it = std::find(dynamic_objects_.begin(), dynamic_objects_.end(), i_physics_object);
+        if (it == dynamic_objects_.end())
+        {
+            LOG_ERROR("Physics could not find this physics object!");
+            return;
+        }
 
-    // remove it from the list
-    dynamic_objects_.erase(it);
-    --num_dynamic_objects_;
+        // remove it from the list
+        dynamic_objects_.erase(it);
+        --num_dynamic_objects_;
+    }
+    else
+    {
+        // check if this object exists
+        auto it = std::find(static_kynematic_objects_.begin(), static_kynematic_objects_.end(), i_physics_object);
+        if (it == static_kynematic_objects_.end())
+        {
+            LOG_ERROR("Physics could not find this physics object!");
+            return;
+        }
+
+        // remove it from the list
+        static_kynematic_objects_.erase(it);
+        --num_static_kynematic_objects_;
+    }
 }
 
 } // namespace physics

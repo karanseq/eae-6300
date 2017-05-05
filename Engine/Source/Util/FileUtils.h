@@ -2,6 +2,7 @@
 #define FILE_UTILS_H_
 
 // library includes
+#include <mutex>
 #include <unordered_map>
 
 // engine includes
@@ -69,6 +70,7 @@ public:
 	inline bool IsFileCached(unsigned int i_hash) const;
 
 private:
+    mutable std::mutex                                      file_cache_mutex_;
 	std::unordered_map<unsigned int, FileData>				file_cache_;
 	
 }; // class FileUtils

@@ -13,11 +13,13 @@ inline FileUtils* FileUtils::Get()
 
 inline bool FileUtils::IsFileCached(const engine::data::PooledString& i_file_name) const
 {
+    std::lock_guard<std::mutex> lock(file_cache_mutex_);
 	return IsFileCached(engine::data::HashedString::Hash(i_file_name));
 }
 
 inline bool FileUtils::IsFileCached(unsigned int i_hash) const
 {
+    std::lock_guard<std::mutex> lock(file_cache_mutex_);
 	return file_cache_.count(i_hash) > 0;
 }
 
