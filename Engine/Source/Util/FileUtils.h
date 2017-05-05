@@ -61,7 +61,8 @@ public:
 	static void Destroy();
 	static inline FileUtils* Get();
 
-	FileData ReadFile(const engine::data::PooledString& i_file_name, bool i_cache_file);
+	const FileData ReadFile(const engine::data::PooledString& i_file_name, bool i_cache_file);
+    inline const FileData GetFileFromCache(const engine::data::PooledString& i_file_name) const;
 	
 	bool WriteFile(const engine::data::PooledString& i_file_name, const char* i_file_contents) const;
 	void ClearFileCache();

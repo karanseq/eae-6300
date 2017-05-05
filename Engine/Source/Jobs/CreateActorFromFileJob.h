@@ -1,5 +1,5 @@
-#ifndef ACTOR_CREATOR_JOB_H_
-#define ACTOR_CREATOR_JOB_H_
+#ifndef CREATE_ACTOR_FROM_FILE_JOB_H_
+#define CREATE_ACTOR_FROM_FILE_JOB_H_
 
 // library includes
 #include <functional>
@@ -14,11 +14,12 @@
 namespace engine {
 namespace jobs {
 
-class CreateActorDeleteFileDataJob : public InterfaceJob
+class CreateActorFromFileJob : public InterfaceJob
 {
 public:
-	CreateActorDeleteFileDataJob(const engine::util::FileUtils::FileData& i_file_data, const std::function<void(engine::memory::SharedPointer<engine::gameobject::Actor>)>& i_callback);
-	~CreateActorDeleteFileDataJob();
+    CreateActorFromFileJob(const engine::data::PooledString& i_file_name, const std::function<void(engine::memory::SharedPointer<engine::gameobject::Actor>)>& i_callback);
+	CreateActorFromFileJob(const engine::util::FileUtils::FileData& i_file_data, const std::function<void(engine::memory::SharedPointer<engine::gameobject::Actor>)>& i_callback);
+	~CreateActorFromFileJob();
 
 	// implement InterfaceJob
 	void DoWork() override;
@@ -31,11 +32,11 @@ public:
 	inline void SetCallback(const std::function<void(engine::memory::SharedPointer<engine::gameobject::Actor>)>& i_callback);
 
 private:
-	CreateActorDeleteFileDataJob(const CreateActorDeleteFileDataJob&) = delete;
-	CreateActorDeleteFileDataJob(CreateActorDeleteFileDataJob&&) = delete;
+	CreateActorFromFileJob(const CreateActorFromFileJob&) = delete;
+	CreateActorFromFileJob(CreateActorFromFileJob&&) = delete;
 
-	CreateActorDeleteFileDataJob& operator=(const CreateActorDeleteFileDataJob&) = delete;
-	CreateActorDeleteFileDataJob& operator=(CreateActorDeleteFileDataJob&&) = delete;
+	CreateActorFromFileJob& operator=(const CreateActorFromFileJob&) = delete;
+	CreateActorFromFileJob& operator=(CreateActorFromFileJob&&) = delete;
 
 	engine::util::FileUtils::FileData																file_data_;
 	std::function<void(engine::memory::SharedPointer<engine::gameobject::Actor>)>					callback_;
@@ -45,6 +46,6 @@ private:
 } // namespace jobs
 } // namespace engine
 
-#include "CreateActorDeleteFileDataJob-inl.h"
+#include "CreateActorFromFileJob-inl.h"
 
-#endif // ACTOR_CREATOR_JOB_H_
+#endif // CREATE_ACTOR_FROM_FILE_JOB_H_

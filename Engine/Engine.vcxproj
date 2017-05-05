@@ -242,10 +242,8 @@
     <ClInclude Include="Source\GameObject\GameObject.h" />
     <ClInclude Include="Source\GameObject\InterfaceGameObjectController.h" />
     <ClInclude Include="Source\Input\Input.h" />
-    <ClInclude Include="Source\Jobs\CreateActorCacheFileDataJob-inl.h" />
-    <ClInclude Include="Source\Jobs\CreateActorCacheFileDataJob.h" />
-    <ClInclude Include="Source\Jobs\CreateActorDeleteFileDataJob-inl.h" />
-    <ClInclude Include="Source\Jobs\CreateActorDeleteFileDataJob.h" />
+    <ClInclude Include="Source\Jobs\CreateActorFromFileJob-inl.h" />
+    <ClInclude Include="Source\Jobs\CreateActorFromFileJob.h" />
     <ClInclude Include="Source\Jobs\FileLoadJob-inl.h" />
     <ClInclude Include="Source\Jobs\FileLoadJob.h" />
     <ClInclude Include="Source\Jobs\InterfaceJob.h" />
@@ -324,8 +322,7 @@
     <ClCompile Include="Source\GameObject\Private\Actor.cpp" />
     <ClCompile Include="Source\GameObject\Private\ActorCreator.cpp" />
     <ClCompile Include="Source\Input\Private\Input.cpp" />
-    <ClCompile Include="Source\Jobs\Private\CreateActorCacheFileDataJob.cpp" />
-    <ClCompile Include="Source\Jobs\Private\CreateActorDeleteFileDataJob.cpp" />
+    <ClCompile Include="Source\Jobs\Private\CreateActorFromFileJob.cpp" />
     <ClCompile Include="Source\Jobs\Private\FileLoadJob.cpp" />
     <ClCompile Include="Source\Jobs\Private\JobQueue.cpp" />
     <ClCompile Include="Source\Jobs\Private\JobSystem.cpp" />

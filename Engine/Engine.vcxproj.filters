@@ -294,18 +294,6 @@
     <ClInclude Include="Source\Jobs\FileLoadJob-inl.h">
       <Filter>Header Files\Jobs</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Jobs\CreateActorDeleteFileDataJob.h">
-      <Filter>Header Files\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Jobs\CreateActorDeleteFileDataJob-inl.h">
-      <Filter>Header Files\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Jobs\CreateActorCacheFileDataJob.h">
-      <Filter>Header Files\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Jobs\CreateActorCacheFileDataJob-inl.h">
-      <Filter>Header Files\Jobs</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Memory\AllocationCounter.h">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
@@ -374,6 +362,12 @@
     </ClInclude>
     <ClInclude Include="Source\Events\TimerEvent-inl.h">
       <Filter>Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Jobs\CreateActorFromFileJob.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Jobs\CreateActorFromFileJob-inl.h">
+      <Filter>Header Files\Jobs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -470,12 +464,6 @@
     <ClCompile Include="Source\Jobs\Private\Worker.cpp">
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Jobs\Private\CreateActorDeleteFileDataJob.cpp">
-      <Filter>Source Files\Jobs</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Jobs\Private\CreateActorCacheFileDataJob.cpp">
-      <Filter>Source Files\Jobs</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Memory\Private\AllocationCounter.cpp">
       <Filter>Source Files\Memory</Filter>
     </ClCompile>
@@ -517,6 +505,9 @@
     </ClCompile>
     <ClCompile Include="Source\Events\Private\TimerEvent.cpp">
       <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Jobs\Private\CreateActorFromFileJob.cpp">
+      <Filter>Source Files\Jobs</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
