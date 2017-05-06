@@ -2,6 +2,7 @@
 
 // engine includes
 #include "Assert\Assert.h"
+#include "Data\PooledString.h"
 #include "GameObject\ActorCreator.h"
 #include "Events\EventDispatcher.h"
 #include "Logger\Logger.h"
@@ -17,14 +18,14 @@ namespace game {
 const float Player::DEFAULT_MASS = 50.0f;
 const float Player::DEFAULT_FORCE = 1.0f;
 
-Player::Player() : is_left_pressed_(false),
+Player::Player(const engine::data::PooledString& i_lua_file_name) : is_left_pressed_(false),
     is_right_pressed_(false),
     is_up_pressed_(false),
     is_down_pressed_(false),
     actor_(nullptr),
     keyboard_event_(engine::events::KeyboardEvent::Create())
 {
-    //engine::gameobject::ActorCreator::CreateActorFromFile(GameData::PLAYER_LUA_FILE_NAME, actor_);
+    engine::gameobject::ActorCreator::CreateActorFromFile(i_lua_file_name, actor_);
 
     // register for update events
     engine::time::Updater::Get()->AddTickable(this);

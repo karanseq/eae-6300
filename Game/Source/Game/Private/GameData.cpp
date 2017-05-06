@@ -4,6 +4,7 @@
 #include "lua.hpp"
 
 // engine includes
+#include "Assert\Assert.h"
 #include "Events\TimerEvent.h"
 #include "Jobs\FileLoadJob.h"
 #include "Jobs\JobSystem.h"
@@ -19,7 +20,10 @@ const char* GameData::GAME_CONFIG_FILE = "Data\\GameConfig.lua";
 GameData::GameData() : on_loading_complete_(nullptr),
     on_loading_failed_(nullptr),
     files_left_to_load_(0),
-    jobs_left_to_finish_(0)
+    jobs_left_to_finish_(0),
+    player_lua_file_name_(""),
+    bullet_lua_file_path_(""),
+    level_lua_file_path_("")
 {}
 
 GameData::~GameData()
@@ -56,10 +60,18 @@ void GameData::LoadAssetsListedInConfig(const std::function<void(void)>& i_on_lo
     result = lua_getglobal(lua_state, "GameConfig");
     ASSERT(result == LUA_TTABLE);
 
-    result = LUA_TNIL;
+    // extract the player lua file name
+    player_lua_file_name_ = engine::util::LuaHelper::CreatePooledString(lua_state, "player_lua");
+
+    // extract the bullet lua file path
+    bullet_lua_file_path_ = engine::util::LuaHelper::CreatePooledString(lua_state, "bullet_lua");
+
+    // extract the level lua file path
+    level_lua_file_path_ = engine::util::LuaHelper::CreatePooledString(lua_state, "level_lua");
 
     // check if there is an asset list
     lua_pushstring(lua_state, "asset_list");
+    result = LUA_TNIL;
     result = lua_gettable(lua_state, -2);
     ASSERT(result == LUA_TTABLE);
 
@@ -119,7 +131,6 @@ void GameData::OnFileLoaded(const engine::util::FileUtils::FileData& i_file_data
         // call the appropriate callback function based on whether all files were loaded
         // create a timer event so the callback is called from the main thread
         engine::time::Updater::Get()->AddTimerEvent(engine::events::TimerEvent::Create(files_left_to_load_ == 0 ? on_loading_complete_ : on_loading_failed_, 0.001f, 0));
-        LOG("%s - %s", __FUNCTION__, files_left_to_load_ == 0 ? "SUCCESS" : "FAILURE");
     }
 }
 

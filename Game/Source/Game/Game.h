@@ -23,6 +23,7 @@
 namespace game {
 
 // forward declarations
+class LevelData;
 class Player;
 
 // global life-cycle functions
@@ -40,22 +41,24 @@ public:
     bool Init();
     void Reset();
 
-    // asset loading event handlers
-    void OnLoadingComplete();
-    void OnLoadingFailed();
+    // events
+    void OnAssetLoadingComplete();
+    void OnAssetLoadingFailed();
+    void OnLevelLoadingComplete();
+    void OnLevelLoadingFailed();
+    void OnKeyPressed(unsigned int i_key_id);
 
-    // the main game loop
-    // called every tick by the engine
+    // implement InterfaceTickable
     virtual void Tick(float dt) override;
 
-    // gameplay
-    void OnKeyPressed(unsigned int i_key_id);
+    // implement InterfaceCollisionListener
+    virtual void OnCollision(const engine::physics::CollisionPair& i_collision_pair) override;
+
+    // game elements
+    void CreateLevel();
+    void DestroyLevel();
     void CreatePlayer();
     void DestroyPlayer();
-    void CreateActor(const engine::data::PooledString& i_file_name);
-
-    // collision listener
-    virtual void OnCollision(const engine::physics::CollisionPair& i_collision_pair) override;
 
     inline GameStates GetState() const                                              { return game_state_; }
 
@@ -72,25 +75,24 @@ private:
     Game(const Game& i_copy) = delete;
     Game& operator=(const Game& i_copy) = delete;
 
-    void OnFileLoaded(const engine::util::FileUtils::FileData i_file_data) const;
-    void OnActorCreated(engine::memory::SharedPointer<engine::gameobject::Actor>) const;
-
     // game state & data
     GameStates                                                                      game_state_;
     GameData                                                                        game_data_;
     bool                                                                            init_successful_;
 
     // game elements
+    uint8_t                                                                         level_number_;
+    LevelData*                                                                      level_data_;
     Player*                                                                         player_;
-    std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           actors_;
+    std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           enemies_;
+    std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           bricks_;
+    std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           player_bullets_;
+    std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           enemy_bullets_;
 
     // events
     engine::memory::SharedPointer<engine::events::KeyboardEvent>                    keyboard_event_;
     engine::memory::WeakPointer<engine::events::TimerEvent>                         move_enemies_event_;
     engine::memory::WeakPointer<engine::events::TimerEvent>                         fire_enemy_bullet_event_;
-
-    mutable std::mutex                                                              new_actors_mutex_;
-    mutable std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>   new_actors_;
 
 }; // class Game
 

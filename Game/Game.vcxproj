@@ -250,7 +250,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\Private\GameData.cpp" />
-    <ClCompile Include="Source\Game\Private\Level.cpp" />
+    <ClCompile Include="Source\Game\Private\LevelData.cpp" />
     <ClCompile Include="Source\Game\Private\Main.cpp" />
     <ClCompile Include="Source\Game\Private\Game.cpp" />
     <ClCompile Include="Source\Game\Private\Player.cpp" />
@@ -272,7 +272,7 @@
     <ClInclude Include="Source\Game\GameTypes.h" />
     <ClInclude Include="Source\Game\GameUtils.h" />
     <ClInclude Include="Source\Game\Game.h" />
-    <ClInclude Include="Source\Game\Level.h" />
+    <ClInclude Include="Source\Game\LevelData.h" />
     <ClInclude Include="Source\Game\Player.h" />
     <ClInclude Include="Source\resource.h" />
     <ClInclude Include="Source\Tests\BlockAllocatorTest.h" />

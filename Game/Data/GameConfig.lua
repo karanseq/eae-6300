@@ -1,5 +1,9 @@
 GameConfig = 
 {
+    player_lua = "Data\\Actors\\Player.lua",
+    bullet_lua = "Data\\Actors\\Bullet",
+    level_lua = "Data\\Levels\\Level_",
+
     asset_list = 
     {
         { file_name = "Data\\Sprites\\Brick_01.dds" },

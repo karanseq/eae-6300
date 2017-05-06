@@ -15,12 +15,10 @@
 
 // game includes
 #include "Game\GameUtils.h"
+#include "Game\LevelData.h"
 #include "Game\Player.h"
 
 namespace game {
-
-static float X(-0.4f * Game::SCREEN_WIDTH);
-static float Y(0.4f * Game::SCREEN_HEIGHT);
 
 bool StartUp()
 {
@@ -34,7 +32,7 @@ bool StartUp()
     }
 
     // load the game config
-    const engine::util::FileUtils::FileData config_file_data = engine::util::FileUtils::Get()->ReadFile(GameData::GAME_CONFIG_FILE, true);
+    const engine::util::FileUtils::FileData config_file_data = engine::util::FileUtils::Get()->ReadFile(GameData::GAME_CONFIG_FILE);
     ASSERT(config_file_data.file_contents && config_file_data.file_size > 0);
 
     // create an instance of the game
@@ -77,13 +75,15 @@ void Game::Destroy()
 
 Game::Game() : game_state_(GameStates::kGameStateNone),
     init_successful_(false),
+    level_number_(1),
+    level_data_(nullptr),
     player_(nullptr),
     keyboard_event_(nullptr),
     move_enemies_event_(nullptr),
     fire_enemy_bullet_event_(nullptr)
 {
     game_state_ = GameStates::kGameStateLoading;
-    game_data_.LoadAssetsListedInConfig(std::bind(&Game::OnLoadingComplete, this), std::bind(&Game::OnLoadingFailed, this));
+    game_data_.LoadAssetsListedInConfig(std::bind(&Game::OnAssetLoadingComplete, this), std::bind(&Game::OnAssetLoadingFailed, this));
 }
 
 Game::~Game()
@@ -91,30 +91,18 @@ Game::~Game()
     Reset();
 }
 
-void Game::OnLoadingComplete()
-{
-    game_state_ = GameStates::kGameStateBegin;
-    Init();
-}
-
-void Game::OnLoadingFailed()
-{
-    game_state_ = GameStates::kGameStateQuit;
-    engine::InitiateShutdown();
-}
-
 bool Game::Init()
 {
-    ASSERT(game_state_ == GameStates::kGameStateBegin || game_state_ == GameStates::kGameStateRestart);
+    ASSERT(game_state_ == GameStates::kGameStateBegin);
 
+    // make sure we don't init repeatedly
     if (init_successful_)
     {
         return false;
     }
     init_successful_ = true;
 
-    // create the player
-    CreatePlayer();
+    LOG("%s", __FUNCTION__);
 
     // register for update events
     engine::time::Updater::Get()->AddTickable(this);
@@ -130,18 +118,11 @@ bool Game::Init()
     keyboard_event_->SetOnKeyPressed(std::bind(&Game::OnKeyPressed, this, std::placeholders::_1));
     engine::events::EventDispatcher::Get()->AddKeyboardEventListener(keyboard_event_);
 
-    game_state_ = GameStates::kGameStateRunning;
+    // create the level
+    CreateLevel();
 
-    //engine::time::Updater::Get()->AddTimerEvent(engine::events::TimerEvent::Create([&]() {
-    //    LOG("DummyTimer!");
-    //    CreateActor("Data\\Actors\\Enemy_01.lua");
-    //}, 0.01f, 100));
-
-    for (uint8_t i = 0; i < 50; ++i)
-    {
-        static const char* names[4] = { "Data\\Actors\\Enemy_01.lua", "Data\\Actors\\Enemy_02.lua", "Data\\Actors\\Enemy_03.lua", "Data\\Actors\\Brick_01.lua" };
-        CreateActor(names[i % 4]);
-    }
+    // create the player
+    CreatePlayer();
 
     return true;
 }
@@ -150,66 +131,65 @@ void Game::Reset()
 {
     ASSERT(game_state_ == GameStates::kGameStateQuit || game_state_ == GameStates::kGameStateRestart);
 
+    // make sure we don't reset repeatedly
     if (!init_successful_)
     {
         return;
     }
     init_successful_ = false;
 
-    DestroyPlayer();
-    actors_.clear();
-    new_actors_.clear();
+    LOG("%s", __FUNCTION__);
 
     engine::time::Updater::Get()->RemoveAllTimerEvents();
+
+    DestroyPlayer();
+    DestroyLevel();
+
+    engine::events::EventDispatcher::Get()->RemoveKeyboardEventListener(keyboard_event_);
+    keyboard_event_ = nullptr;
 
     // tell the engine we no longer want collision events
     engine::physics::Collider::Get()->SetCollisionListener(nullptr);
 
     // tell the engine we no longer want to be ticked
     engine::time::Updater::Get()->RemoveTickable(this);
-
-    engine::events::EventDispatcher::Get()->RemoveKeyboardEventListener(keyboard_event_);
-    keyboard_event_ = nullptr;
-
-    X = -0.5f * Game::SCREEN_WIDTH;
-    Y = 0.45f * Game::SCREEN_HEIGHT;
 }
 
-void Game::Tick(float dt)
+void Game::OnAssetLoadingComplete()
 {
-    if (game_state_ == GameStates::kGameStateRestart)
-    {
-        Reset();
-        Init();
-        return;
-    }
+    LOG("%s", __FUNCTION__);
+    game_state_ = GameStates::kGameStateBegin;
+    Init();
+}
 
-    const size_t num_actors = actors_.size();
-    for (size_t i = 0; i < num_actors; ++i)
-    {
-        engine::math::Vec3D position = actors_[i]->GetGameObject()->GetPosition();
-        position.x(position.x() < -0.5f * Game::SCREEN_WIDTH ? 0.5f * Game::SCREEN_WIDTH : (position.x() > 0.5f * Game::SCREEN_WIDTH ? -0.5f * Game::SCREEN_WIDTH : position.x()));
-        position.y(position.y() < -0.5f * Game::SCREEN_HEIGHT ? 0.5f * Game::SCREEN_HEIGHT : (position.y() > 0.5f * Game::SCREEN_HEIGHT ? -0.5f * Game::SCREEN_HEIGHT : position.y()));
-        actors_[i]->GetGameObject()->SetPosition(position);
+void Game::OnAssetLoadingFailed()
+{
+    LOG("%s", __FUNCTION__);
+    game_state_ = GameStates::kGameStateQuit;
+    engine::InitiateShutdown();
+}
 
-        engine::math::Vec3D impulse;
-        int64_t j(i + 1);
-        impulse.x(j % 2 ? -j * 0.2f : j * 0.2f);
-        impulse.y(j % 3 ? j * 0.15f : -j * 0.2f);
+void Game::OnLevelLoadingComplete()
+{
+    LOG("%s", __FUNCTION__);
+    game_state_ = GameStates::kGameStateRunning;
+}
 
-        actors_[i]->GetPhysicsObject().Lock()->ApplyImpulse(impulse);
-    }
-
-    if (!new_actors_.empty())
-    {
-        std::lock_guard<std::mutex> lock(new_actors_mutex_);
-        actors_.insert(actors_.end(), new_actors_.begin(), new_actors_.end());
-        new_actors_.clear();
-    }
+void Game::OnLevelLoadingFailed()
+{
+    LOG("%s", __FUNCTION__);
+    game_state_ = GameStates::kGameStateQuit;
+    engine::InitiateShutdown();
 }
 
 void Game::OnKeyPressed(unsigned int i_key_id)
 {
+    if (game_state_ != GameStates::kGameStateRunning &&
+        game_state_ != GameStates::kGameStatePaused)
+    {
+        return;
+    }
+
     if (i_key_id == 'P')
     {
         if (engine::IsPaused())
@@ -225,7 +205,11 @@ void Game::OnKeyPressed(unsigned int i_key_id)
     }
     else if (i_key_id == 'R')
     {
-        game_state_ = GameStates::kGameStateRestart;
+        if (engine::IsPaused())
+        {
+            engine::Resume();
+            game_state_ = GameStates::kGameStateRestart;
+        }
     }
     else if (i_key_id == 'Q')
     {
@@ -234,14 +218,15 @@ void Game::OnKeyPressed(unsigned int i_key_id)
     }
 }
 
-void Game::CreatePlayer()
+void Game::Tick(float dt)
 {
-    player_ = new Player();
-}
-
-void Game::DestroyPlayer()
-{
-    SAFE_DELETE(player_);
+    if (game_state_ == GameStates::kGameStateRestart)
+    {
+        Reset();
+        game_state_ = GameStates::kGameStateBegin;
+        Init();
+        return;
+    }
 }
 
 void Game::OnCollision(const engine::physics::CollisionPair& i_collision_pair)
@@ -249,39 +234,29 @@ void Game::OnCollision(const engine::physics::CollisionPair& i_collision_pair)
     LOG("%s", __FUNCTION__);
 }
 
-void Game::CreateActor(const engine::data::PooledString& i_file_name)
+void Game::CreatePlayer()
 {
-    // validate inputs
-    ASSERT(i_file_name.GetLength() > 0);
-
-    engine::jobs::FileLoadJob* file_load_job = new engine::jobs::FileLoadJob(i_file_name, std::bind(&Game::OnFileLoaded, this, std::placeholders::_1));
-    engine::jobs::JobSystem::Get()->AddJob(file_load_job, engine::data::PooledString("GameTeam"));
+    player_ = new Player(game_data_.GetPlayerLuaFileName());
 }
 
-void Game::OnFileLoaded(const engine::util::FileUtils::FileData i_file_data) const
+void Game::DestroyPlayer()
 {
-    // validate inputs
-    ASSERT(i_file_data.file_contents && i_file_data.file_size > 0);
-
-    engine::jobs::CreateActorFromFileJob* actor_creator_job = new engine::jobs::CreateActorFromFileJob(i_file_data, std::bind(&Game::OnActorCreated, this, std::placeholders::_1));
-    engine::jobs::JobSystem::Get()->AddJob(actor_creator_job, engine::data::PooledString("GameTeam"));
+    SAFE_DELETE(player_);
 }
 
-void Game::OnActorCreated(engine::memory::SharedPointer<engine::gameobject::Actor> i_actor) const
+void Game::CreateLevel()
 {
-    // validate inputs
-    ASSERT(i_actor);
+    level_data_ = new LevelData();
 
-    // give this actor a random position
-    //i_actor->GetGameObject()->SetPosition(GameUtils::GetRandomVec3D(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT, 0));
+    char buf[512];
+    sprintf_s(buf, "%s%02d.lua", game_data_.GetLevelLuaFilePath().GetString(), level_number_);
 
-    i_actor->GetGameObject()->SetPosition(engine::math::Vec3D(X, Y));
-    X += 200.0f;
-    Y -= X > 0.4f * Game::SCREEN_WIDTH ? 120.0f : 0.0f;
-    X = X > 0.4f * Game::SCREEN_WIDTH ? -0.4f * Game::SCREEN_WIDTH : X;
+    level_data_->LoadLevel(engine::util::FileUtils::Get()->GetFileFromCache(engine::data::HashedString::Hash(buf)), std::bind(&Game::OnLevelLoadingComplete, this), std::bind(&Game::OnLevelLoadingFailed, this));
+}
 
-    std::lock_guard<std::mutex> lock(new_actors_mutex_);
-    new_actors_.push_back(i_actor);
+void Game::DestroyLevel()
+{
+    SAFE_DELETE(level_data_);
 }
 
 } // namespace game

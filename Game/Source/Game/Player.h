@@ -7,12 +7,19 @@
 #include "Memory\SharedPointer.h"
 #include "Time\InterfaceTickable.h"
 
+// forward declaration
+namespace engine {
+namespace data {
+    class PooledString;
+}
+}
+
 namespace game {
 
 class Player : public engine::time::InterfaceTickable
 {
 public:
-    Player();
+    Player(const engine::data::PooledString& i_lua_file_name);
     ~Player();
 
     // disable copy & move constructors & assignment operators
