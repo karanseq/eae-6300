@@ -93,5 +93,15 @@ inline const engine::memory::WeakPointer<engine::render::RenderableObject>& Acto
 	return renderable_object_;
 }
 
+inline void Actor::SetHasDied(bool i_has_died)
+{
+    has_died_ = i_has_died;
+}
+
+inline bool Actor::GetHasDied() const
+{
+    return has_died_;
+}
+
 } // namespace gameobject
 } // namespace engine

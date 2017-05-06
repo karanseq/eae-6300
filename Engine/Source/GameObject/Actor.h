@@ -49,6 +49,9 @@ public:
     inline void SetRenderableObject(const engine::memory::WeakPointer<engine::render::RenderableObject>& i_renderable_object);
     inline const engine::memory::WeakPointer<engine::render::RenderableObject>& GetRenderableObject() const;
 
+    inline void SetHasDied(bool i_has_died);
+    inline bool GetHasDied() const;
+
 protected:
     Actor();
     Actor(uint32_t i_id, const engine::data::PooledString& i_name, const engine::data::HashedString& i_type);

@@ -172,7 +172,7 @@ bool ActorCreator::CreateActor(lua_State* i_lua_state, engine::memory::SharedPoi
 	const auto transform = engine::util::LuaHelper::CreateTransform(i_lua_state, "transform");
 
 	// create the game object
-	const auto game_object = engine::gameobject::GameObject::Create(aabb, transform);
+	const auto game_object = engine::gameobject::GameObject::Create(aabb, transform, o_actor);
 	o_actor->SetGameObject(game_object);
 
 	// create a physics object
