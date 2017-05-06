@@ -1,25 +1,27 @@
 Actor = 
 {
-	name = "Ship",
+	name = "Player",
 	type = "Player",
 
 	bounding_box = { 0.0, 0.0, 44.0, 44.0 },
 	transform = 
 	{
-		position = { -250.0, 100.0, 0.0 },
+		position = { 0.0, -300.0, 0.0 },
 		rotation = { 0.0, 0.0, 0.0 },
 		scale = { 1.0, 1.0, 1.0 }
 	},
 
 	physics_settings = 
 	{
+		type = "dynamic",
 		mass = 50.0,
 		drag = 0.02,
-		collide = true
+		collide = true,
+		collision_filter = 0
 	},
 
 	render_settings = 
 	{
-		sprite_name = "Data\\Ship.dds"
+		sprite_name = "Data\\Sprites\\Ship.dds"
 	}
 }

@@ -3,9 +3,10 @@
 
 namespace game {
 
-enum class GameStates
+enum class GameStates : uint8_t
 {
     kGameStateNone = 0,
+    kGameStateLoading,
     kGameStateBegin,
     kGameStateRunning,
     kGameStatePaused,

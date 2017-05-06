@@ -2,31 +2,36 @@
 #define GAME_DATA_H_
 
 // library includes
-#include <map>
-#include <string>
+#include <functional>
 
 // engine includes
-#include "Assert\Assert.h"
+#include "Util\FileUtils.h"
 
 namespace game {
 
-struct FileData {
-	size_t		file_size;
-	uint8_t*	file_content;
-};
-
 class GameData
 {
-private:
-	GameData() = delete;
-	~GameData() = delete;
-
-	// disable copy constructor & copy assignment operator
-	GameData(const GameData& i_copy) = delete;
-	GameData& operator=(const GameData& i_copy) = delete;
-
 public:
-	static const char*							PLAYER_LUA_FILE_NAME;
+    GameData();
+    ~GameData();
+
+    void LoadAssetsListedInConfig(const std::function<void(void)>& i_on_loading_complete, const std::function<void(void)>& i_on_loading_failed);
+
+    // constants
+    static const char* GAME_CONFIG_FILE;
+
+private:
+    // disable copy constructor & copy assignment operator
+    GameData(const GameData& i_copy) = delete;
+    GameData& operator=(const GameData& i_copy) = delete;
+
+    void OnFileLoaded(const engine::util::FileUtils::FileData& i_file_data);
+
+private:
+    std::function<void(void)>                               on_loading_complete_;
+    std::function<void(void)>                               on_loading_failed_;
+    size_t                                                  files_left_to_load_;
+    size_t                                                  jobs_left_to_finish_;
 
 }; // class GameData
 

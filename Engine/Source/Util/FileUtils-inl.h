@@ -13,7 +13,7 @@ inline FileUtils* FileUtils::Get()
 
 inline const FileUtils::FileData FileUtils::GetFileFromCache(const engine::data::PooledString& i_file_name) const
 {
-    const auto it = file_cache_.find(i_file_name);
+    const auto it = file_cache_.find(engine::data::HashedString::Hash(i_file_name));
     return it != file_cache_.end() ? it->second : FileData();
 }
 
