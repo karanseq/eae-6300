@@ -127,7 +127,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;BUILD_DEBUG;VERBOSITY_LEVEL=1;ENABLE_FAST_MATH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;BUILD_DEBUG;VERBOSITY_LEVEL=0;ENABLE_FAST_MATH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)External\GLib\;$(SolutionDir)External\Lua\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -242,6 +242,8 @@
     <ClInclude Include="Source\GameObject\GameObject.h" />
     <ClInclude Include="Source\GameObject\InterfaceGameObjectController.h" />
     <ClInclude Include="Source\Input\Input.h" />
+    <ClInclude Include="Source\Jobs\CreateActorFromFileAtPositionJob-inl.h" />
+    <ClInclude Include="Source\Jobs\CreateActorFromFileAtPositionJob.h" />
     <ClInclude Include="Source\Jobs\CreateActorFromFileJob-inl.h" />
     <ClInclude Include="Source\Jobs\CreateActorFromFileJob.h" />
     <ClInclude Include="Source\Jobs\FileLoadJob-inl.h" />
@@ -322,6 +324,7 @@
     <ClCompile Include="Source\GameObject\Private\Actor.cpp" />
     <ClCompile Include="Source\GameObject\Private\ActorCreator.cpp" />
     <ClCompile Include="Source\Input\Private\Input.cpp" />
+    <ClCompile Include="Source\Jobs\Private\CreateActorFromFileAtPositionJob.cpp" />
     <ClCompile Include="Source\Jobs\Private\CreateActorFromFileJob.cpp" />
     <ClCompile Include="Source\Jobs\Private\FileLoadJob.cpp" />
     <ClCompile Include="Source\Jobs\Private\JobQueue.cpp" />

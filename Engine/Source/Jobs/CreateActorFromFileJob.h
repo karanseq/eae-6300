@@ -38,8 +38,8 @@ private:
 	CreateActorFromFileJob& operator=(const CreateActorFromFileJob&) = delete;
 	CreateActorFromFileJob& operator=(CreateActorFromFileJob&&) = delete;
 
-	engine::util::FileUtils::FileData																file_data_;
 	std::function<void(engine::memory::SharedPointer<engine::gameobject::Actor>)>					callback_;
+	engine::util::FileUtils::FileData																file_data_;
 
 }; // class ActorCreatorJob
 

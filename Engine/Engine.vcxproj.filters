@@ -369,6 +369,12 @@
     <ClInclude Include="Source\Jobs\CreateActorFromFileJob-inl.h">
       <Filter>Header Files\Jobs</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Jobs\CreateActorFromFileAtPositionJob.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Jobs\CreateActorFromFileAtPositionJob-inl.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Logger\Private\Logger.win32.cpp">
@@ -507,6 +513,9 @@
       <Filter>Source Files\Events</Filter>
     </ClCompile>
     <ClCompile Include="Source\Jobs\Private\CreateActorFromFileJob.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Jobs\Private\CreateActorFromFileAtPositionJob.cpp">
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
   </ItemGroup>

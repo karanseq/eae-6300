@@ -3,7 +3,6 @@
 // engine includes
 #include "Assert\Assert.h"
 #include "Common\HelperMacros.h"
-#include "Data\HashedString.h"
 #include "Logger\Logger.h"
 
 namespace engine {

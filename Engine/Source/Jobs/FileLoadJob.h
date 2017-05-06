@@ -38,8 +38,8 @@ private:
 	FileLoadJob& operator=(const FileLoadJob&) = delete;
 	FileLoadJob& operator=(FileLoadJob&&) = delete;
 
-	engine::data::PooledString													file_name_;
 	std::function<void(const engine::util::FileUtils::FileData)>				callback_;
+	engine::data::PooledString													file_name_;
     bool                                                                        does_cache_file_;
 };
 

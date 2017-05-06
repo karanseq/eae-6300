@@ -24,12 +24,10 @@ bool ActorCreator::CreateActorFromFile(const engine::data::PooledString& i_file_
 	ASSERT(i_file_name.GetLength() > 0);
 
 	// read the lua file
-	engine::util::FileUtils::FileData file_data = engine::util::FileUtils::Get()->ReadFile(i_file_name, false);
+	const engine::util::FileUtils::FileData file_data = engine::util::FileUtils::Get()->ReadFile(i_file_name);
 	ASSERT(file_data.file_contents && file_data.file_size > 0);
 
 	CreateActorFromFileData(file_data, o_actor);
-
-	delete[] file_data.file_contents;
 
 	return true;
 }
@@ -40,12 +38,10 @@ bool ActorCreator::CreateActorsFromFile(const engine::data::PooledString& i_file
 	ASSERT(i_file_name.GetLength() > 0);
 
 	// read the lua file
-	engine::util::FileUtils::FileData file_data = engine::util::FileUtils::Get()->ReadFile(i_file_name, false);
+	engine::util::FileUtils::FileData file_data = engine::util::FileUtils::Get()->ReadFile(i_file_name);
 	ASSERT(file_data.file_contents && file_data.file_size > 0);
 
 	CreateActorsFromFileData(file_data, o_actors);
-
-	delete[] file_data.file_contents;
 
 	return true;
 }
