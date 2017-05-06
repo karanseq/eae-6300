@@ -41,13 +41,6 @@ public:
     bool Init();
     void Reset();
 
-    // events
-    void OnAssetLoadingComplete();
-    void OnAssetLoadingFailed();
-    void OnLevelLoadingComplete();
-    void OnLevelLoadingFailed();
-    void OnKeyPressed(unsigned int i_key_id);
-
     // implement InterfaceTickable
     virtual void Tick(float dt) override;
 
@@ -59,6 +52,15 @@ public:
     void DestroyLevel();
     void CreatePlayer();
     void DestroyPlayer();
+
+    // events
+    void OnAssetLoadingComplete();
+    void OnAssetLoadingFailed();
+    void OnLevelLoadingComplete();
+    void OnLevelLoadingFailed();
+    void OnKeyPressed(unsigned int i_key_id);
+    void OnMoveEnemiesTimerElapsed();
+    void OnFireEnemyBulletTimerElapsed();
 
     inline GameStates GetState() const                                              { return game_state_; }
 
@@ -84,15 +86,13 @@ private:
     uint8_t                                                                         level_number_;
     LevelData*                                                                      level_data_;
     Player*                                                                         player_;
-    std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           enemies_;
-    std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           bricks_;
     std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           player_bullets_;
     std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           enemy_bullets_;
 
     // events
     engine::memory::SharedPointer<engine::events::KeyboardEvent>                    keyboard_event_;
-    engine::memory::WeakPointer<engine::events::TimerEvent>                         move_enemies_event_;
-    engine::memory::WeakPointer<engine::events::TimerEvent>                         fire_enemy_bullet_event_;
+    engine::memory::SharedPointer<engine::events::TimerEvent>                       move_enemies_event_;
+    engine::memory::SharedPointer<engine::events::TimerEvent>                       fire_enemy_bullet_event_;
 
 }; // class Game
 

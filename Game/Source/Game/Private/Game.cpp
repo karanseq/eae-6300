@@ -140,9 +140,12 @@ void Game::Reset()
 
     LOG("%s", __FUNCTION__);
 
+    move_enemies_event_ = nullptr;
+    fire_enemy_bullet_event_ = nullptr;
     engine::time::Updater::Get()->RemoveAllTimerEvents();
 
     DestroyPlayer();
+
     DestroyLevel();
 
     engine::events::EventDispatcher::Get()->RemoveKeyboardEventListener(keyboard_event_);
@@ -172,6 +175,13 @@ void Game::OnAssetLoadingFailed()
 void Game::OnLevelLoadingComplete()
 {
     LOG("%s", __FUNCTION__);
+
+    move_enemies_event_ = engine::events::TimerEvent::Create(std::bind(&Game::OnMoveEnemiesTimerElapsed, this), level_data_->level_.enemy_move_interval_, -1);
+    engine::time::Updater::Get()->AddTimerEvent(move_enemies_event_);
+
+    fire_enemy_bullet_event_ = engine::events::TimerEvent::Create(std::bind(&Game::OnFireEnemyBulletTimerElapsed, this), level_data_->level_.enemy_fire_rate_, -1);
+    engine::time::Updater::Get()->AddTimerEvent(fire_enemy_bullet_event_);
+
     game_state_ = GameStates::kGameStateRunning;
 }
 
@@ -216,6 +226,16 @@ void Game::OnKeyPressed(unsigned int i_key_id)
         game_state_ = GameStates::kGameStateQuit;
         engine::InitiateShutdown();
     }
+}
+
+void Game::OnMoveEnemiesTimerElapsed()
+{
+    LOG("%s", __FUNCTION__);
+}
+
+void Game::OnFireEnemyBulletTimerElapsed()
+{
+    LOG("%s", __FUNCTION__);
 }
 
 void Game::Tick(float dt)

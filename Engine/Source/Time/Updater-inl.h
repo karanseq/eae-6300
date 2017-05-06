@@ -82,15 +82,11 @@ inline void Updater::RemoveTimerEvent(const engine::memory::SharedPointer<engine
     std::lock_guard<std::mutex> lock(timer_events_mutex_);
 
     // check if this object exists
-    auto it = std::find(timer_events_.begin(), timer_events_.end(), i_timer_event);
-    if (it == timer_events_.end())
+    if (std::find(timer_events_.begin(), timer_events_.end(), i_timer_event) != timer_events_.end())
     {
-        LOG_ERROR("Updater could not find this timer event!");
-        return;
+        // mark it as complete so it gets removed in the subsequent tick
+        i_timer_event->complete_ = true;
     }
-
-    timer_events_.erase(it);
-    --num_timer_events_;
 }
 
 inline void Updater::RemoveAllTimerEvents()

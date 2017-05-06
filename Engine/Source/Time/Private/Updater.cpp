@@ -43,8 +43,6 @@ void Updater::Run(float dt)
 
     // tick all timer events
     {
-        std::lock_guard<std::mutex> lock(timer_events_mutex_);
-
         for (size_t i = 0; i < num_timer_events_; ++i)
         {
             timer_events_[i]->Tick(dt);
@@ -52,6 +50,8 @@ void Updater::Run(float dt)
 
         if (num_timer_events_ > 0)
         {
+            std::lock_guard<std::mutex> lock(timer_events_mutex_);
+
             // remove all timer events that completed this tick
             auto logical_end = std::remove_if(timer_events_.begin(), timer_events_.end(), [](const engine::memory::SharedPointer<engine::events::TimerEvent>& i_timer_event) { return i_timer_event->complete_; });
             auto it = timer_events_.erase(logical_end, timer_events_.end());

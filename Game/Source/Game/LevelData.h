@@ -52,6 +52,8 @@ private:
     size_t                                              actors_left_to_create_;
     size_t                                              jobs_left_to_finish_;
 
+    friend class Game;
+
 }; // class LevelData
 
 } // namespace game
