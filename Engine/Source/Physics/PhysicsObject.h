@@ -98,6 +98,9 @@ public:
     inline bool GetIsAwake() const;
     inline void SetIsAwake(bool i_is_awake);
 
+    inline bool GetIsActive() const;
+    inline void SetIsActive(bool i_is_active);
+
 private:
     explicit PhysicsObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, 
         float i_mass = DEFAULT_MASS, 
@@ -125,6 +128,7 @@ private:
 
     PhysicsObjectType                                                       type_;
     bool                                                                    is_awake_;
+    bool                                                                    is_active_;
 
 #ifdef ENABLE_DEBUG_DRAW
     DebugDrawData*                                                          debug_draw_data_;

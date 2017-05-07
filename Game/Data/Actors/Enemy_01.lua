@@ -1,6 +1,6 @@
 Actor =
 {
-	name = "Inky",
+	name = "Enemy_01",
 	type = "Enemy",
 
 	bounding_box = { 0.0, 0.0, 40.0, 25.0 },

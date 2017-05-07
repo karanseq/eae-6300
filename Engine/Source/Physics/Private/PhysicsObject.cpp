@@ -33,12 +33,13 @@ PhysicsObject::PhysicsObject(const engine::memory::WeakPointer<engine::gameobjec
         inverse_mass_(0.0f),
         coeff_drag_(i_drag),
         type_(i_type),
-        is_awake_(false)
+        is_awake_(false),
+        is_active_(true)
 {
     // validate inputs
     ASSERT(game_object_);
     // physics objects must have positive mass
-    ASSERT(!engine::math::IsNaN(mass_) && !engine::math::FuzzyEquals(mass_, 0.0f));
+    ASSERT(!engine::math::IsNaN(mass_) && mass_ > 0.0f);
     ASSERT(!engine::math::IsNaN(coeff_drag_));
 
     // calculate inverse mass
@@ -63,7 +64,8 @@ PhysicsObject::PhysicsObject(const PhysicsObject& i_copy) : curr_velocity_(i_cop
     inverse_mass_(i_copy.inverse_mass_),
     coeff_drag_(i_copy.coeff_drag_),
     type_(i_copy.type_),
-    is_awake_(i_copy.is_awake_)
+    is_awake_(i_copy.is_awake_),
+    is_active_(i_copy.is_active_)
 {
 #ifdef ENABLE_DEBUG_DRAW
     debug_draw_data_ = nullptr;
@@ -72,8 +74,8 @@ PhysicsObject::PhysicsObject(const PhysicsObject& i_copy) : curr_velocity_(i_cop
 
 void PhysicsObject::Update(float i_dt)
 {
-    // don't process if not awake
-    if (is_awake_ == false)
+    // don't process if inactive or asleep
+    if (is_active_ == false || is_awake_ == false)
     {
         return;
     }
@@ -140,6 +142,11 @@ void PhysicsObject::DrawDebugData(float i_dt)
 
 void PhysicsObject::ApplyImpulse(const engine::math::Vec3D& i_impulse)
 {
+    if (is_active_ == false || type_ == PhysicsObjectType::kPhysicsObjectStatic)
+    {
+        return;
+    }
+
     // validate input
     if (i_impulse.IsZero())
     {

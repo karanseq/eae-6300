@@ -40,6 +40,7 @@ public:
     // game life-cycle functions
     bool Init();
     void Reset();
+    void CheckLevelComplete();
 
     // implement InterfaceTickable
     virtual void Tick(float dt) override;
@@ -52,6 +53,9 @@ public:
     void DestroyLevel();
     void CreatePlayer();
     void DestroyPlayer();
+    void CreateEnemyBullets();
+    void DestroyEnemyBullets();
+    size_t DestroyDeadLevelActors(std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>& i_actors) const;
 
     // events
     void OnAssetLoadingComplete();
@@ -61,12 +65,17 @@ public:
     void OnKeyPressed(unsigned int i_key_id);
     void OnMoveEnemiesTimerElapsed();
     void OnFireEnemyBulletTimerElapsed();
+    void OnEnemyBulletCreated(const engine::memory::SharedPointer<engine::gameobject::Actor> i_actor);
 
     inline GameStates GetState() const                                              { return game_state_; }
+    inline const GameData& GetGameData() const                                      { return game_data_; }
+    inline const LevelData* GetLevelData() const                                    { return level_data_; }
 
     // game constants
     static const uint16_t                                                           SCREEN_WIDTH = 1280;
     static const uint16_t                                                           SCREEN_HEIGHT = 800;
+    static const uint8_t                                                            BULLETS_PER_ENEMY_IN_POOL = 3;
+    static const float                                                              BULLET_IMPULSE;
 
 private:
     Game();
@@ -86,13 +95,15 @@ private:
     uint8_t                                                                         level_number_;
     LevelData*                                                                      level_data_;
     Player*                                                                         player_;
-    std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           player_bullets_;
-    std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           enemy_bullets_;
+    std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           enemy_bullet_pool_;
+    std::mutex                                                                      enemy_bullet_pool_mutex_;
+    uint8_t                                                                         enemy_moves_;
 
     // events
     engine::memory::SharedPointer<engine::events::KeyboardEvent>                    keyboard_event_;
     engine::memory::SharedPointer<engine::events::TimerEvent>                       move_enemies_event_;
     engine::memory::SharedPointer<engine::events::TimerEvent>                       fire_enemy_bullet_event_;
+
 
 }; // class Game
 

@@ -29,6 +29,7 @@ inline PhysicsObject& PhysicsObject::operator=(const PhysicsObject& i_copy)
         coeff_drag_ = i_copy.coeff_drag_;
         type_ = i_copy.type_;
         is_awake_ = i_copy.is_awake_;
+        is_active_ = i_copy.is_active_;
 #ifdef ENABLE_DEBUG_DRAW
         debug_draw_data_ = nullptr;
 #endif
@@ -130,6 +131,17 @@ inline bool PhysicsObject::GetIsAwake() const
 inline void PhysicsObject::SetIsAwake(bool i_is_awake)
 {
     is_awake_ = i_is_awake;
+}
+
+inline bool PhysicsObject::GetIsActive() const
+{
+    return is_active_;
+}
+
+inline void PhysicsObject::SetIsActive(bool i_is_active)
+{
+    is_active_ = i_is_active;
+    curr_velocity_ = engine::math::Vec3D::ZERO;
 }
 
 } // namespace physics

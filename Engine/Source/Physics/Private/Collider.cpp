@@ -68,6 +68,10 @@ void Collider::DetectCollisions(float i_dt)
     {
         // get physics object A
         const engine::memory::SharedPointer<PhysicsObject> physics_object_a = dynamic_objects_[i].Lock();
+        if (!physics_object_a->GetIsActive())
+        {
+            continue;
+        }
 
         // get physics object A's collision filter
         uint16_t collision_filter_a = physics_object_a->GetCollisionFilter();
@@ -88,6 +92,10 @@ void Collider::DetectCollisions(float i_dt)
         {
             // get physics object B
             engine::memory::SharedPointer<PhysicsObject> physics_object_b = j < num_dynamic_objects_ ? dynamic_objects_[j].Lock() : static_kynematic_objects_[k].Lock();
+            if (!physics_object_b->GetIsActive())
+            {
+                continue;
+            }
 
             // get physics object B's collision filter
             uint16_t collision_filter_b = physics_object_b->GetCollisionFilter();

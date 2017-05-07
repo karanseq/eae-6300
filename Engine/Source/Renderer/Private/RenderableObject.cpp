@@ -12,7 +12,8 @@ namespace engine {
 namespace render {
 
 RenderableObject::RenderableObject(GLib::Sprites::Sprite* i_sprite) : sprite_(i_sprite),
-    game_object_(nullptr)
+    game_object_(nullptr),
+    is_visible_(true)
 {
     // validate inputs
     ASSERT(sprite_);
@@ -22,7 +23,8 @@ RenderableObject::RenderableObject(GLib::Sprites::Sprite* i_sprite) : sprite_(i_
 }
 
 RenderableObject::RenderableObject(GLib::Sprites::Sprite* i_sprite, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object) : sprite_(i_sprite),
-	game_object_(i_game_object)
+	game_object_(i_game_object),
+    is_visible_(true)
 {
 	// validate inputs
 	ASSERT(sprite_);
@@ -44,6 +46,11 @@ RenderableObject::~RenderableObject()
 
 void RenderableObject::Render(float i_dt)
 {
+    if (!is_visible_)
+    {
+        return;
+    }
+
     if (game_object_)
     {
 	    // get a shared pointer to operate on

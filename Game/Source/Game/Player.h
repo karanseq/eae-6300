@@ -1,9 +1,14 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
+// library includes
+#include <mutex>
+#include <vector>
+
 // engine includes
 #include "GameObject\Actor.h"
 #include "Events\KeyboardEvent.h"
+#include "Events\TimerEvent.h"
 #include "Memory\SharedPointer.h"
 #include "Time\InterfaceTickable.h"
 
@@ -31,25 +36,48 @@ public:
     // implement interface tickable
     void Tick(float i_dt) override;
 
-    // keyboard event handlers
+    // accessors
+    inline const engine::memory::WeakPointer<engine::gameobject::Actor> GetActor() const
+    { 
+        return actor_;
+    }
+
+    inline const std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>& GetBulletPool() const
+    {
+        return bullet_pool_;
+    }
+
+private:
+    void CreateActors(const engine::data::PooledString& i_lua_file_name);
+    void FireBullet();
+
+    // events
+    void OnActorCreated(engine::memory::SharedPointer<engine::gameobject::Actor>);
+    void OnAllActorsCreated();
     void OnKeyPressed(unsigned int i_key_id);
     void OnKeyReleased(unsigned int i_key_id);
+    void OnFireTimerElapsed();
 
-    // accessor
-    inline const engine::memory::WeakPointer<engine::gameobject::Actor> GetActor() { return actor_; }
-
+public:
     // constants
     static const float                                                              DEFAULT_MASS;
     static const float                                                              DEFAULT_FORCE;
+    static const size_t                                                             BULLET_POOL_SIZE;
 
 private:
-    bool                                                                            is_left_pressed_;
-    bool                                                                            is_right_pressed_;
-    bool                                                                            is_up_pressed_;
-    bool                                                                            is_down_pressed_;
-
     engine::memory::SharedPointer<engine::gameobject::Actor>                        actor_;
     engine::memory::SharedPointer<engine::events::KeyboardEvent>                    keyboard_event_;
+    engine::memory::SharedPointer<engine::events::TimerEvent>                       fire_timer_event_;
+
+    std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           bullet_pool_;
+    mutable std::mutex                                                              bullet_pool_mutex_;
+
+    float                                                                           fire_rate_;
+    bool                                                                            is_left_pressed_;
+    bool                                                                            is_right_pressed_;
+    bool                                                                            is_space_pressed_;
+    bool                                                                            can_fire_;
+    uint8_t                                                                         actors_left_to_create_;
 
 }; // class Player
 

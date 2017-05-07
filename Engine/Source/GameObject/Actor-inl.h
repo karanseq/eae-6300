@@ -103,5 +103,28 @@ inline bool Actor::GetHasDied() const
     return has_died_;
 }
 
+inline void Actor::SetIsEnabled(bool i_is_enabled)
+{
+    if (is_enabled_ != i_is_enabled)
+    {
+        is_enabled_ = i_is_enabled;
+
+        if (physics_object_)
+        {
+            physics_object_.Lock()->SetIsActive(is_enabled_);
+        }
+
+        if (renderable_object_)
+        {
+            renderable_object_.Lock()->SetIsVisible(is_enabled_);
+        }
+    }
+}
+
+inline bool Actor::GetIsEnabled() const
+{
+    return is_enabled_;
+}
+
 } // namespace gameobject
 } // namespace engine

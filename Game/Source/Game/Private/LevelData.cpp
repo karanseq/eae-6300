@@ -61,6 +61,9 @@ void LevelData::LoadLevel(const engine::util::FileUtils::FileData& i_level_file_
     // extract the enemy move interval
     level_.enemy_move_interval_ = engine::util::LuaHelper::CreateFloat(lua_state, "enemy_move_interval");
 
+    // extract the enemy move impulse
+    level_.enemy_move_impulse_ = engine::util::LuaHelper::CreateFloat(lua_state, "enemy_move_impulse");
+
     // check if there are actors
     lua_pushstring(lua_state, "actors");
     result = LUA_TNIL;
@@ -68,7 +71,7 @@ void LevelData::LoadLevel(const engine::util::FileUtils::FileData& i_level_file_
     ASSERT(result == LUA_TTABLE);
 
     size_t index = 0;
-    const engine::data::PooledString game_team("GameTeam");
+    static const engine::data::PooledString game_team("GameTeam");
 
     lua_pushnil(lua_state);
 
@@ -125,8 +128,10 @@ void LevelData::LoadLevel(const engine::util::FileUtils::FileData& i_level_file_
 
 void LevelData::OnActorCreated(engine::memory::SharedPointer<engine::gameobject::Actor> i_actor_created)
 {
-    static engine::data::HashedString enemy_type("Enemy");
-    static engine::data::HashedString brick_type("Brick");
+    ASSERT(i_actor_created);
+
+    static const engine::data::HashedString enemy_type("Enemy");
+    static const engine::data::HashedString brick_type("Brick");
 
     std::lock_guard<std::mutex> lock(actors_created_mutex_);
 
@@ -139,10 +144,12 @@ void LevelData::OnActorCreated(engine::memory::SharedPointer<engine::gameobject:
         if (i_actor_created->GetType() == enemy_type)
         {
             level_.enemies_.push_back(i_actor_created);
+            ++level_.num_enemies_;
         }
         else if (i_actor_created->GetType() == brick_type)
         {
             level_.bricks_.push_back(i_actor_created);
+            ++level_.num_bricks_;
         }
         else
         {

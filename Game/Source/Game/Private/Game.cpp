@@ -56,6 +56,7 @@ void Shutdown()
 
 // static member initialization
 Game* Game::instance_ = nullptr;
+const float Game::BULLET_IMPULSE = 12.0f;
 
 Game* Game::Create()
 {
@@ -78,6 +79,7 @@ Game::Game() : game_state_(GameStates::kGameStateNone),
     level_number_(1),
     level_data_(nullptr),
     player_(nullptr),
+    enemy_moves_(0),
     keyboard_event_(nullptr),
     move_enemies_event_(nullptr),
     fire_enemy_bullet_event_(nullptr)
@@ -124,6 +126,9 @@ bool Game::Init()
     // create the player
     CreatePlayer();
 
+    // create a pool of enemy bullets
+    CreateEnemyBullets();
+
     return true;
 }
 
@@ -144,6 +149,8 @@ void Game::Reset()
     fire_enemy_bullet_event_ = nullptr;
     engine::time::Updater::Get()->RemoveAllTimerEvents();
 
+    DestroyEnemyBullets();
+
     DestroyPlayer();
 
     DestroyLevel();
@@ -156,6 +163,16 @@ void Game::Reset()
 
     // tell the engine we no longer want to be ticked
     engine::time::Updater::Get()->RemoveTickable(this);
+}
+
+void Game::CheckLevelComplete()
+{
+    if (level_data_->level_.num_enemies_ <= 0)
+    {
+        game_state_ = GameStates::kGameStateRestart;
+        ++level_number_;
+        level_number_ = level_number_ > 5 ? 1 : level_number_;
+    }
 }
 
 void Game::OnAssetLoadingComplete()
@@ -176,6 +193,7 @@ void Game::OnLevelLoadingComplete()
 {
     LOG("%s", __FUNCTION__);
 
+    enemy_moves_ = 1;
     move_enemies_event_ = engine::events::TimerEvent::Create(std::bind(&Game::OnMoveEnemiesTimerElapsed, this), level_data_->level_.enemy_move_interval_, -1);
     engine::time::Updater::Get()->AddTimerEvent(move_enemies_event_);
 
@@ -230,12 +248,53 @@ void Game::OnKeyPressed(unsigned int i_key_id)
 
 void Game::OnMoveEnemiesTimerElapsed()
 {
-    LOG("%s", __FUNCTION__);
+    for (const auto& enemy : level_data_->level_.enemies_)
+    {
+        enemy->GetPhysicsObject().Lock()->ApplyImpulse(engine::math::Vec3D(level_data_->level_.enemy_move_impulse_));
+    }
+
+    --enemy_moves_;
+    level_data_->level_.enemy_move_impulse_ *= enemy_moves_ <= 0 ? -1 : 1;
+    enemy_moves_ = enemy_moves_ <= 0 ? 2 : enemy_moves_;
 }
 
 void Game::OnFireEnemyBulletTimerElapsed()
 {
-    LOG("%s", __FUNCTION__);
+    static const engine::data::PooledString enemy_types[3] = { "Enemy_01", "Enemy_02", "Enemy_03" };
+    static const engine::data::PooledString bullet_types[3] = { "Bullet_01", "Bullet_02", "Bullet_03" };
+
+    const uint8_t random_index = rand() % level_data_->level_.num_enemies_;
+    const engine::data::PooledString& enemy_name = level_data_->level_.enemies_[random_index]->GetName();
+
+    uint8_t bullet_type = 0;
+    for (uint8_t i = 0; i < 3; ++i)
+    {
+        if (enemy_name == enemy_types[i])
+        {
+            bullet_type = i;
+            break;
+        }
+    }
+
+    for (const auto& bullet : enemy_bullet_pool_)
+    {
+        if (bullet->GetName() == bullet_types[bullet_type] && bullet->GetIsEnabled() == false)
+        {
+            bullet->SetIsEnabled(true);
+            bullet->GetGameObject()->SetPosition(level_data_->level_.enemies_[random_index]->GetGameObject()->GetPosition());
+            bullet->GetPhysicsObject().Lock()->ApplyImpulse(engine::math::Vec3D(0.0f, -Game::BULLET_IMPULSE));
+            break;
+        }
+    }
+}
+
+void Game::OnEnemyBulletCreated(engine::memory::SharedPointer<engine::gameobject::Actor> i_actor)
+{
+    ASSERT(i_actor);
+
+    std::lock_guard<std::mutex> lock(enemy_bullet_pool_mutex_);
+    i_actor->SetIsEnabled(false);
+    enemy_bullet_pool_.push_back(i_actor);
 }
 
 void Game::Tick(float dt)
@@ -247,21 +306,59 @@ void Game::Tick(float dt)
         Init();
         return;
     }
+    else if (game_state_ == GameStates::kGameStateRunning)
+    {
+        // remove all enemies that died this tick
+        level_data_->level_.num_enemies_ = static_cast<uint8_t>(DestroyDeadLevelActors(level_data_->level_.enemies_));
+
+        // remove all bricks
+        level_data_->level_.num_bricks_ = static_cast<uint8_t>(DestroyDeadLevelActors(level_data_->level_.bricks_));
+
+        // disable all enemy bullets that have left the screen
+        for (const auto& bullet : enemy_bullet_pool_)
+        {
+            bullet->SetIsEnabled(bullet->GetIsEnabled() && bullet->GetGameObject()->GetPosition().y() < -Game::SCREEN_HEIGHT * 0.5f ? false : bullet->GetIsEnabled());
+        }
+
+        // check if the level has completed
+        CheckLevelComplete();
+    }
 }
 
 void Game::OnCollision(const engine::physics::CollisionPair& i_collision_pair)
 {
-    LOG("%s", __FUNCTION__);
-}
+    static const engine::data::HashedString enemy_type("Enemy");
+    static const engine::data::HashedString brick_type("Brick");
+    static const engine::data::HashedString bullet_type("Bullet");
+    static const engine::data::HashedString player_type("Player");
 
-void Game::CreatePlayer()
-{
-    player_ = new Player(game_data_.GetPlayerLuaFileName());
-}
+    const engine::memory::SharedPointer<engine::gameobject::Actor> actor_a = i_collision_pair.object_a.Lock()->GetGameObject().Lock()->GetOwner().Lock();
+    const engine::memory::SharedPointer<engine::gameobject::Actor> actor_b = i_collision_pair.object_b.Lock()->GetGameObject().Lock()->GetOwner().Lock();
 
-void Game::DestroyPlayer()
-{
-    SAFE_DELETE(player_);
+    const engine::memory::SharedPointer<engine::gameobject::Actor> enemy = actor_a->GetType() == enemy_type ? actor_a : (actor_b->GetType() == enemy_type ? actor_b : nullptr);
+    const engine::memory::SharedPointer<engine::gameobject::Actor> brick = actor_a->GetType() == brick_type ? actor_a : (actor_b->GetType() == brick_type ? actor_b : nullptr);
+    const engine::memory::SharedPointer<engine::gameobject::Actor> bullet = actor_a->GetType() == bullet_type ? actor_a : (actor_b->GetType() == bullet_type ? actor_b : nullptr);
+    const engine::memory::SharedPointer<engine::gameobject::Actor> player = actor_a->GetType() == player_type ? actor_a : (actor_b->GetType() == player_type ? actor_b : nullptr);
+
+    if (enemy)
+    {
+        enemy->SetHasDied(true);
+    }
+
+    if (brick)
+    {
+        brick->SetHasDied(true);
+    }
+
+    if (bullet)
+    {
+        bullet->SetIsEnabled(false);
+    }
+
+    if (player)
+    {
+        game_state_ = GameStates::kGameStateRestart;
+    }
 }
 
 void Game::CreateLevel()
@@ -277,6 +374,46 @@ void Game::CreateLevel()
 void Game::DestroyLevel()
 {
     SAFE_DELETE(level_data_);
+}
+
+void Game::CreatePlayer()
+{
+    player_ = new Player(game_data_.GetPlayerLuaFileName());
+}
+
+void Game::DestroyPlayer()
+{
+    SAFE_DELETE(player_);
+}
+
+void Game::CreateEnemyBullets()
+{
+    static const engine::data::PooledString job_team("GameTeam");
+
+    for (uint8_t i = 0; i < BULLETS_PER_ENEMY_IN_POOL * 3; ++i)
+    {
+        char buf[512];
+        sprintf_s(buf, "%s_%02d.lua", game_data_.GetBulletLuaFilePath().GetString(), (i % BULLETS_PER_ENEMY_IN_POOL) + 1);
+
+        engine::jobs::JobSystem::Get()->AddJob(new engine::jobs::CreateActorFromFileJob(engine::util::FileUtils::Get()->GetFileFromCache(engine::data::HashedString::Hash(buf)), 
+            std::bind(&Game::OnEnemyBulletCreated, this, std::placeholders::_1)), job_team);
+    }
+}
+
+void Game::DestroyEnemyBullets()
+{
+    enemy_bullet_pool_.clear();
+}
+
+size_t Game::DestroyDeadLevelActors(std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>& i_actors) const
+{
+    if (!i_actors.empty())
+    {
+        auto end_it = std::remove_if(i_actors.begin(), i_actors.end(), [](const engine::memory::SharedPointer<engine::gameobject::Actor>& i_actor) { return i_actor->GetHasDied(); });
+        auto diff_it = i_actors.erase(end_it, i_actors.end());
+        return size_t(diff_it - i_actors.begin());
+    }
+    return 0;
 }
 
 } // namespace game

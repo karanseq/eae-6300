@@ -75,5 +75,15 @@ inline void RenderableObject::SetGameObject(const engine::memory::WeakPointer<en
 	game_object_ = i_game_object;
 }
 
+inline bool RenderableObject::GetIsVisible() const
+{
+    return is_visible_;
+}
+
+inline void RenderableObject::SetIsVisible(bool i_is_visible)
+{
+    is_visible_ = i_is_visible;
+}
+
 } // namespace render
 } // namespace engine

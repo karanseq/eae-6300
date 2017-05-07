@@ -52,6 +52,9 @@ public:
     inline void SetHasDied(bool i_has_died);
     inline bool GetHasDied() const;
 
+    inline void SetIsEnabled(bool i_is_enabled);
+    inline bool GetIsEnabled() const;
+
 protected:
     Actor();
     Actor(uint32_t i_id, const engine::data::PooledString& i_name, const engine::data::HashedString& i_type);
@@ -68,6 +71,7 @@ private:
     engine::memory::WeakPointer<engine::physics::PhysicsObject>                 physics_object_;
     engine::memory::WeakPointer<engine::render::RenderableObject>               renderable_object_;
     bool                                                                        has_died_;
+    bool                                                                        is_enabled_;
 
 }; // class Actor
 

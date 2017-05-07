@@ -1,6 +1,6 @@
 Actor = 
 {
-    name = "Enemy_01_Bullet",
+    name = "Bullet_01",
     type = "Bullet",
 
     bounding_box = { 0.0, 0.0, 11.0, 21.0 },
@@ -12,7 +12,7 @@ Actor =
     physics_settings = 
     {
         type = "dynamic",
-        mass = 10.0,
+        mass = 20.0,
         drag = 0.0,
         collide = true,
         collision_filter = 0
@@ -20,7 +20,7 @@ Actor =
 
     render_settings = 
     {
-        sprite_name = "Data\\Sprites\\Bullet.dds"
+        sprite_name = "Data\\Sprites\\Bullet_01.dds"
     }
 }
 

@@ -54,6 +54,9 @@ public:
 	inline engine::memory::WeakPointer<engine::gameobject::GameObject> GetGameObject() const;
 	inline void SetGameObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
 
+    inline bool GetIsVisible() const;
+    inline void SetIsVisible(bool i_is_visible);
+
 private:
     RenderableObject(GLib::Sprites::Sprite* i_sprite);
 	RenderableObject(GLib::Sprites::Sprite* i_sprite, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
@@ -63,6 +66,7 @@ private:
     float                                                                               angle_;
     GLib::Point2D                                                                       position_;
 	engine::memory::WeakPointer<engine::gameobject::GameObject>							game_object_;
+    bool                                                                                is_visible_;
 
 }; // class RenderableObject
 

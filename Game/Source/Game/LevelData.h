@@ -18,13 +18,20 @@ struct Level
 {
     std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>       enemies_;
     std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>       bricks_;
+    uint8_t                                                                     num_enemies_;
+    uint8_t                                                                     num_bricks_;
     float                                                                       player_fire_rate_;
     float                                                                       enemy_fire_rate_;
     float                                                                       enemy_move_interval_;
+    float                                                                       enemy_move_impulse_;
 
-    Level() : player_fire_rate_(0.0f),
+    Level() : 
+        num_enemies_(0),
+        num_bricks_(0),
+        player_fire_rate_(0.0f),
         enemy_fire_rate_(0.0f),
-        enemy_move_interval_(0.0f)
+        enemy_move_interval_(0.0f),
+        enemy_move_impulse_(0.0f)
     {}
 
 }; // struct Level
@@ -36,6 +43,7 @@ public:
     ~LevelData();
 
     void LoadLevel(const engine::util::FileUtils::FileData& i_level_file_data, const std::function<void(void)>& i_on_loading_complete, const std::function<void(void)>& i_on_loading_failed);
+    inline const Level& GetLevel() const { return level_; }
 
 private:
     // disable copy constructor & copy assignment operator
