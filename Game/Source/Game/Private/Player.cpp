@@ -72,6 +72,8 @@ void Player::FlyOut()
     // stop taking key input
     engine::events::EventDispatcher::Get()->RemoveKeyboardEventListener(keyboard_event_);
     keyboard_event_ = nullptr;
+    is_left_pressed_ = false;
+    is_right_pressed_ = false;
 
     // stop firing
     engine::time::Updater::Get()->RemoveTimerEvent(fire_timer_event_);
