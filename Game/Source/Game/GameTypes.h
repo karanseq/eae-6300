@@ -10,6 +10,8 @@ enum class GameStates : uint8_t
     kGameStateBegin,
     kGameStateRunning,
     kGameStatePaused,
+    kLevelFailed,
+    kLevelComplete,
     kGameStateRestart,
     kGameStateQuit
 };

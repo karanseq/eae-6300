@@ -36,6 +36,9 @@ public:
     // implement interface tickable
     void Tick(float i_dt) override;
 
+    void FlyOut();
+    void Die();
+
     // accessors
     inline const engine::memory::WeakPointer<engine::gameobject::Actor> GetActor() const
     { 

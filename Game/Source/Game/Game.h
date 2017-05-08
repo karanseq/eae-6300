@@ -57,15 +57,25 @@ public:
     void DestroyEnemyBullets();
     size_t DestroyDeadLevelActors(std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>& i_actors) const;
 
-    // events
+    // effects
+    void DoLevelFailedEffect();
+    void OnLevelFailedEffectComplete();
+    void DoLevelCompletedEffect();
+    void OnLevelCompletedEffectComplete();
+
+    // job events
     void OnAssetLoadingComplete();
     void OnAssetLoadingFailed();
     void OnLevelLoadingComplete();
     void OnLevelLoadingFailed();
+    void OnEnemyBulletCreated(const engine::memory::SharedPointer<engine::gameobject::Actor> i_actor);
+
+    // key event
     void OnKeyPressed(unsigned int i_key_id);
+
+    // timer events
     void OnMoveEnemiesTimerElapsed();
     void OnFireEnemyBulletTimerElapsed();
-    void OnEnemyBulletCreated(const engine::memory::SharedPointer<engine::gameobject::Actor> i_actor);
 
     inline GameStates GetState() const                                              { return game_state_; }
     inline const GameData& GetGameData() const                                      { return game_data_; }

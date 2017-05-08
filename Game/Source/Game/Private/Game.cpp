@@ -169,9 +169,8 @@ void Game::CheckLevelComplete()
 {
     if (level_data_->level_.num_enemies_ <= 0)
     {
-        game_state_ = GameStates::kGameStateRestart;
-        ++level_number_;
-        level_number_ = level_number_ > game_data_.GetNumberOfLevels() ? 1 : level_number_;
+        game_state_ = GameStates::kLevelComplete;
+        DoLevelCompletedEffect();
     }
 }
 
@@ -241,8 +240,11 @@ void Game::OnKeyPressed(unsigned int i_key_id)
     }
     else if (i_key_id == 'Q')
     {
-        game_state_ = GameStates::kGameStateQuit;
-        engine::InitiateShutdown();
+        if (engine::IsPaused())
+        {
+            game_state_ = GameStates::kGameStateQuit;
+            engine::InitiateShutdown();
+        }
     }
 }
 
@@ -328,6 +330,11 @@ void Game::Tick(float dt)
 
 void Game::OnCollision(const engine::physics::CollisionPair& i_collision_pair)
 {
+    if (game_state_ != GameStates::kGameStateRunning)
+    {
+        return;
+    }
+
     static const engine::data::HashedString enemy_type("Enemy");
     static const engine::data::HashedString brick_type("Brick");
     static const engine::data::HashedString bullet_type("Bullet");
@@ -358,7 +365,8 @@ void Game::OnCollision(const engine::physics::CollisionPair& i_collision_pair)
 
     if (player)
     {
-        game_state_ = GameStates::kGameStateRestart;
+        game_state_ = GameStates::kLevelFailed;
+        DoLevelFailedEffect();
     }
 }
 
@@ -415,6 +423,53 @@ size_t Game::DestroyDeadLevelActors(std::vector<engine::memory::SharedPointer<en
         return size_t(diff_it - i_actors.begin());
     }
     return 0;
+}
+
+void Game::DoLevelCompletedEffect()
+{
+    if (game_state_ != GameStates::kLevelComplete)
+    {
+        return;
+    }
+
+    engine::time::Updater::Get()->RemoveTimerEvent(move_enemies_event_);
+    engine::time::Updater::Get()->RemoveTimerEvent(fire_enemy_bullet_event_);
+
+    player_->FlyOut();
+    engine::time::Updater::Get()->AddTimerEvent(engine::events::TimerEvent::Create(std::bind(&Game::OnLevelCompletedEffectComplete, this), 1.0f, 0));
+}
+
+void Game::DoLevelFailedEffect()
+{
+    if (game_state_ != GameStates::kLevelFailed)
+    {
+        return;
+    }
+
+    player_->Die();
+    engine::time::Updater::Get()->AddTimerEvent(engine::events::TimerEvent::Create(std::bind(&Game::OnLevelFailedEffectComplete, this), 1.0f, 0));
+}
+
+void Game::OnLevelCompletedEffectComplete()
+{
+    if (game_state_ != GameStates::kLevelComplete)
+    {
+        return;
+    }
+
+    ++level_number_;
+    level_number_ = level_number_ > game_data_.GetNumberOfLevels() ? 1 : level_number_;
+    game_state_ = GameStates::kGameStateRestart;
+}
+
+void Game::OnLevelFailedEffectComplete()
+{
+    if (game_state_ != GameStates::kLevelFailed)
+    {
+        return;
+    }
+
+    game_state_ = GameStates::kGameStateRestart;
 }
 
 } // namespace game

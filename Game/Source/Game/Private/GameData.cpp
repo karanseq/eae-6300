@@ -71,9 +71,6 @@ void GameData::LoadAssetsListedInConfig(const std::function<void(void)>& i_on_lo
     // extract the level lua file path
     level_lua_file_path_ = engine::util::LuaHelper::CreatePooledString(lua_state, "level_lua");
 
-    // extract the pause overlay file path
-    pause_overlay_file_path_ = engine::util::LuaHelper::CreatePooledString(lua_state, "pause_dds");
-
     // extract the number of levels
     num_levels_ = static_cast<uint8_t>(engine::util::LuaHelper::CreateInt(lua_state, "num_levels"));
 

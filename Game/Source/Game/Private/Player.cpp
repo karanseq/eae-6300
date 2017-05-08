@@ -38,8 +38,11 @@ Player::Player(const engine::data::PooledString& i_lua_file_name) :
 
 Player::~Player()
 {
-    engine::events::EventDispatcher::Get()->RemoveKeyboardEventListener(keyboard_event_);
-    keyboard_event_ = nullptr;
+    if (keyboard_event_)
+    {
+        engine::events::EventDispatcher::Get()->RemoveKeyboardEventListener(keyboard_event_);
+        keyboard_event_ = nullptr;
+    }
 
     engine::time::Updater::Get()->RemoveTickable(this);
 }
@@ -61,8 +64,49 @@ void Player::Tick(float i_dt)
     // wrap around the screen
     engine::math::Vec3D position = actor_->GetGameObject()->GetPosition();
     position.x((position.x() < -Game::SCREEN_WIDTH / 2) ? Game::SCREEN_WIDTH / 2 : (position.x() > Game::SCREEN_WIDTH / 2 ? -Game::SCREEN_WIDTH / 2 : position.x()));
-    position.y((position.y() < -Game::SCREEN_HEIGHT / 2) ? Game::SCREEN_HEIGHT / 2 : (position.y() > Game::SCREEN_HEIGHT / 2 ? -Game::SCREEN_HEIGHT / 2 : position.y()));
     actor_->GetGameObject()->SetPosition(position);
+}
+
+void Player::FlyOut()
+{
+    // stop taking key input
+    engine::events::EventDispatcher::Get()->RemoveKeyboardEventListener(keyboard_event_);
+    keyboard_event_ = nullptr;
+
+    // stop firing
+    engine::time::Updater::Get()->RemoveTimerEvent(fire_timer_event_);
+    fire_timer_event_ = nullptr;
+
+    // fly off screen
+    const engine::memory::SharedPointer<engine::physics::PhysicsObject> physics_object = actor_->GetPhysicsObject().Lock();
+    physics_object->SetIsActive(false);
+    physics_object->SetIsActive(true);
+    physics_object->SetDrag(0.0f);
+    physics_object->ApplyImpulse(engine::math::Vec3D(0.0f, Player::DEFAULT_FORCE * 15.0f));
+}
+
+void Player::Die()
+{
+    // stop taking key input
+    engine::events::EventDispatcher::Get()->RemoveKeyboardEventListener(keyboard_event_);
+    keyboard_event_ = nullptr;
+
+    // stop firing
+    engine::time::Updater::Get()->RemoveTimerEvent(fire_timer_event_);
+    fire_timer_event_ = nullptr;
+
+    // fly off screen
+    const engine::memory::SharedPointer<engine::physics::PhysicsObject> physics_object = actor_->GetPhysicsObject().Lock();
+    physics_object->SetIsActive(false);
+    physics_object->SetIsActive(true);
+    physics_object->ApplyImpulse(engine::math::Vec3D(0.0f, -Player::DEFAULT_FORCE * 20.0f));
+
+    // spin off screen
+    engine::time::Updater::Get()->AddTimerEvent(engine::events::TimerEvent::Create([&]() {
+        engine::math::Vec3D rotation = actor_->GetGameObject()->GetRotation();
+        rotation.z(rotation.z() + 10);
+        actor_->GetGameObject()->SetRotation(rotation);
+    }, 0.05f, 25));
 }
 
 void Player::CreateActors(const engine::data::PooledString& i_lua_file_name)
@@ -108,6 +152,9 @@ void Player::OnActorCreated(engine::memory::SharedPointer<engine::gameobject::Ac
     {
         actor_ = i_actor;
         --actors_left_to_create_;
+
+        // fly into screen
+        actor_->GetPhysicsObject().Lock()->ApplyImpulse(engine::math::Vec3D(0.0f, Player::DEFAULT_FORCE * 17.5f));
     }
     else if (i_actor->GetType() == "Bullet")
     {
@@ -140,7 +187,8 @@ void Player::OnAllActorsCreated()
     engine::events::EventDispatcher::Get()->AddKeyboardEventListener(keyboard_event_);
 
     fire_rate_ = Game::GetInstance()->GetLevelData()->GetLevel().player_fire_rate_;
-    engine::time::Updater::Get()->AddTimerEvent(engine::events::TimerEvent::Create(std::bind(&Player::FireBullet, this), fire_rate_, -1));
+    fire_timer_event_ = engine::events::TimerEvent::Create(std::bind(&Player::FireBullet, this), fire_rate_, -1);
+    engine::time::Updater::Get()->AddTimerEvent(fire_timer_event_);
 }
 
 void Player::OnKeyPressed(unsigned int i_key_id)
