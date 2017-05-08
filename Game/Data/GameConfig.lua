@@ -3,7 +3,6 @@ GameConfig =
     player_lua = "Data\\Actors\\Player.lua",
     bullet_lua = "Data\\Actors\\Bullet",
     level_lua = "Data\\Levels\\Level_",
-    pause_dds = "Data\\Sprites\\PauseOverlay.dds",
     num_levels = 5,
 
     asset_list = 
@@ -18,7 +17,6 @@ GameConfig =
         { file_name = "Data\\Sprites\\Enemy_02.dds" },
         { file_name = "Data\\Sprites\\Enemy_03.dds" },
         { file_name = "Data\\Sprites\\Ship.dds" },
-        { file_name = "Data\\Sprites\\PauseOverlay.dds" },
 
         { file_name = "Data\\Actors\\Brick_01.lua" },
         { file_name = "Data\\Actors\\Brick_02.lua" },

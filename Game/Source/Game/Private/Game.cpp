@@ -79,7 +79,6 @@ Game::Game() : game_state_(GameStates::kGameStateNone),
     level_number_(1),
     level_data_(nullptr),
     player_(nullptr),
-    pause_overlay_(nullptr),
     enemy_moves_(0),
     keyboard_event_(nullptr),
     move_enemies_event_(nullptr),
@@ -120,9 +119,6 @@ bool Game::Init()
     // register for key events
     keyboard_event_->SetOnKeyPressed(std::bind(&Game::OnKeyPressed, this, std::placeholders::_1));
     engine::events::EventDispatcher::Get()->AddKeyboardEventListener(keyboard_event_);
-
-    //pause_overlay_ = engine::render::Renderer::Get()->CreateRenderableObject(game_data_.GetPauseOverlayFilePath());
-    //pause_overlay_.Lock()->SetIsVisible(false);
 
     // create the level
     CreateLevel();

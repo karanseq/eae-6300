@@ -62,12 +62,7 @@ void Renderer::Run(float i_dt)
     GLib::EndRendering();
 }
 
-GLib::Sprites::Sprite* Renderer::CreateSprite(const engine::data::PooledString& i_texture_file_name)
-{
-    return Renderer::CreateSprite(i_texture_file_name, 255, 255, 255, 255);
-}
-
-GLib::Sprites::Sprite* Renderer::CreateSprite(const engine::data::PooledString& i_texture_file_name, uint8_t i_r, uint8_t i_g, uint8_t i_b, uint8_t i_a)
+GLib::Sprites::Sprite* Renderer::CreateSprite(const engine::data::PooledString& i_texture_file_name, unsigned int i_width, unsigned int i_height)
 {
     // validate input
     ASSERT(i_texture_file_name.GetLength() > 0);
@@ -77,7 +72,11 @@ GLib::Sprites::Sprite* Renderer::CreateSprite(const engine::data::PooledString& 
     ASSERT(texture_file_data.file_contents);
 
     // Ask GLib to create a texture out of the data (assuming it was loaded successfully)
-    GLib::Texture * texture = texture_file_data.file_contents ? GLib::CreateTexture(texture_file_data.file_contents, texture_file_data.file_size) : nullptr;
+    GLib::Texture * texture = nullptr;
+    {
+        std::lock_guard<std::mutex> lock(create_sprite_mutex_);
+        texture = texture_file_data.file_contents ? GLib::CreateTexture(texture_file_data.file_contents, texture_file_data.file_size) : nullptr;
+    }
 
     if (texture == nullptr)
         return nullptr;
@@ -92,9 +91,14 @@ GLib::Sprites::Sprite* Renderer::CreateSprite(const engine::data::PooledString& 
     ASSERT((width > 0) && (height > 0));
 
     // Define the sprite edges
-    GLib::Sprites::SpriteEdges      Edges = { -float(width / 2.0f), float(height / 2.0f), float(width / 2.0f), -float(height / 2.0f) };
+    GLib::Sprites::SpriteEdges      Edges = { -float(i_width > 0 ? i_width / 2.0f : width / 2.0f), 
+        float(i_height > 0 ? i_height / 2.0f : height / 2.0f), 
+        float(i_width > 0 ? i_width / 2.0f : width / 2.0f), 
+        -float(i_height > 0 ? i_height / 2.0f : height / 2.0f) };
     GLib::Sprites::SpriteUVs        UVs = { { 0.0f, 0.0f },{ 1.0f, 0.0f },{ 0.0f, 1.0f },{ 1.0f, 1.0f } };
-    GLib::RGBA                      Color = { i_r, i_g, i_b, i_a };
+    GLib::RGBA                      Color = { 255, 255, 255, 255 };
+
+    std::lock_guard<std::mutex> lock(create_sprite_mutex_);
 
     // Create the sprite
     GLib::Sprites::Sprite * sprite = GLib::Sprites::CreateSprite(Edges, 0.1f, Color, UVs);

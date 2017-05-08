@@ -44,21 +44,23 @@ public:
 
 	// create renderable objects
     inline engine::memory::SharedPointer<RenderableObject> CreateRenderableObject(const engine::data::PooledString& i_file_name);
+    inline engine::memory::SharedPointer<RenderableObject> CreateRenderableObject(const engine::data::PooledString& i_file_name, unsigned int i_width, unsigned int i_height);
     inline engine::memory::SharedPointer<RenderableObject> CreateRenderableObject(GLib::Sprites::Sprite* i_sprite);
-	inline engine::memory::SharedPointer<RenderableObject> CreateRenderableObject(const engine::data::PooledString& i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
+    inline engine::memory::SharedPointer<RenderableObject> CreateRenderableObject(const engine::data::PooledString& i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
+    inline engine::memory::SharedPointer<RenderableObject> CreateRenderableObject(const engine::data::PooledString& i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, unsigned int i_width, unsigned int i_height);
     inline engine::memory::SharedPointer<RenderableObject> CreateRenderableObject(GLib::Sprites::Sprite* i_sprite, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object);
 
     // add & remove renderer objects
 	inline void AddRenderableObject(const engine::memory::SharedPointer<RenderableObject>& i_renderable_object);
 	inline void RemoveRenderableObject(const engine::memory::SharedPointer<RenderableObject>& i_renderable_object);
 
-	static GLib::Sprites::Sprite* CreateSprite(const engine::data::PooledString& i_texture_file_name);
-    static GLib::Sprites::Sprite* CreateSprite(const engine::data::PooledString& i_texture_file_name, uint8_t i_r, uint8_t i_g, uint8_t i_b, uint8_t i_a);
+    GLib::Sprites::Sprite* CreateSprite(const engine::data::PooledString& i_texture_file_name, unsigned int i_width, unsigned int i_height);
 
 private:
 	size_t																			num_renderables_;
 	std::vector<engine::memory::SharedPointer<RenderableObject>>					renderables_;
 	std::mutex																		renderables_mutex_;
+    std::mutex                                                                      create_sprite_mutex_;
 
 }; // class Renderer
 

@@ -25,7 +25,18 @@ inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderabl
     ASSERT(i_file_name.GetLength() > 0);
 
     // create a sprite for the renderable
-    GLib::Sprites::Sprite* sprite = CreateSprite(i_file_name);
+    GLib::Sprites::Sprite* sprite = CreateSprite(i_file_name, 0, 0);
+
+    return Renderer::CreateRenderableObject(sprite);
+}
+
+inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderableObject(const engine::data::PooledString& i_file_name, unsigned int i_width, unsigned int i_height)
+{
+    // validate input
+    ASSERT(i_file_name.GetLength() > 0);
+
+    // create a sprite for the renderable
+    GLib::Sprites::Sprite* sprite = CreateSprite(i_file_name, i_width, i_height);
 
     return Renderer::CreateRenderableObject(sprite);
 }
@@ -52,7 +63,19 @@ inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderabl
 	ASSERT(i_game_object);
 
 	// create a sprite for the renderable
-    GLib::Sprites::Sprite* sprite = CreateSprite(i_file_name);
+    GLib::Sprites::Sprite* sprite = CreateSprite(i_file_name, 0, 0);
+
+    return Renderer::CreateRenderableObject(sprite, i_game_object);
+}
+
+inline engine::memory::SharedPointer<RenderableObject> Renderer::CreateRenderableObject(const engine::data::PooledString& i_file_name, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object, unsigned int i_width, unsigned int i_height)
+{
+    // validate input
+    ASSERT(i_file_name.GetLength() > 0);
+    ASSERT(i_game_object);
+
+    // create a sprite for the renderable
+    GLib::Sprites::Sprite* sprite = CreateSprite(i_file_name, i_width, i_height);
 
     return Renderer::CreateRenderableObject(sprite, i_game_object);
 }
