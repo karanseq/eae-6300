@@ -3,7 +3,7 @@ Actor =
     name = "Brick_02",
     type = "Brick",
 
-    bounding_box = { 0.0, 0.0, 49.0, 18.0 },
+    bounding_box = { 0.0, 0.0, 50.0, 20.0 },
     transform = 
     {
         position = { 0.0, 0.0, 0.0 },

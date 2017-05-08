@@ -97,6 +97,7 @@ private:
     Player*                                                                         player_;
     std::vector<engine::memory::SharedPointer<engine::gameobject::Actor>>           enemy_bullet_pool_;
     std::mutex                                                                      enemy_bullet_pool_mutex_;
+    engine::memory::WeakPointer<engine::render::RenderableObject>                   pause_overlay_;
     uint8_t                                                                         enemy_moves_;
 
     // events

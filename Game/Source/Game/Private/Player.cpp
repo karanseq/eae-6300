@@ -21,7 +21,7 @@ namespace game {
 
 // static member initialization
 const float Player::DEFAULT_MASS = 50.0f;
-const float Player::DEFAULT_FORCE = 1.0f;
+const float Player::DEFAULT_FORCE = 5.0f;
 const size_t Player::BULLET_POOL_SIZE = 5;
 
 Player::Player(const engine::data::PooledString& i_lua_file_name) : 
@@ -31,8 +31,6 @@ Player::Player(const engine::data::PooledString& i_lua_file_name) :
     fire_rate_(0.0f),
     is_left_pressed_(false),
     is_right_pressed_(false),
-    is_space_pressed_(false),
-    can_fire_(false),
     actors_left_to_create_(0)
 {
     CreateActors(i_lua_file_name);
@@ -53,12 +51,6 @@ void Player::Tick(float i_dt)
     {
         engine::math::Vec3D force(is_left_pressed_ ? -Player::DEFAULT_FORCE : (is_right_pressed_ ? Player::DEFAULT_FORCE : 0.0f), 0.0f);
         actor_->GetPhysicsObject().Lock()->ApplyImpulse(force);
-    }
-
-    // fire a bullet when space is pressed
-    if (is_space_pressed_)
-    {
-        FireBullet();
     }
 
     for (const auto& bullet : bullet_pool_)
@@ -96,14 +88,6 @@ void Player::CreateActors(const engine::data::PooledString& i_lua_file_name)
 
 void Player::FireBullet()
 {
-    if (!can_fire_)
-    {
-        return;
-    }
-
-    can_fire_ = false;
-    engine::time::Updater::Get()->AddTimerEvent(engine::events::TimerEvent::Create(std::bind(&Player::OnFireTimerElapsed, this), fire_rate_, 0));
-
     for (const auto& bullet : bullet_pool_)
     {
         if (bullet->GetIsEnabled() == false)
@@ -127,6 +111,7 @@ void Player::OnActorCreated(engine::memory::SharedPointer<engine::gameobject::Ac
     }
     else if (i_actor->GetType() == "Bullet")
     {
+        i_actor->GetPhysicsObject().Lock()->SetDefaultCollisionResponseEnabled(false);
         std::lock_guard<std::mutex> lock(bullet_pool_mutex_);
         i_actor->SetIsEnabled(false);
         bullet_pool_.push_back(i_actor);
@@ -154,27 +139,20 @@ void Player::OnAllActorsCreated()
     keyboard_event_->SetOnKeyReleased(std::bind(&Player::OnKeyReleased, this, std::placeholders::_1));
     engine::events::EventDispatcher::Get()->AddKeyboardEventListener(keyboard_event_);
 
-    can_fire_ = true;
     fire_rate_ = Game::GetInstance()->GetLevelData()->GetLevel().player_fire_rate_;
+    engine::time::Updater::Get()->AddTimerEvent(engine::events::TimerEvent::Create(std::bind(&Player::FireBullet, this), fire_rate_, -1));
 }
 
 void Player::OnKeyPressed(unsigned int i_key_id)
 {
-    is_left_pressed_ = is_left_pressed_ || i_key_id == 'A';
-    is_right_pressed_ = is_right_pressed_ || i_key_id == 'D';
-    is_space_pressed_ = is_space_pressed_ || i_key_id == ' ';
+    is_left_pressed_ = is_left_pressed_ || i_key_id == 37;
+    is_right_pressed_ = is_right_pressed_ || i_key_id == 39;
 }
 
 void Player::OnKeyReleased(unsigned int i_key_id)
 {
-    is_left_pressed_ = is_left_pressed_ ? !(i_key_id == 'A') : is_left_pressed_;
-    is_right_pressed_ = is_right_pressed_ ? !(i_key_id == 'D') : is_right_pressed_;
-    is_space_pressed_ = is_space_pressed_ ? !(i_key_id == ' ') : is_space_pressed_;
-}
-
-void Player::OnFireTimerElapsed()
-{
-    can_fire_ = true;
+    is_left_pressed_ = is_left_pressed_ ? !(i_key_id == 37) : is_left_pressed_;
+    is_right_pressed_ = is_right_pressed_ ? !(i_key_id == 39) : is_right_pressed_;
 }
 
 } // namespace monsterchase

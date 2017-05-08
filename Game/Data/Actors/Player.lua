@@ -15,7 +15,7 @@ Actor =
 	{
 		type = "dynamic",
 		mass = 50.0,
-		drag = 0.02,
+		drag = 0.1,
 		collide = true,
 		collision_filter = 0
 	},

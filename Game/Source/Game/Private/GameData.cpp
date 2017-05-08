@@ -21,9 +21,11 @@ GameData::GameData() : on_loading_complete_(nullptr),
     on_loading_failed_(nullptr),
     files_left_to_load_(0),
     jobs_left_to_finish_(0),
-    player_lua_file_name_(""),
+    player_lua_file_path_(""),
     bullet_lua_file_path_(""),
-    level_lua_file_path_("")
+    level_lua_file_path_(""),
+    pause_overlay_file_path_(""),
+    num_levels_(5)
 {}
 
 GameData::~GameData()
@@ -60,14 +62,20 @@ void GameData::LoadAssetsListedInConfig(const std::function<void(void)>& i_on_lo
     result = lua_getglobal(lua_state, "GameConfig");
     ASSERT(result == LUA_TTABLE);
 
-    // extract the player lua file name
-    player_lua_file_name_ = engine::util::LuaHelper::CreatePooledString(lua_state, "player_lua");
+    // extract the player lua file path
+    player_lua_file_path_ = engine::util::LuaHelper::CreatePooledString(lua_state, "player_lua");
 
     // extract the bullet lua file path
     bullet_lua_file_path_ = engine::util::LuaHelper::CreatePooledString(lua_state, "bullet_lua");
 
     // extract the level lua file path
     level_lua_file_path_ = engine::util::LuaHelper::CreatePooledString(lua_state, "level_lua");
+
+    // extract the pause overlay file path
+    pause_overlay_file_path_ = engine::util::LuaHelper::CreatePooledString(lua_state, "pause_dds");
+
+    // extract the number of levels
+    num_levels_ = static_cast<uint8_t>(engine::util::LuaHelper::CreateInt(lua_state, "num_levels"));
 
     // check if there is an asset list
     lua_pushstring(lua_state, "asset_list");

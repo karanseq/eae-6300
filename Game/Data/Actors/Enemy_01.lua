@@ -3,7 +3,7 @@ Actor =
 	name = "Enemy_01",
 	type = "Enemy",
 
-	bounding_box = { 0.0, 0.0, 40.0, 25.0 },
+	bounding_box = { 0.0, 0.0, 40.0, 26.0 },
 	transform = 
 	{
 		position = { 0.0, 0.0, 0.0 },

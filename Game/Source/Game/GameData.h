@@ -20,7 +20,7 @@ public:
 
     inline const engine::data::PooledString& GetPlayerLuaFileName() const
     {
-        return player_lua_file_name_;
+        return player_lua_file_path_;
     }
 
     inline const engine::data::PooledString& GetBulletLuaFilePath() const
@@ -31,6 +31,16 @@ public:
     inline const engine::data::PooledString& GetLevelLuaFilePath() const
     {
         return level_lua_file_path_;
+    }
+
+    inline const engine::data::PooledString& GetPauseOverlayFilePath() const
+    {
+        return pause_overlay_file_path_;
+    }
+
+    inline uint8_t GetNumberOfLevels() const
+    {
+        return num_levels_;
     }
 
     // constants
@@ -48,9 +58,11 @@ private:
     std::function<void(void)>                               on_loading_failed_;
     size_t                                                  files_left_to_load_;
     size_t                                                  jobs_left_to_finish_;
-    engine::data::PooledString                              player_lua_file_name_;
+    engine::data::PooledString                              player_lua_file_path_;
     engine::data::PooledString                              bullet_lua_file_path_;
     engine::data::PooledString                              level_lua_file_path_;
+    engine::data::PooledString                              pause_overlay_file_path_;
+    uint8_t                                                 num_levels_;
 
 }; // class GameData
 

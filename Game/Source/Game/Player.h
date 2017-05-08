@@ -56,7 +56,6 @@ private:
     void OnAllActorsCreated();
     void OnKeyPressed(unsigned int i_key_id);
     void OnKeyReleased(unsigned int i_key_id);
-    void OnFireTimerElapsed();
 
 public:
     // constants
@@ -75,8 +74,6 @@ private:
     float                                                                           fire_rate_;
     bool                                                                            is_left_pressed_;
     bool                                                                            is_right_pressed_;
-    bool                                                                            is_space_pressed_;
-    bool                                                                            can_fire_;
     uint8_t                                                                         actors_left_to_create_;
 
 }; // class Player

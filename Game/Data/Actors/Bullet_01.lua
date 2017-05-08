@@ -3,7 +3,7 @@ Actor =
     name = "Bullet_01",
     type = "Bullet",
 
-    bounding_box = { 0.0, 0.0, 11.0, 21.0 },
+    bounding_box = { 0.0, 0.0, 10.0, 16.0 },
     transform = 
     {
         position = { 0.0, 0.0, 0.0 },
