@@ -12,7 +12,7 @@ CreateActorFromFileJob::CreateActorFromFileJob(const engine::data::PooledString&
     ASSERT(file_data_.file_size > 0);
     ASSERT(callback_);
 
-    SetName("CreateActorDeleteFileDataJob");
+    SetName("CreateActorFromFileJob");
 }
 
 CreateActorFromFileJob::CreateActorFromFileJob(const engine::util::FileUtils::FileData& i_file_data, const std::function<void(engine::memory::SharedPointer<engine::gameobject::Actor>)>& i_callback) : 
@@ -24,7 +24,7 @@ CreateActorFromFileJob::CreateActorFromFileJob(const engine::util::FileUtils::Fi
     ASSERT(file_data_.file_size > 0);
     ASSERT(callback_);
 
-    SetName("CreateActorDeleteFileDataJob");
+    SetName("CreateActorFromFileJob");
 }
 
 CreateActorFromFileJob::~CreateActorFromFileJob()
