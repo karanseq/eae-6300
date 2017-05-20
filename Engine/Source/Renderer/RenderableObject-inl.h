@@ -18,18 +18,18 @@ inline engine::memory::SharedPointer<RenderableObject> RenderableObject::Create(
 
 inline engine::memory::SharedPointer<RenderableObject> RenderableObject::Create(GLib::Sprites::Sprite* i_sprite, const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object)
 {
-	return engine::memory::SharedPointer<RenderableObject>(new RenderableObject(i_sprite, i_game_object));
+    return engine::memory::SharedPointer<RenderableObject>(new RenderableObject(i_sprite, i_game_object));
 }
 
 inline GLib::Sprites::Sprite* RenderableObject::GetSprite() const
 {
-	return sprite_;
+    return sprite_;
 }
 
 inline void RenderableObject::SetSprite(GLib::Sprites::Sprite* i_sprite)
 {
-	ASSERT(i_sprite);
-	sprite_ = i_sprite;
+    ASSERT(i_sprite);
+    sprite_ = i_sprite;
 }
 
 inline const float RenderableObject::GetAngle() const
@@ -66,13 +66,13 @@ inline void RenderableObject::SetPosition(const GLib::Point2D& i_position)
 
 inline engine::memory::WeakPointer<engine::gameobject::GameObject> RenderableObject::GetGameObject() const
 {
-	return game_object_;
+    return game_object_;
 }
 
 inline void RenderableObject::SetGameObject(const engine::memory::WeakPointer<engine::gameobject::GameObject>& i_game_object)
 {
-	ASSERT(i_game_object);
-	game_object_ = i_game_object;
+    ASSERT(i_game_object);
+    game_object_ = i_game_object;
 }
 
 inline bool RenderableObject::GetIsVisible() const

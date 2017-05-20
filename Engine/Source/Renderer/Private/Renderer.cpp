@@ -20,22 +20,22 @@ Renderer::Renderer() : num_renderables_(0)
 
 Renderer::~Renderer()
 {
-	renderables_.clear();
-	num_renderables_ = 0;
+    renderables_.clear();
+    num_renderables_ = 0;
 }
 
 Renderer* Renderer::Create()
 {
-	if (!Renderer::instance_)
-	{
-		Renderer::instance_ = new Renderer();
-	}
-	return Renderer::instance_;
+    if (!Renderer::instance_)
+    {
+        Renderer::instance_ = new Renderer();
+    }
+    return Renderer::instance_;
 }
 
 void Renderer::Destroy()
 {
-	SAFE_DELETE(Renderer::instance_);
+    SAFE_DELETE(Renderer::instance_);
 }
 
 void Renderer::Run(float i_dt)

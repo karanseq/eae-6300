@@ -58,33 +58,33 @@ void TestFastMath();
 void RunTests()
 {
 #ifdef ENABLE_VECTOR_CONST_TEST
-	LOG("\n");
-	TestVectorConstness();
+    LOG("\n");
+    TestVectorConstness();
 #endif // ENABLE_VECTOR_CONST_TEST
 
 #ifdef ENABLE_FLOAT_VALIDITY_TEST
-	LOG("\n");
-	TestFloatValidity();
+    LOG("\n");
+    TestFloatValidity();
 #endif // ENABLE_FLOAT_VALIDITY_TEST
-	
+    
 #ifdef ENABLE_BIT_ARRAY_TEST
-	LOG("\n");
-	RunBitArray_UnitTest();
+    LOG("\n");
+    RunBitArray_UnitTest();
 #endif // ENABLE_BIT_ARRAY_TEST
 
 #ifdef ENABLE_STRONG_POINTER_TEST
-	LOG("\n");
-	TestSmartPointers();
+    LOG("\n");
+    TestSmartPointers();
 #endif // ENABLE_STRONG_POINTER_TEST
 
 #ifdef ENABLE_STRING_POOL_TEST
-	LOG("\n");
-	TestStringPool();
+    LOG("\n");
+    TestStringPool();
 #endif // ENABLE_STRING_POOL_TEST
 
 #ifdef ENABLE_JOB_SYSTEM_TEST
-	LOG("\n");
-	TestJobSystem();
+    LOG("\n");
+    TestJobSystem();
 #endif // ENABLE_JOB_SYSTEM_TEST
 
 #ifdef ENABLE_MAT44_TEST
@@ -98,20 +98,20 @@ void RunTests()
 #endif // ENABLE_FAST_MATH_TEST
 
 #ifdef ENABLE_ALLOCATOR_TEST
-	LOG("\n");
-	TestFixedSizeAllocator();
+    LOG("\n");
+    TestFixedSizeAllocator();
 
-	LOG("\n");
+    LOG("\n");
 #ifdef BUILD_DEBUG
-		HeapManager_UnitTest();
+        HeapManager_UnitTest();
 #else
-		const size_t mem_size = 1024 * 1024;
-		BlockAllocatorTest::Init(mem_size);
-		BlockAllocatorTest::RunTest00();
-		BlockAllocatorTest::RunTest01();
-		BlockAllocatorTest::RunTest02();
-		BlockAllocatorTest::RunTest03();
-		BlockAllocatorTest::Reset();
+        const size_t mem_size = 1024 * 1024;
+        BlockAllocatorTest::Init(mem_size);
+        BlockAllocatorTest::RunTest00();
+        BlockAllocatorTest::RunTest01();
+        BlockAllocatorTest::RunTest02();
+        BlockAllocatorTest::RunTest03();
+        BlockAllocatorTest::Reset();
 #endif // BUILD_DEBUG
 
 #endif // ENABLE_ALLOCATOR_TEST

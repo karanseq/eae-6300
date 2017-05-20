@@ -13,7 +13,7 @@ inline engine::memory::SharedPointer<PhysicsObject> PhysicsObject::Create(const 
     uint16_t i_collision_filter,
     bool i_is_collidable)
 {
-	return engine::memory::SharedPointer<PhysicsObject>(new PhysicsObject(i_game_object, i_mass, i_drag, i_type, i_collision_filter, i_is_collidable));
+    return engine::memory::SharedPointer<PhysicsObject>(new PhysicsObject(i_game_object, i_mass, i_drag, i_type, i_collision_filter, i_is_collidable));
 }
 
 inline PhysicsObject& PhysicsObject::operator=(const PhysicsObject& i_copy)
@@ -91,26 +91,26 @@ inline void PhysicsObject::SetGameObject(const engine::memory::WeakPointer<engin
 
 inline float PhysicsObject::GetMass() const
 {
-	return mass_;
+    return mass_;
 }
 
 inline void PhysicsObject::SetMass(float i_mass)
 {
-	// physics objects must have positive mass
-	ASSERT(!engine::math::IsNaN(i_mass) && !engine::math::FuzzyEquals(i_mass, 0.0f));
-	mass_ = i_mass;
-	inverse_mass_ = 1.0f / mass_;
+    // physics objects must have positive mass
+    ASSERT(!engine::math::IsNaN(i_mass) && !engine::math::FuzzyEquals(i_mass, 0.0f));
+    mass_ = i_mass;
+    inverse_mass_ = 1.0f / mass_;
 }
 
 inline float PhysicsObject::GetDrag() const
 {
-	return coeff_drag_;
+    return coeff_drag_;
 }
 
 inline void PhysicsObject::SetDrag(float i_drag)
 {
-	ASSERT(!engine::math::IsNaN(i_drag) && i_drag < MAX_COEFF_DRAG);
-	coeff_drag_ = i_drag;
+    ASSERT(!engine::math::IsNaN(i_drag) && i_drag < MAX_COEFF_DRAG);
+    coeff_drag_ = i_drag;
 }
 
 inline PhysicsObjectType PhysicsObject::GetType() const

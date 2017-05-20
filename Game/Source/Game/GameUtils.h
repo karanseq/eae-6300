@@ -17,13 +17,13 @@ namespace game {
 class GameUtils
 {
 private:
-	GameUtils() = delete;
-	GameUtils(const GameUtils& i_copy) = delete;
-	GameUtils& operator=(const GameUtils& i_rhs) = delete;
-	~GameUtils() = delete;
+    GameUtils() = delete;
+    GameUtils(const GameUtils& i_copy) = delete;
+    GameUtils& operator=(const GameUtils& i_rhs) = delete;
+    ~GameUtils() = delete;
 
 public:
-	inline static engine::math::Vec3D GetRandomVec3D(size_t i_max_x = 0, size_t i_max_y = 0, size_t i_max_z = 0) 
+    inline static engine::math::Vec3D GetRandomVec3D(size_t i_max_x = 0, size_t i_max_y = 0, size_t i_max_z = 0) 
     { 
         return engine::math::Vec3D(i_max_x > 0 ? static_cast<float>(rand() % i_max_x) : 0.0f, 
                                    i_max_y > 0 ? static_cast<float>(rand() % i_max_y) : 0.0f, 

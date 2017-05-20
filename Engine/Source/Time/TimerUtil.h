@@ -10,33 +10,33 @@ namespace time {
 class TimerUtil
 {
 private:
-	TimerUtil() = delete;
-	~TimerUtil() = delete;
+    TimerUtil() = delete;
+    ~TimerUtil() = delete;
 
-	TimerUtil(const TimerUtil& i_copy) = delete;
-	TimerUtil operator=(const TimerUtil& i_copy) = delete;
+    TimerUtil(const TimerUtil& i_copy) = delete;
+    TimerUtil operator=(const TimerUtil& i_copy) = delete;
 
 public:
     static double GetTick();
     static double CalculateTick();
 
-	static float GetLastFrameTime_ms();
-	static float CalculateLastFrameTime_ms();
+    static float GetLastFrameTime_ms();
+    static float CalculateLastFrameTime_ms();
 
-	static void CustomSleep(uint32_t i_milli_seconds);
+    static void CustomSleep(uint32_t i_milli_seconds);
 
-	static const float					DESIRED_FPS;
-	static const float					DESIRED_FRAMETIME_MS;
-	static const float					MAX_FRAMETIME_MS;
+    static const float                  DESIRED_FPS;
+    static const float                  DESIRED_FRAMETIME_MS;
+    static const float                  MAX_FRAMETIME_MS;
 
-	// TODO: These functions may only be required for win32
-	static double GetCounter();
-	static double GetFrequency();
+    // TODO: These functions may only be required for win32
+    static double GetCounter();
+    static double GetFrequency();
 private:
 
-	static double						pc_frequency_;
-	static double						last_frame_start_tick_;
-	static float						last_frame_time_ms_;
+    static double                       pc_frequency_;
+    static double                       last_frame_start_tick_;
+    static float                        last_frame_time_ms_;
 
 }; // class TimerUtil
 

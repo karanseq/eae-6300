@@ -30,7 +30,7 @@ Updater* Updater::Create()
 
 void Updater::Destroy()
 {
-	SAFE_DELETE(Updater::instance_);
+    SAFE_DELETE(Updater::instance_);
 }
 
 void Updater::Run(float dt)

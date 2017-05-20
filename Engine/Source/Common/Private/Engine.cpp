@@ -32,7 +32,7 @@ bool StartUp(HINSTANCE i_h_instance, int i_n_cmd_show, const char* i_window_name
     // initialize GLib
     bool success = GLib::Initialize(i_h_instance, i_n_cmd_show, i_window_name, -1, i_window_width, i_window_height);
     ASSERT(success);
-	
+    
     // create string pools
     engine::data::StringPool::Create();
 
